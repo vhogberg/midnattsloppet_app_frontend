@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application/pages/login_page/login_widget.dart';
+import 'package:flutter_application/pages/registration/complete_profile_page.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
@@ -46,7 +47,7 @@ class RegisterPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[300],
+      backgroundColor: Colors.white,
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
@@ -118,7 +119,7 @@ class RegisterPage extends StatelessWidget {
                       if (response == "User registered successfully") {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => HomePage()),
+                          MaterialPageRoute(builder: (context) => CompleteProfilePage(username)),
                         );
                       } else if (response == "Username already exists" ||
                           response == "Username already exists") {
@@ -136,33 +137,6 @@ class RegisterPage extends StatelessWidget {
                       ));
                     });
                   },
-                ),
-                const SizedBox(height: 50),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: Divider(
-                          thickness: 0.5,
-                          color: Colors.grey[400],
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                        child: Text(
-                          'Or continue with',
-                          style: TextStyle(color: Colors.grey[700]),
-                        ),
-                      ),
-                      Expanded(
-                        child: Divider(
-                          thickness: 0.5,
-                          color: Colors.grey[400],
-                        ),
-                      ),
-                    ],
-                  ),
                 ),
                 const SizedBox(height: 50),
                 GestureDetector(

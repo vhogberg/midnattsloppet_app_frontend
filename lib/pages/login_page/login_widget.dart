@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application/components/custom_colors.dart';
 import 'package:flutter_application/pages/homepage.dart';
+import 'package:flutter_application/pages/registration/complete_profile_page.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 import 'package:flutter_application/components/my_button.dart';
 import 'package:flutter_application/components/my_textfield.dart';
-import 'package:flutter_application/pages/register_account/register_page.dart';
+import 'package:flutter_application/pages/registration/register_page.dart';
 
 class LoginPage extends StatelessWidget {
   LoginPage({super.key});
@@ -40,7 +42,7 @@ class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[300],
+      backgroundColor: Colors.white,
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
@@ -106,7 +108,7 @@ class LoginPage extends StatelessWidget {
                       if (response == "Success") {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => HomePage()),
+                          MaterialPageRoute(builder: (context) => HomePage(username)),
                         );
                       } else if (response == "User not found" ||
                           response == "Invalid username or password") {
@@ -124,33 +126,6 @@ class LoginPage extends StatelessWidget {
                       ));
                     });
                   },
-                ),
-                const SizedBox(height: 50),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: Divider(
-                          thickness: 0.5,
-                          color: Colors.grey[400],
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                        child: Text(
-                          'Or continue with',
-                          style: TextStyle(color: Colors.grey[700]),
-                        ),
-                      ),
-                      Expanded(
-                        child: Divider(
-                          thickness: 0.5,
-                          color: Colors.grey[400],
-                        ),
-                      ),
-                    ],
-                  ),
                 ),
                 const SizedBox(height: 50),
                 Row(

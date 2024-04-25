@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application/pages/login_page/login_widget.dart';
 
 class HomePage extends StatelessWidget {
-  const HomePage({Key? key}) : super(key: key);
+  final String username; // Define username as a member variable
+
+  const HomePage(this.username, {Key? key}) : super(key: key);
 
   // Method to sign the user out
   void signUserOut(BuildContext context) {
@@ -21,7 +22,9 @@ class HomePage extends StatelessWidget {
           )
         ],
       ),
-      body: Center(child: Text("Logged in!")),
+      body: Center(
+        child: Text("Logged in as: $username"), // Access username here
+      ),
     );
   }
 }
