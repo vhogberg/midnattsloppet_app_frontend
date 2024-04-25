@@ -1,20 +1,21 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_application/pages/login_page/login_widget.dart';
-import 'package:flutter_application/pages/registration/complete_profile_page.dart';
-import 'package:http/http.dart' as http;
 import 'dart:convert';
 
+import 'package:flutter/material.dart';
 import 'package:flutter_application/components/my_button.dart';
 import 'package:flutter_application/components/my_textfield.dart';
-import 'package:flutter_application/pages/homepage.dart';
+import 'package:flutter_application/pages/login_page/login_widget.dart';
+import 'package:flutter_application/pages/registration/complete_profile_page.dart';
+import 'package:flutter_application/session_manager.dart';
+import 'package:http/http.dart' as http;
 
 class RegisterPage extends StatelessWidget {
   RegisterPage({super.key});
 
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
-  final confirnPasswordController = TextEditingController();
+  final confirmPasswordController = TextEditingController();
 
+  //TODO: move this to session manager(?)
   Future<String> registerUser(String username, String password) async {
     //try registering user
     final url = Uri.parse('https://group-15-7.pvt.dsv.su.se/app/register');
@@ -22,7 +23,7 @@ class RegisterPage extends StatelessWidget {
     final jsonBody = jsonEncode(credentials);
 
     try {
-      if (passwordController.text == confirnPasswordController.text) {
+      if (passwordController.text == confirmPasswordController.text) {
         final response = await http.post(
           url,
           headers: <String, String>{
@@ -61,7 +62,7 @@ class RegisterPage extends StatelessWidget {
                 ),
                 const SizedBox(height: 50),
                 Text(
-                  'Welcome back you\'ve been missed!',
+                  'Let\'s create your account!',
                   style: TextStyle(
                     color: Colors.grey[700],
                     fontSize: 16,
@@ -81,7 +82,7 @@ class RegisterPage extends StatelessWidget {
                 ),
                 const SizedBox(height: 10),
                 MyTextField(
-                  controller: confirnPasswordController,
+                  controller: confirmPasswordController,
                   hintText: 'Confirm Password',
                   obscureText: true,
                 ),
@@ -114,13 +115,39 @@ class RegisterPage extends StatelessWidget {
                       return; // Exit the function early if either field is empty
                     }
 
+                    // Show CircularProgressIndicator while registering the user
+                    showDialog(
+                      context: context,
+                      barrierDismissible:
+                          false, // Prevent user from dismissing the dialog
+                      builder: (BuildContext context) {
+                        return Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      },
+                    );
+
                     // Proceed with registration if username and password are not empty
                     registerUser(username, password).then((response) {
+                      // Close the CircularProgressIndicator dialog
+                      Navigator.of(context).pop();
+
                       if (response == "User registered successfully") {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => CompleteProfilePage(username)),
-                        );
+                        // Log in the user after successful registration
+                        SessionManager.loginUser(username, password).then((_) {
+                          // Navigate to CompleteProfilePage after saving session token
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    CompleteProfilePage(username)),
+                          );
+                        }).catchError((error) {
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            content:
+                                Text('Failed to save session token: $error'),
+                          ));
+                        });
                       } else if (response == "Username already exists" ||
                           response == "Username already exists") {
                         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -132,6 +159,9 @@ class RegisterPage extends StatelessWidget {
                         ));
                       }
                     }).catchError((error) {
+                      // Close the CircularProgressIndicator dialog
+                      Navigator.of(context).pop();
+
                       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                         content: Text('Failed to register: $error'),
                       ));

@@ -1,43 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application/components/custom_colors.dart';
-import 'package:flutter_application/pages/homepage.dart';
-import 'package:flutter_application/pages/registration/complete_profile_page.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
-
 import 'package:flutter_application/components/my_button.dart';
 import 'package:flutter_application/components/my_textfield.dart';
+import 'package:flutter_application/pages/homepage.dart';
 import 'package:flutter_application/pages/registration/register_page.dart';
+import 'package:flutter_application/session_manager.dart';
 
 class LoginPage extends StatelessWidget {
   LoginPage({super.key});
 
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
-
-  Future<String> loginUser(String username, String password) async {
-    final url = Uri.parse('https://group-15-7.pvt.dsv.su.se/app/login');
-    final credentials = {'username': username, 'password': password};
-    final jsonBody = jsonEncode(credentials);
-
-    try {
-      final response = await http.post(
-        url,
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-        },
-        body: jsonBody,
-      );
-
-      if (response.statusCode == 200) {
-        return response.body;
-      } else {
-        throw Exception('Failed to login: ${response.statusCode}');
-      }
-    } catch (e) {
-      throw Exception('Failed to login: $e');
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -104,23 +76,25 @@ class LoginPage extends StatelessWidget {
                     }
 
                     // Proceed with login if username and password are not empty
-                    loginUser(username, password).then((response) {
-                      if (response == "Success") {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => HomePage(username)),
-                        );
-                      } else if (response == "User not found" ||
-                          response == "Invalid username or password") {
-                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                          content: Text('Failed to login: $response'),
-                        ));
+                    SessionManager.loginUser(username, password)
+                        .then((sessionToken) {
+                      if (sessionToken != null) {
+                        // Save session token and navigate to home page
+                        SessionManager.saveSessionToken(sessionToken).then((_) {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => HomePage()),
+                          );
+                        });
                       } else {
+                        // Handle login failure
                         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                          content: Text('Unexpected response: $response'),
+                          content: Text(
+                              'Failed to login: User not found or invalid credentials.'),
                         ));
                       }
                     }).catchError((error) {
+                      // Handle login error
                       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                         content: Text('Failed to login: $error'),
                       ));

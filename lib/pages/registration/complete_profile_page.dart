@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application/pages/login_page/login_widget.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
@@ -87,45 +86,25 @@ class CompleteProfilePage extends StatelessWidget {
                 ),
                 const SizedBox(height: 20),
                 MyButton(
-                  text: "Complete profile",
-                  onTap: () {
-                    final name = nameController.text;
-                    final companyVoucherCode =
-                        companyVoucherCodeController.text;
+                    text: "Complete profile",
+                    onTap: () {
+                      final name = nameController.text;
+                      final companyVoucherCode =
+                          companyVoucherCodeController.text;
 
-                    if (name.isEmpty || companyVoucherCode.isEmpty) {
-                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                        content: Text(
-                            'Please enter a name and a company voucher code to proceed.'),
-                      ));
-                      return;
-                    }
-
-                 /*   updateUser(username, name, companyVoucherCode)
-                        .then((response) {
-                      if (response == "User updated successfully") {
-                     */   Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => HomePage(username)),
-                        );
-                     /* } else if (response == "Not a valid code" ||
-                          response == "No valid code") {
+                      if (name.isEmpty || companyVoucherCode.isEmpty) {
                         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                          content: Text('Failed to register: $response'),
+                          content: Text(
+                              'Please enter a name and a company voucher code to proceed.'),
                         ));
-                      } else {
-                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                          content: Text('Unexpected response: $response'),
-                        ));
+                        return;
                       }
-                    }).catchError((error) {
-                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                        content: Text('Failed to register: $error'),
-                      ));
-                    }); */
-                  }  
-                ),
+                      // update user with name and get company registered form voucher code
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => HomePage()),
+                      );
+                    }),
                 const SizedBox(height: 50),
               ],
             ),
