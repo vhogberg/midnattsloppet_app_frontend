@@ -14,27 +14,28 @@ class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
-      body: SafeArea(
-        child: Center(
-          child: SingleChildScrollView(
+      backgroundColor: Colors.transparent,
+      body: Center(
+        child: SingleChildScrollView(
+          child: Container(
+            height: 950, //Fyller ut bakgrundsbilden
+            decoration: const BoxDecoration(
+              image: DecorationImage(
+                  image: AssetImage("images/Midnattsloppet.jpg"),
+                  fit: BoxFit.fitHeight //Justera bakgrund
+                  ),
+            ),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const SizedBox(height: 50),
-                const Icon(
-                  Icons.lock,
-                  size: 100,
-                ),
-                const SizedBox(height: 50),
-                Text(
-                  'Welcome back you\'ve been missed!',
+                const Text(
+                  'Welcome back, you\'ve been missed!',
                   style: TextStyle(
-                    color: Colors.grey[700],
+                    color: Colors.white,
                     fontSize: 16,
                   ),
                 ),
-                const SizedBox(height: 25),
+                const SizedBox(height: 10),
                 MyTextField(
                   controller: emailController,
                   hintText: 'Username',
@@ -47,14 +48,14 @@ class LoginPage extends StatelessWidget {
                   obscureText: true,
                 ),
                 const SizedBox(height: 10),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 25.0),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       Text(
                         'Forgot Password?',
-                        style: TextStyle(color: Colors.grey[600]),
+                        style: TextStyle(color: Colors.white),
                       ),
                     ],
                   ),
@@ -68,7 +69,7 @@ class LoginPage extends StatelessWidget {
 
                     // Check if username or password is empty
                     if (username.isEmpty || password.isEmpty) {
-                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                         content:
                             Text('Please enter both username and password.'),
                       ));
@@ -88,7 +89,8 @@ class LoginPage extends StatelessWidget {
                         });
                       } else {
                         // Handle login failure
-                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        ScaffoldMessenger.of(context)
+                            .showSnackBar(const SnackBar(
                           content: Text(
                               'Failed to login: User not found or invalid credentials.'),
                         ));
@@ -101,13 +103,13 @@ class LoginPage extends StatelessWidget {
                     });
                   },
                 ),
-                const SizedBox(height: 50),
+                const SizedBox(height: 25),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(
+                    const Text(
                       'Not a member?',
-                      style: TextStyle(color: Colors.grey[700]),
+                      style: TextStyle(color: Colors.white, fontSize: 15),
                     ),
                     const SizedBox(width: 4),
                     GestureDetector(
@@ -121,9 +123,9 @@ class LoginPage extends StatelessWidget {
                       child: const Text(
                         'Register now',
                         style: TextStyle(
-                          color: Colors.blue,
-                          fontWeight: FontWeight.bold,
-                        ),
+                            color: Colors.blue,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 15),
                       ),
                     ),
                   ],
