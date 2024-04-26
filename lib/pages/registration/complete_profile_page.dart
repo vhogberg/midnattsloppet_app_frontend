@@ -13,19 +13,19 @@ class CompleteProfilePage extends StatelessWidget {
 
   final nameController = TextEditingController();
   final companyVoucherCodeController = TextEditingController();
-  final confirmCompanyVoucherCodeController = TextEditingController();
 
-  Future<String> updateUser(
-      String username, String name, String companyVoucher) async {
-    //try registering user
-    final url =
-        Uri.parse('https://group-15-7.pvt.dsv.su.se/app/register/profile');
-    final credentials = {
+  // should perhaps be combined to one API call with the register user method? 
+  Future<void> completeProfile(
+      String username, String name, String voucherCode) async {
+    // Replace 'your_backend_url' with your actual backend URL
+    final url = Uri.parse('https://group-15-7.pvt.dsv.su.se/app/register/profile');
+
+    // Construct the JSON payload
+    final payload = jsonEncode({
       'username': username,
       'name': name,
-      'company': companyVoucher
-    };
-    final jsonBody = jsonEncode(credentials);
+      'voucherCode': voucherCode,
+    });
 
     try {
       final response = await http.post(
@@ -33,16 +33,19 @@ class CompleteProfilePage extends StatelessWidget {
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },
-        body: jsonBody,
+        body: payload,
       );
 
       if (response.statusCode == 200) {
-        return response.body;
+        // Handle success response
+        print('Profile updated successfully');
       } else {
-        throw Exception('Failed to register: ${response.statusCode}');
+        // Handle error response
+        print('Error: ${response.body}');
       }
     } catch (e) {
-      throw Exception('Failed to register: $e');
+      // Handle exceptions
+      print('Exception: $e');
     }
   }
 
@@ -87,7 +90,7 @@ class CompleteProfilePage extends StatelessWidget {
                 const SizedBox(height: 20),
                 MyButton(
                     text: "Complete profile",
-                    onTap: () {
+                    onTap: () async {
                       final name = nameController.text;
                       final companyVoucherCode =
                           companyVoucherCodeController.text;
@@ -99,11 +102,21 @@ class CompleteProfilePage extends StatelessWidget {
                         ));
                         return;
                       }
-                      // update user with name and get company registered form voucher code
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => HomePage()),
-                      );
+
+                      // Call updateUser method and wait for its completion
+                      try {
+                        await completeProfile(username, name, companyVoucherCode);
+
+                        // Navigate to HomePage after updateUser completes successfully
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => HomePage()),
+                        );
+                      } catch (e) {
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                          content: Text('Failed to update user profile: $e'),
+                        ));
+                      }
                     }),
                 const SizedBox(height: 50),
               ],
