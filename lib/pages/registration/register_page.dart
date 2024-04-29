@@ -48,23 +48,26 @@ class RegisterPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
-      body: SafeArea(
-        child: Center(
-          child: SingleChildScrollView(
+      backgroundColor: Colors.transparent,
+      body: Center(
+        child: SingleChildScrollView(
+          child: Container(
+            height: 1000, //Fyller ut bakgrundsbilden
+            decoration: const BoxDecoration(
+              image: DecorationImage(
+                  image: AssetImage("images/Midnattsloppet.jpg"),
+                  fit: BoxFit.fitHeight //Justera bakgrund
+                  ),
+            ),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 const SizedBox(height: 25),
-                const Icon(
-                  Icons.lock,
-                  size: 75,
-                ),
                 const SizedBox(height: 50),
                 Text(
                   'Let\'s create your account!',
                   style: TextStyle(
-                    color: Colors.grey[700],
+                    color: Colors.white,
                     fontSize: 16,
                   ),
                 ),
@@ -181,7 +184,7 @@ class RegisterPage extends StatelessWidget {
                     children: [
                       Text(
                         'Already have an account?',
-                        style: TextStyle(color: Colors.grey[700]),
+                        style: TextStyle(color: Colors.white),
                       ),
                       const SizedBox(width: 4),
                       const Text(

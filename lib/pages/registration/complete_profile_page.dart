@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application/pages/registration/team_page.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
@@ -14,11 +15,12 @@ class CompleteProfilePage extends StatelessWidget {
   final nameController = TextEditingController();
   final companyVoucherCodeController = TextEditingController();
 
-  // should perhaps be combined to one API call with the register user method? 
+  // should perhaps be combined to one API call with the register user method?
   Future<void> completeProfile(
       String username, String name, String voucherCode) async {
     // Replace 'your_backend_url' with your actual backend URL
-    final url = Uri.parse('https://group-15-7.pvt.dsv.su.se/app/register/profile');
+    final url =
+        Uri.parse('https://group-15-7.pvt.dsv.su.se/app/register/profile');
 
     // Construct the JSON payload
     final payload = jsonEncode({
@@ -52,26 +54,26 @@ class CompleteProfilePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
-      body: SafeArea(
-        child: Center(
-          child: SingleChildScrollView(
+      backgroundColor: Colors.transparent,
+      body: Center(
+        child: SingleChildScrollView(
+          child: Container(
+            height: 1000, //Fyller ut bakgrundsbilden
+            decoration: const BoxDecoration(
+              image: DecorationImage(
+                  image: AssetImage("images/Midnattsloppet.jpg"),
+                  fit: BoxFit.fitHeight //Justera bakgrund
+                  ),
+            ),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 const SizedBox(height: 50),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 20),
-                  child: Icon(
-                    Icons.lock,
-                    size: 75,
-                  ),
-                ),
                 const SizedBox(height: 20),
                 Text(
                   'Let\'s complete your profile!',
                   style: TextStyle(
-                    color: Colors.grey[700],
+                    color: Colors.white,
                     fontSize: 16,
                   ),
                 ),
@@ -105,7 +107,8 @@ class CompleteProfilePage extends StatelessWidget {
 
                       // Call updateUser method and wait for its completion
                       try {
-                        await completeProfile(username, name, companyVoucherCode);
+                        await completeProfile(
+                            username, name, companyVoucherCode);
 
                         // Navigate to HomePage after updateUser completes successfully
                         Navigator.push(
