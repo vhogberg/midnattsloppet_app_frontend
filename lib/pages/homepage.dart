@@ -3,7 +3,7 @@ import 'package:flutter_application/pages/login_page/login_widget.dart';
 import 'package:http/http.dart' as http;
 import 'package:iconsax/iconsax.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:flutter_application/components/custom_colors.dart';
+import 'package:flutter_application/pages/navigation_bar/navigation_bar.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -223,7 +223,7 @@ class _HomePageState extends State<HomePage> {
                           top: 10,
                           left: 10,
                           child: Padding(
-                            padding: const EdgeInsets.all(8.0),
+                            padding: EdgeInsets.all(8.0),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -326,6 +326,7 @@ class _HomePageState extends State<HomePage> {
           ),
         ],
       ),
+      bottomNavigationBar: const MyNavigationBar(),
     );
   }
 }
