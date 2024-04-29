@@ -18,7 +18,7 @@ class LoginPage extends StatelessWidget {
       body: Center(
         child: SingleChildScrollView(
           child: Container(
-            height: 950, //Fyller ut bakgrundsbilden
+            height: 1000, //Fyller ut bakgrundsbilden
             decoration: const BoxDecoration(
               image: DecorationImage(
                   image: AssetImage("images/Midnattsloppet.jpg"),
