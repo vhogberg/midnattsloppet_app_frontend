@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application/pages/registration/team_page.dart';
+import 'package:flutter_application/pages/registration/team/team_page.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
@@ -71,7 +71,7 @@ class CompleteProfilePage extends StatelessWidget {
                 const SizedBox(height: 50),
                 const SizedBox(height: 20),
                 Text(
-                  'Let\'s complete your profile!',
+                  'Låt oss färdigställa din profil!',
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 16,
@@ -80,18 +80,18 @@ class CompleteProfilePage extends StatelessWidget {
                 const SizedBox(height: 20),
                 MyTextField(
                   controller: nameController,
-                  hintText: 'Name',
+                  hintText: 'Namn',
                   obscureText: false,
                 ),
                 const SizedBox(height: 10),
                 MyTextField(
                   controller: companyVoucherCodeController,
-                  hintText: 'Voucher code',
+                  hintText: 'Företagskod',
                   obscureText: false,
                 ),
                 const SizedBox(height: 20),
                 MyButton(
-                    text: "Complete profile",
+                    text: "Färdigställ profil",
                     onTap: () async {
                       final name = nameController.text;
                       final companyVoucherCode =
@@ -100,7 +100,7 @@ class CompleteProfilePage extends StatelessWidget {
                       if (name.isEmpty || companyVoucherCode.isEmpty) {
                         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                           content: Text(
-                              'Please enter a name and a company voucher code to proceed.'),
+                              'Vänligen ange ett namn och en företagskod.'),
                         ));
                         return;
                       }
@@ -113,7 +113,7 @@ class CompleteProfilePage extends StatelessWidget {
                         // Navigate to HomePage after updateUser completes successfully
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => HomePage()),
+                          MaterialPageRoute(builder: (context) => RegisterTeamPage(username)),
                         );
                       } catch (e) {
                         ScaffoldMessenger.of(context).showSnackBar(SnackBar(

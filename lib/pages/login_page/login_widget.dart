@@ -29,7 +29,7 @@ class LoginPage extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 const Text(
-                  'Welcome back, you\'ve been missed!',
+                  'Välkommen!',
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 16,
@@ -38,13 +38,13 @@ class LoginPage extends StatelessWidget {
                 const SizedBox(height: 10),
                 MyTextField(
                   controller: emailController,
-                  hintText: 'Username',
+                  hintText: 'Användarnamn',
                   obscureText: false,
                 ),
                 const SizedBox(height: 10),
                 MyTextField(
                   controller: passwordController,
-                  hintText: 'Password',
+                  hintText: 'Lösenord',
                   obscureText: true,
                 ),
                 const SizedBox(height: 10),
@@ -54,7 +54,7 @@ class LoginPage extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       Text(
-                        'Forgot Password?',
+                        'Glömt lösenord?',
                         style: TextStyle(color: Colors.white),
                       ),
                     ],
@@ -62,7 +62,7 @@ class LoginPage extends StatelessWidget {
                 ),
                 const SizedBox(height: 25),
                 MyButton(
-                  text: "Sign In",
+                  text: "Logga in",
                   onTap: () {
                     final username = emailController.text;
                     final password = passwordController.text;
@@ -71,7 +71,7 @@ class LoginPage extends StatelessWidget {
                     if (username.isEmpty || password.isEmpty) {
                       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                         content:
-                            Text('Please enter both username and password.'),
+                            Text('Vänligen ange både användarnamn och lösenord.'),
                       ));
                       return; // Exit the function early if either field is empty
                     }
@@ -92,13 +92,13 @@ class LoginPage extends StatelessWidget {
                         ScaffoldMessenger.of(context)
                             .showSnackBar(const SnackBar(
                           content: Text(
-                              'Failed to login: User not found or invalid credentials.'),
+                              ': Inloggning misslyckades.'),
                         ));
                       }
                     }).catchError((error) {
                       // Handle login error
                       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                        content: Text('Failed to login: $error'),
+                        content: Text('Inloggning misslyckades: $error'),
                       ));
                     });
                   },
@@ -108,7 +108,7 @@ class LoginPage extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     const Text(
-                      'Not a member?',
+                      'Inget användarkonto?',
                       style: TextStyle(color: Colors.white, fontSize: 15),
                     ),
                     const SizedBox(width: 4),
@@ -121,7 +121,7 @@ class LoginPage extends StatelessWidget {
                         );
                       },
                       child: const Text(
-                        'Register now',
+                        'Registrera dig nu',
                         style: TextStyle(
                             color: Colors.blue,
                             fontWeight: FontWeight.bold,

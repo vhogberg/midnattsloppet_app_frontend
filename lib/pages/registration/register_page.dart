@@ -65,7 +65,7 @@ class RegisterPage extends StatelessWidget {
                 const SizedBox(height: 25),
                 const SizedBox(height: 50),
                 Text(
-                  'Let\'s create your account!',
+                  'Låt oss skapa ditt konto!',
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 16,
@@ -74,19 +74,19 @@ class RegisterPage extends StatelessWidget {
                 const SizedBox(height: 25),
                 MyTextField(
                   controller: emailController,
-                  hintText: 'Username',
+                  hintText: 'Användarnamn',
                   obscureText: false,
                 ),
                 const SizedBox(height: 10),
                 MyTextField(
                   controller: passwordController,
-                  hintText: 'Password',
+                  hintText: 'Lösenord',
                   obscureText: true,
                 ),
                 const SizedBox(height: 10),
                 MyTextField(
                   controller: confirmPasswordController,
-                  hintText: 'Confirm Password',
+                  hintText: 'Bekräfta lösenord',
                   obscureText: true,
                 ),
                 const SizedBox(height: 10),
@@ -95,16 +95,12 @@ class RegisterPage extends StatelessWidget {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      Text(
-                        'Forgot Password?',
-                        style: TextStyle(color: Colors.grey[600]),
-                      ),
                     ],
                   ),
                 ),
                 const SizedBox(height: 25),
                 MyButton(
-                  text: "Sign Up",
+                  text: "Skapa konto",
                   onTap: () {
                     final username = emailController.text;
                     final password = passwordController.text;
@@ -113,7 +109,7 @@ class RegisterPage extends StatelessWidget {
                     if (username.isEmpty || password.isEmpty) {
                       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                         content:
-                            Text('Please enter both username and password.'),
+                            Text('Vänligen ange både användarnamn och lösenord.'),
                       ));
                       return; // Exit the function early if either field is empty
                     }
@@ -183,12 +179,12 @@ class RegisterPage extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        'Already have an account?',
+                        'Har du redan ett användarkonto?',
                         style: TextStyle(color: Colors.white),
                       ),
                       const SizedBox(width: 4),
                       const Text(
-                        'Sign in',
+                        'Logga in',
                         style: TextStyle(
                           color: Colors.blue,
                           fontWeight: FontWeight.bold,
