@@ -94,8 +94,7 @@ class RegisterPage extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(horizontal: 25.0),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                    ],
+                    children: [],
                   ),
                 ),
                 const SizedBox(height: 25),
@@ -108,8 +107,8 @@ class RegisterPage extends StatelessWidget {
                     // Check if username or password is empty
                     if (username.isEmpty || password.isEmpty) {
                       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                        content:
-                            Text('Vänligen ange både användarnamn och lösenord.'),
+                        content: Text(
+                            'Vänligen ange både användarnamn och lösenord.'),
                       ));
                       return; // Exit the function early if either field is empty
                     }
