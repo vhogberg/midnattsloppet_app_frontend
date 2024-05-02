@@ -16,31 +16,32 @@ class _MyGoalReachedState extends State<MyGoalReached> {
   @override
   void initState() {
     super.initState();
-    // Starta kontinuerlig kontroll av målet när widgeten initialiseras
+    // Start continuous goal check when the widget initializes
     startGoalCheck();
   }
 
-  // Metod för att kontinuerligt kontrollera om målet har nåtts
-  // Är däremot osäker på om detta är en bra lösning...
+  // Method for continuous goal check
   void startGoalCheck() {
     Timer.periodic(Duration(minutes: 5), (timer) {
       checkGoalReached();
     });
   }
 
-  // Metod för att göra en GET-förfrågan till servern för att kontrollera om målet har nåtts
+  // Method to check if the goal is reached
   Future<void> checkGoalReached() async {
     try {
       var url = Uri.parse(
-          'https://group-15-7.pvt.dsv.su.se/app/team/{teamId}/checkGoal'); //på något sätt få tag på teamId
+          'https://group-15-7.pvt.dsv.su.se/app/team/{teamId}/checkGoal');
       var response = await http.get(url);
       if (response.statusCode == 200) {
-        // Om målet har nåtts, visa popup-rutan
         setState(() {
           isGoalReached = response.body.toLowerCase() == 'true';
         });
-      } else {
-      }
+        if (isGoalReached) {
+          // If goal is reached, show notification
+          showCustomDialog(context);
+        }
+      } else {}
     } catch (e) {
       print('Error checking goal: $e');
     }
@@ -51,20 +52,15 @@ class _MyGoalReachedState extends State<MyGoalReached> {
     return MaterialApp(
       home: Scaffold(
         body: Center(
-          child: isGoalReached    // inte helt säker på vad som händer här
-              ? ElevatedButton(   // men kort och gott ---> om isGoalReached == true 
-                  onPressed: () { // ---> tryck på en osynlig knapp som sätter igång notifikation??? eller?
-                    showCustomDialog(context);
-                  },
-                  child: Text('Show Goal Reached Dialog'),
-                )
+          child: isGoalReached
+              ? Text('Donation goal reached!')
               : Text('Donation goal not reached yet'),
         ),
       ),
     );
   }
 
-  // Metod för att visa popup-rutan när målet har nåtts
+  // Method to show custom dialog when goal is reached
   void showCustomDialog(BuildContext context) {
     showDialog(
       context: context,
@@ -115,7 +111,7 @@ class _MyGoalReachedState extends State<MyGoalReached> {
                   TextButton(
                     style: TextButton.styleFrom(
                       backgroundColor:
-                          Color(int.parse('0xFF3C4785')), // Justerad till lila
+                          Color(int.parse('0xFF3C4785')), // Adjusted to purple
                       padding:
                           EdgeInsets.symmetric(horizontal: 30, vertical: 15),
                       shape: RoundedRectangleBorder(
