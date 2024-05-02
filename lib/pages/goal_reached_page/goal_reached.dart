@@ -3,14 +3,14 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
-class MyGoalReached extends StatefulWidget {
-  const MyGoalReached({Key? key}) : super(key: key);
+class TeamGoalReached extends StatefulWidget {
+  const TeamGoalReached({super.key});
 
   @override
-  _MyGoalReachedState createState() => _MyGoalReachedState();
+  _TeamGoalReachedState createState() => _TeamGoalReachedState();
 }
 
-class _MyGoalReachedState extends State<MyGoalReached> {
+class _TeamGoalReachedState extends State<TeamGoalReached> {
   bool isGoalReached = false;
 
   @override
@@ -22,7 +22,7 @@ class _MyGoalReachedState extends State<MyGoalReached> {
 
   // Method for continuous goal check
   void startGoalCheck() {
-    Timer.periodic(Duration(minutes: 5), (timer) {
+    Timer.periodic(const Duration(seconds: 10), (timer) {
       checkGoalReached();
     });
   }
@@ -53,8 +53,8 @@ class _MyGoalReachedState extends State<MyGoalReached> {
       home: Scaffold(
         body: Center(
           child: isGoalReached
-              ? Text('Donation goal reached!')
-              : Text('Donation goal not reached yet'),
+              ? const Text('Donation goal reached!')
+              : const Text('Donation goal not reached yet'),
         ),
       ),
     );
@@ -81,15 +81,15 @@ class _MyGoalReachedState extends State<MyGoalReached> {
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
                   ClipRRect(
-                    borderRadius: BorderRadius.only(
+                    borderRadius: const BorderRadius.only(
                       topLeft: Radius.circular(12),
                       topRight: Radius.circular(12),
                     ),
                     child: Image.asset('images/goal_reached.png',
                         fit: BoxFit.cover),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
+                  const Padding(
+                    padding: EdgeInsets.symmetric(
                         vertical: 20, horizontal: 10),
                     child: Text(
                       'Donation goal reached!',
@@ -99,25 +99,25 @@ class _MyGoalReachedState extends State<MyGoalReached> {
                       ),
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                  const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 10),
                     child: Text(
                       'Thank you so much for making a difference!',
                       textAlign: TextAlign.center,
                       style: TextStyle(fontSize: 16),
                     ),
                   ),
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                   TextButton(
                     style: TextButton.styleFrom(
                       backgroundColor:
                           Color(int.parse('0xFF3C4785')), // Adjusted to purple
                       padding:
-                          EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+                          const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(30),
                       ),
-                      textStyle: TextStyle(
+                      textStyle: const TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
                       ),
@@ -125,7 +125,7 @@ class _MyGoalReachedState extends State<MyGoalReached> {
                     onPressed: () {
                       Navigator.of(context).pop();
                     },
-                    child: Text(
+                    child: const Text(
                       'Back',
                       style: TextStyle(
                         color: Colors.white,
@@ -133,7 +133,7 @@ class _MyGoalReachedState extends State<MyGoalReached> {
                       ),
                     ),
                   ),
-                  SizedBox(height: 30),
+                  const SizedBox(height: 30),
                 ],
               ),
             ),
