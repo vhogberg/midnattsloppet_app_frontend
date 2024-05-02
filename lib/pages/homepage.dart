@@ -1,4 +1,7 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:flutter_application/components/donation_progress_bar.dart';
 import 'package:flutter_application/pages/login_page/login_widget.dart';
 import 'package:http/http.dart' as http;
 import 'package:iconsax/iconsax.dart';
@@ -83,21 +86,21 @@ class _HomePageState extends State<HomePage> {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
+          const Row(
             children: [
               Padding(
                 padding: const EdgeInsets.only(left: 20),
                 child: Text(
-                  "Good morning $username!",
-                  style: const TextStyle(
+                  "Godmorgon!",
+                  style: TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
                     color: Colors.black,
                   ),
                 ),
               ),
-              const Spacer(),
-              const Padding(
+              Spacer(),
+              Padding(
                 padding: EdgeInsets.only(right: 20),
                 child: Icon(
                   Iconsax.notification,
@@ -105,7 +108,7 @@ class _HomePageState extends State<HomePage> {
                   color: Color.fromARGB(255, 113, 113, 113),
                 ),
               ),
-              const Padding(
+              Padding(
                 padding: EdgeInsets.only(right: 20),
                 child: CircleAvatar(
                   radius: 35,
@@ -120,17 +123,17 @@ class _HomePageState extends State<HomePage> {
             children: [
               Padding(
                 padding:
-                    const EdgeInsets.only(top: 15.0, left: 30.0, right: 30.0),
+                    const EdgeInsets.only(top: 15.0, left: 22.0, right: 22.0),
                 child: Column(
                   children: [
                     Stack(
                       children: [
                         Container(
                           width: 400,
-                          height: 230,
+                          height: 290,
                           decoration: BoxDecoration(
                             color: const Color(0XFF3C4785),
-                            borderRadius: BorderRadius.circular(20.0),
+                            borderRadius: BorderRadius.circular(13.0),
                             gradient: const RadialGradient(
                               radius: 0.8,
                               center: Alignment(-0.5, 0.4),
@@ -146,7 +149,7 @@ class _HomePageState extends State<HomePage> {
                             ),
                           ),
                         ),
-                        const Positioned(
+                        Positioned(
                           top: 10,
                           left: 10,
                           child: Padding(
@@ -154,29 +157,53 @@ class _HomePageState extends State<HomePage> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(
-                                  'Lag 1',
+                                const Text(
+                                  'Insamlingsbössa: Nordea Lag 5',
                                   style: TextStyle(
                                     color: Colors.white,
                                     fontSize: 18,
-                                    fontWeight: FontWeight.w600,
+                                    fontWeight: FontWeight.w400,
                                   ),
                                 ),
-                                Text(
-                                  '675 kr',
+                                const Text(
+                                  '1050 kr insamlat',
                                   style: TextStyle(
                                     color: Colors.white,
-                                    fontSize: 36,
+                                    fontSize: 28,
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
-                                SizedBox(height: 8.0),
-                                Text(
-                                  'Donate to support Barncancerfonden.',
+                                const Text(
+                                  'Stödjer: Barncancerfonden',
                                   style: TextStyle(
                                     color: Colors.white,
-                                    fontSize: 17,
+                                    fontSize: 16,
                                     fontWeight: FontWeight.w400,
+                                  ),
+                                ),
+                                const SizedBox(
+                                  height: 15,
+                                ),
+                                const SizedBox(
+                                  width: 315, // Adjust width as needed
+                                  child: Padding(
+                                    padding: EdgeInsets.only(left: 30),
+                                    child: DonationProgressBar(goal: 5000),
+                                  ),
+                                ),
+                                const SizedBox(
+                                  height: 40,
+                                ),
+                                Container(
+                                  width: 345,
+                                  height: 100,
+                                  decoration: BoxDecoration(
+                                    color: Colors.white30,
+                                    borderRadius: BorderRadius.circular(13.0),
+                                    border: Border.all(
+                                      color: Colors.white60, // Border color
+                                      width: 1.0, // Border width
+                                    ),
                                   ),
                                 ),
                               ],
@@ -200,7 +227,7 @@ class _HomePageState extends State<HomePage> {
                       children: [
                         Container(
                           width: 400,
-                          height: 230,
+                          height: 290,
                           decoration: BoxDecoration(
                             color: const Color(0XFF3C4785),
                             borderRadius: BorderRadius.circular(20.0),
@@ -266,58 +293,6 @@ class _HomePageState extends State<HomePage> {
                           ),
                         ),
                       ],
-                    ),
-                    const SizedBox(height: 20),
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => LoginPage()),
-                        );
-                      },
-                      child: Stack(
-                        children: [
-                          Container(
-                            width: 400,
-                            height: 90,
-                            decoration: BoxDecoration(
-                              color: const Color(0XFF3C4785),
-                              borderRadius: BorderRadius.circular(20.0),
-                            ),
-                          ),
-                          Positioned(
-                            top: 10,
-                            left: 10,
-                            child: Padding(
-                              padding: EdgeInsets.all(8.0),
-                              child: Row(
-                                children: [
-                                  Image.asset(
-                                    'images/fire.png',
-                                    width: 50,
-                                    height: 50,
-                                  ),
-                                  const SizedBox(width: 10),
-                                  const Text(
-                                    'Start a challenge',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 24,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  const SizedBox(width: 10),
-                                  Image.asset(
-                                    'images/fire.png',
-                                    width: 50,
-                                    height: 50,
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
                     ),
                   ],
                 ),
