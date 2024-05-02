@@ -8,12 +8,24 @@ import 'package:flutter_application/pages/registration/complete_profile_page.dar
 import 'package:flutter_application/session_manager.dart';
 import 'package:http/http.dart' as http;
 
-class RegisterPage extends StatelessWidget {
+class RegisterPage extends StatefulWidget {
   RegisterPage({super.key});
 
+  @override
+  _RegisterPage createState() => _RegisterPage();
+}
+
+class _RegisterPage extends State<RegisterPage> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   final confirmPasswordController = TextEditingController();
+  String? username;
+
+  @override
+  void initState() {
+    super.initState();
+    username = SessionManager.instance.username;
+  }
 
   //TODO: move this to session manager(?)
   Future<String> registerUser(String username, String password) async {
@@ -132,13 +144,13 @@ class RegisterPage extends StatelessWidget {
 
                       if (response == "User registered successfully") {
                         // Log in the user after successful registration
-                        SessionManager.loginUser(username, password).then((_) {
+                        SessionManager.instance.loginUser(username, password).then((_) {
                           // Navigate to CompleteProfilePage after saving session token
                           Navigator.push(
                             context,
                             MaterialPageRoute(
                                 builder: (context) =>
-                                    CompleteProfilePage(username)),
+                                    CompleteProfilePage()),
                           );
                         }).catchError((error) {
                           ScaffoldMessenger.of(context).showSnackBar(SnackBar(

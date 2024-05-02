@@ -3,9 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_application/components/donation_progress_bar.dart';
 import 'package:flutter_application/pages/login_page/login_widget.dart';
-import 'package:http/http.dart' as http;
+import 'package:flutter_application/session_manager.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_application/pages/navigation_bar/navigation_bar.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -23,54 +22,7 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    getUsernameFromSession();
-  }
-
-  Future<void> getUsernameFromSession() async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    final String? sessionToken = prefs.getString('session_token');
-    if (sessionToken != null) {
-      // Extract username from session token
-      final List<String> parts = sessionToken.split(':');
-      if (parts.length == 2) {
-        setState(() {
-          username = parts[0];
-        });
-      }
-    }
-  }
-
-  // method to sign the user out TODO: move to session manager(?)
-  void signUserOut(BuildContext context) async {
-    try {
-      final SharedPreferences prefs = await SharedPreferences.getInstance();
-      final String? sessionToken = prefs.getString('session_token');
-      if (sessionToken != null) {
-        // Call logout endpoint on the backend
-        final url = Uri.parse('https://group-15-7.pvt.dsv.su.se/app/logout');
-        final response = await http.post(
-          url,
-          headers: <String, String>{
-            'Authorization':
-                'Bearer $sessionToken', // Include session token in the request header
-          },
-        );
-        if (response.statusCode == 200) {
-          // Clear session token from local storage
-          prefs.remove('session_token');
-          // Navigate back to the login screen
-          Navigator.popUntil(context, ModalRoute.withName('/'));
-        } else {
-          throw Exception('Failed to logout: ${response.statusCode}');
-        }
-      }
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Failed to logout: $e'),
-        ),
-      );
-    }
+    username = SessionManager.instance.username;
   }
 
   @override
@@ -79,8 +31,10 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         actions: [
           IconButton(
-            onPressed: () =>
-                signUserOut(context), // Call signUserOut method on press
+            onPressed: () {
+              SessionManager.instance
+                  .signUserOut(context); // Call signUserOut method on press
+            },
             icon: Icon(Icons.logout),
           )
         ],

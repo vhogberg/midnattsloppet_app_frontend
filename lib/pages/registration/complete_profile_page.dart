@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application/pages/registration/team/team_page.dart';
+import 'package:flutter_application/session_manager.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
@@ -7,13 +8,24 @@ import 'package:flutter_application/components/my_button.dart';
 import 'package:flutter_application/components/my_textfield.dart';
 import 'package:flutter_application/pages/homepage.dart';
 
-class CompleteProfilePage extends StatelessWidget {
-  final String username; // Define username as a member variable
+class CompleteProfilePage extends StatefulWidget {
 
-  CompleteProfilePage(this.username, {Key? key}) : super(key: key);
+  CompleteProfilePage({Key? key}) : super(key: key);
 
+    @override
+  _CompleteProfilePage createState() => _CompleteProfilePage();
+}
+
+class _CompleteProfilePage extends State<CompleteProfilePage> {
   final nameController = TextEditingController();
   final companyVoucherCodeController = TextEditingController();
+  String? username;
+
+  @override
+  void initState() {
+    super.initState();
+    username = SessionManager.instance.username;
+  }
 
   // should perhaps be combined to one API call with the register user method?
   Future<void> completeProfile(
@@ -108,12 +120,12 @@ class CompleteProfilePage extends StatelessWidget {
                       // Call updateUser method and wait for its completion
                       try {
                         await completeProfile(
-                            username, name, companyVoucherCode);
+                            username!, name, companyVoucherCode);
 
                         // Navigate to HomePage after updateUser completes successfully
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => RegisterTeamPage(username)),
+                          MaterialPageRoute(builder: (context) => RegisterTeamPage()),
                         );
                       } catch (e) {
                         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
