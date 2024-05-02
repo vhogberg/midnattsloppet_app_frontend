@@ -11,7 +11,7 @@ class MyNavigationBar extends StatefulWidget {
   @override
   _NavigationBarState createState() => _NavigationBarState();
 }
-//hej
+
 class _NavigationBarState extends State<MyNavigationBar> {
   int _currentIndex = 0;
   final List<Widget> _pages = [
