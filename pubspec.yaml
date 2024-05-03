@@ -75,6 +75,18 @@ flutter:
     - images/swishlogo2.jpg.png
     - images/GoalCompleted.png
 
+  fonts:
+
+    - family: Nunito
+      fonts:
+        - asset: fonts/Nunito/Nunito.ttf
+        - asset: fonts/Nunito/Nunito-Italic.ttf
+        - asset: fonts/Nunito/Nunito-Bold.ttf
+        
+
+    - family: Sora
+      fonts:
+        - asset: fonts/Sora/Sora.ttf
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
