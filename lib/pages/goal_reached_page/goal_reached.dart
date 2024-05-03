@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_application/session_manager.dart';
 import 'package:http/http.dart' as http;
 
 class TeamGoalReached extends StatefulWidget {
@@ -12,26 +13,28 @@ class TeamGoalReached extends StatefulWidget {
 
 class _TeamGoalReachedState extends State<TeamGoalReached> {
   bool isGoalReached = false;
+  String? username;
 
   @override
   void initState() {
     super.initState();
     // Start continuous goal check when the widget initializes
-    startGoalCheck();
+    username = SessionManager.instance.username;
+    startGoalCheck(username);
   }
 
   // Method for continuous goal check
-  void startGoalCheck() {
+  void startGoalCheck(username) {
     Timer.periodic(const Duration(seconds: 10), (timer) {
-      checkGoalReached();
+      checkGoalReached(username);
     });
   }
 
   // Method to check if the goal is reached
-  Future<void> checkGoalReached() async {
+  Future<void> checkGoalReached(String username) async {
     try {
       var url = Uri.parse(
-          'https://group-15-7.pvt.dsv.su.se/app/team/{teamId}/checkGoal');
+          'https://group-15-7.pvt.dsv.su.se/app/team/$username/checkGoal');
       var response = await http.get(url);
       if (response.statusCode == 200) {
         setState(() {
@@ -89,8 +92,7 @@ class _TeamGoalReachedState extends State<TeamGoalReached> {
                         fit: BoxFit.cover),
                   ),
                   const Padding(
-                    padding: EdgeInsets.symmetric(
-                        vertical: 20, horizontal: 10),
+                    padding: EdgeInsets.symmetric(vertical: 20, horizontal: 10),
                     child: Text(
                       'Donation goal reached!',
                       style: TextStyle(
@@ -112,8 +114,8 @@ class _TeamGoalReachedState extends State<TeamGoalReached> {
                     style: TextButton.styleFrom(
                       backgroundColor:
                           Color(int.parse('0xFF3C4785')), // Adjusted to purple
-                      padding:
-                          const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 30, vertical: 15),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(30),
                       ),
