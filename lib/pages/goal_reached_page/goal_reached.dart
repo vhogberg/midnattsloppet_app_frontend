@@ -13,7 +13,7 @@ class TeamGoalReached extends StatefulWidget {
 }
 
 class _TeamGoalReachedState extends State<TeamGoalReached> {
-  bool isGoalReached = true;
+  bool isGoalReached = false;
   String? username;
 
   @override
