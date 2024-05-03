@@ -33,8 +33,6 @@ class _TeamGoalReachedState extends State<TeamGoalReached> {
 
   // Method to check if the goal is reached
   Future<void> checkGoalReached(username) async {
-    showCustomDialog(context);
-
     try {
       var url = Uri.parse(
           'https://group-15-7.pvt.dsv.su.se/app/team/$username/checkGoal');
@@ -59,8 +57,8 @@ class _TeamGoalReachedState extends State<TeamGoalReached> {
       home: Scaffold(
         body: Center(
           child: isGoalReached
-              ? const Text('Donation goal reached!')
-              : const Text('Donation goal not reached yet'),
+              ? const Text('')
+              : const Text(''),
         ),
       ),
     );
