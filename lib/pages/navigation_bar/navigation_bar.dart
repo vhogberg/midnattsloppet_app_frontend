@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:flutter_application/pages/homepage.dart';
+import 'package:flutter_application/pages/searchpage.dart';
 //import 'package:flutter_application/pages/examplepage1.dart';
 //import 'package:flutter_application/pages/examplepage2.dart';
 //import 'package:flutter_application/pages/examplepage3.dart';
@@ -70,7 +71,7 @@ class _NavigationBarState extends State<MyNavigationBar> {
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     IconButton(
-                      onPressed: () => _selectPage(2),
+                      onPressed: () => _goToSearchPage(context),
                       icon: Icon(
                         _icons[2],
                         size: _iconSize,
@@ -149,5 +150,11 @@ class _NavigationBarState extends State<MyNavigationBar> {
         _icons[3] = Iconsax.smileys5;
         break;
     }
+  }
+    void _goToSearchPage(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => SearchPage()),
+    );
   }
 }
