@@ -14,24 +14,22 @@ class TeamGoalReached extends StatefulWidget {
 
 class _TeamGoalReachedState extends State<TeamGoalReached> {
   bool isGoalReached = false;
+  bool dialogShown = false; // Variabel för att hålla reda på om dialogrutan redan har visats
   String? username;
 
   @override
   void initState() {
     super.initState();
-    // Start continuous goal check when the widget initializes
     username = SessionManager.instance.username;
     startGoalCheck(username);
   }
 
-  // Method for continuous goal check
   void startGoalCheck(username) {
     Timer.periodic(const Duration(seconds: 10), (timer) {
       checkGoalReached(username);
     });
   }
 
-  // Method to check if the goal is reached
   Future<void> checkGoalReached(username) async {
     try {
       var url = Uri.parse(
@@ -41,8 +39,8 @@ class _TeamGoalReachedState extends State<TeamGoalReached> {
         setState(() {
           isGoalReached = response.body.toLowerCase() == 'true';
         });
-        if (isGoalReached) {
-          // If goal is reached, show notification
+        if (isGoalReached && !dialogShown) { 
+          dialogShown = true; 
           showCustomDialog(context);
         }
       } else {}
@@ -64,7 +62,6 @@ class _TeamGoalReachedState extends State<TeamGoalReached> {
     );
   }
 
-  // Method to show custom dialog when goal is reached
   void showCustomDialog(BuildContext context) {
     showDialog(
       context: context,
