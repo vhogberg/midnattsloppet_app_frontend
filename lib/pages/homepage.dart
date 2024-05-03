@@ -169,10 +169,10 @@ class _HomePageState extends State<HomePage> {
                         Positioned(
                           top: 20,
                           right: 20,
-                          child: Container(
-                            width: 65,
-                            height: 65,
-                            child: Image.asset(
+                            child: Container(
+                              width: 65,
+                              height: 65,
+                              child: Image.asset(
                                 'images/chrome_DmBUq4pVqL-removebg-preview.png'),
                           ),
                         ),
@@ -305,51 +305,62 @@ class ShareHelper {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return Dialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20.0),
+        return SlideTransition(
+          position: Tween<Offset>(
+            begin: const Offset(0, -1),
+            end: Offset.zero,
+          ).animate(
+            CurvedAnimation(
+              parent: ModalRoute.of(context)!.animation!,
+              curve: Curves.easeInOut,
+            ),
           ),
-          child: const Padding(
-            padding: EdgeInsets.all(20.0),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Dela via:',
-                  style: TextStyle(
-                    fontFamily: 'Sora',
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
+          child: Dialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12.0),
+            ),
+            child: const Padding(
+              padding: EdgeInsets.all(20.0),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Dela via:',
+                    style: TextStyle(
+                      fontFamily: 'Sora',
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
-                ),
-                SizedBox(height: 20),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    IconButton(
-                      onPressed: ShareHelper.shareToTwitter,
-                      icon: FaIcon(FontAwesomeIcons.twitter),
-                      iconSize: 50,
-                    ),
-                    IconButton(
-                      onPressed: ShareHelper.shareToFacebook,
-                      icon: FaIcon(FontAwesomeIcons.facebook),
-                      iconSize: 50,
-                    ),
-                    IconButton(
-                      onPressed: ShareHelper.shareToLinkedIn,
-                      icon: FaIcon(FontAwesomeIcons.linkedin),
-                      iconSize: 50,
-                    ),
-                    IconButton(
-                      onPressed: ShareHelper.openMail,
-                      icon: FaIcon(FontAwesomeIcons.envelope),
-                      iconSize: 50,
-                    ),
-                  ],
-                ),
-              ],
+                  SizedBox(height: 15),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      IconButton(
+                        onPressed: shareToTwitter,
+                        icon: FaIcon(FontAwesomeIcons.twitter),
+                        iconSize: 50,
+                      ),
+                      IconButton(
+                        onPressed: shareToFacebook,
+                        icon: FaIcon(FontAwesomeIcons.facebook),
+                        iconSize: 50,
+                      ),
+                      IconButton(
+                        onPressed: shareToLinkedIn,
+                        icon: FaIcon(FontAwesomeIcons.linkedin),
+                        iconSize: 50,
+                      ),
+                      IconButton(
+                        onPressed: openMail,
+                        icon: Icon(Icons.email),
+                        iconSize: 50,
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
         );
