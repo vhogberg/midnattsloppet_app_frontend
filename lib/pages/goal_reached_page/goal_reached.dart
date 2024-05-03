@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_application/components/my_button.dart';
 import 'package:flutter_application/session_manager.dart';
 import 'package:http/http.dart' as http;
 
@@ -12,7 +13,7 @@ class TeamGoalReached extends StatefulWidget {
 }
 
 class _TeamGoalReachedState extends State<TeamGoalReached> {
-  bool isGoalReached = false;
+  bool isGoalReached = true;
   String? username;
 
   @override
@@ -31,7 +32,9 @@ class _TeamGoalReachedState extends State<TeamGoalReached> {
   }
 
   // Method to check if the goal is reached
-  Future<void> checkGoalReached(String username) async {
+  Future<void> checkGoalReached(username) async {
+    showCustomDialog(context);
+
     try {
       var url = Uri.parse(
           'https://group-15-7.pvt.dsv.su.se/app/team/$username/checkGoal');
@@ -88,7 +91,7 @@ class _TeamGoalReachedState extends State<TeamGoalReached> {
                       topLeft: Radius.circular(12),
                       topRight: Radius.circular(12),
                     ),
-                    child: Image.asset('images/goal_reached.png',
+                    child: Image.asset('images/GoalCompleted.png',
                         fit: BoxFit.cover),
                   ),
                   const Padding(
@@ -110,31 +113,11 @@ class _TeamGoalReachedState extends State<TeamGoalReached> {
                     ),
                   ),
                   const SizedBox(height: 20),
-                  TextButton(
-                    style: TextButton.styleFrom(
-                      backgroundColor:
-                          Color(int.parse('0xFF3C4785')), // Adjusted to purple
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 30, vertical: 15),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30),
-                      ),
-                      textStyle: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                    child: const Text(
-                      'Back',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 16,
-                      ),
-                    ),
-                  ),
+                  MyButton(
+                      text: "Back",
+                      onTap: () {
+                        Navigator.of(context).pop();
+                      }),
                   const SizedBox(height: 30),
                 ],
               ),
