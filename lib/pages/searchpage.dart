@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class SearchPage extends StatefulWidget {
   SearchPage({Key? key}) : super(key: key);
@@ -9,44 +11,13 @@ class SearchPage extends StatefulWidget {
 
 class _SearchPageState extends State<SearchPage> {
   final TextEditingController searchController = TextEditingController();
-  List<String> teams = [
-    'Team 1',
-    'Team 2',
-    'Team 3',
-    'Team 4',
-    'Team 5',
-    'Team 6',
-    'Team 7',
-    'Team 8',
-    'Team 9',
-    'Team 10',
-    'Team 11',
-    'Team 12',
-    'Team 13',
-    'Team 14',
-    'Team 15',
-    'Team 16',
-    'Team 17',
-    'Team 18',
-    'Team 19',
-    'Team 20',
-    'Team 21',
-    'Team 22',
-    'Team 23',
-    'Team 24',
-    'Team 25',
-    'Team 26',
-    'Team 27',
-    'Team 28',
-    'Team 29',
-    'Team 30',
-  ];
+  List<String> teams = [];
   List<String> filteredTeams = [];
 
   @override
   void initState() {
     super.initState();
-    filteredTeams = teams;
+    fetchEntitiesFromAPI();
   }
 
   @override
@@ -124,6 +95,20 @@ class _SearchPageState extends State<SearchPage> {
         ),
       ),
     );
+  }
+
+  Future<void> fetchEntitiesFromAPI() async {
+    final response = await http
+        .get(Uri.parse('https://group-15-7.pvt.dsv.su.se/app/all/teams'));
+    if (response.statusCode == 200) {
+      final List<dynamic> data = jsonDecode(response.body);
+      setState(() {
+        teams = List<String>.from(data);
+        filteredTeams.addAll(teams);
+      });
+    } else {
+      throw Exception('Failed to load teams from API');
+    }
   }
 
   void _filterTeams(String searchTerm) {
