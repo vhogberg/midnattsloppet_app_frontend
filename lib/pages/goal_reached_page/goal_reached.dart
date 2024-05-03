@@ -1,12 +1,12 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_application/components/my_button.dart';
 import 'package:flutter_application/session_manager.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class TeamGoalReached extends StatefulWidget {
-  const TeamGoalReached({super.key});
+  const TeamGoalReached({Key? key}) : super(key: key);
 
   @override
   _TeamGoalReachedState createState() => _TeamGoalReachedState();
@@ -14,7 +14,6 @@ class TeamGoalReached extends StatefulWidget {
 
 class _TeamGoalReachedState extends State<TeamGoalReached> {
   bool isGoalReached = false;
-  bool dialogShown = false; // Variabel för att hålla reda på om dialogrutan redan har visats
   String? username;
 
   @override
@@ -24,13 +23,15 @@ class _TeamGoalReachedState extends State<TeamGoalReached> {
     startGoalCheck(username);
   }
 
-  void startGoalCheck(username) {
+  void startGoalCheck(String? username) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
     Timer.periodic(const Duration(seconds: 10), (timer) {
-      checkGoalReached(username);
+      checkGoalReached(username, prefs);
     });
   }
 
-  Future<void> checkGoalReached(username) async {
+  Future<void> checkGoalReached(
+      String? username, SharedPreferences prefs) async {
     try {
       var url = Uri.parse(
           'https://group-15-7.pvt.dsv.su.se/app/team/$username/checkGoal');
@@ -39,11 +40,11 @@ class _TeamGoalReachedState extends State<TeamGoalReached> {
         setState(() {
           isGoalReached = response.body.toLowerCase() == 'true';
         });
-        if (isGoalReached && !dialogShown) { 
-          dialogShown = true; 
+        if (isGoalReached && !(prefs.getBool('dialogShown') ?? false)) {
+          prefs.setBool('dialogShown', true);
           showCustomDialog(context);
         }
-      } else {}
+      }
     } catch (e) {
       print('Error checking goal: $e');
     }
@@ -54,9 +55,7 @@ class _TeamGoalReachedState extends State<TeamGoalReached> {
     return MaterialApp(
       home: Scaffold(
         body: Center(
-          child: isGoalReached
-              ? const Text('')
-              : const Text(''),
+          child: isGoalReached ? const Text('') : const Text(''),
         ),
       ),
     );
