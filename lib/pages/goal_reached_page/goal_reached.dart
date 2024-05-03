@@ -92,7 +92,7 @@ class _TeamGoalReachedState extends State<TeamGoalReached> {
                   const Padding(
                     padding: EdgeInsets.symmetric(vertical: 20, horizontal: 10),
                     child: Text(
-                      'Donation goal reached!',
+                      'Tack så hemskt mycket!',
                       style: TextStyle(
                         fontSize: 24,
                         fontWeight: FontWeight.bold,
@@ -102,14 +102,14 @@ class _TeamGoalReachedState extends State<TeamGoalReached> {
                   const Padding(
                     padding: EdgeInsets.symmetric(horizontal: 10),
                     child: Text(
-                      'Thank you so much for making a difference!',
+                      'Eran insats kommer att göra en verklig skillnad och bidra till en bättre värld! Vi är djupt tacksamma för er godhet och stöd.',
                       textAlign: TextAlign.center,
                       style: TextStyle(fontSize: 16),
                     ),
                   ),
                   const SizedBox(height: 20),
                   MyButton(
-                      text: "Back",
+                      text: "Tillbaka",
                       onTap: () {
                         Navigator.of(context).pop();
                       }),
