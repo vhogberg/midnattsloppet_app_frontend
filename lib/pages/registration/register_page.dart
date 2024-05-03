@@ -8,12 +8,24 @@ import 'package:flutter_application/pages/registration/complete_profile_page.dar
 import 'package:flutter_application/session_manager.dart';
 import 'package:http/http.dart' as http;
 
-class RegisterPage extends StatelessWidget {
+class RegisterPage extends StatefulWidget {
   RegisterPage({super.key});
 
+  @override
+  _RegisterPage createState() => _RegisterPage();
+}
+
+class _RegisterPage extends State<RegisterPage> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   final confirmPasswordController = TextEditingController();
+  String? username;
+
+  @override
+  void initState() {
+    super.initState();
+    username = SessionManager.instance.username;
+  }
 
   //TODO: move this to session manager(?)
   Future<String> registerUser(String username, String password) async {
@@ -94,8 +106,7 @@ class RegisterPage extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(horizontal: 25.0),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                    ],
+                    children: [],
                   ),
                 ),
                 const SizedBox(height: 25),
@@ -108,8 +119,8 @@ class RegisterPage extends StatelessWidget {
                     // Check if username or password is empty
                     if (username.isEmpty || password.isEmpty) {
                       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                        content:
-                            Text('Vänligen ange både användarnamn och lösenord.'),
+                        content: Text(
+                            'Vänligen ange både användarnamn och lösenord.'),
                       ));
                       return; // Exit the function early if either field is empty
                     }
@@ -133,13 +144,13 @@ class RegisterPage extends StatelessWidget {
 
                       if (response == "User registered successfully") {
                         // Log in the user after successful registration
-                        SessionManager.loginUser(username, password).then((_) {
+                        SessionManager.instance.loginUser(username, password).then((_) {
                           // Navigate to CompleteProfilePage after saving session token
                           Navigator.push(
                             context,
                             MaterialPageRoute(
                                 builder: (context) =>
-                                    CompleteProfilePage(username)),
+                                    CompleteProfilePage()),
                           );
                         }).catchError((error) {
                           ScaffoldMessenger.of(context).showSnackBar(SnackBar(

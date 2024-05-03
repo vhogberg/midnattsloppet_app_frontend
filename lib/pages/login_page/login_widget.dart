@@ -5,11 +5,24 @@ import 'package:flutter_application/pages/homepage.dart';
 import 'package:flutter_application/pages/registration/register_page.dart';
 import 'package:flutter_application/session_manager.dart';
 
-class LoginPage extends StatelessWidget {
-  LoginPage({super.key});
+class LoginPage extends StatefulWidget {
+  const LoginPage({Key? key}) : super(key: key);
 
-  final emailController = TextEditingController();
-  final passwordController = TextEditingController();
+  @override
+  _LoginPageState createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
+  TextEditingController _usernameController = TextEditingController();
+  TextEditingController _passwordController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    // Clear the text fields when the login page is initialized
+    _usernameController.clear();
+    _passwordController.clear();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -18,12 +31,12 @@ class LoginPage extends StatelessWidget {
       body: Center(
         child: SingleChildScrollView(
           child: Container(
-            height: 1000, //Fyller ut bakgrundsbilden
+            height: 1000, // Fyller ut bakgrundsbilden
             decoration: const BoxDecoration(
               image: DecorationImage(
-                  image: AssetImage("images/Midnattsloppet.jpg"),
-                  fit: BoxFit.fitHeight //Justera bakgrund
-                  ),
+                image: AssetImage("images/Midnattsloppet.jpg"),
+                fit: BoxFit.fitHeight, // Justera bakgrund
+              ),
             ),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -37,13 +50,13 @@ class LoginPage extends StatelessWidget {
                 ),
                 const SizedBox(height: 10),
                 MyTextField(
-                  controller: emailController,
+                  controller: _usernameController,
                   hintText: 'Användarnamn',
                   obscureText: false,
                 ),
                 const SizedBox(height: 10),
                 MyTextField(
-                  controller: passwordController,
+                  controller: _passwordController,
                   hintText: 'Lösenord',
                   obscureText: true,
                 ),
@@ -64,42 +77,41 @@ class LoginPage extends StatelessWidget {
                 MyButton(
                   text: "Logga in",
                   onTap: () {
-                    final username = emailController.text;
-                    final password = passwordController.text;
+                    final username = _usernameController.text;
+                    final password = _passwordController.text;
 
                     // Check if username or password is empty
                     if (username.isEmpty || password.isEmpty) {
-                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                        content:
-                            Text('Vänligen ange både användarnamn och lösenord.'),
-                      ));
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text(
+                            'Vänligen ange både användarnamn och lösenord.',
+                          ),
+                        ),
+                      );
                       return; // Exit the function early if either field is empty
                     }
 
                     // Proceed with login if username and password are not empty
-                    SessionManager.loginUser(username, password)
+                    SessionManager.instance
+                        .loginUser(username, password)
                         .then((sessionToken) {
-                      if (sessionToken != null) {
-                        // Save session token and navigate to home page
-                        SessionManager.saveSessionToken(sessionToken).then((_) {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => HomePage()),
-                          );
-                        });
-                      } else {
-                        // Handle login failure
-                        ScaffoldMessenger.of(context)
-                            .showSnackBar(const SnackBar(
-                          content: Text(
-                              ': Inloggning misslyckades.'),
-                        ));
-                      }
+                      // Save session token and navigate to home page
+                      SessionManager.instance
+                          .saveSessionToken(sessionToken)
+                          .then((_) {
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(builder: (context) => HomePage()),
+                        );
+                      });
                     }).catchError((error) {
                       // Handle login error
-                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                        content: Text('Inloggning misslyckades: $error'),
-                      ));
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text('Inloggning misslyckades: $error'),
+                        ),
+                      );
                     });
                   },
                 ),
@@ -117,15 +129,17 @@ class LoginPage extends StatelessWidget {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => RegisterPage()),
+                            builder: (context) => RegisterPage(),
+                          ),
                         );
                       },
                       child: const Text(
                         'Registrera dig nu',
                         style: TextStyle(
-                            color: Colors.blue,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 15),
+                          color: Colors.blue,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 15,
+                        ),
                       ),
                     ),
                   ],

@@ -5,9 +5,8 @@ import 'package:flutter_application/pages/registration/team/join_team_page.dart'
 import 'package:flutter_application/components/my_button.dart';
 
 class RegisterTeamPage extends StatelessWidget {
-  final String username; // Define username as a member variable
 
-  RegisterTeamPage(this.username, {super.key});
+  RegisterTeamPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +43,7 @@ class RegisterTeamPage extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => JoinTeamPage(username)),
+                            builder: (context) => JoinTeamPage()),
                       );
                     }),
                 const SizedBox(height: 20), // Add some spacing between buttons
@@ -54,7 +53,7 @@ class RegisterTeamPage extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => CreateTeamPage(username)),
+                            builder: (context) => CreateTeamPage()),
                       );
                     }),
                 const SizedBox(height: 50),
