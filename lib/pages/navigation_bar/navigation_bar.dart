@@ -1,17 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application/pages/myteampage.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:flutter_application/pages/homepage.dart';
 import 'package:flutter_application/pages/searchpage.dart';
-<<<<<<< HEAD
 import 'package:flutter_application/pages/leaderboard_page/leaderboard_page.dart';
 import 'package:flutter_application/pages/challenge_page/challenge_page.dart';
-=======
-import 'package:flutter_application/pages/myteampage.dart';
-//import 'package:flutter_application/pages/examplepage1.dart';
-//import 'package:flutter_application/pages/examplepage2.dart';
->>>>>>> 4b30e71b29e9662aecb5ee17fcb08de284291dfd
-//import 'package:flutter_application/pages/examplepage3.dart';
 
 class MyNavigationBar extends StatefulWidget {
   const MyNavigationBar({super.key});
@@ -23,15 +17,9 @@ class _NavigationBarState extends State<MyNavigationBar> {
   int _currentIndex = 0;
   final List<Widget> _pages = [
     const HomePage(),
-<<<<<<< HEAD
     ChallengePage(), // Include ChallengePage here
     Container(), // LeaderboardPage(),
     Container(), // ExamplePage3(),
-=======
-    Container(), //ExamplePage1(),
-    Container(), //ExamplePage2(),
-    const MyTeamPage(),
->>>>>>> 4b30e71b29e9662aecb5ee17fcb08de284291dfd
   ];
 
   final double _iconSize = 36.0;
@@ -181,17 +169,20 @@ class _NavigationBarState extends State<MyNavigationBar> {
       _currentIndex = index;
       _updateIcons();
       _updateNames();
-      
+
+      if (_currentIndex == 0) {
+        _goToHomePage(context);
+      }
+
       if (_currentIndex == 1) {
         // Check if "Lagkamp" button is clicked
         _goToChallengePage(context); // Navigate to ChallengePage
       }
-      
+
       if (_currentIndex == 2) {
         // Check if "Topplista" button is clicked
         _goToLeaderboardPage(context); // Navigate to LeaderboardPage
       }
-      
     });
   }
 
@@ -279,10 +270,10 @@ class _NavigationBarState extends State<MyNavigationBar> {
     }
   }
 
-  void _goToSearchPage(BuildContext context) {
+  void _goToHomePage(BuildContext context) {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => SearchPage()),
+      MaterialPageRoute(builder: (context) => const HomePage()),
     );
   }
 
@@ -298,11 +289,11 @@ class _NavigationBarState extends State<MyNavigationBar> {
       context,
       MaterialPageRoute(builder: (context) => ChallengePage()),
     );
-  
-  void _goToMyTeamPage(BuildContext context) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => MyTeamPage()),
+
+    void _goToMyTeamPage(BuildContext context) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => MyTeamPage()),
       );
     }
   }
