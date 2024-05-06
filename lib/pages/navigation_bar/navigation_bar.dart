@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:flutter_application/pages/homepage.dart';
+import 'package:flutter_application/pages/searchpage.dart';
 //import 'package:flutter_application/pages/examplepage1.dart';
 //import 'package:flutter_application/pages/examplepage2.dart';
 //import 'package:flutter_application/pages/examplepage3.dart';
@@ -11,7 +12,7 @@ class MyNavigationBar extends StatefulWidget {
   @override
   _NavigationBarState createState() => _NavigationBarState();
 }
-//hej
+
 class _NavigationBarState extends State<MyNavigationBar> {
   int _currentIndex = 0;
   final List<Widget> _pages = [
@@ -24,11 +25,34 @@ class _NavigationBarState extends State<MyNavigationBar> {
   final double _iconSize = 36.0;
   final Uri _url = Uri.parse('https://group-15-7.pvt.dsv.su.se/app/donate');
 
-  List<IconData> _icons = [
+  List<IconData> _pageIcons = [
     Iconsax.home_2,
     Iconsax.medal_star,
     Iconsax.receipt_item,
     Iconsax.smileys,
+  ];
+
+  List<Text> _pageNames = [
+    const Text("Hem",
+        style: TextStyle(
+          fontFamily: 'Nunito',
+          fontSize: 14,
+        )),
+    const Text("Lagkamp",
+        style: TextStyle(
+          fontFamily: 'Nunito',
+          fontSize: 14,
+        )),
+    const Text("Topplista",
+        style: TextStyle(
+          fontFamily: 'Nunito',
+          fontSize: 14,
+        )),
+    const Text("Mitt lag",
+        style: TextStyle(
+          fontFamily: 'Nunito',
+          fontSize: 14,
+        )),
   ];
 
   @override
@@ -38,7 +62,7 @@ class _NavigationBarState extends State<MyNavigationBar> {
         Container(
           height: 120,
           padding:
-              const EdgeInsets.only(bottom: 24.0, left: 32, right: 32, top: 45),
+              const EdgeInsets.only(bottom: 24.0, left: 32, right: 32, top: 20),
           color: Colors.transparent,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -47,20 +71,30 @@ class _NavigationBarState extends State<MyNavigationBar> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    IconButton(
-                      onPressed: () => _selectPage(0),
-                      icon: Icon(
-                        _icons[0],
-                        size: _iconSize,
-                      ),
+                    Column(
+                      children: [
+                        IconButton(
+                          onPressed: () => _selectPage(0),
+                          icon: Icon(
+                            _pageIcons[0],
+                            size: _iconSize,
+                          ),
+                        ),
+                        _pageNames[0],
+                      ],
                     ),
                     const SizedBox(width: 10),
-                    IconButton(
-                      onPressed: () => _selectPage(1),
-                      icon: Icon(
-                        _icons[1],
-                        size: _iconSize,
-                      ),
+                    Column(
+                      children: [
+                        IconButton(
+                          onPressed: () => _selectPage(1),
+                          icon: Icon(
+                            _pageIcons[1],
+                            size: _iconSize,
+                          ),
+                        ),
+                        _pageNames[1],
+                      ],
                     ),
                   ],
                 ),
@@ -69,20 +103,30 @@ class _NavigationBarState extends State<MyNavigationBar> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    IconButton(
-                      onPressed: () => _selectPage(2),
-                      icon: Icon(
-                        _icons[2],
-                        size: _iconSize,
-                      ),
+                    Column(
+                      children: [
+                        IconButton(
+                          onPressed: () => _selectPage(2),
+                          icon: Icon(
+                            _pageIcons[2],
+                            size: _iconSize,
+                          ),
+                        ),
+                        _pageNames[2],
+                      ],
                     ),
                     const SizedBox(width: 10),
-                    IconButton(
-                      onPressed: () => _selectPage(3),
-                      icon: Icon(
-                        _icons[3],
-                        size: _iconSize,
-                      ),
+                    Column(
+                      children: [
+                        IconButton(
+                          onPressed: () => _selectPage(3),
+                          icon: Icon(
+                            _pageIcons[3],
+                            size: _iconSize,
+                          ),
+                        ),
+                        _pageNames[3],
+                      ],
                     ),
                   ],
                 ),
@@ -124,11 +168,12 @@ class _NavigationBarState extends State<MyNavigationBar> {
     setState(() {
       _currentIndex = index;
       _updateIcons();
+      _updateNames();
     });
   }
 
   void _updateIcons() {
-    _icons = [
+    _pageIcons = [
       Iconsax.home_2,
       Iconsax.medal_star,
       Iconsax.receipt_item,
@@ -137,17 +182,84 @@ class _NavigationBarState extends State<MyNavigationBar> {
 
     switch (_currentIndex) {
       case 0:
-        _icons[0] = Iconsax.home_25;
+        _pageIcons[0] = Iconsax.home_25;
         break;
       case 1:
-        _icons[1] = Iconsax.medal_star5;
+        _pageIcons[1] = Iconsax.medal_star5;
         break;
       case 2:
-        _icons[2] = Iconsax.receipt_item5;
+        _pageIcons[2] = Iconsax.receipt_item5;
         break;
       case 3:
-        _icons[3] = Iconsax.smileys5;
+        _pageIcons[3] = Iconsax.smileys5;
         break;
     }
+  }
+
+  void _updateNames() {
+    _pageNames = [
+      const Text("Hem",
+          style: TextStyle(
+            fontFamily: 'Nunito',
+            fontSize: 14,
+          )),
+      const Text("Lagkamp",
+          style: TextStyle(
+            fontFamily: 'Nunito',
+            fontSize: 14,
+          )),
+      const Text("Topplista",
+          style: TextStyle(
+            fontFamily: 'Nunito',
+            fontSize: 14,
+          )),
+      const Text("Mitt lag",
+          style: TextStyle(
+            fontFamily: 'Nunito',
+            fontSize: 14,
+          )),
+    ];
+
+    switch (_currentIndex) {
+      case 0:
+        _pageNames[0] = const Text("Hem",
+            style: TextStyle(
+              fontFamily: 'Nunito',
+              fontSize: 14,
+              fontWeight: FontWeight.w900,
+            ));
+        break;
+      case 1:
+        _pageNames[1] = const Text("Lagkamp",
+            style: TextStyle(
+              fontFamily: 'Nunito',
+              fontSize: 14,
+              fontWeight: FontWeight.w900,
+            ));
+        break;
+      case 2:
+        _pageNames[2] = const Text("Topplista",
+            style: TextStyle(
+              fontFamily: 'Nunito',
+              fontSize: 14,
+              fontWeight: FontWeight.w900,
+            ));
+        break;
+      case 3:
+        _pageNames[3] = const Text("Mitt lag",
+            style: TextStyle(
+              fontFamily: 'Nunito',
+              fontSize: 14,
+              fontWeight: FontWeight.w900,
+            ));
+        break;
+    }
+  }
+
+  void _goToSearchPage(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => SearchPage()),
+    );
   }
 }

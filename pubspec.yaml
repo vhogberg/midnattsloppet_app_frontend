@@ -33,6 +33,7 @@ dependencies:
   http: ^0.13.3
   shared_preferences: ^2.0.8
   url_launcher: ^6.0.9
+  font_awesome_flutter: ^9.2.0  # twitter, facebook, linkedin, mail logo
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -72,7 +73,20 @@ flutter:
     - images/chrome_DmBUq4pVqL-removebg-preview.png
     - images/swishlogo.jpg.png
     - images/swishlogo2.jpg.png
+    - images/GoalCompleted.png
 
+  fonts:
+
+    - family: Nunito
+      fonts:
+        - asset: fonts/Nunito/Nunito.ttf
+        - asset: fonts/Nunito/Nunito-Italic.ttf
+        - asset: fonts/Nunito/Nunito-Bold.ttf
+        
+
+    - family: Sora
+      fonts:
+        - asset: fonts/Sora/Sora.ttf
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
