@@ -1,13 +1,13 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+import 'package:flutter_application/api_utils/api_utils.dart';
 import 'package:flutter_application/components/donation_progress_bar.dart';
-import 'package:flutter_application/pages/login_page/login_widget.dart';
+import 'package:flutter_application/components/goal_box.dart';
 import 'package:flutter_application/session_manager.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:flutter_application/pages/navigation_bar/navigation_bar.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'dart:async';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -18,11 +18,48 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   String? username;
+  double donationGoal = 0;
+  double totalDonations = 0;
+  late Timer _timer;
 
   @override
   void initState() {
     super.initState();
     username = SessionManager.instance.username;
+    fetchGoal();
+    fetchDonations();
+    _timer = Timer.periodic(const Duration(seconds: 10), (timer) {
+      fetchGoal();
+      fetchDonations();
+    });
+  }
+
+  @override
+  void dispose() {
+    _timer.cancel();
+    super.dispose();
+  }
+
+  Future<void> fetchDonations() async {
+    try {
+      double total = await ApiUtils.fetchDonations(username);
+      setState(() {
+        totalDonations = total;
+      });
+    } catch (e) {
+      print("Error");
+    }
+  }
+
+  Future<void> fetchGoal() async {
+    try {
+      double goal = await ApiUtils.fetchGoal(username);
+      setState(() {
+        donationGoal = goal;
+      });
+    } catch (e) {
+      print("Error");
+    }
   }
 
   @override
@@ -34,38 +71,39 @@ class _HomePageState extends State<HomePage> {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Row(
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(left: 20),
-                child: Text(
+          Padding(
+            padding: const EdgeInsets.only(left: 20, right: 20, top: 50),
+            child: Row(
+              children: [
+                const Text(
                   "Godmorgon!",
                   style: TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
                     color: Colors.black,
+                    fontFamily: 'Sora',
                   ),
                 ),
-              ),
-              Spacer(),
-              Padding(
-                padding: EdgeInsets.only(right: 20),
-                child: Icon(
+                const Spacer(),
+                const Icon(
                   Iconsax.notification,
                   size: 35,
                   color: Color.fromARGB(255, 113, 113, 113),
                 ),
-              ),
-              Padding(
-                padding: EdgeInsets.only(right: 20),
-                child: CircleAvatar(
-                  radius: 35,
-                  backgroundColor: Colors.white,
-                  backgroundImage:
-                      AssetImage('images/stockholm-university.png'),
+                const SizedBox(width: 20),
+                GestureDetector(
+                  onTap: () {
+                    SessionManager.instance.signUserOut(context);
+                  },
+                  child: const CircleAvatar(
+                    radius: 35,
+                    backgroundColor: Colors.white,
+                    backgroundImage:
+                        AssetImage('images/stockholm-university.png'),
+                  ),
                 ),
-              )
-            ],
+              ],
+            ),
           ),
           Column(
             children: [
@@ -78,7 +116,7 @@ class _HomePageState extends State<HomePage> {
                       children: [
                         Container(
                           width: 400,
-                          height: 290,
+                          height: 320,
                           decoration: BoxDecoration(
                             color: const Color(0XFF3C4785),
                             borderRadius: BorderRadius.circular(13.0),
@@ -113,9 +151,9 @@ class _HomePageState extends State<HomePage> {
                                     fontWeight: FontWeight.w400,
                                   ),
                                 ),
-                                const Text(
-                                  '1050 kr insamlat',
-                                  style: TextStyle(
+                                Text(
+                                  '${totalDonations.toStringAsFixed(0)} kr insamlat',
+                                  style: const TextStyle(
                                     color: Colors.white,
                                     fontSize: 28,
                                     fontWeight: FontWeight.bold,
@@ -133,18 +171,18 @@ class _HomePageState extends State<HomePage> {
                                   height: 15,
                                 ),
                                 const SizedBox(
-                                  width: 315, // Adjust width as needed
+                                  width: 315,
                                   child: Padding(
                                     padding: EdgeInsets.only(left: 30),
-                                    child: DonationProgressBar(goal: 5000),
+                                    child: DonationProgressBar(),
                                   ),
                                 ),
                                 const SizedBox(
-                                  height: 40,
+                                  height: 80,
                                 ),
                                 Container(
                                   width: 345,
-                                  height: 100,
+                                  height: 90,
                                   decoration: BoxDecoration(
                                     color: Colors.white30,
                                     borderRadius: BorderRadius.circular(13.0),
@@ -161,12 +199,17 @@ class _HomePageState extends State<HomePage> {
                         Positioned(
                           top: 20,
                           right: 20,
-                            child: Container(
-                              width: 65,
-                              height: 65,
-                              child: Image.asset(
+                          child: Container(
+                            width: 65,
+                            height: 65,
+                            child: Image.asset(
                                 'images/chrome_DmBUq4pVqL-removebg-preview.png'),
                           ),
+                        ),
+                        Positioned(
+                          top: 140,
+                          right: 35,
+                          child: GoalBox(),
                         ),
                       ],
                     ),
@@ -175,7 +218,7 @@ class _HomePageState extends State<HomePage> {
                       children: [
                         Container(
                           width: 400,
-                          height: 290,
+                          height: 320,
                           decoration: BoxDecoration(
                             color: const Color(0XFF3C4785),
                             borderRadius: BorderRadius.circular(20.0),
