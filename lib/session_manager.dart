@@ -88,7 +88,7 @@ class SessionManager {
           prefs.remove(_sessionKey);
           // Navigate back to the login screen and remove all routes on top
           Navigator.pushNamedAndRemoveUntil(context, '/', (route) => false);
-          print("logout sucessesful");
+          print("Logout successful");
         } else {
           throw Exception('Failed to logout: ${response.statusCode}');
         }

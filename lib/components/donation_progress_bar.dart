@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
-import 'dart:convert';
+import 'package:flutter_application/session_manager.dart';
+import 'package:flutter_application/api_utils/api_utils.dart';
 import 'dart:async';
-import 'package:http/http.dart' as http;
 
 class DonationProgressBar extends StatefulWidget {
-  final double goal;
-
-  const DonationProgressBar({Key? key, required this.goal}) : super(key: key);
+  const DonationProgressBar({Key? key}) : super(key: key);
 
   @override
   _DonationProgressBarState createState() => _DonationProgressBarState();
@@ -14,14 +12,19 @@ class DonationProgressBar extends StatefulWidget {
 
 class _DonationProgressBarState extends State<DonationProgressBar> {
   double totalDonations = 0;
+  double donationGoal = 0;
+  String? username;
   late Timer _timer;
 
   @override
   void initState() {
-    super.initState(); //Initial donation fetch
+    super.initState();
+    username = SessionManager.instance.username;
     fetchDonations();
+    fetchGoal();
     _timer = Timer.periodic(const Duration(seconds: 10), (timer) {
       fetchDonations();
+      fetchGoal();
     });
   }
 
@@ -33,36 +36,29 @@ class _DonationProgressBarState extends State<DonationProgressBar> {
 
   Future<void> fetchDonations() async {
     try {
-      // Make HTTP GET request to fetch donation amounts from the API
-      var response =
-          await http.get(Uri.parse('https://your-api.com/donations'));
-
-      if (response.statusCode == 200) {
-        // Parse the JSON response
-        var data = json.decode(response.body);
-
-        // Calculate total donations
-        double total = 0;
-        for (var donation in data['donations']) {
-          total += donation['amount'];
-        }
-
-        // Update the totalDonations variable and rebuild the widget
-        setState(() {
-          totalDonations = total;
-        });
-      } else {
-        throw Exception('Failed to fetch donations');
-      }
+      double total = await ApiUtils.fetchDonations(username);
+      setState(() {
+        totalDonations = total;
+      });
     } catch (e) {
-      print('Error fetching donations: $e');
+      print("Error");
+    }
+  }
+
+  Future<void> fetchGoal() async {
+    try {
+      double goal = await ApiUtils.fetchGoal(username);
+      setState(() {
+        donationGoal = goal;
+      });
+    } catch (e) {
+      print("Error");
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    // Calculate the percentage of donations raised
-    double percentage = totalDonations / widget.goal;
+    double percentage = donationGoal != 0 ? totalDonations / donationGoal : 0.0;
 
     return LinearProgressIndicator(
       value: percentage,
