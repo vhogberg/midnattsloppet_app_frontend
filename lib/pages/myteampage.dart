@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application/components/donation_progress_bar.dart';
 import 'package:flutter_application/pages/navigation_bar/navigation_bar.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter_application/components/custom_app_bar.dart';
 
 class MyTeamPage extends StatelessWidget {
   const MyTeamPage({Key? key}) : super(key: key);
@@ -9,8 +10,10 @@ class MyTeamPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: const Text('Mitt lag'),
+        appBar: CustomAppBar(
+          key: null,
+          title: 'Mitt lag',
+          useActionButton: true,
         ),
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -26,7 +29,7 @@ class MyTeamPage extends StatelessWidget {
                 ),
                 child: const Center(
                   child: CircleAvatar(
-                    radius: 35,
+                    radius: 74,
                     backgroundColor: Colors.white,
                     backgroundImage:
                         AssetImage('images/stockholm-university.png'),
@@ -36,6 +39,7 @@ class MyTeamPage extends StatelessWidget {
             ),
             const SizedBox(height: 20),
             // Textbox with the donation pledge name
+            //importera via api?
             const Padding(
               padding: EdgeInsets.symmetric(horizontal: 20),
               child: Text(
