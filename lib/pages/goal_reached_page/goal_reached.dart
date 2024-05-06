@@ -93,8 +93,9 @@ class _TeamGoalReachedState extends State<TeamGoalReached> {
                     child: Text(
                       'Tack så hemskt mycket!',
                       style: TextStyle(
-                        fontSize: 24,
+                        fontSize: 26,
                         fontWeight: FontWeight.bold,
+                        fontFamily: 'Sora',
                       ),
                     ),
                   ),
@@ -103,7 +104,11 @@ class _TeamGoalReachedState extends State<TeamGoalReached> {
                     child: Text(
                       'Eran insats kommer att göra en verklig skillnad och bidra till en bättre värld! Vi är djupt tacksamma för er godhet och stöd.',
                       textAlign: TextAlign.center,
-                      style: TextStyle(fontSize: 16),
+                      style: TextStyle(
+                          fontSize: 16,
+                          fontFamily: 'Nunito',
+                          fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
                   const SizedBox(height: 20),
