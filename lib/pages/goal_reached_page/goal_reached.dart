@@ -1,10 +1,12 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
+import 'package:flutter_application/components/my_button.dart';
+import 'package:flutter_application/session_manager.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class TeamGoalReached extends StatefulWidget {
-  const TeamGoalReached({super.key});
+  const TeamGoalReached({Key? key}) : super(key: key);
 
   @override
   _TeamGoalReachedState createState() => _TeamGoalReachedState();
@@ -12,36 +14,37 @@ class TeamGoalReached extends StatefulWidget {
 
 class _TeamGoalReachedState extends State<TeamGoalReached> {
   bool isGoalReached = false;
+  String? username;
 
   @override
   void initState() {
     super.initState();
-    // Start continuous goal check when the widget initializes
-    startGoalCheck();
+    username = SessionManager.instance.username;
+    startGoalCheck(username);
   }
 
-  // Method for continuous goal check
-  void startGoalCheck() {
+  void startGoalCheck(String? username) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
     Timer.periodic(const Duration(seconds: 10), (timer) {
-      checkGoalReached();
+      checkGoalReached(username, prefs);
     });
   }
 
-  // Method to check if the goal is reached
-  Future<void> checkGoalReached() async {
+  Future<void> checkGoalReached(
+      String? username, SharedPreferences prefs) async {
     try {
       var url = Uri.parse(
-          'https://group-15-7.pvt.dsv.su.se/app/team/{teamId}/checkGoal');
+          'https://group-15-7.pvt.dsv.su.se/app/team/$username/checkGoal');
       var response = await http.get(url);
       if (response.statusCode == 200) {
         setState(() {
           isGoalReached = response.body.toLowerCase() == 'true';
         });
-        if (isGoalReached) {
-          // If goal is reached, show notification
+        if (isGoalReached && !(prefs.getBool('dialogShown') ?? false)) {
+          prefs.setBool('dialogShown', true);
           showCustomDialog(context);
         }
-      } else {}
+      }
     } catch (e) {
       print('Error checking goal: $e');
     }
@@ -52,15 +55,12 @@ class _TeamGoalReachedState extends State<TeamGoalReached> {
     return MaterialApp(
       home: Scaffold(
         body: Center(
-          child: isGoalReached
-              ? const Text('Donation goal reached!')
-              : const Text('Donation goal not reached yet'),
+          child: isGoalReached ? const Text('') : const Text(''),
         ),
       ),
     );
   }
 
-  // Method to show custom dialog when goal is reached
   void showCustomDialog(BuildContext context) {
     showDialog(
       context: context,
@@ -85,14 +85,13 @@ class _TeamGoalReachedState extends State<TeamGoalReached> {
                       topLeft: Radius.circular(12),
                       topRight: Radius.circular(12),
                     ),
-                    child: Image.asset('images/goal_reached.png',
+                    child: Image.asset('images/GoalCompleted.png',
                         fit: BoxFit.cover),
                   ),
                   const Padding(
-                    padding: EdgeInsets.symmetric(
-                        vertical: 20, horizontal: 10),
+                    padding: EdgeInsets.symmetric(vertical: 20, horizontal: 10),
                     child: Text(
-                      'Donation goal reached!',
+                      'Tack så hemskt mycket!',
                       style: TextStyle(
                         fontSize: 24,
                         fontWeight: FontWeight.bold,
@@ -102,37 +101,17 @@ class _TeamGoalReachedState extends State<TeamGoalReached> {
                   const Padding(
                     padding: EdgeInsets.symmetric(horizontal: 10),
                     child: Text(
-                      'Thank you so much for making a difference!',
+                      'Eran insats kommer att göra en verklig skillnad och bidra till en bättre värld! Vi är djupt tacksamma för er godhet och stöd.',
                       textAlign: TextAlign.center,
                       style: TextStyle(fontSize: 16),
                     ),
                   ),
                   const SizedBox(height: 20),
-                  TextButton(
-                    style: TextButton.styleFrom(
-                      backgroundColor:
-                          Color(int.parse('0xFF3C4785')), // Adjusted to purple
-                      padding:
-                          const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30),
-                      ),
-                      textStyle: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                    child: const Text(
-                      'Back',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 16,
-                      ),
-                    ),
-                  ),
+                  MyButton(
+                      text: "Tillbaka",
+                      onTap: () {
+                        Navigator.of(context).pop();
+                      }),
                   const SizedBox(height: 30),
                 ],
               ),

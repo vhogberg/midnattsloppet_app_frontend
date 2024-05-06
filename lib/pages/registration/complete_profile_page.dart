@@ -3,16 +3,13 @@ import 'package:flutter_application/pages/registration/team/team_page.dart';
 import 'package:flutter_application/session_manager.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-
 import 'package:flutter_application/components/my_button.dart';
 import 'package:flutter_application/components/my_textfield.dart';
-import 'package:flutter_application/pages/homepage.dart';
 
 class CompleteProfilePage extends StatefulWidget {
-
   CompleteProfilePage({Key? key}) : super(key: key);
 
-    @override
+  @override
   _CompleteProfilePage createState() => _CompleteProfilePage();
 }
 
@@ -125,7 +122,8 @@ class _CompleteProfilePage extends State<CompleteProfilePage> {
                         // Navigate to HomePage after updateUser completes successfully
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => RegisterTeamPage()),
+                          MaterialPageRoute(
+                              builder: (context) => RegisterTeamPage()),
                         );
                       } catch (e) {
                         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
