@@ -65,9 +65,6 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        // Tom appbar, används för att få space i toppkant
-      ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
