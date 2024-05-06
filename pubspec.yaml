@@ -74,6 +74,7 @@ flutter:
     - images/swishlogo.jpg.png
     - images/swishlogo2.jpg.png
     - images/GoalCompleted.png
+    - images/CompetitionImage.png
 
   #Company logos
     - images/company_logos/

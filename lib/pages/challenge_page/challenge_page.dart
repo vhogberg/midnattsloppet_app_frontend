@@ -1,12 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application/pages/homepage.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:flutter_application/pages/navigation_bar/navigation_bar.dart';
+import 'package:flutter_application/components/custom_app_bar.dart';
+
+
 
 class ChallengePage extends StatelessWidget {
+
+  String test2 = 'test';
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Lagkamp'),
+      appBar: CustomAppBar(
+        key: null,
+        title: 'Lagkamp',
+        useActionButton: false,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -14,7 +23,7 @@ class ChallengePage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Image.asset(
-              'images/Lagkamp_image.png',
+              'images/CompetitionImage.png',
               fit: BoxFit.fitWidth,
             ),
             const SizedBox(height: 10),
@@ -84,7 +93,7 @@ class ChallengePage extends StatelessWidget {
             const SizedBox(height: 10),
             const Center(
               child: Text(
-                'Your content goes here',
+                'text text text',
                 style: TextStyle(fontSize: 24.0),
               ),
             ),

@@ -3,8 +3,8 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:flutter_application/pages/homepage.dart';
 import 'package:flutter_application/pages/searchpage.dart';
-//import 'package:flutter_application/pages/examplepage1.dart';
-//import 'package:flutter_application/pages/examplepage2.dart';
+import 'package:flutter_application/pages/leaderboard_page/leaderboard_page.dart';
+import 'package:flutter_application/pages/challenge_page/challenge_page.dart';
 //import 'package:flutter_application/pages/examplepage3.dart';
 
 class MyNavigationBar extends StatefulWidget {
@@ -17,9 +17,9 @@ class _NavigationBarState extends State<MyNavigationBar> {
   int _currentIndex = 0;
   final List<Widget> _pages = [
     const HomePage(),
-    Container(), //ExamplePage1(),
-    Container(), //ExamplePage2(),
-    Container(), //ExamplePage3(),
+    ChallengePage(), // Include ChallengePage here
+    Container(), // LeaderboardPage(),
+    Container(), // ExamplePage3(),
   ];
 
   final double _iconSize = 36.0;
@@ -169,6 +169,17 @@ class _NavigationBarState extends State<MyNavigationBar> {
       _currentIndex = index;
       _updateIcons();
       _updateNames();
+      
+      if (_currentIndex == 1) {
+        // Check if "Lagkamp" button is clicked
+        _goToChallengePage(context); // Navigate to ChallengePage
+      }
+      
+      if (_currentIndex == 2) {
+        // Check if "Topplista" button is clicked
+        _goToLeaderboardPage(context); // Navigate to LeaderboardPage
+      }
+      
     });
   }
 
@@ -260,6 +271,20 @@ class _NavigationBarState extends State<MyNavigationBar> {
     Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => SearchPage()),
+    );
+  }
+
+  void _goToLeaderboardPage(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => LeaderboardPage()),
+    );
+  }
+
+  void _goToChallengePage(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => ChallengePage()),
     );
   }
 }

@@ -29,15 +29,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        actions: [
-          IconButton(
-            onPressed: () {
-              SessionManager.instance
-                  .signUserOut(context); // Call signUserOut method on press
-            },
-            icon: Icon(Icons.logout),
-          )
-        ],
+        // Tom appbar, används för att få space i toppkant
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
