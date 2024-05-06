@@ -75,6 +75,9 @@ flutter:
     - images/swishlogo2.jpg.png
     - images/GoalCompleted.png
 
+  #Company logos
+    - images/company_logos/
+
   fonts:
 
     - family: Nunito
