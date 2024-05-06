@@ -3,6 +3,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:flutter_application/pages/homepage.dart';
 import 'package:flutter_application/pages/searchpage.dart';
+import 'package:flutter_application/pages/myteampage.dart';
 //import 'package:flutter_application/pages/examplepage1.dart';
 //import 'package:flutter_application/pages/examplepage2.dart';
 //import 'package:flutter_application/pages/examplepage3.dart';
@@ -19,7 +20,7 @@ class _NavigationBarState extends State<MyNavigationBar> {
     const HomePage(),
     Container(), //ExamplePage1(),
     Container(), //ExamplePage2(),
-    Container(), //ExamplePage3(),
+    const MyTeamPage(),
   ];
 
   final double _iconSize = 36.0;
@@ -260,6 +261,12 @@ class _NavigationBarState extends State<MyNavigationBar> {
     Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => SearchPage()),
+    );
+  }
+    void _goToMyTeamPage(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => MyTeamPage()),
     );
   }
 }
