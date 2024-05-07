@@ -15,6 +15,7 @@ class ChallengePage extends StatelessWidget {
       appBar: CustomAppBar(
         key: null,
         title: 'Lagkamp',
+        // lagkampssidan ska inte ha någon ActionButton till höger, så detta nedan sätts "false"
         useActionButton: false,
       ),
       body: Padding(

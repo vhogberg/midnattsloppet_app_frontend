@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
-  final bool useActionButton; 
+  final bool useActionButton;
   final IconData? actionIcon;
   final Function()? onActionPressed;
 
@@ -20,12 +20,12 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       child: Container(
         padding: EdgeInsets.only(top: 50), // padding i topp
         child: AppBar(
-          automaticallyImplyLeading: false, // tar bort standard-tillbaka knappen som medföljer AppBar
+          automaticallyImplyLeading:
+              false, // tar bort standard-tillbaka knappen som medföljer AppBar
           elevation: 0,
           centerTitle: true, // centrera titeln
           title: Row(
             children: [
-
               // IconButton är tillbaka-pilen till vänster om titeln
               IconButton(
                 icon: const Icon(
@@ -34,10 +34,8 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                 ),
                 onPressed: () => Navigator.of(context).pop(),
               ),
-              SizedBox(
-                  width: 8), // Padding
+              SizedBox(width: 8), // Padding
               Expanded(
-
                 // titelns egenskaper
                 child: Text(
                   title,
@@ -64,20 +62,18 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                     ),
                     onPressed: onActionPressed,
                   ),
-              
+
               // Om ActionButton inte ska användas görs den osynlig
               if (!useActionButton)
-                
-                  IconButton(
-                    icon: Icon(
-                      actionIcon,
-                      color: actionIcon != null
-                          ? Color.fromARGB(255, 255, 255, 255)
-                          : Color.fromARGB(255, 255, 255, 255),
-                    ),
-                    onPressed: onActionPressed,
+                IconButton(
+                  icon: Icon(
+                    actionIcon,
+                    color: actionIcon != null
+                        ? Color.fromARGB(255, 255, 255, 255)
+                        : Color.fromARGB(255, 255, 255, 255),
                   ),
-
+                  onPressed: onActionPressed,
+                ),
             ],
           ),
           backgroundColor: Colors.transparent,
@@ -90,7 +86,6 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Size get preferredSize => const Size.fromHeight(100);
 }
-
 
 /**
  * Har skapat en appbar som följer stilen i Figma, och har gjort den till en component så att den kan återanvändas enklare. 
@@ -123,4 +118,5 @@ appBar: CustomAppBar(
           },
       ),
  * 
+ * Exempel finns också i challenge_page där denna är implementerad!
  */
