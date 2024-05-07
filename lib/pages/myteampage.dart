@@ -1,11 +1,47 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application/components/donation_progress_bar.dart';
 import 'package:flutter_application/pages/navigation_bar/navigation_bar.dart';
+import 'package:flutter_application/session_manager.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_application/components/custom_app_bar.dart';
 
 class MyTeamPage extends StatelessWidget {
   const MyTeamPage({Key? key}) : super(key: key);
+
+  static const List<String> teamMembers = [
+    'John Doe',
+    'Jane Doe',
+    'Adam Doe',
+    'James Doe',
+    'Carl Doe',
+  ];
+
+  // Method to generate ListTiles dynamically based on team members list
+  List<Widget> generateTeamList() {
+return teamMembers.map((member) {
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 3, horizontal: 5),
+      padding: const EdgeInsets.all(10),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: ListTile(
+        leading: Icon(
+          Icons.person,
+          color: Colors.black, // Change the icon color to blue
+        ),
+        title: Text(
+          member,
+          style: TextStyle(
+            color: Colors.black, // Change text color to black
+          ),
+        ),
+      ),
+    );
+  }).toList();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -13,7 +49,14 @@ class MyTeamPage extends StatelessWidget {
         appBar: CustomAppBar(
           key: null,
           title: 'Mitt lag',
+          // teampage ska ha en logout-knapp till höger, så detta nedan sätts "true"
           useActionButton: true,
+          // logout knapp från Iconsax bilbiotek
+          actionIcon: Iconsax.logout,
+          // kalla på onActionPressed metoden också, använd sessionmanager för att logga ut
+          onActionPressed: () {
+            SessionManager.instance.signUserOut(context);
+          },
         ),
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -38,13 +81,15 @@ class MyTeamPage extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 20),
-            // Textbox with the donation pledge name
-            //importera via api?
+// Textbox with the donation pledge name
+// import via API?
             const Padding(
               padding: EdgeInsets.symmetric(horizontal: 20),
-              child: Text(
-                'Stödjer: Barncancerfonden', // Static text
-                style: TextStyle(fontSize: 16),
+              child: Center(
+                child: Text(
+                  'Stödjer: Barncancerfonden', // Static text
+                  style: TextStyle(fontSize: 16),
+                ),
               ),
             ),
             const SizedBox(height: 20),
@@ -68,7 +113,7 @@ class MyTeamPage extends StatelessWidget {
                   ],
                 ),
               ),
-              child: const Column(
+              child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
@@ -80,27 +125,8 @@ class MyTeamPage extends StatelessWidget {
                     ),
                   ),
                   SizedBox(height: 10),
-                  // You can populate this list dynamically from an API
-                  ListTile(
-                    leading: Icon(Icons.person),
-                    title: Text('John Doe'),
-                  ),
-                  ListTile(
-                    leading: Icon(Icons.person),
-                    title: Text('Jane Doe'),
-                  ),
-                  ListTile(
-                    leading: Icon(Icons.person),
-                    title: Text('Adam Doe'),
-                  ),
-                  ListTile(
-                    leading: Icon(Icons.person),
-                    title: Text('James Doe'),
-                  ),
-                  ListTile(
-                    leading: Icon(Icons.person),
-                    title: Text('Carl Doe'),
-                  ),
+                  // Generate ListTiles dynamically
+                  ...generateTeamList(),
                 ],
               ),
             ),
@@ -109,5 +135,3 @@ class MyTeamPage extends StatelessWidget {
         bottomNavigationBar: const MyNavigationBar());
   }
 }
-
-// ShareHelper class remains unchanged
