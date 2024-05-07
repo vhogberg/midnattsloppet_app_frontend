@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application/components/custom_app_bar.dart';
 import 'package:flutter_application/components/donation_progress_bar.dart';
 import 'package:flutter_application/pages/navigation_bar/navigation_bar.dart';
+import 'package:flutter_application/session_manager.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:iconsax/iconsax.dart';
 
 class MyTeamPage extends StatelessWidget {
   const MyTeamPage({Key? key}) : super(key: key);
@@ -9,8 +12,17 @@ class MyTeamPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: const Text('Mitt lag'),
+        appBar: CustomAppBar(
+          key: null,
+          title: 'Lagkamp',
+          // teampage ska ha en logout-knapp till höger, så detta nedan sätts "true"
+          useActionButton: true,
+          // logout knapp från Iconsax bilbiotek
+          actionIcon: Iconsax.logout_1,
+          // kalla på onActionPressed metoden också, använd sessionmanager för att logga ut
+          onActionPressed: () {
+            SessionManager.instance.signUserOut(context);
+          },
         ),
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
