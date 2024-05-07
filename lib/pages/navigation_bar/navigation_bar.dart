@@ -18,7 +18,7 @@ class _NavigationBarState extends State<MyNavigationBar> {
     const HomePage(),
     ChallengePage(), // Include ChallengePage here
     Container(), // LeaderboardPage(),
-    MyTeamPage(), // MyTeamPage()
+    const MyTeamPage(), // MyTeamPage()
   ];
 
   final double _iconSize = 36.0;
@@ -182,6 +182,9 @@ class _NavigationBarState extends State<MyNavigationBar> {
         // Check if "Topplista" button is clicked
         _goToLeaderboardPage(context); // Navigate to LeaderboardPage
       }
+      if (_currentIndex == 3) {
+        _goToMyTeamPage(context); // Add this condition for "My Team" page
+      }
     });
   }
 
@@ -288,11 +291,12 @@ class _NavigationBarState extends State<MyNavigationBar> {
       context,
       MaterialPageRoute(builder: (context) => ChallengePage()),
     );
+  }
 
-    void _goToMyTeamPage(BuildContext context) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => const MyTeamPage()),
-      );
-    }
+  void _goToMyTeamPage(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const MyTeamPage()),
+    );
+  }
 }

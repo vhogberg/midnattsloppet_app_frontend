@@ -52,7 +52,7 @@ return teamMembers.map((member) {
           // teampage ska ha en logout-knapp till höger, så detta nedan sätts "true"
           useActionButton: true,
           // logout knapp från Iconsax bilbiotek
-          actionIcon: Iconsax.logout,
+          actionIcon: Iconsax.logout_1,
           // kalla på onActionPressed metoden också, använd sessionmanager för att logga ut
           onActionPressed: () {
             SessionManager.instance.signUserOut(context);
