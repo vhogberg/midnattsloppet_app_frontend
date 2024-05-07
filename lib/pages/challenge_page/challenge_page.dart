@@ -4,10 +4,7 @@ import 'package:iconsax/iconsax.dart';
 import 'package:flutter_application/pages/navigation_bar/navigation_bar.dart';
 import 'package:flutter_application/components/custom_app_bar.dart';
 
-
-
 class ChallengePage extends StatelessWidget {
-
   String test2 = 'test';
   @override
   Widget build(BuildContext context) {
@@ -19,7 +16,7 @@ class ChallengePage extends StatelessWidget {
         useActionButton: false,
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(20.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
@@ -29,7 +26,7 @@ class ChallengePage extends StatelessWidget {
             ),
             const SizedBox(height: 10),
             const Padding(
-              padding: EdgeInsets.all(16.0),
+              padding: EdgeInsets.only(top: 16, bottom: 16),
               child: TextField(
                 decoration: InputDecoration(
                   hintText: 'Sök upp lag att utmana...',
@@ -39,16 +36,44 @@ class ChallengePage extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 10),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                _buildPurpleBox('Tävla i donationer', 185),
-                _buildPurpleBox('Tävla i tid', 185),
-              ],
+            const Align(
+              alignment: Alignment.centerLeft,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: EdgeInsets.only(bottom: 8.0),
+                    child: Text(
+                      '1. Sök upp ett lag som ni vill starta lagkamp emot',
+                      style: TextStyle(
+                          fontSize: 20.0,
+                          fontFamily: 'Sora',
+                          fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(bottom: 8.0),
+                    child: Text(
+                      '2. Skicka iväg utmaningen och invänta svar från det andra laget',
+                      style: TextStyle(
+                          fontSize: 20.0,
+                          fontFamily: 'Sora',
+                          fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(bottom: 20.0),
+                    child: Text(
+                      '3. En aktiv lagkamp startas där ni kan tävla i donationer och skapa egna mini-tävlingar!',
+                      style: TextStyle(
+                          fontSize: 20.0,
+                          fontFamily: 'Sora',
+                          fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                ],
+              ),
             ),
-            const SizedBox(height: 20),
-            _buildPurpleBox('Egen tävling', 500),
-            const SizedBox(height: 25),
             Stack(
               children: [
                 Container(
@@ -61,25 +86,30 @@ class ChallengePage extends StatelessWidget {
                 ),
                 Positioned(
                   top: 5,
-                  left: 25,
+                  left: 10,
+                  right: 10,
                   child: Padding(
                     padding: EdgeInsets.all(8.0),
                     child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Image.asset(
                           'images/fire.png',
                           width: 35,
                           height: 35,
                         ),
-                        const SizedBox(width: 10),
+                        SizedBox(width: 15),
                         const Text(
-                          'Start a challenge',
+                          'Skicka iväg utmaningen!',
                           style: TextStyle(
                             color: Colors.white,
-                            fontSize: 18,
+                            
+                            fontSize: 22,
+                            fontWeight: FontWeight.bold,
+
                           ),
                         ),
-                        const SizedBox(width: 10),
+                        SizedBox(width: 15),
                         Image.asset(
                           'images/fire.png',
                           width: 35,
@@ -91,37 +121,10 @@ class ChallengePage extends StatelessWidget {
                 ),
               ],
             ),
-            const SizedBox(height: 10),
-            const Center(
-              child: Text(
-                'text text text',
-                style: TextStyle(fontSize: 24.0),
-              ),
-            ),
           ],
         ),
       ),
       bottomNavigationBar: const MyNavigationBar(),
-    );
-  }
-
-  Widget _buildPurpleBox(String text, double width) {
-    return Container(
-      width: width,
-      height: 65,
-      decoration: BoxDecoration(
-        color: Color(0XFF3C4785),
-        borderRadius: BorderRadius.circular(5),
-      ),
-      child: Center(
-        child: Text(
-          text,
-          style: const TextStyle(
-            color: Colors.white,
-            fontSize: 18,
-          ),
-        ),
-      ),
     );
   }
 }
