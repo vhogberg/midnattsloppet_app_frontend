@@ -201,7 +201,7 @@ class ChallengePage extends StatelessWidget {
                                       style: TextStyle(
                                         fontSize: 16,
                                         fontWeight: FontWeight.bold,
-                                        color: Colors.black, 
+                                        color: Colors.black,
                                       ),
                                     ),
                                     SizedBox(
@@ -219,7 +219,7 @@ class ChallengePage extends StatelessWidget {
                         ],
                       )
 
-                    // om användaren har skickat challenge, visa detta  
+                    // om användaren har skickat challenge, visa detta
                     : (challengeSent
                         ? Text(
                             'Inväntar svar från lag $senderTeam',
@@ -231,7 +231,7 @@ class ChallengePage extends StatelessWidget {
                             textAlign: TextAlign.center,
                           )
 
-                          // Om användaren inte har skickat challenge, och ingen challenge har blivit skickat till dem, visa detta:
+                        // Om användaren inte har skickat challenge, och ingen challenge har blivit skickat till dem, visa detta:
                         : Text(
                             'Inga aktiva inbjudningar eller förfrågningar',
                             style: TextStyle(
@@ -246,7 +246,6 @@ class ChallengePage extends StatelessWidget {
           ),
         ),
       ),
-      bottomNavigationBar: const MyNavigationBar(),
     );
   }
 }

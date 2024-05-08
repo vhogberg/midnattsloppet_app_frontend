@@ -4,7 +4,6 @@ import 'package:flutter_application/components/donation_progress_bar.dart';
 import 'package:flutter_application/components/goal_box.dart';
 import 'package:flutter_application/session_manager.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:flutter_application/pages/navigation_bar/navigation_bar.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'dart:async';
@@ -289,7 +288,6 @@ class _HomePageState extends State<HomePage> {
           ),
         ],
       ),
-      bottomNavigationBar: const MyNavigationBar(),
     );
   }
 }
