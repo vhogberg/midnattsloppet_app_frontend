@@ -137,64 +137,64 @@ class _NotificationPageState extends State<NotificationPage>
 
   // Funktion för att visa modalbottenpanelen för sökning
   void _showSearchModal(BuildContext context) {
-    showModalBottomSheet(
-      context: context,
-      builder: (BuildContext context) {
-        return Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Spacer(),
-                  IconButton(
-                    icon: Icon(Icons.close),
-                    onPressed: () {
-                      Navigator.pop(context);
-                      _searchController.clear();
-                      setState(() {
-                        _searchTerm = '';
-                      });
-                    },
-                  ),
-                ],
-              ),
-              TextField(
-                controller: _searchController,
-                decoration: InputDecoration(
-                  labelText: 'Sök',
+  showModalBottomSheet(
+    context: context,
+    builder: (BuildContext context) {
+      return Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Spacer(),
+                IconButton(
+                  icon: const Icon(Icons.close),
+                  onPressed: () {
+                    Navigator.pop(context);
+                    _searchController.clear();
+                    setState(() {
+                      _searchTerm = '';
+                    });
+                  },
                 ),
-                onChanged: (value) {
-                  setState(() {
-                    _searchTerm = value;
-                  });
-                },
+              ],
+            ),
+            TextField(
+              controller: _searchController,
+              decoration: const InputDecoration(
+                labelText: 'Sök',
+                labelStyle: TextStyle(fontFamily: 'Nunito'), 
               ),
-              SizedBox(height: 16.0),
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  textStyle: TextStyle(fontFamily: 'Nunito'), // Ändra fonten för texten på knappen
-                ),
-                onPressed: () {
-                  Navigator.pop(context); // Stäng modalbottenpanelen
-                  // Utför sökningen här om det behövs
-                },
-                child: Text('Sök'),
+              onChanged: (value) {
+                setState(() {
+                  _searchTerm = value;
+                });
+              },
+            ),
+            const SizedBox(height: 16.0),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                textStyle: const TextStyle(fontFamily: 'Nunito'), 
               ),
-            ],
-          ),
-        );
-      },
-    );
-  }
+              onPressed: () {
+                Navigator.pop(context); 
+              },
+              child: const Text('Sök'),
+            ),
+          ],
+        ),
+      );
+    },
+  );
+}
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
+        title: const Text(
           'Notifikationer',
           style: TextStyle(
             fontFamily: 'Sora',
@@ -203,9 +203,9 @@ class _NotificationPageState extends State<NotificationPage>
         ),
         actions: [
           Padding(
-            padding: EdgeInsets.only(right: 16.0),
+            padding: const EdgeInsets.only(right: 16.0),
             child: IconButton(
-              icon: Icon(Icons.search),
+              icon: const Icon(Icons.search),
               onPressed: () {
                 _showSearchModal(
                     context); // Visa modalbottenpanelen för sökning

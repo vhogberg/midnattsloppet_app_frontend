@@ -13,55 +13,50 @@ class TeamGoalReached extends StatefulWidget {
 }
 
 class _TeamGoalReachedState extends State<TeamGoalReached> {
-  bool isGoalReached = false;
-  String? username;
+  late SharedPreferences _prefs;
+  bool _isGoalReached = false;
 
   @override
   void initState() {
     super.initState();
-    username = SessionManager.instance.username;
-    startGoalCheck(username);
+    _initSharedPreferences();
   }
 
-  void startGoalCheck(String? username) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
+  Future<void> _initSharedPreferences() async {
+    _prefs = await SharedPreferences.getInstance();
+    _startGoalCheck(SessionManager.instance.username);
+  }
+
+  void _startGoalCheck(String? username) {
     Timer.periodic(const Duration(seconds: 10), (timer) {
-      checkGoalReached(username, prefs);
+      _checkGoalReached(username);
     });
   }
 
-  Future<void> checkGoalReached(
-      String? username, SharedPreferences prefs) async {
+  Future<void> _checkGoalReached(String? username) async {
+    _showCustomDialog(context);
     try {
-      var url = Uri.parse(
-          'https://group-15-7.pvt.dsv.su.se/app/team/$username/checkGoal');
-      var response = await http.get(url);
+      var url = Uri.parse('https://group-15-7.pvt.dsv.su.se/app/team/$username/checkGoal');
+      var response = await http.head(url);
       if (response.statusCode == 200) {
         setState(() {
-          isGoalReached = response.body.toLowerCase() == 'true';
+          _isGoalReached = true;
         });
-        if (isGoalReached && !(prefs.getBool('dialogShown') ?? false)) {
-          prefs.setBool('dialogShown', true);
-          showCustomDialog(context);
-        }
+        _showCustomDialogIfNeeded();
       }
     } catch (e) {
       print('Error checking goal: $e');
     }
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        body: Center(
-          child: isGoalReached ? const Text('') : const Text(''),
-        ),
-      ),
-    );
+  void _showCustomDialogIfNeeded() {
+    if (_isGoalReached && !(_prefs.containsKey('dialogShown') && _prefs.getBool('dialogShown')!)) {
+      _prefs.setBool('dialogShown', true);
+      _showCustomDialog(context);
+    }
   }
 
-  void showCustomDialog(BuildContext context) {
+  void _showCustomDialog(BuildContext context) {
     showDialog(
       context: context,
       barrierDismissible: true,
@@ -85,8 +80,7 @@ class _TeamGoalReachedState extends State<TeamGoalReached> {
                       topLeft: Radius.circular(12),
                       topRight: Radius.circular(12),
                     ),
-                    child: Image.asset('images/GoalCompleted.png',
-                        fit: BoxFit.cover),
+                    child: Image.asset('images/GoalCompleted.png', fit: BoxFit.cover),
                   ),
                   const Padding(
                     padding: EdgeInsets.symmetric(vertical: 20, horizontal: 10),
@@ -105,18 +99,19 @@ class _TeamGoalReachedState extends State<TeamGoalReached> {
                       'Eran insats kommer att göra en verklig skillnad och bidra till en bättre värld! Vi är djupt tacksamma för er godhet och stöd.',
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                          fontSize: 16,
-                          fontFamily: 'Nunito',
-                          fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                        fontFamily: 'Nunito',
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
                   ),
                   const SizedBox(height: 20),
                   MyButton(
-                      text: "Tillbaka",
-                      onTap: () {
-                        Navigator.of(context).pop();
-                      }),
+                    text: "Tillbaka",
+                    onTap: () {
+                      Navigator.of(context).pop();
+                    },
+                  ),
                   const SizedBox(height: 30),
                 ],
               ),
@@ -124,6 +119,17 @@ class _TeamGoalReachedState extends State<TeamGoalReached> {
           ),
         );
       },
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: Scaffold(
+        body: Center(
+          child: SizedBox(), // Empty widget, could be replaced with something meaningful if needed
+        ),
+      ),
     );
   }
 }
