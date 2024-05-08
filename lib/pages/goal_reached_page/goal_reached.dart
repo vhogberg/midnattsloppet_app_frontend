@@ -34,7 +34,6 @@ class _TeamGoalReachedState extends State<TeamGoalReached> {
   }
 
   Future<void> _checkGoalReached(String? username) async {
-    _showCustomDialog(context);
     try {
       var url = Uri.parse('https://group-15-7.pvt.dsv.su.se/app/team/$username/checkGoal');
       var response = await http.head(url);
@@ -124,7 +123,7 @@ class _TeamGoalReachedState extends State<TeamGoalReached> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const MaterialApp(
       home: Scaffold(
         body: Center(
           child: SizedBox(), // Empty widget, could be replaced with something meaningful if needed
