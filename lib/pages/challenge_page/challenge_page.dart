@@ -30,9 +30,9 @@ class ChallengePage extends StatelessWidget {
                 'images/CompetitionImage.png',
                 fit: BoxFit.fitWidth,
               ),
-              const SizedBox(height: 10),
+              const SizedBox(height: 6), // space mellan nedkant av bild och sökfält
               const Padding(
-                padding: EdgeInsets.only(top: 16, bottom: 16),
+                padding: EdgeInsets.only(top: 10, bottom: 10), // space i topkant och nedkant av sökfält
                 child: TextField(
                   decoration: InputDecoration(
                     hintText: 'Sök upp lag att utmana...',
@@ -41,14 +41,14 @@ class ChallengePage extends StatelessWidget {
                   ),
                 ),
               ),
-              const SizedBox(height: 10),
+              const SizedBox(height: 4), // space under sökfält och mellan textinstruktionerna
               const Align(
                 alignment: Alignment.centerLeft,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Padding(
-                      padding: EdgeInsets.only(bottom: 8.0),
+                      padding: EdgeInsets.only(bottom: 8.0), // space mellan punkt 1-2
                       child: Text(
                         '1. Sök upp ett lag som ni vill starta lagkamp emot',
                         style: TextStyle(
@@ -58,7 +58,7 @@ class ChallengePage extends StatelessWidget {
                       ),
                     ),
                     Padding(
-                      padding: EdgeInsets.only(bottom: 8.0),
+                      padding: EdgeInsets.only(bottom: 8.0), // space mellan punkt 2-3
                       child: Text(
                         '2. Skicka iväg utmaningen och invänta svar från det andra laget',
                         style: TextStyle(
@@ -68,7 +68,7 @@ class ChallengePage extends StatelessWidget {
                       ),
                     ),
                     Padding(
-                      padding: EdgeInsets.only(bottom: 10.0),
+                      padding: EdgeInsets.only(bottom: 6.0), // space mellan punkt 3 och skicka-knapp
                       child: Text(
                         '3. En aktiv lagkamp startas där ni kan tävla i donationer och skapa egna mini-tävlingar!',
                         style: TextStyle(
@@ -83,7 +83,7 @@ class ChallengePage extends StatelessWidget {
 
               // Skicka iväg utmaning-knapp
               Padding(
-                padding: const EdgeInsets.symmetric(vertical: 10.0),
+                padding: const EdgeInsets.symmetric(vertical: 6), // igen, space ovanför skicka-knapp, lite dubbelfunktion här.
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -92,7 +92,7 @@ class ChallengePage extends StatelessWidget {
                         height: 65,
                         decoration: BoxDecoration(
                           color: const Color(0XFF3C4785),
-                          borderRadius: BorderRadius.circular(5.0),
+                          borderRadius: BorderRadius.circular(4.0),
                         ),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -127,7 +127,7 @@ class ChallengePage extends StatelessWidget {
 
               // Inboxlåda för utmaningar
               Container(
-                margin: EdgeInsets.symmetric(vertical: 20.0),
+                margin: EdgeInsets.symmetric(vertical: 12.0),
                 padding: EdgeInsets.all(20.0),
                 decoration: BoxDecoration(
                   color: Colors.grey.shade300,
