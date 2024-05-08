@@ -30,9 +30,13 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
               IconButton(
                 icon: const Icon(
                   Icons.arrow_back,
-                  color: Color(0xFF4F4F4F),
+                  
+                  //color: Color(0xFF4F4F4F),
+                  color: Color(0xFFFDFDFD), // färg för att göra osynlig
+                  size: 30
                 ),
-                onPressed: () => Navigator.of(context).pop(),
+                onPressed: () => DoNothingAction(), // gör ingenting, sparar för framtid...
+                // onPressed: () => Navigator.of(context).pop(), tidigare implementation
               ),
               SizedBox(width: 8), // Padding
               Expanded(
@@ -41,9 +45,9 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                   title,
                   textAlign: TextAlign.center,
                   style: const TextStyle(
-                    fontFamily: 'Plus Jakarta Sans',
+                    fontFamily: 'Sora',
                     fontWeight: FontWeight.bold,
-                    fontSize: 20,
+                    fontSize: 24,
                     color: Color(0xFF4F4F4F),
                   ),
                 ),
@@ -56,6 +60,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                   IconButton(
                     icon: Icon(
                       actionIcon,
+                      size: 30,
                       color: actionIcon != null
                           ? Color(0xFF4F4F4F)
                           : Colors.transparent,
