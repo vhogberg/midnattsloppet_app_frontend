@@ -123,9 +123,7 @@ class ChallengePage extends StatelessWidget {
                 ),
               ),
 
-
-// test
-
+// test 2
 
               // Inboxlåda för utmaningar
               Container(
