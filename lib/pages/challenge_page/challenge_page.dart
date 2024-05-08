@@ -5,14 +5,19 @@ import 'package:flutter_application/pages/navigation_bar/navigation_bar.dart';
 import 'package:flutter_application/components/custom_app_bar.dart';
 
 class ChallengePage extends StatelessWidget {
-  String test2 = 'test';
+  // Dessa variabler bör ju sättas nån annanstans
+  bool challengeSent =
+      false; // Bool för ifall en användare har skickat en inbjudan till ett annat team
+  bool challengeReceived =
+      true; // Bool för ifall ett annat team har skickat en inbjudan till användaren
+  String senderTeam = 'Nordea lag 3'; // Namnet på teamet som skicka inbjudan
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(
         key: null,
         title: 'Lagkamp',
-        // lagkampssidan ska inte ha någon ActionButton till höger, så detta nedan sätts "false"
         useActionButton: false,
       ),
       body: SingleChildScrollView(
@@ -63,7 +68,7 @@ class ChallengePage extends StatelessWidget {
                       ),
                     ),
                     Padding(
-                      padding: EdgeInsets.only(bottom: 20.0),
+                      padding: EdgeInsets.only(bottom: 10.0),
                       child: Text(
                         '3. En aktiv lagkamp startas där ni kan tävla i donationer och skapa egna mini-tävlingar!',
                         style: TextStyle(
@@ -75,6 +80,8 @@ class ChallengePage extends StatelessWidget {
                   ],
                 ),
               ),
+
+              // Skicka iväg utmaning-knapp
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 10.0),
                 child: Row(
@@ -116,6 +123,124 @@ class ChallengePage extends StatelessWidget {
                     ),
                   ],
                 ),
+              ),
+
+              // Inboxlåda för utmaningar
+              Container(
+                margin: EdgeInsets.symmetric(vertical: 20.0),
+                padding: EdgeInsets.all(20.0),
+                decoration: BoxDecoration(
+                  color: Colors.grey.shade300,
+                  borderRadius: BorderRadius.circular(4.0),
+                ),
+                child: challengeReceived
+                    ? Column(
+                        children: [
+                          Text(
+                            // senderTeam byts ut baserat på variabeln längst upp
+                            '$senderTeam vill starta en lagkamp med er, acceptera?',
+                            style: TextStyle(
+                              fontSize: 16.0,
+                              fontWeight: FontWeight.bold,
+                              fontFamily: 'Sora',
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                          SizedBox(height: 20),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              // Acceptera lagkamp knapp
+                              ElevatedButton(
+                                onPressed: () {
+                                  // Acceptera lagkamp logik här
+                                },
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.green,
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 20, vertical: 10),
+                                ),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Text(
+                                      'Acceptera',
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black, // Black text color
+                                      ),
+                                    ),
+                                    SizedBox(
+                                        width: 8), // Space mellan text och ikon
+                                    Icon(
+                                      Iconsax.like_1,
+                                      size: 24,
+                                      color: Colors.black,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              SizedBox(width: 20),
+
+                              // Avböj lagkamp knapp
+                              ElevatedButton(
+                                onPressed: () {
+                                  // Avböj lagkamp logik här
+                                },
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.red,
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 20, vertical: 10),
+                                ),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Text(
+                                      'Avböj',
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black, 
+                                      ),
+                                    ),
+                                    SizedBox(
+                                        width: 8), // space mellan text och ikon
+                                    Icon(
+                                      Iconsax.dislike,
+                                      size: 24,
+                                      color: Colors.black,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      )
+
+                    // om användaren har skickat challenge, visa detta  
+                    : (challengeSent
+                        ? Text(
+                            'Inväntar svar från lag $senderTeam',
+                            style: TextStyle(
+                              fontSize: 16.0,
+                              fontWeight: FontWeight.bold,
+                              fontFamily: 'Sora',
+                            ),
+                            textAlign: TextAlign.center,
+                          )
+
+                          // Om användaren inte har skickat challenge, och ingen challenge har blivit skickat till dem, visa detta:
+                        : Text(
+                            'Inga aktiva inbjudningar eller förfrågningar',
+                            style: TextStyle(
+                              fontSize: 16.0,
+                              fontWeight: FontWeight.bold,
+                              fontFamily: 'Sora',
+                            ),
+                            textAlign: TextAlign.center,
+                          )),
               ),
             ],
           ),
