@@ -161,7 +161,7 @@ class _NotificationPageState extends State<NotificationPage>
     DateTime targetDate = DateTime(2024, 8, 17);
 
     // Starta en timer som kontrollerar varje dag
-    Timer.periodic(Duration(seconds: 10), (timer) {
+    Timer.periodic(Duration(days: 1), (timer) {
       // Beräkna antal dagar kvar
       DateTime now = DateTime.now();
       int daysLeft = targetDate.difference(now).inDays;
@@ -192,7 +192,7 @@ class _NotificationPageState extends State<NotificationPage>
         );
       }
 
-      // Stoppa timern när vi når måldatumet
+      // Stoppa timern när måldatumet är nptt
       if (now.isAfter(targetDate)) {
         timer.cancel();
       }
