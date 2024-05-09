@@ -27,13 +27,13 @@ class MyTeamPage extends StatelessWidget {
           borderRadius: BorderRadius.circular(10),
         ),
         child: ListTile(
-          leading: Icon(
+          leading: const Icon(
             Icons.person,
             color: Colors.black, // Change the icon color to blue
           ),
           title: Text(
             member,
-            style: TextStyle(
+            style: const TextStyle(
               color: Colors.black, // Change text color to black
             ),
           ),
@@ -115,7 +115,7 @@ class MyTeamPage extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
+                const Text(
                   'Team Members',
                   style: TextStyle(
                     color: Colors.white,
@@ -123,7 +123,7 @@ class MyTeamPage extends StatelessWidget {
                     fontSize: 18,
                   ),
                 ),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 // Generate ListTiles dynamically
                 ...generateTeamList(),
               ],

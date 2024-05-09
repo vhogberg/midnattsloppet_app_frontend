@@ -15,7 +15,7 @@ class ChallengePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(
+      appBar: const CustomAppBar(
         key: null,
         title: 'Lagkamp',
         useActionButton: false,
@@ -127,8 +127,8 @@ class ChallengePage extends StatelessWidget {
 
               // Inboxlåda för utmaningar
               Container(
-                margin: EdgeInsets.symmetric(vertical: 12.0),
-                padding: EdgeInsets.all(20.0),
+                margin: const EdgeInsets.symmetric(vertical: 12.0),
+                padding: const EdgeInsets.all(20.0),
                 decoration: BoxDecoration(
                   color: Colors.grey.shade300,
                   borderRadius: BorderRadius.circular(4.0),
@@ -139,14 +139,14 @@ class ChallengePage extends StatelessWidget {
                           Text(
                             // senderTeam byts ut baserat på variabeln längst upp
                             '$senderTeam vill starta en lagkamp med er, acceptera?',
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontSize: 16.0,
                               fontWeight: FontWeight.bold,
                               fontFamily: 'Sora',
                             ),
                             textAlign: TextAlign.center,
                           ),
-                          SizedBox(height: 20),
+                          const SizedBox(height: 20),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
@@ -157,10 +157,10 @@ class ChallengePage extends StatelessWidget {
                                 },
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: Colors.green,
-                                  padding: EdgeInsets.symmetric(
+                                  padding: const EdgeInsets.symmetric(
                                       horizontal: 20, vertical: 10),
                                 ),
-                                child: Row(
+                                child: const Row(
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
                                     Text(
@@ -181,7 +181,7 @@ class ChallengePage extends StatelessWidget {
                                   ],
                                 ),
                               ),
-                              SizedBox(width: 20),
+                              const SizedBox(width: 20),
 
                               // Avböj lagkamp knapp
                               ElevatedButton(
@@ -190,10 +190,10 @@ class ChallengePage extends StatelessWidget {
                                 },
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: Colors.red,
-                                  padding: EdgeInsets.symmetric(
+                                  padding: const EdgeInsets.symmetric(
                                       horizontal: 20, vertical: 10),
                                 ),
-                                child: Row(
+                                child: const Row(
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
                                     Text(
@@ -223,7 +223,7 @@ class ChallengePage extends StatelessWidget {
                     : (challengeSent
                         ? Text(
                             'Inväntar svar från lag $senderTeam',
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontSize: 16.0,
                               fontWeight: FontWeight.bold,
                               fontFamily: 'Sora',
@@ -232,7 +232,7 @@ class ChallengePage extends StatelessWidget {
                           )
 
                         // Om användaren inte har skickat challenge, och ingen challenge har blivit skickat till dem, visa detta:
-                        : Text(
+                        : const Text(
                             'Inga aktiva inbjudningar eller förfrågningar',
                             style: TextStyle(
                               fontSize: 16.0,

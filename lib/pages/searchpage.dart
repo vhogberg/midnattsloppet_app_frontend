@@ -24,7 +24,7 @@ class _SearchPageState extends State<SearchPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
+        title: const Text(
           'Sök lag',
           style: TextStyle(
             color: Colors.black,
@@ -40,7 +40,7 @@ class _SearchPageState extends State<SearchPage> {
           children: [
             TextField(
               controller: searchController,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'Ange lagnamn',
                 border: OutlineInputBorder(),
               ),
@@ -48,7 +48,7 @@ class _SearchPageState extends State<SearchPage> {
                 _filterTeams(value); // Filter teams based on input text
               },
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             Expanded(
               child: Container(
                 width: double.infinity,
@@ -60,8 +60,8 @@ class _SearchPageState extends State<SearchPage> {
                   itemCount: filteredTeams.length,
                   itemBuilder: (BuildContext context, int index) {
                     return Container(
-                      margin: EdgeInsets.symmetric(vertical: 5.0),
-                      padding: EdgeInsets.all(10.0),
+                      margin: const EdgeInsets.symmetric(vertical: 5.0),
+                      padding: const EdgeInsets.all(10.0),
                       decoration: BoxDecoration(
                         color: const Color(0XFF3C4785),
                         borderRadius: BorderRadius.circular(20.0),
@@ -80,7 +80,7 @@ class _SearchPageState extends State<SearchPage> {
                       ),
                       child: Text(
                         filteredTeams[index],
-                        style: TextStyle(
+                        style: const TextStyle(
                           color: Colors.white,
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
