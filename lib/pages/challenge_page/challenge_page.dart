@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application/pages/homepage.dart';
-import 'package:iconsax/iconsax.dart';
-import 'package:flutter_application/pages/navigation_bar/navigation_bar.dart';
 import 'package:flutter_application/components/custom_app_bar.dart';
+import 'package:iconsax/iconsax.dart';
 
 class ChallengePage extends StatelessWidget {
   // Dessa variabler bör ju sättas nån annanstans
@@ -124,6 +122,8 @@ class ChallengePage extends StatelessWidget {
                   ],
                 ),
               ),
+
+// test 2
 
               // Inboxlåda för utmaningar
               Container(
