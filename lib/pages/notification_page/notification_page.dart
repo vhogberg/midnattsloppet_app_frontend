@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_application/session_manager.dart';
+import 'package:flutter_application/api_utils/api_utils.dart';
+import 'dart:async';
+
 import 'package:shared_preferences/shared_preferences.dart';
 
 // Skapa en klass för notifikationen
@@ -28,49 +33,18 @@ class _NotificationPageState extends State<NotificationPage>
   final TextEditingController _searchController =
       TextEditingController(); // Controller för sökfältet
   String _searchTerm = ''; // Söktermen
+  String?
+      username; // Användarnamn för att hämta mängden insamlat i insamlingbössan och donationsmålet
 
   // simulera notifikationer
-  List<NotificationItem> allNotifications = [
-    NotificationItem(
-      title: "Du har blivit utmanad av {företag} {lagnamn}",
-      message: "Gå in i \"lagkamp\"-fliken för att acceptera utmaningen!",
-      time: DateTime.now(),
-    ),
-    NotificationItem(
-      title: "30% av donationsmålet uppnått!",
-      message:
-          "Ni har uppnått 30% av erat donationsmål! \nGrattis och fortsätt!",
-      time: DateTime.now(),
-    ),
-    NotificationItem(
-      title: "60% av donationsmålet uppnått!",
-      message:
-          "Ni har uppnått 60% av erat donationsmål! \nGrattis och fortsätt!",
-      time: DateTime.now(),
-    ),
-    NotificationItem(
-      title: "90% av donationsmålet uppnått",
-      message:
-          "Ni har uppnått 90% av erat donationsmål! \nGrattis och fortsätt!",
-      time: DateTime.now(),
-    ),
-    NotificationItem(
-      title: "50 dagar kvar till loppet",
-      message:
-          "Det är 50 dagar kvar till midnattsloppets racestart! \nSpara datumet: 27 Augusti 2024",
-      time: DateTime.now(),
-    ),
-    NotificationItem(
-      title: "100 dagar kvar till loppet",
-      message:
-          "Det är 100 dagar klvar till midnattsloppets racestart! \nSpara datumet: 27 Augusti 2024",
-      time: DateTime.now(),
-    ),
-    // Andra notifikationer här ...
-  ];
-
+  List<NotificationItem> allNotifications = [];
   List<NotificationItem> unreadNotifications = [];
   List<NotificationItem> readNotifications = [];
+
+  double donationGoal = 0;
+  double totalDonations = 0;
+
+  late Timer _timer;
 
   @override
   void initState() {
@@ -78,12 +52,30 @@ class _NotificationPageState extends State<NotificationPage>
     _tabController = TabController(
         length: 3, vsync: this); // Skapa en TabController med 3 flikar
     initializeSharedPreferences();
+    username = SessionManager.instance.username;
+    fetchDonations();
+    fetchGoal();
+    dateNotifications(); // Lägg till anropet till metoden som ansvarar för datumsnotiser.
+    donationNotifications(); // anrop till metoden som ansvarar för donationsnotiser.
+    _timer = Timer.periodic(const Duration(seconds: 10), (timer) {
+      fetchDonations();
+      fetchGoal();
+    });
+  }
+
+  void resetLists() {
+    setState(() {
+      unreadNotifications.clear();
+      readNotifications.clear();
+      separateNotifications();
+    });
   }
 
   @override
   void dispose() {
     _tabController.dispose(); // Ta bort TabController när widgeten förstörs
     _searchController.dispose(); // Ta bort TextEditingController
+    _timer.cancel();
     super.dispose();
   }
 
@@ -113,19 +105,12 @@ class _NotificationPageState extends State<NotificationPage>
     }
   }
 
-  // Återställ listorna när användaren ändrar fliken
-  void resetLists() {
-    unreadNotifications.clear();
-    readNotifications.clear();
-    separateNotifications();
-  }
-
   // Uppdatera notisens lässtatus i SharedPreferences
   void updateNotificationStatus(NotificationItem notification) {
     _prefs.setBool(notification.title, notification.isRead);
   }
 
-  // Funktion för att filtrera notifikationer baserat på söktermen
+  // Funktion för filtrering av notifikationer baserat på söktermen
   List<NotificationItem> filterNotifications(String searchTerm) {
     return allNotifications.where((notification) {
       return notification.title
@@ -135,60 +120,167 @@ class _NotificationPageState extends State<NotificationPage>
     }).toList();
   }
 
-  // Funktion för att visa modalbottenpanelen för sökning
-  void _showSearchModal(BuildContext context) {
-  showModalBottomSheet(
-    context: context,
-    builder: (BuildContext context) {
-      return Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Spacer(),
-                IconButton(
-                  icon: const Icon(Icons.close),
-                  onPressed: () {
-                    Navigator.pop(context);
-                    _searchController.clear();
-                    setState(() {
-                      _searchTerm = '';
-                    });
-                  },
-                ),
-              ],
-            ),
-            TextField(
-              controller: _searchController,
-              decoration: const InputDecoration(
-                labelText: 'Sök',
-                labelStyle: TextStyle(fontFamily: 'Nunito'), 
-              ),
-              onChanged: (value) {
-                setState(() {
-                  _searchTerm = value;
-                });
-              },
-            ),
-            const SizedBox(height: 16.0),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                textStyle: const TextStyle(fontFamily: 'Nunito'), 
-              ),
-              onPressed: () {
-                Navigator.pop(context); 
-              },
-              child: const Text('Sök'),
-            ),
-          ],
+  void donationNotifications() {
+    // Hårdkodade notifikationer baserat på procentandelen av donationsmålet
+    if (calculatePercentage() >= 30) {
+      allNotifications.add(
+        NotificationItem(
+          title: "30% av donationsmålet uppnått!",
+          message:
+              "Ni har uppnått 30% av erat donationsmål! \nGrattis och fortsätt!",
+          time: DateTime.now(),
         ),
       );
-    },
-  );
-}
+    }
+
+    if (calculatePercentage() >= 60) {
+      allNotifications.add(
+        NotificationItem(
+          title: "60% av donationsmålet uppnått!",
+          message:
+              "Ni har uppnått 60% av erat donationsmål! \nGrattis och fortsätt!",
+          time: DateTime.now(),
+        ),
+      );
+    }
+
+    if (calculatePercentage() >= 90) {
+      allNotifications.add(
+        NotificationItem(
+          title: "90% av donationsmålet uppnått",
+          message:
+              "Ni har uppnått 90% av erat donationsmål! \nGrattis och fortsätt!",
+          time: DateTime.now(),
+        ),
+      );
+    }
+  }
+
+  void dateNotifications() {
+    // Datumet att räkna ner till
+    DateTime targetDate = DateTime(2024, 8, 17);
+
+    // Starta en timer som kontrollerar varje dag
+    Timer.periodic(Duration(seconds: 10), (timer) {
+      // Beräkna antal dagar kvar
+      DateTime now = DateTime.now();
+      int daysLeft = targetDate.difference(now).inDays;
+      print(daysLeft);
+
+      // Kontrollera om det är 50 dagar kvar
+      if (daysLeft == 50) {
+        // Visa notis till användaren
+        allNotifications.add(
+          NotificationItem(
+            title: "50 dagar kvar till loppet",
+            message:
+                "Det är 50 dagar kvar till midnattsloppets racestart! \nSpara datumet: 17 Augusti 2024",
+            time: DateTime.now(),
+          ),
+        );
+      }
+
+      if (daysLeft <= 100) {
+        // Visa notis till användaren
+        allNotifications.add(
+          NotificationItem(
+            title: "100 dagar kvar till loppet",
+            message:
+                "Det är 100 dagar kvar till midnattsloppets racestart! \nSpara datumet: 17 Augusti 2024",
+            time: DateTime.now(),
+          ),
+        );
+      }
+
+      // Stoppa timern när vi når måldatumet
+      if (now.isAfter(targetDate)) {
+        timer.cancel();
+      }
+    });
+  }
+
+  // Funktion för att visa modalbottenpanelen för sökning
+  void _showSearchModal(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Spacer(),
+                  IconButton(
+                    icon: const Icon(Icons.close),
+                    onPressed: () {
+                      Navigator.pop(context);
+                      _searchController.clear();
+                      setState(() {
+                        _searchTerm = '';
+                      });
+                    },
+                  ),
+                ],
+              ),
+              TextField(
+                controller: _searchController,
+                decoration: const InputDecoration(
+                  labelText: 'Sök',
+                ),
+                onChanged: (value) {
+                  setState(() {
+                    _searchTerm = value;
+                  });
+                },
+              ),
+              const SizedBox(height: 16.0),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: const Text('Sök'),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  // Funktion för att hämta aktuella donationer
+  Future<void> fetchDonations() async {
+    try {
+      double total = await ApiUtils.fetchDonations(username);
+      setState(() {
+        totalDonations = total;
+      });
+    } catch (e) {
+      print("Error fetching donations: $e");
+    }
+  }
+
+  // Funktion för att hämta donationsmål
+  Future<void> fetchGoal() async {
+    try {
+      double goal = await ApiUtils.fetchGoal(username);
+      setState(() {
+        donationGoal = goal;
+      });
+    } catch (e) {
+      print("Error fetching goal: $e");
+    }
+  }
+
+  double calculatePercentage() {
+    if (donationGoal == 0) {
+      return 0.0; // Undvik division med noll
+    } else {
+      return (totalDonations / donationGoal) * 100;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -197,7 +289,6 @@ class _NotificationPageState extends State<NotificationPage>
         title: const Text(
           'Notifikationer',
           style: TextStyle(
-            fontFamily: 'Sora',
             fontWeight: FontWeight.w700,
           ),
         ),
@@ -207,14 +298,13 @@ class _NotificationPageState extends State<NotificationPage>
             child: IconButton(
               icon: const Icon(Icons.search),
               onPressed: () {
-                _showSearchModal(
-                    context); // Visa modalbottenpanelen för sökning
+                _showSearchModal(context);
               },
             ),
           ),
         ],
         bottom: TabBar(
-          controller: _tabController, // Använd vår TabController
+          controller: _tabController,
           tabs: const [
             Tab(text: 'Alla'),
             Tab(text: 'Olästa'),
@@ -226,7 +316,7 @@ class _NotificationPageState extends State<NotificationPage>
         children: [
           Expanded(
             child: TabBarView(
-              controller: _tabController, // Använd vår TabController
+              controller: _tabController,
               children: [
                 NotificationList(
                   notifications: _searchTerm.isEmpty
@@ -301,7 +391,6 @@ class NotificationList extends StatelessWidget {
               title: Text(
                 notifications[index].title,
                 style: const TextStyle(
-                  fontFamily: 'Sora',
                   fontWeight: FontWeight.bold,
                   fontSize: 16.0,
                 ),
@@ -309,7 +398,6 @@ class NotificationList extends StatelessWidget {
               subtitle: Text(
                 notifications[index].message,
                 style: const TextStyle(
-                  fontFamily: 'Nunito',
                   fontWeight: FontWeight.bold,
                   fontSize: 12.0,
                 ),
@@ -337,7 +425,6 @@ class NotificationDetail extends StatelessWidget {
         title: Text(
           notification.title,
           style: const TextStyle(
-            fontFamily: 'Sora',
             fontWeight: FontWeight.w700,
           ),
         ),
@@ -350,7 +437,6 @@ class NotificationDetail extends StatelessWidget {
             Text(
               notification.message,
               style: const TextStyle(
-                fontFamily: 'Nunito',
                 fontWeight: FontWeight.bold,
                 fontSize: 16.0,
               ),
@@ -359,7 +445,6 @@ class NotificationDetail extends StatelessWidget {
             Text(
               'Tid: ${notification.time.hour}:${notification.time.minute}',
               style: const TextStyle(
-                fontFamily: 'Nunito',
                 fontSize: 14.0,
               ),
             ),
@@ -369,7 +454,3 @@ class NotificationDetail extends StatelessWidget {
     );
   }
 }
-
-
-
-
