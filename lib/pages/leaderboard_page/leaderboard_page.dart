@@ -40,23 +40,23 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
     final response = await http.get(Uri.parse('https://group-15-7.pvt.dsv.su.se/app/all/teamswithbox'));
 
     if (response.statusCode == 200) {
-      final List<dynamic> data = jsonDecode(response.body);
+      final Map<String, dynamic> data = jsonDecode(response.body);
       List<Team> fetchedTeams = []; // Create a temporary list to hold Team objects
-      for (var item in data) {
+      data.forEach((key, value) {
         fetchedTeams.add(Team(
-          name: item['name'],
-          fundraiserBox: item['fundraiserBox'],
+          name: key,
+          fundraiserBox: value,
         ));
-      }
+      });
       fetchedTeams = sortTeams(fetchedTeams); // Sort the fetched teams
       setState(() {
         teams = fetchedTeams; // Update the state with the sorted teams
-        debugPrint('teams: $teams');
       });
     } else {
       throw Exception('Failed to load teams from API');
     }
   }
+
 
   List<Team> sortTeams(List<Team> teams) {
     teams.sort((a, b) => b.fundraiserBox.compareTo(a.fundraiserBox));
