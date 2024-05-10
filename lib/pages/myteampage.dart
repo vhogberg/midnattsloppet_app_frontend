@@ -1,13 +1,22 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:flutter_application/api_utils/api_utils.dart';
 import 'package:flutter_application/components/donation_progress_bar.dart';
+import 'package:flutter_application/pages/navigation_bar/navigation_bar.dart';
 import 'package:flutter_application/session_manager.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_application/components/custom_app_bar.dart';
+import 'package:flutter_application/components/goal_box.dart';
 
-class MyTeamPage extends StatelessWidget {
+class MyTeamPage extends StatefulWidget {
   const MyTeamPage({Key? key}) : super(key: key);
 
+  @override
+  _MyTeamPageState createState() => _MyTeamPageState();
+}
+
+class _MyTeamPageState extends State<MyTeamPage> {
   static const List<String> teamMembers = [
     'John Doe',
     'Jane Doe',
@@ -15,31 +24,89 @@ class MyTeamPage extends StatelessWidget {
     'James Doe',
     'Carl Doe',
   ];
+  String? username;
+  double donationGoal = 0;
+  double totalDonations = 0;
+  late Timer timer;
+
+  @override
+  void initState() {
+    super.initState();
+    username = SessionManager.instance.username;
+    fetchGoal();
+    fetchDonations();
+    timer = Timer.periodic(const Duration(seconds: 10), (timer) {
+      fetchGoal();
+      fetchDonations();
+    });
+  }
+
+  Future<void> fetchDonations() async {
+    try {
+      double total = await ApiUtils.fetchDonations(username);
+      setState(() {
+        totalDonations = total;
+      });
+    } catch (e) {
+      print("Error fetching donations: $e");
+    }
+  }
+
+  Future<void> fetchGoal() async {
+    try {
+      double goal = await ApiUtils.fetchGoal(username);
+      setState(() {
+        donationGoal = goal;
+      });
+    } catch (e) {
+      print("Error fetching goal: $e");
+    }
+  }
 
   // Method to generate ListTiles dynamically based on team members list
   List<Widget> generateTeamList() {
-    return teamMembers.map((member) {
-      return Container(
-        margin: const EdgeInsets.symmetric(vertical: 3, horizontal: 5),
-        padding: const EdgeInsets.all(10),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(10),
-        ),
-        child: ListTile(
-          leading: Icon(
-            Icons.person,
-            color: Colors.black, // Change the icon color to blue
-          ),
+    List<Widget> listTiles = [];
+    for (int i = 0; i < teamMembers.length; i += 2) {
+      if (i + 1 < teamMembers.length) {
+        listTiles.add(Row(
+          children: [
+            Expanded(
+              child: ListTile(
+                title: Text(
+                  teamMembers[i],
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 14, // smaller font size
+                  ),
+                ),
+              ),
+            ),
+            Expanded(
+              child: ListTile(
+                title: Text(
+                  teamMembers[i + 1],
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 14, // smaller font size
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ));
+      } else {
+        listTiles.add(ListTile(
           title: Text(
-            member,
+            teamMembers[i],
             style: TextStyle(
-              color: Colors.black, // Change text color to black
+              color: Colors.black,
+              fontSize: 14, // smaller font size
             ),
           ),
-        ),
-      );
-    }).toList();
+        ));
+      }
+    }
+    return listTiles;
   }
 
   @override
@@ -80,14 +147,14 @@ class MyTeamPage extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 20),
-// Textbox with the donation pledge name
-// import via API?
-          const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20),
+          // Textbox with the donation pledge name
+          // import via API?
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
             child: Center(
               child: Text(
                 'Stödjer: Barncancerfonden', // Static text
-                style: TextStyle(fontSize: 16),
+                style: const TextStyle(fontSize: 16),
               ),
             ),
           ),
@@ -95,6 +162,7 @@ class MyTeamPage extends StatelessWidget {
           // Container with team members names
           Container(
             width: double.infinity,
+          height: 500,
             padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
               color: const Color(0XFF3C4785),
@@ -116,7 +184,7 @@ class MyTeamPage extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Team Members',
+                  'Lagmedlemmar',
                   style: TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.bold,
@@ -126,6 +194,46 @@ class MyTeamPage extends StatelessWidget {
                 SizedBox(height: 10),
                 // Generate ListTiles dynamically
                 ...generateTeamList(),
+                SizedBox(height: 20),
+                // Display fetched data
+                Container(
+                  width: 345,
+                  height: 150,
+                  decoration: BoxDecoration(
+                    color: Colors.white30,
+                    borderRadius: BorderRadius.circular(13.0),
+                    border: Border.all(
+                      color: Colors.white60, // Border color
+                      width: 1.0, // Border width
+                    ),
+                  ),
+                  padding: EdgeInsets.all(10),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        '${totalDonations.toStringAsFixed(0)} kr insamlat',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      Text(
+                        'Mål: ${donationGoal.toStringAsFixed(0)} kr',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      SizedBox(height: 10),
+                      DonationProgressBar(),
+                      Positioned(
+                        left: 300,
+                        child: SizedBox(width: 50, child: GoalBox(),),
+                        ),
+                    ],
+                  ),
+                ),
               ],
             ),
           ),
