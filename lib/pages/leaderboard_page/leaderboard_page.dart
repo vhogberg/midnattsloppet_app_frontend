@@ -51,6 +51,7 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
       fetchedTeams = sortTeams(fetchedTeams); // Sort the fetched teams
       setState(() {
         teams = fetchedTeams; // Update the state with the sorted teams
+        debugPrint('teams: $teams');
       });
     } else {
       throw Exception('Failed to load teams from API');
