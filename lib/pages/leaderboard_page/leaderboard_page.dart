@@ -37,13 +37,20 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
   }
 
   Future<void> fetchTeamsFromAPI() async {
-    final response = await http.get(Uri.parse('https://group-15-7.pvt.dsv.su.se/app/all/teams'));
+    final response = await http.get(Uri.parse('https://group-15-7.pvt.dsv.su.se/app/all/teamswithbox'));
 
     if (response.statusCode == 200) {
       final List<dynamic> data = jsonDecode(response.body);
-      //List<Team> fetchedTeams = data.map((teamJson) => Team.fromJson(teamJson)).toList(); // Convert JSON data to Team objects
+      List<Team> fetchedTeams = []; // Create a temporary list to hold Team objects
+      for (var item in data) {
+        fetchedTeams.add(Team(
+          name: item['name'],
+          fundraiserBox: item['fundraiserBox'],
+        ));
+      }
+      fetchedTeams = sortTeams(fetchedTeams); // Sort the fetched teams
       setState(() {
-        //teams = sortTeams(fetchedTeams); // Sort fetched teams
+        teams = fetchedTeams; // Update the state with the sorted teams
       });
     } else {
       throw Exception('Failed to load teams from API');
