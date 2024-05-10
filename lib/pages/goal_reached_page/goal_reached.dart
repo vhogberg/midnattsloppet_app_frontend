@@ -126,7 +126,7 @@ class _TeamGoalReachedState extends State<TeamGoalReached> {
     return const MaterialApp(
       home: Scaffold(
         body: Center(
-          child: SizedBox(), // Empty widget, could be replaced with something meaningful if needed
+          child: SizedBox(), // Empty widget, could be replaced with something if needed
         ),
       ),
     );
