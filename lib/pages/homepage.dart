@@ -1,12 +1,14 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_application/api_utils/api_utils.dart';
 import 'package:flutter_application/components/donation_progress_bar.dart';
 import 'package:flutter_application/components/goal_box.dart';
+import 'package:flutter_application/pages/notification_page/notification_page.dart';
 import 'package:flutter_application/session_manager.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'dart:async';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -81,10 +83,19 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ),
                 const Spacer(),
-                const Icon(
-                  Iconsax.notification,
-                  size: 35,
-                  color: Color.fromARGB(255, 113, 113, 113),
+                GestureDetector(
+                  onTap: () {
+                    // Navigate to another page here
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => NotificationPage()),
+                    );
+                  },
+                  child: const Icon(
+                    Iconsax.notification,
+                    size: 35,
+                    color: Color.fromARGB(255, 113, 113, 113),
+                  ),
                 ),
                 const SizedBox(width: 20),
                 GestureDetector(

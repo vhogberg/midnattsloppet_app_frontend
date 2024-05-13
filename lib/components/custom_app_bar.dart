@@ -90,7 +90,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   // appbar klass kräver preferredSize sätts
   // preferred size (100) är padding till komponenter under app bar
   @override
-  Size get preferredSize => const Size.fromHeight(100);
+  Size get preferredSize => const Size.fromHeight(50);
 }
 
 /**
