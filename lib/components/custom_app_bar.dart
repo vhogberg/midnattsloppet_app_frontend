@@ -18,7 +18,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Container(
-        padding: EdgeInsets.only(top: 50), // padding i topp
+        padding: EdgeInsets.only(top: 0), // padding i topp
         child: AppBar(
           automaticallyImplyLeading:
               false, // tar bort standard-tillbaka knappen som medföljer AppBar
