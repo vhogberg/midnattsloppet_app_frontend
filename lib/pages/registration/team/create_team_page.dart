@@ -45,10 +45,8 @@ class _CreateTeamPageState extends State<CreateTeamPage> {
     }
   }
 
-  Future<void> registerTeam(String username, String teamName,
-      String charityName, String donationGoal) async {
-    final String url =
-        'https://group-15-7.pvt.dsv.su.se/app/register/profile/register/team';
+  Future<void> registerTeam(String username, String teamName, String charityName, String donationGoal) async {
+    final String url ='https://group-15-7.pvt.dsv.su.se/app/register/profile/register/team';
 
     Map<String, String> requestBody = {
       'username': username,
@@ -70,9 +68,12 @@ class _CreateTeamPageState extends State<CreateTeamPage> {
     } else if (response.statusCode == 400) {
       print('Team name already exists');
     } else {
-      print('Failed to register team');
+      print('Failed to register team: ${response.statusCode}');
+      print('Response body: ${response.body}');
+      // Handle other error cases here, such as 500 Internal Server Error
     }
   }
+
 
   void filterSearchResults(String query) {
     List<String> searchResults = [];
