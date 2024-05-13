@@ -94,24 +94,24 @@ class _HomePageState extends State<HomePage> {
                   },
                   child: Stack(
                     children: [
-                      Icon(
+                      const Icon(
                         Iconsax.notification,
                         size: 35,
                         color: Color.fromARGB(255, 113, 113, 113),
                       ),
-                      if (1==0 /** Implementera variabelcheck på unreadNotificationsExist här*/)
+                      if (1==0 /** Denna if-satsen finns om vi hittar något sätt att kontrollera om det finns olästa notifikationer, just nu tar detta för mkt tid*/)
                         Positioned(
                           // position på cirkeln
                           top: 0,
                           right: 0,
                           child: Container(
                             padding:
-                                EdgeInsets.all(1), // Storlek på cirkeln
-                            decoration: BoxDecoration(
+                                const EdgeInsets.all(1), // Storlek på cirkeln
+                            decoration: const BoxDecoration(
                               color: Color.fromARGB(255, 241, 75, 75),
                               shape: BoxShape.circle,
                             ),
-                            child: Icon(
+                            child: const Icon(
                               Iconsax.notification_12,
                               size: 12,
                               color: Colors.white,
@@ -170,7 +170,7 @@ class _HomePageState extends State<HomePage> {
                           top: 10,
                           left: 10,
                           child: Padding(
-                            padding: EdgeInsets.all(8.0),
+                            padding: const EdgeInsets.all(8.0),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
