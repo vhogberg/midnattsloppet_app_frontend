@@ -92,10 +92,33 @@ class _HomePageState extends State<HomePage> {
                           builder: (context) => NotificationPage()),
                     );
                   },
-                  child: const Icon(
-                    Iconsax.notification,
-                    size: 35,
-                    color: Color.fromARGB(255, 113, 113, 113),
+                  child: Stack(
+                    children: [
+                      Icon(
+                        Iconsax.notification,
+                        size: 35,
+                        color: Color.fromARGB(255, 113, 113, 113),
+                      ),
+                      if (1==1 /** Implementera variabelcheck på unreadNotificationsExist här*/)
+                        Positioned(
+                          // position på cirkeln
+                          top: 0,
+                          right: 0,
+                          child: Container(
+                            padding:
+                                EdgeInsets.all(1), // Storlek på cirkeln
+                            decoration: BoxDecoration(
+                              color: Color.fromARGB(255, 241, 75, 75),
+                              shape: BoxShape.circle,
+                            ),
+                            child: Icon(
+                              Iconsax.notification_12,
+                              size: 12,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                    ],
                   ),
                 ),
                 const SizedBox(width: 20),
@@ -341,11 +364,7 @@ class ShareHelper {
     }
   }
 
-  bool checkIfUnreadNotifications() {
-    NotificationPage page = new NotificationPage();
-    bool unread = page.createState().checkUnreadNotifications();
-    return unread;
-  }
+  
 
   // ruta som dyker upp
   // Kalla på den via "onPressed: () => ShareHelper.showShareDialog(context)""
