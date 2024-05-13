@@ -39,8 +39,8 @@ class ApiUtils {
 
   static Future<String?> fetchTeamName(String? username) async {
     try {
-      var response = await http.get(Uri.parse(
-          'https://group-15-7.pvt.dsv.su.se/app/team/$username'));
+      var response = await http.get(
+          Uri.parse('https://group-15-7.pvt.dsv.su.se/app/team/$username'));
 
       if (response.statusCode == 200) {
         return jsonDecode(response.body)['teamName'];
@@ -55,8 +55,8 @@ class ApiUtils {
 
   static Future<String?> fetchCompanyName(String? username) async {
     try {
-      var response = await http.get(Uri.parse(
-          'https://group-15-7.pvt.dsv.su.se/app/team/$username'));
+      var response = await http.get(
+          Uri.parse('https://group-15-7.pvt.dsv.su.se/app/team/$username'));
 
       if (response.statusCode == 200) {
         return jsonDecode(response.body)['companyName'];
@@ -68,10 +68,11 @@ class ApiUtils {
       rethrow; // Rethrow the exception to handle it in the calling code
     }
   }
-    static Future<String?> fetchCharityName(String? username) async {
+
+  static Future<String?> fetchCharityName(String? username) async {
     try {
-      var response = await http.get(Uri.parse(
-          'https://group-15-7.pvt.dsv.su.se/app/team/$username'));
+      var response = await http.get(
+          Uri.parse('https://group-15-7.pvt.dsv.su.se/app/team/$username'));
 
       if (response.statusCode == 200) {
         return jsonDecode(response.body)['charityName'];
@@ -86,8 +87,8 @@ class ApiUtils {
 
   static Future<int?> fetchFundraiserBox(String? username) async {
     try {
-      var response = await http.get(Uri.parse(
-          'https://group-15-7.pvt.dsv.su.se/app/team/$username'));
+      var response = await http.get(
+          Uri.parse('https://group-15-7.pvt.dsv.su.se/app/team/$username'));
 
       if (response.statusCode == 200) {
         return jsonDecode(response.body)['fundraiserBox'];
@@ -102,8 +103,8 @@ class ApiUtils {
 
   static Future<List<String>?> fetchMembers(String? username) async {
     try {
-      var response = await http.get(Uri.parse(
-          'https://group-15-7.pvt.dsv.su.se/app/team/$username'));
+      var response = await http.get(
+          Uri.parse('https://group-15-7.pvt.dsv.su.se/app/team/$username'));
 
       if (response.statusCode == 200) {
         return List<String>.from(jsonDecode(response.body)['members']);
@@ -115,5 +116,22 @@ class ApiUtils {
       rethrow; // Rethrow the exception to handle it in the calling code
     }
   }
-}
 
+  static Future<String?> fetchChallengeStatus(String? username) async {
+    try {
+      var response = await http.get(Uri.parse(
+          'https://group-15-7.pvt.dsv.su.se/app/$username/challenge'));
+
+      if (response.statusCode == 200) {
+        var responseData = jsonDecode(response.body);
+        var challengeStatus = responseData['status'];
+        return challengeStatus;
+      } else {
+        throw Exception('Failed to fetch challenge status');
+      }
+    } catch (e) {
+      print('Error fetching challenge status: $e');
+      rethrow;
+    }
+  }
+}

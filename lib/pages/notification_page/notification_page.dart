@@ -154,7 +154,13 @@ class _NotificationPageState extends State<NotificationPage>
     }
   }
 
-  void challengeNotifications() {}
+  void challengeNotifications() {
+
+
+    
+
+
+  }
 
   void showNotificationIfNeeded(daysLeft) {
     // Kontrollera om det är 50 dagar kvar
@@ -182,7 +188,6 @@ class _NotificationPageState extends State<NotificationPage>
                 "Det är 100 dagar kvar till midnattsloppets racestart! \nSpara datumet: 17 Augusti 2024",
           ),
         );
-        print(allNotifications);
       }
     }
   }
