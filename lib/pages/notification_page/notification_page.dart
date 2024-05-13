@@ -343,12 +343,6 @@ class _NotificationPageState extends State<NotificationPage>
     }
   }
 
-  bool checkUnreadNotifications() {
-    if (unreadNotifications.isNotEmpty) {
-      return true;
-    }
-    return false;
-  }
 
   @override
   Widget build(BuildContext context) {

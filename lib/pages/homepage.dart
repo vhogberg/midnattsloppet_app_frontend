@@ -99,7 +99,7 @@ class _HomePageState extends State<HomePage> {
                         size: 35,
                         color: Color.fromARGB(255, 113, 113, 113),
                       ),
-                      if (1==1 /** Implementera variabelcheck på unreadNotificationsExist här*/)
+                      if (1==0 /** Implementera variabelcheck på unreadNotificationsExist här*/)
                         Positioned(
                           // position på cirkeln
                           top: 0,
