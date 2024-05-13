@@ -19,7 +19,7 @@ class GradientContainer extends StatelessWidget {
       height: height,
       decoration: BoxDecoration(
         color: const Color(0XFF3C4785),
-        borderRadius: BorderRadius.circular(13.0),
+        borderRadius: BorderRadius.circular(12.0),
         gradient: RadialGradient(
           radius: 0.8,
           center: gradientAlignment,
