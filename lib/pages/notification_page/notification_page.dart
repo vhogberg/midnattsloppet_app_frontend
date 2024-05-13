@@ -10,14 +10,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 class NotificationItem {
   final String title;
   final String message;
-  final DateTime time;
   bool isRead; // Spåra om notisen är läst eller inte
 
   NotificationItem(
-      {required this.title,
-      required this.message,
-      required this.time,
-      this.isRead = false});
+      {required this.title, required this.message, this.isRead = false});
 }
 
 class NotificationPage extends StatefulWidget {
@@ -36,8 +32,15 @@ class _NotificationPageState extends State<NotificationPage>
   String?
       username; // Användarnamn för att hämta mängden insamlat i insamlingbössan och donationsmålet
 
-  // simulera notifikationer
-  List<NotificationItem> allNotifications = [];
+  // Notifikationslistan.
+  List<NotificationItem> allNotifications = [
+    NotificationItem(
+      title: "Välkommen till Midnattsloppet Fortal!",
+      message:
+          "Tillsammans ska vi göra detta till en oförglömlig upplevelse! Glöm inte att hålla ögonen öppna för kommande uppdateringar och spännande nyheter.\n\nLycka till med din träning och vi ses på startlinjen!",
+    ),
+  ];
+
   List<NotificationItem> unreadNotifications = [];
   List<NotificationItem> readNotifications = [];
 
@@ -53,8 +56,6 @@ class _NotificationPageState extends State<NotificationPage>
         length: 3, vsync: this); // Skapa en TabController med 3 flikar
     initializeSharedPreferences();
     username = SessionManager.instance.username;
-    fetchDonations();
-    fetchGoal();
     dateNotifications(); // Lägg till anropet till metoden som ansvarar för datumsnotiser.
     donationNotifications(); // anrop till metoden som ansvarar för donationsnotiser.
     _timer = Timer.periodic(const Duration(seconds: 10), (timer) {
@@ -128,7 +129,6 @@ class _NotificationPageState extends State<NotificationPage>
           title: "30% av donationsmålet uppnått!",
           message:
               "Ni har uppnått 30% av erat donationsmål! \nGrattis och fortsätt!",
-          time: DateTime.now(),
         ),
       );
     }
@@ -139,7 +139,6 @@ class _NotificationPageState extends State<NotificationPage>
           title: "60% av donationsmålet uppnått!",
           message:
               "Ni har uppnått 60% av erat donationsmål! \nGrattis och fortsätt!",
-          time: DateTime.now(),
         ),
       );
     }
@@ -150,9 +149,41 @@ class _NotificationPageState extends State<NotificationPage>
           title: "90% av donationsmålet uppnått",
           message:
               "Ni har uppnått 90% av erat donationsmål! \nGrattis och fortsätt!",
-          time: DateTime.now(),
         ),
       );
+    }
+  }
+
+  void challengeNotifications() {}
+
+  void showNotificationIfNeeded(daysLeft) {
+    // Kontrollera om det är 50 dagar kvar
+    if (daysLeft <= 50) {
+      // Kontrollera om notifikationen redan har skapats
+      if (!notificationAlreadyExists("50 dagar kvar till loppet")) {
+        allNotifications.add(
+          NotificationItem(
+            title: "50 dagar kvar till loppet",
+            message:
+                "Det är 50 dagar kvar till midnattsloppets racestart! \nSpara datumet: 17 Augusti 2024",
+          ),
+        );
+      }
+    }
+
+    // Kontrollera om det är 100 dagar kvar
+    if (daysLeft <= 100) {
+      // Kontrollera om notifikationen redan har skapats
+      if (!notificationAlreadyExists("100 dagar kvar till loppet")) {
+        allNotifications.add(
+          NotificationItem(
+            title: "100 dagar kvar till loppet",
+            message:
+                "Det är 100 dagar kvar till midnattsloppets racestart! \nSpara datumet: 17 Augusti 2024",
+          ),
+        );
+        print(allNotifications);
+      }
     }
   }
 
@@ -160,43 +191,17 @@ class _NotificationPageState extends State<NotificationPage>
     // Datumet att räkna ner till
     DateTime targetDate = DateTime(2024, 8, 17);
 
-    // Starta en timer som kontrollerar varje dag
-    Timer.periodic(Duration(days: 1), (timer) {
-      // Beräkna antal dagar kvar
-      DateTime now = DateTime.now();
-      int daysLeft = targetDate.difference(now).inDays;
-      print(daysLeft);
+    // Beräkna antal dagar kvar
+    DateTime now = DateTime.now();
+    int daysLeft = targetDate.difference(now).inDays;
 
-      // Kontrollera om det är 50 dagar kvar
-      if (daysLeft == 50) {
-        // Visa notis till användaren
-        allNotifications.add(
-          NotificationItem(
-            title: "50 dagar kvar till loppet",
-            message:
-                "Det är 50 dagar kvar till midnattsloppets racestart! \nSpara datumet: 17 Augusti 2024",
-            time: DateTime.now(),
-          ),
-        );
-      }
+    // Visa notifikation om det behövs
+    showNotificationIfNeeded(daysLeft);
+  }
 
-      if (daysLeft <= 100) {
-        // Visa notis till användaren
-        allNotifications.add(
-          NotificationItem(
-            title: "100 dagar kvar till loppet",
-            message:
-                "Det är 100 dagar kvar till midnattsloppets racestart! \nSpara datumet: 17 Augusti 2024",
-            time: DateTime.now(),
-          ),
-        );
-      }
-
-      // Stoppa timern när måldatumet är nptt
-      if (now.isAfter(targetDate)) {
-        timer.cancel();
-      }
-    });
+// Funktion för att kontrollera om en notifikation redan finns
+  bool notificationAlreadyExists(String title) {
+    return allNotifications.any((notification) => notification.title == title);
   }
 
   // Funktion för att visa modalbottenpanelen för sökning
@@ -402,9 +407,6 @@ class NotificationList extends StatelessWidget {
                   fontSize: 12.0,
                 ),
               ),
-              trailing: Text(
-                '${notifications[index].time.hour}:${notifications[index].time.minute}',
-              ),
             ),
           ),
         );
@@ -442,12 +444,6 @@ class NotificationDetail extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 16.0),
-            Text(
-              'Tid: ${notification.time.hour}:${notification.time.minute}',
-              style: const TextStyle(
-                fontSize: 14.0,
-              ),
-            ),
           ],
         ),
       ),
