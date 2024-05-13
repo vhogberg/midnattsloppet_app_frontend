@@ -113,42 +113,49 @@ class _ChallengePageState extends State<ChallengePage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Expanded(
-                      child: Container(
-                        height: 65,
-                        decoration: BoxDecoration(
-                          color: const Color(0XFF3C4785),
-                          borderRadius: BorderRadius.circular(4.0),
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Image.asset(
-                              'images/fire.png',
-                              width: 35,
-                              height: 35,
-                            ),
-                            const SizedBox(width: 15),
-                            const Text(
-                              'Skicka iväg utmaningen!',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 22,
-                                fontWeight: FontWeight.bold,
+                      child: GestureDetector(
+                        onTap: () {
+                          // Skicka iväg utmaning logik här
+                          print('Button clicked!');
+                        },
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: const Color(0XFF3C4785),
+                            borderRadius: BorderRadius.circular(4.0),
+                          ),
+                          padding: EdgeInsets.symmetric(vertical: 15), // höjd på skicka-iväg utmaning knapp.
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Image.asset(
+                                'images/fire.png',
+                                width: 35,
+                                height: 35,
                               ),
-                            ),
-                            const SizedBox(width: 15),
-                            Image.asset(
-                              'images/fire.png',
-                              width: 35,
-                              height: 35,
-                            ),
-                          ],
+                              const SizedBox(width: 10),
+                              const Text(
+                                'Skicka iväg utmaningen!',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              const SizedBox(width: 10),
+                              Image.asset(
+                                'images/fire.png',
+                                width: 35,
+                                height: 35,
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ),
                   ],
                 ),
               ),
+
               Container(
                 margin: const EdgeInsets.symmetric(vertical: 12.0),
                 padding: const EdgeInsets.all(20.0),
@@ -277,8 +284,10 @@ class _ChallengePageState extends State<ChallengePage> {
                   return true;
                 },
                 child: Container(
-                  width: MediaQuery.of(context).size.width * 0.8 + 45, // bredd pop-up
-                  height: MediaQuery.of(context).size.height * 0.5, // höjd pop-up
+                  width: MediaQuery.of(context).size.width * 0.8 +
+                      45, // bredd pop-up
+                  height:
+                      MediaQuery.of(context).size.height * 0.5, // höjd pop-up
                   child: Column(
                     children: [
                       Padding(
