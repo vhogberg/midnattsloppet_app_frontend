@@ -9,12 +9,8 @@ class ApiUtils {
           'https://group-15-7.pvt.dsv.su.se/app/team/$username/donatedAmount'));
 
       if (response.statusCode == 200) {
-        var data = json.decode(response.body);
-        double total = 0;
-        for (var donation in data['donations']) {
-          total += donation['amount'];
-        }
-        return total;
+        double donations = double.parse(response.body);
+        return donations;
       } else {
         throw Exception('Failed to fetch donations');
       }
@@ -30,8 +26,7 @@ class ApiUtils {
           'https://group-15-7.pvt.dsv.su.se/app/team/$username/donationGoal'));
 
       if (response.statusCode == 200) {
-        var data = json.decode(response.body);
-        double goal = data['goal'];
+        double goal = double.parse(response.body);
         return goal;
       } else {
         throw Exception('Failed to fetch goal');
