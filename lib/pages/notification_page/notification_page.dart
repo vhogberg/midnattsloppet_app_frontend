@@ -46,6 +46,7 @@ class _NotificationPageState extends State<NotificationPage>
 
   double donationGoal = 0;
   double totalDonations = 0;
+  String challengeStatus = "";
 
   late Timer _timer;
 
@@ -124,42 +125,78 @@ class _NotificationPageState extends State<NotificationPage>
   void donationNotifications() {
     // Hårdkodade notifikationer baserat på procentandelen av donationsmålet
     if (calculatePercentage() >= 30) {
-      allNotifications.add(
-        NotificationItem(
-          title: "30% av donationsmålet uppnått!",
-          message:
-              "Ni har uppnått 30% av erat donationsmål! \nGrattis och fortsätt!",
-        ),
-      );
+      if (!notificationAlreadyExists("30% av donationsmålet uppnått!")) {
+        allNotifications.add(
+          NotificationItem(
+            title: "30% av donationsmålet uppnått!",
+            message:
+                "Ni har uppnått 30% av erat donationsmål! \nGrattis och fortsätt!",
+          ),
+        );
+      }
     }
 
     if (calculatePercentage() >= 60) {
-      allNotifications.add(
-        NotificationItem(
-          title: "60% av donationsmålet uppnått!",
-          message:
-              "Ni har uppnått 60% av erat donationsmål! \nGrattis och fortsätt!",
-        ),
-      );
+      if (!notificationAlreadyExists("60% av donationsmålet uppnått!")) {
+        allNotifications.add(
+          NotificationItem(
+            title: "60% av donationsmålet uppnått!",
+            message:
+                "Ni har uppnått 60% av erat donationsmål! \nGrattis och fortsätt!",
+          ),
+        );
+      }
     }
 
     if (calculatePercentage() >= 90) {
-      allNotifications.add(
-        NotificationItem(
-          title: "90% av donationsmålet uppnått",
-          message:
-              "Ni har uppnått 90% av erat donationsmål! \nGrattis och fortsätt!",
-        ),
-      );
+      if (!notificationAlreadyExists("90% av donationsmålet uppnått")) {
+        allNotifications.add(
+          NotificationItem(
+            title: "90% av donationsmålet uppnått",
+            message:
+                "Ni har uppnått 90% av erat donationsmål! \nGrattis och fortsätt!",
+          ),
+        );
+      }
     }
   }
 
   void challengeNotifications() {
+    if (challengeStatus.contains("PENDING")) {
+      if (!notificationAlreadyExists("50 dagar kvar till loppet")) {
+        allNotifications.add(
+          NotificationItem(
+            title: "Ni har blivit utmanade eller utmanat ett annat lag!",
+            message:
+                "Gör er redo för lagkamp!",
+          ),
+        );
+      }
+    }
 
+    if (challengeStatus.contains("ACCEPTED")) {
+      if (!notificationAlreadyExists("Du befinner dig i en lagkamp!")) {
+        allNotifications.add(
+          NotificationItem(
+            title: "Du befinner dig i en lagkamp!",
+            message:
+                "Du och ditt lag befinner sig nu i en lagkamp!\nGe allt för att vinna och ha kul!",
+          ),
+        );
+      }
+    }
 
-    
-
-
+    if (challengeStatus.contains("REJECTED")) {
+      if (!notificationAlreadyExists("{lagnamn} avböjde din inbjudan på att starta lagkamp")) {
+        allNotifications.add(
+          NotificationItem(
+            title: "{lagnamn} avböjde din inbjudan på att starta lagkamp",
+            message:
+                "",
+          ),
+        );
+      }
+    }
   }
 
   void showNotificationIfNeeded(daysLeft) {
@@ -289,6 +326,21 @@ class _NotificationPageState extends State<NotificationPage>
       return 0.0; // Undvik division med noll
     } else {
       return (totalDonations / donationGoal) * 100;
+    }
+  }
+
+  void getChallengeStatus(String? username) async {
+    try {
+      var status = await ApiUtils.fetchChallengeStatus(username);
+      if (status != null) {
+        challengeStatus = status;
+      } else {
+        // Hantera om statusen inte är tillgänglig
+        print('Challenge status not available');
+      }
+    } catch (e) {
+      // Hantera eventuella fel vid hämtning av statusen
+      print('Error: $e');
     }
   }
 
