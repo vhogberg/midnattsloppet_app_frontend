@@ -88,7 +88,8 @@ class _HomePageState extends State<HomePage> {
                     // Navigate to another page here
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => NotificationPage()),
+                      MaterialPageRoute(
+                          builder: (context) => NotificationPage()),
                     );
                   },
                   child: const Icon(
@@ -338,6 +339,12 @@ class ShareHelper {
     } else {
       throw 'Could not launch $url';
     }
+  }
+
+  bool checkIfUnreadNotifications() {
+    NotificationPage page = new NotificationPage();
+    bool unread = page.createState().checkUnreadNotifications();
+    return unread;
   }
 
   // ruta som dyker upp

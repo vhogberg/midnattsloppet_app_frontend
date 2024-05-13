@@ -167,8 +167,7 @@ class _NotificationPageState extends State<NotificationPage>
         allNotifications.add(
           NotificationItem(
             title: "Ni har blivit utmanade eller utmanat ett annat lag!",
-            message:
-                "Gör er redo för lagkamp!",
+            message: "Gör er redo för lagkamp!",
           ),
         );
       }
@@ -187,12 +186,12 @@ class _NotificationPageState extends State<NotificationPage>
     }
 
     if (challengeStatus.contains("REJECTED")) {
-      if (!notificationAlreadyExists("{lagnamn} avböjde din inbjudan på att starta lagkamp")) {
+      if (!notificationAlreadyExists(
+          "{lagnamn} avböjde din inbjudan på att starta lagkamp")) {
         allNotifications.add(
           NotificationItem(
             title: "{lagnamn} avböjde din inbjudan på att starta lagkamp",
-            message:
-                "",
+            message: "",
           ),
         );
       }
@@ -342,6 +341,13 @@ class _NotificationPageState extends State<NotificationPage>
       // Hantera eventuella fel vid hämtning av statusen
       print('Error: $e');
     }
+  }
+
+  bool checkUnreadNotifications() {
+    if (unreadNotifications.isNotEmpty) {
+      return true;
+    }
+    return false;
   }
 
   @override
