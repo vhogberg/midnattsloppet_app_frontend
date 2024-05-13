@@ -30,26 +30,30 @@ class _ChallengePageState extends State<ChallengePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      // egen custom appbar fr klassen "CustomAppBar"
       appBar: const CustomAppBar(
         key: null,
         title: 'Lagkamp',
         useActionButton: false,
       ),
+      // Lägg allt i en ScrollView så att sidan går att skrolla upp och ned, krav för responsive design.
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.all(20.0),
+          padding: const EdgeInsets.all(
+              20.0), // top-nivå padding, allting på sidan har 20px padding i alla riktningar
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center, // centrera allt.
             children: [
               Image.asset(
                 'images/CompetitionImage.png',
-                fit: BoxFit.fitWidth,
+                fit: BoxFit.fitWidth, //  Anpassa bildens bredd horisontellt
               ),
-              const SizedBox(height: 6),
+              const SizedBox(height: 6), // lite vertikalt space under bilden
 
               // Sökfältknapp
               Padding(
-                padding: const EdgeInsets.only(top: 10, bottom: 10),
+                padding: const EdgeInsets.only(
+                    top: 10, bottom: 10), // space över och under sökfältet
                 child: TextField(
                   controller: searchController,
                   onChanged: (value) {
@@ -65,14 +69,14 @@ class _ChallengePageState extends State<ChallengePage> {
                   ),
                 ),
               ),
-              const SizedBox(height: 4),
-              Align(
+              const SizedBox(height: 4), // lite vertikalt mellanrum
+              const Align(
                 alignment: Alignment.centerLeft,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Padding(
-                      padding: const EdgeInsets.only(bottom: 8.0),
+                      padding: EdgeInsets.only(bottom: 8.0), // space nedåt
                       child: Text(
                         '1. Sök upp ett lag som ni vill starta lagkamp emot',
                         style: TextStyle(
@@ -83,7 +87,7 @@ class _ChallengePageState extends State<ChallengePage> {
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.only(bottom: 8.0),
+                      padding: EdgeInsets.only(bottom: 8.0), // space nedåt
                       child: Text(
                         '2. Skicka iväg utmaningen och invänta svar från det andra laget',
                         style: TextStyle(
@@ -94,7 +98,7 @@ class _ChallengePageState extends State<ChallengePage> {
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.only(bottom: 6.0),
+                      padding: EdgeInsets.only(bottom: 6.0), // space nedåt
                       child: Text(
                         '3. En aktiv lagkamp startas där ni kan tävla i donationer och skapa egna mini-tävlingar!',
                         style: TextStyle(
@@ -108,7 +112,8 @@ class _ChallengePageState extends State<ChallengePage> {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.symmetric(vertical: 6),
+                padding: const EdgeInsets.symmetric(
+                    vertical: 6), // lite vertikalt space
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -121,11 +126,15 @@ class _ChallengePageState extends State<ChallengePage> {
                         child: Container(
                           decoration: BoxDecoration(
                             color: const Color(0XFF3C4785),
-                            borderRadius: BorderRadius.circular(4.0),
+                            borderRadius:
+                                BorderRadius.circular(4.0), // Avrunda hörnen
                           ),
-                          padding: EdgeInsets.symmetric(vertical: 15), // höjd på skicka-iväg utmaning knapp.
+                          padding: EdgeInsets.symmetric(
+                              vertical:
+                                  15), // höjd på skicka-iväg utmaning knapp.
                           child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment
+                                .center, // centrera allt, viktigt för padding i kanter
                             children: [
                               Image.asset(
                                 'images/fire.png',
@@ -157,12 +166,17 @@ class _ChallengePageState extends State<ChallengePage> {
               ),
 
               Container(
-                margin: const EdgeInsets.symmetric(vertical: 12.0),
-                padding: const EdgeInsets.all(20.0),
+                margin: const EdgeInsets.symmetric(
+                    vertical:
+                        12.0), // maringal vertikalt mellan skicka-iväg knapp och inbox-låda
+                padding: const EdgeInsets.all(
+                    20.0), // space-hantering inuti inbox-låda
                 decoration: BoxDecoration(
                   color: Colors.grey.shade300,
-                  borderRadius: BorderRadius.circular(4.0),
+                  borderRadius: BorderRadius.circular(4.0), // hörn-radie
                 ),
+
+                // När en lagkampsinbjudan har ankommit till MITT lag från ett ANNAT lag
                 child: challengeReceived
                     ? Column(
                         children: [
@@ -242,6 +256,8 @@ class _ChallengePageState extends State<ChallengePage> {
                           ),
                         ],
                       )
+
+                    // När MITT lag har skickat en lagkamp till ett annat lag, inväntar svar
                     : (challengeSent
                         ? Text(
                             'Inväntar svar från lag $senderTeam',
@@ -252,6 +268,9 @@ class _ChallengePageState extends State<ChallengePage> {
                             ),
                             textAlign: TextAlign.center,
                           )
+
+                        // När ingen aktivitet har skett på lagkampssidan
+                        // både challengeSent och challengeReceived är falskt
                         : const Text(
                             'Inga aktiva inbjudningar eller förfrågningar',
                             style: TextStyle(
