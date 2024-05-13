@@ -36,4 +36,84 @@ class ApiUtils {
       rethrow; // Rethrow the exception to handle it in the calling code
     }
   }
+
+  static Future<String?> fetchTeamName(String? username) async {
+    try {
+      var response = await http.get(Uri.parse(
+          'https://group-15-7.pvt.dsv.su.se/app/team/$username'));
+
+      if (response.statusCode == 200) {
+        return jsonDecode(response.body)['teamName'];
+      } else {
+        throw Exception('Failed to fetch team name');
+      }
+    } catch (e) {
+      print('Error fetching team name: $e');
+      rethrow; // Rethrow the exception to handle it in the calling code
+    }
+  }
+
+  static Future<String?> fetchCompanyName(String? username) async {
+    try {
+      var response = await http.get(Uri.parse(
+          'https://group-15-7.pvt.dsv.su.se/app/team/$username'));
+
+      if (response.statusCode == 200) {
+        return jsonDecode(response.body)['companyName'];
+      } else {
+        throw Exception('Failed to fetch company name');
+      }
+    } catch (e) {
+      print('Error fetching company name: $e');
+      rethrow; // Rethrow the exception to handle it in the calling code
+    }
+  }
+    static Future<String?> fetchCharityName(String? username) async {
+    try {
+      var response = await http.get(Uri.parse(
+          'https://group-15-7.pvt.dsv.su.se/app/team/$username'));
+
+      if (response.statusCode == 200) {
+        return jsonDecode(response.body)['charityName'];
+      } else {
+        throw Exception('Failed to fetch charity name');
+      }
+    } catch (e) {
+      print('Error fetching charity name: $e');
+      rethrow; // Rethrow the exception to handle it in the calling code
+    }
+  }
+
+  static Future<int?> fetchFundraiserBox(String? username) async {
+    try {
+      var response = await http.get(Uri.parse(
+          'https://group-15-7.pvt.dsv.su.se/app/team/$username'));
+
+      if (response.statusCode == 200) {
+        return jsonDecode(response.body)['fundraiserBox'];
+      } else {
+        throw Exception('Failed to fetch fundraiser box');
+      }
+    } catch (e) {
+      print('Error fetching fundraiser box: $e');
+      rethrow; // Rethrow the exception to handle it in the calling code
+    }
+  }
+
+  static Future<List<String>?> fetchMembers(String? username) async {
+    try {
+      var response = await http.get(Uri.parse(
+          'https://group-15-7.pvt.dsv.su.se/app/team/$username'));
+
+      if (response.statusCode == 200) {
+        return List<String>.from(jsonDecode(response.body)['members']);
+      } else {
+        throw Exception('Failed to fetch members');
+      }
+    } catch (e) {
+      print('Error fetching members: $e');
+      rethrow; // Rethrow the exception to handle it in the calling code
+    }
+  }
 }
+

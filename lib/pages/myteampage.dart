@@ -8,6 +8,8 @@ import 'package:iconsax/iconsax.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_application/components/custom_app_bar.dart';
 import 'package:flutter_application/components/goal_box.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class MyTeamPage extends StatefulWidget {
   const MyTeamPage({Key? key}) : super(key: key);
@@ -17,14 +19,11 @@ class MyTeamPage extends StatefulWidget {
 }
 
 class _MyTeamPageState extends State<MyTeamPage> {
-  static const List<String> teamMembers = [
-    'John Doe',
-    'Jane Doe',
-    'Adam Doe',
-    'James Doe',
-    'Carl Doe',
-  ];
+  static List<String> members = [];
   String? username;
+  String? teamName;
+  String? companyName;
+  String? charityName;
   double donationGoal = 0;
   double totalDonations = 0;
   late Timer timer;
@@ -33,15 +32,19 @@ class _MyTeamPageState extends State<MyTeamPage> {
   void initState() {
     super.initState();
     username = SessionManager.instance.username;
-    fetchGoal();
-    fetchDonations();
+    fetchDonationGoal();
+    fetchDonatedAmount();
+    fetchCharityName();
+    fetchTeamName();
+    fetchCompanyName();
+    fetchMembers();
     timer = Timer.periodic(const Duration(seconds: 10), (timer) {
-      fetchGoal();
-      fetchDonations();
+      fetchDonationGoal();
+      fetchDonatedAmount();
     });
   }
 
-  Future<void> fetchDonations() async {
+  Future<void> fetchDonatedAmount() async {
     try {
       double total = await ApiUtils.fetchDonations(username);
       setState(() {
@@ -52,7 +55,7 @@ class _MyTeamPageState extends State<MyTeamPage> {
     }
   }
 
-  Future<void> fetchGoal() async {
+  Future<void> fetchDonationGoal() async {
     try {
       double goal = await ApiUtils.fetchGoal(username);
       setState(() {
@@ -63,17 +66,61 @@ class _MyTeamPageState extends State<MyTeamPage> {
     }
   }
 
+  Future<void> fetchTeamName() async {
+    try {
+      String? teName = await ApiUtils.fetchTeamName(username);
+      setState(() {
+        teamName = teName;
+      });
+    } catch (e) {
+      print("Error fetching teamname: $e");
+    }
+  }
+
+  Future<void> fetchCompanyName() async {
+    try {
+      String? coName = await ApiUtils.fetchCompanyName(username);
+      setState(() {
+        companyName = coName;
+      });
+    } catch (e) {
+      print("Error fetching company name: $e");
+    }
+  }
+
+  Future<void> fetchCharityName() async {
+    try {
+      String? chaName = await ApiUtils.fetchCharityName(username);
+      setState(() {
+        charityName = chaName;
+      });
+    } catch (e) {
+      print("Error fetching charity name: $e");
+    }
+  }
+
+  Future<void> fetchMembers() async {
+    try {
+      List<String>? teamMembers = await ApiUtils.fetchMembers(username);
+      setState(() {
+        members = teamMembers ?? []; // handle null case
+      });
+    } catch (e) {
+      print("Error fetching charity name: $e");
+    }
+  }
+
   // Method to generate ListTiles dynamically based on team members list
   List<Widget> generateTeamList() {
     List<Widget> listTiles = [];
-    for (int i = 0; i < teamMembers.length; i += 2) {
-      if (i + 1 < teamMembers.length) {
+    for (int i = 0; i < members.length; i += 2) {
+      if (i + 1 < members.length) {
         listTiles.add(Row(
           children: [
             Expanded(
               child: ListTile(
                 title: Text(
-                  teamMembers[i],
+                  members[i],
                   style: TextStyle(
                     color: Colors.black,
                     fontSize: 14, // smaller font size
@@ -84,7 +131,7 @@ class _MyTeamPageState extends State<MyTeamPage> {
             Expanded(
               child: ListTile(
                 title: Text(
-                  teamMembers[i + 1],
+                  members[i + 1],
                   style: TextStyle(
                     color: Colors.black,
                     fontSize: 14, // smaller font size
@@ -97,7 +144,7 @@ class _MyTeamPageState extends State<MyTeamPage> {
       } else {
         listTiles.add(ListTile(
           title: Text(
-            teamMembers[i],
+            members[i],
             style: TextStyle(
               color: Colors.black,
               fontSize: 14, // smaller font size
@@ -127,6 +174,21 @@ class _MyTeamPageState extends State<MyTeamPage> {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          // Display team name above the circular team picture
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: Center(
+              child: Text(
+                'Lag: $teamName',
+                style: TextStyle(
+                  fontSize: 24, // Adjust font size
+                  color: Colors.black, // Set color to black
+                ),
+              ),
+            ),
+          ),
+          SizedBox(
+              height: 10), // Add some spacing between teamName and the picture
           // Circular team picture at the middle top
           Center(
             child: Container(
@@ -148,13 +210,20 @@ class _MyTeamPageState extends State<MyTeamPage> {
           ),
           const SizedBox(height: 20),
           // Textbox with the donation pledge name
-          // import via API?
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: Center(
-              child: Text(
-                'Stödjer: Barncancerfonden', // Static text
-                style: const TextStyle(fontSize: 16),
+              child: Column(
+                children: [
+                  Text(
+                    'Företag: $companyName', // Display the company name
+                    style: const TextStyle(fontSize: 16),
+                  ),
+                  Text(
+                    'Stödjer: $charityName', // Display the charity name
+                    style: const TextStyle(fontSize: 16),
+                  ),
+                ],
               ),
             ),
           ),
@@ -162,7 +231,7 @@ class _MyTeamPageState extends State<MyTeamPage> {
           // Container with team members names
           Container(
             width: double.infinity,
-          height: 500,
+            height: 500,
             padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
               color: const Color(0XFF3C4785),
@@ -192,8 +261,24 @@ class _MyTeamPageState extends State<MyTeamPage> {
                   ),
                 ),
                 SizedBox(height: 10),
-                // Generate ListTiles dynamically
-                ...generateTeamList(),
+                // Check if members list is empty
+                members.isEmpty
+                    ? Padding(
+                        padding: const EdgeInsets.all(10),
+                        child: Text(
+                          'Inga lagmedlemmar än!',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 16,
+                          ),
+                        ),
+                      )
+                    : Column(
+                        // Generate ListTiles dynamically
+                        children: [
+                          ...generateTeamList(),
+                        ],
+                      ),
                 SizedBox(height: 20),
                 // Display fetched data
                 Container(
@@ -229,8 +314,11 @@ class _MyTeamPageState extends State<MyTeamPage> {
                       DonationProgressBar(),
                       Positioned(
                         left: 300,
-                        child: SizedBox(width: 50, child: GoalBox(),),
+                        child: SizedBox(
+                          width: 50,
+                          child: GoalBox(),
                         ),
+                      ),
                     ],
                   ),
                 ),
