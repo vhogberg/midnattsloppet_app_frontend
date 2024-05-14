@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_application/components/custom_app_bar.dart';
+import 'package:flutter_application/session_manager.dart';
 import 'package:http/http.dart' as http;
 import 'package:iconsax/iconsax.dart';
 
@@ -19,12 +20,15 @@ class _ChallengePageState extends State<ChallengePage> {
   List<String> teams = [];
   List<String> filteredTeams = [];
   String? selectedTeam;
+  String? username; // plockas från sessionmanager
+  String? challengeFate; // 'ACCEPTED' el. 'DECLINED', används för
 
   @override
   void initState() {
     super.initState();
     filteredTeams.addAll(teams);
     fetchEntitiesFromAPI();
+    username = SessionManager.instance.username;
   }
 
   @override
@@ -119,9 +123,32 @@ class _ChallengePageState extends State<ChallengePage> {
                   children: [
                     Expanded(
                       child: GestureDetector(
-                        onTap: () {
-                          // Skicka iväg utmaning logik här
-                          print('Button clicked!');
+                        // Skicka iväg utmaningslogik nedan
+                        onTap: () async {
+                          final String url =
+                              'https://group-15-7.pvt.dsv.su.se/app/${username}/createchallenge';
+                          final Map<String, String> requestData = {
+                            'name': 'Mitt challenge namn', // namn
+                            'description':
+                                'Min challenge beskrivning', // beskrivning
+                            'challenger':
+                                selectedTeam!, // Antar att man har ett selected team
+                          };
+
+                          final response = await http.post(
+                            Uri.parse(url),
+                            body: jsonEncode(requestData),
+                            headers: {'Content-Type': 'application/json'},
+                          );
+
+                          // error hantering
+                          if (response.statusCode == 200) {
+                            // Challenge created successfully, handle response if needed
+                            print('Challenge sent successfully');
+                          } else {
+                            // Handle error response
+                            print('Failed to send challenge: ${response.body}');
+                          }
                         },
                         child: Container(
                           decoration: BoxDecoration(
@@ -194,8 +221,26 @@ class _ChallengePageState extends State<ChallengePage> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               ElevatedButton(
-                                onPressed: () {
-                                  // Acceptera lagkamp logik här
+                                
+                                // Acceptera lagkamp logik här
+                                onPressed: () async {
+                                  challengeFate = 'ACCEPTED';
+                                  final String url =
+                                      'https://group-15-7.pvt.dsv.su.se/app/${username}/acceptchallenge/${challengeFate}';
+
+                                  final response = await http.post(
+                                    Uri.parse(url),
+                                    // ytterligare data?
+                                  );
+
+                                  if (response.statusCode == 200) {
+                                    // Challenge accepterad
+                                    print('Challenge accepted successfully');
+                                  } else {
+                                    // Error hantering
+                                    print(
+                                        'Failed to accept challenge: ${response.body}');
+                                  }
                                 },
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: Colors.green,
@@ -224,9 +269,27 @@ class _ChallengePageState extends State<ChallengePage> {
                               ),
                               const SizedBox(width: 20),
                               ElevatedButton(
-                                onPressed: () {
-                                  // Avböj lagkamp logik här
+                                // Avböj lagkamp logik här
+                                onPressed: () async {
+                                  challengeFate = 'DECLINED';
+                                  final String url =
+                                      'https://group-15-7.pvt.dsv.su.se/app/${username}/acceptchallenge/${challengeFate}';
+
+                                  final response = await http.post(
+                                    Uri.parse(url),
+                                    // ytterligare data?
+                                  );
+
+                                  if (response.statusCode == 200) {
+                                    // Challenge avböjd lyckat 
+                                    print('Challenge declined successfully');
+                                  } else {
+                                    // Handle error response
+                                    print(
+                                        'Failed to accept challenge: ${response.body}');
+                                  }
                                 },
+
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: Colors.red,
                                   padding: const EdgeInsets.symmetric(
