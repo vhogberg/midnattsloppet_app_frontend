@@ -3,6 +3,15 @@ import 'package:flutter_application/api_utils/api_utils.dart';
 import 'package:flutter_application/session_manager.dart';
 
 class GoalBox extends StatefulWidget {
+  final double height;
+  final double width;
+
+  const GoalBox({
+    Key? key,
+    required this.height,
+    required this.width,
+  }) : super(key: key);
+
   @override
   _GoalBoxState createState() => _GoalBoxState();
 }
@@ -32,7 +41,8 @@ class _GoalBoxState extends State<GoalBox> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 50,
+      height: widget.height,
+      width: widget.width,
       child: CustomPaint(
         painter: _GoalBoxPainter(),
         child: Padding(
