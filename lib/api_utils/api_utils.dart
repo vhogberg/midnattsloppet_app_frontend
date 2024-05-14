@@ -40,7 +40,7 @@ class ApiUtils {
   static Future<String?> fetchTeamName(String? username) async {
     try {
       var response = await http.get(
-          Uri.parse('https://group-15-7.pvt.dsv.su.se/app/team/$username'));
+          Uri.parse('https://group-15-7.pvt.dsv.su.se/app/user/$username'));
 
       if (response.statusCode == 200) {
         return jsonDecode(response.body)['teamName'];
@@ -56,7 +56,7 @@ class ApiUtils {
   static Future<String?> fetchCompanyName(String? username) async {
     try {
       var response = await http.get(
-          Uri.parse('https://group-15-7.pvt.dsv.su.se/app/team/$username'));
+          Uri.parse('https://group-15-7.pvt.dsv.su.se/app/user/$username'));
 
       if (response.statusCode == 200) {
         return jsonDecode(response.body)['companyName'];
@@ -72,7 +72,7 @@ class ApiUtils {
   static Future<String?> fetchCharityName(String? username) async {
     try {
       var response = await http.get(
-          Uri.parse('https://group-15-7.pvt.dsv.su.se/app/team/$username'));
+          Uri.parse('https://group-15-7.pvt.dsv.su.se/app/user/$username'));
 
       if (response.statusCode == 200) {
         return jsonDecode(response.body)['charityName'];

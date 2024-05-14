@@ -5,11 +5,8 @@ import 'package:flutter_application/components/donation_progress_bar.dart';
 import 'package:flutter_application/pages/navigation_bar/navigation_bar.dart';
 import 'package:flutter_application/session_manager.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_application/components/custom_app_bar.dart';
 import 'package:flutter_application/components/goal_box.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
 
 class MyTeamPage extends StatefulWidget {
   const MyTeamPage({Key? key}) : super(key: key);
@@ -312,12 +309,9 @@ class _MyTeamPageState extends State<MyTeamPage> {
                       ),
                       SizedBox(height: 10),
                       DonationProgressBar(),
-                      Positioned(
-                        left: 300,
-                        child: SizedBox(
-                          width: 50,
-                          child: GoalBox(),
-                        ),
+                      SizedBox(
+                        height: 50,
+                        child: GoalBox(),
                       ),
                     ],
                   ),
