@@ -309,10 +309,12 @@ class _MyTeamPageState extends State<MyTeamPage> {
                       ),
                       SizedBox(height: 10),
                       DonationProgressBar(),
-                      SizedBox(
-                        height: 50,
-                        child: GoalBox(),
-                      ),
+                      SizedBox(height: 5),
+                      Positioned(
+                          top: 100,
+                          right: 140,
+                        child: GoalBox(width: 60, height: 60),
+                        )
                     ],
                   ),
                 ),

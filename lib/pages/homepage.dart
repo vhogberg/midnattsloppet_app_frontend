@@ -62,7 +62,8 @@ class _HomePageState extends State<HomePage> {
       print("Error");
     }
   }
-
+//introducera fetchcharityname när api fungerar
+//edita rutan längst ner kopplat till topplista se topp 3
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -240,7 +241,7 @@ class _HomePageState extends State<HomePage> {
                         Positioned(
                           top: 140,
                           right: 35,
-                          child: GoalBox(),
+                          child: GoalBox(width: 60, height: 60),
                         ),
                       ],
                     ),
