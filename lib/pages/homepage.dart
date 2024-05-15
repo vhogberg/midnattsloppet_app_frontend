@@ -115,7 +115,8 @@ class _HomePageState extends State<HomePage> {
                       // Navigate to another page here
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => NotificationPage()),
+                        MaterialPageRoute(
+                            builder: (context) => NotificationPage()),
                       );
                     },
                     child: Stack(
@@ -125,13 +126,15 @@ class _HomePageState extends State<HomePage> {
                           size: 35,
                           color: Color.fromARGB(255, 113, 113, 113),
                         ),
-                        if (1 == 0 /** Denna if-satsen finns om vi hittar något sätt att kontrollera om det finns olästa notifikationer, just nu tar detta för mkt tid*/)
+                        if (1 ==
+                            0 /** Denna if-satsen finns om vi hittar något sätt att kontrollera om det finns olästa notifikationer, just nu tar detta för mkt tid*/)
                           Positioned(
                             // position på cirkeln
                             top: 0,
                             right: 0,
                             child: Container(
-                              padding: const EdgeInsets.all(1), // Storlek på cirkeln
+                              padding:
+                                  const EdgeInsets.all(1), // Storlek på cirkeln
                               decoration: const BoxDecoration(
                                 color: Color.fromARGB(255, 241, 75, 75),
                                 shape: BoxShape.circle,
@@ -154,7 +157,8 @@ class _HomePageState extends State<HomePage> {
                     child: const CircleAvatar(
                       radius: 35,
                       backgroundColor: Colors.white,
-                      backgroundImage: AssetImage('images/stockholm-university.png'),
+                      backgroundImage:
+                          AssetImage('images/stockholm-university.png'),
                     ),
                   ),
                 ],
@@ -246,7 +250,11 @@ class _HomePageState extends State<HomePage> {
                                       const Expanded(
                                         child: Text(
                                           'Dela bössan med vänner och familj!',
-                                          style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold, fontFamily: 'Sora'),
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.bold,
+                                              fontFamily: 'Sora'),
                                         ),
                                       ),
                                       GestureDetector(
@@ -259,7 +267,8 @@ class _HomePageState extends State<HomePage> {
                                           height: 50,
                                           decoration: BoxDecoration(
                                             color: Colors.white,
-                                            borderRadius: BorderRadius.circular(13.0),
+                                            borderRadius:
+                                                BorderRadius.circular(13.0),
                                           ),
                                           child: const Row(
                                             children: [
@@ -294,7 +303,8 @@ class _HomePageState extends State<HomePage> {
                         child: SizedBox(
                           width: 65,
                           height: 65,
-                          child: Image.asset('images/chrome_DmBUq4pVqL-removebg-preview.png'),
+                          child: Image.asset(
+                              'images/chrome_DmBUq4pVqL-removebg-preview.png'),
                         ),
                       ),
                       const Positioned(
@@ -307,10 +317,41 @@ class _HomePageState extends State<HomePage> {
                   const SizedBox(height: 20),
                   Stack(
                     children: [
-                      GradientContainer(
-                        width: MediaQuery.of(context).size.width,
+                      Container(
+                        width: 400,
                         height: 320,
-                        gradientAlignment: const Alignment(0.7, -0.3),
+                        decoration: BoxDecoration(
+                          color: const Color(0XFF3C4785),
+                          borderRadius: BorderRadius.circular(20.0),
+                          gradient: const RadialGradient(
+                            radius: 0.8,
+                            center: Alignment(0.7, -0.3),
+                            colors: [
+                              Color.fromARGB(255, 140, 90, 100), // Start color
+                              Color(0xFF3C4785), // End color
+                            ],
+                            stops: [
+                              0.15,
+                              1.0,
+                            ],
+                          ),
+                        ),
+                        padding: EdgeInsets.all(20),
+                        child: Center(
+                          child: Container(
+                            padding: EdgeInsets.all(50),
+                            width: MediaQuery.of(context).size.width,
+                            height: MediaQuery.of(context).size.height,
+                            decoration: BoxDecoration(
+                              color: Colors.white30,
+                              borderRadius: BorderRadius.circular(13.0),
+                              border: Border.all(
+                                color: Colors.white60, // Border color
+                                width: 1.0, // Border width
+                              ),
+                            ),
+                          ),
+                        ),
                       ),
                     ],
                   ),
@@ -328,19 +369,22 @@ class _HomePageState extends State<HomePage> {
 class ShareHelper {
   static void shareToTwitter() {
     // url är en string, lägg till variabel för lagets personliga teamlänk i slutet.
-    const url = 'http://twitter.com/intent/tweet?text=Hjälp%20mitt%20lag%20att%20uppnå%20vårat%20donationsmål%20inför%20midnattsloppets%20race!%20Öppna%20länken%20här%20för%20att%20donera:%20example.com';
+    const url =
+        'http://twitter.com/intent/tweet?text=Hjälp%20mitt%20lag%20att%20uppnå%20vårat%20donationsmål%20inför%20midnattsloppets%20race!%20Öppna%20länken%20här%20för%20att%20donera:%20example.com';
     launch(url);
   }
 
   static void shareToFacebook() {
     // url är en string, lägg till variabel för lagets personliga teamlänk i slutet.
-    const url = 'https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Fexample.com&quote=Hjälp%20mitt%20lag%20att%20uppnå%20vårat%20donationsmål%20inför%20midnattsloppets%20race!%20Öppna%20länken%20här%20för%20att%20donera:%20example.com';
+    const url =
+        'https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Fexample.com&quote=Hjälp%20mitt%20lag%20att%20uppnå%20vårat%20donationsmål%20inför%20midnattsloppets%20race!%20Öppna%20länken%20här%20för%20att%20donera:%20example.com';
     launch(url);
   }
 
   static void shareToLinkedIn() {
     // url är en string, lägg till variabel för lagets personliga teamlänk i slutet.
-    const url = 'https://www.linkedin.com/sharing/share-offsite/?url=http%3A%2F%2Fexample.com&summary=Hjälp%20mitt%20lag%20att%20uppnå%20vårat%20donationsmål%20inför%20midnattsloppets%20race!%20Öppna%20länken%20här%20för%20att%20donera:%20example.com';
+    const url =
+        'https://www.linkedin.com/sharing/share-offsite/?url=http%3A%2F%2Fexample.com&summary=Hjälp%20mitt%20lag%20att%20uppnå%20vårat%20donationsmål%20inför%20midnattsloppets%20race!%20Öppna%20länken%20här%20för%20att%20donera:%20example.com';
     launch(url);
   }
 
