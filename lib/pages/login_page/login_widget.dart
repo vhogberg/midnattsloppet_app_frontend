@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application/components/my_button.dart';
 import 'package:flutter_application/components/my_navigation_bar.dart';
 import 'package:flutter_application/components/my_textfield.dart';
-import 'package:flutter_application/pages/homepage.dart';
 import 'package:flutter_application/pages/registration/register_page.dart';
 import 'package:flutter_application/session_manager.dart';
 
