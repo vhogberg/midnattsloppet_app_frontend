@@ -221,9 +221,9 @@ class _HomePageState extends State<HomePage> {
                                 child: DonationProgressBar(),
                               ),
                             ),
-                            const SizedBox(
-                              height: 80,
-                            ),
+                            const SizedBox(height: 10),
+                            const Align(alignment: Alignment.topRight, child: GoalBox(height: 50, width: 75)),
+                            const SizedBox(height: 10),
                             Stack(
                               children: [
                                 Container(
@@ -293,11 +293,6 @@ class _HomePageState extends State<HomePage> {
                           height: 65,
                           child: Image.asset('images/chrome_DmBUq4pVqL-removebg-preview.png'),
                         ),
-                      ),
-                      const Positioned(
-                        top: 140,
-                        right: 20,
-                        child: GoalBox(height: 50, width: 90),
                       ),
                     ],
                   ),
