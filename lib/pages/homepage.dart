@@ -41,7 +41,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   void listenNotifications() =>
-      NotificationApi.onNotifications.stream.listen(onClickedNotification);
+      NotificationApi.onClickNotification.stream.listen(onClickedNotification);
 
   void onClickedNotification(String? payload) =>
       Navigator.of(context).push(MaterialPageRoute(
@@ -52,9 +52,10 @@ class _HomePageState extends State<HomePage> {
     bool hasUnread = NotificationManager.instance.hasUnreadNotifications;
 
     if(hasUnread){
-      NotificationApi.showNotification(
+      NotificationApi.showSimpleNotification(
         title: 'Du har olästa notiser!',
         body: 'Gå in i notis-fliken och upptäck dina nya notiser!',
+        payload: 'test',
       );
     }
   }
