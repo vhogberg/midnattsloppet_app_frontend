@@ -49,7 +49,18 @@ android {
         targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
+        multiDexEnabled true // NOTIFIKATIONER https://pub.dev/packages/flutter_local_notifications#-supported-platforms
     }
+
+    // NOTIFIKATIONER https://pub.dev/packages/flutter_local_notifications#-supported-platforms
+    compileOptions {
+    // Flag to enable support for the new language APIs
+    coreLibraryDesugaringEnabled true
+    // Sets Java compatibility to Java 8
+    sourceCompatibility JavaVersion.VERSION_1_8
+    targetCompatibility JavaVersion.VERSION_1_8
+    }
+    // NOTIFIKATIONER SLUT https://pub.dev/packages/flutter_local_notifications#-supported-platforms
 
     buildTypes {
         release {
@@ -64,4 +75,6 @@ flutter {
     source '../..'
 }
 
-dependencies {}
+dependencies {
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.2.2' // NOTIFIKATIONER https://pub.dev/packages/flutter_local_notifications#-supported-platforms
+}
