@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:http/http.dart' as http;
 
 class ApiUtils {
-  static Future<double> fetchDonations(String? username) async {
+   static Future<double> fetchDonations(String? username) async {
     try {
       var response = await http.get(Uri.parse(
           'https://group-15-7.pvt.dsv.su.se/app/team/$username/donatedAmount'));
@@ -40,48 +40,51 @@ class ApiUtils {
   static Future<String?> fetchTeamName(String? username) async {
     try {
       var response = await http.get(
-          Uri.parse('https://group-15-7.pvt.dsv.su.se/app/user/$username'));
+          Uri.parse('https://group-15-7.pvt.dsv.su.se/app/team/$username'));
 
       if (response.statusCode == 200) {
-        return jsonDecode(response.body)['teamName'];
+        Map<String, dynamic> data = jsonDecode(response.body);
+        return data['name'];
       } else {
         throw Exception('Failed to fetch team name');
       }
     } catch (e) {
       print('Error fetching team name: $e');
-      rethrow; // Rethrow the exception to handle it in the calling code
+      rethrow;
     }
   }
 
   static Future<String?> fetchCompanyName(String? username) async {
     try {
       var response = await http.get(
-          Uri.parse('https://group-15-7.pvt.dsv.su.se/app/user/$username'));
+          Uri.parse('https://group-15-7.pvt.dsv.su.se/app/team/$username'));
 
       if (response.statusCode == 200) {
-        return jsonDecode(response.body)['companyName'];
+        Map<String, dynamic> data = jsonDecode(response.body);
+        return data['company']['name'];
       } else {
         throw Exception('Failed to fetch company name');
       }
     } catch (e) {
       print('Error fetching company name: $e');
-      rethrow; // Rethrow the exception to handle it in the calling code
+      rethrow;
     }
   }
 
   static Future<String?> fetchCharityName(String? username) async {
     try {
       var response = await http.get(
-          Uri.parse('https://group-15-7.pvt.dsv.su.se/app/user/$username'));
+          Uri.parse('https://group-15-7.pvt.dsv.su.se/app/team/$username'));
 
       if (response.statusCode == 200) {
-        return jsonDecode(response.body)['charityName'];
+        Map<String, dynamic> data = jsonDecode(response.body);
+        return data['charityOrganization']['name'];
       } else {
         throw Exception('Failed to fetch charity name');
       }
     } catch (e) {
       print('Error fetching charity name: $e');
-      rethrow; // Rethrow the exception to handle it in the calling code
+      rethrow;
     }
   }
 
@@ -91,13 +94,14 @@ class ApiUtils {
           Uri.parse('https://group-15-7.pvt.dsv.su.se/app/team/$username'));
 
       if (response.statusCode == 200) {
-        return jsonDecode(response.body)['fundraiserBox'];
+        Map<String, dynamic> data = jsonDecode(response.body);
+        return data['fundraiserBox'];
       } else {
         throw Exception('Failed to fetch fundraiser box');
       }
     } catch (e) {
       print('Error fetching fundraiser box: $e');
-      rethrow; // Rethrow the exception to handle it in the calling code
+      rethrow;
     }
   }
 
@@ -107,13 +111,16 @@ class ApiUtils {
           Uri.parse('https://group-15-7.pvt.dsv.su.se/app/team/$username'));
 
       if (response.statusCode == 200) {
-        return List<String>.from(jsonDecode(response.body)['members']);
+        Map<String, dynamic> data = jsonDecode(response.body);
+        List<dynamic> membersData = data['members'];
+        List<String> members = membersData.map((member) => member['username'].toString()).toList();
+        return members;
       } else {
         throw Exception('Failed to fetch members');
       }
     } catch (e) {
       print('Error fetching members: $e');
-      rethrow; // Rethrow the exception to handle it in the calling code
+      rethrow;
     }
   }
 

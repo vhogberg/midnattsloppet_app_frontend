@@ -1,5 +1,6 @@
 import 'dart:async';
-
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:flutter_application/api_utils/api_utils.dart';
 import 'package:flutter_application/api_utils/notification_api.dart';
@@ -22,6 +23,8 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   String? username;
+  String? charityName;
+  String? teamName;
   double donationGoal = 0;
   double totalDonations = 0;
   late Timer _timer;
@@ -34,6 +37,8 @@ class _HomePageState extends State<HomePage> {
     listenNotifications();
     fetchGoal();
     fetchDonations();
+    fetchCharityName();
+    fetchTeamName();
     _timer = Timer.periodic(const Duration(seconds: 10), (timer) {
       fetchGoal();
       fetchDonations();
@@ -85,8 +90,28 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-//introducera fetchcharityname när api fungerar
-//edita rutan längst ner kopplat till topplista se topp 3
+  Future<void> fetchTeamName() async {
+    try {
+      String? teName = await ApiUtils.fetchTeamName(username);
+      setState(() {
+        teamName = teName;
+      });
+    } catch (e) {
+      print("Error fetching teamname: $e");
+    }
+  }
+
+  Future<void> fetchCharityName() async {
+    try {
+      String? chaName = await ApiUtils.fetchCharityName(username);
+      setState(() {
+        charityName = chaName;
+      });
+    } catch (e) {
+      print("Error fetching charity name: $e");
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -187,8 +212,8 @@ class _HomePageState extends State<HomePage> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const Text(
-                              'Insamlingsbössa: Nordea Lag 5',
+                            Text(
+                              'Insamlingsbössa: $teamName',
                               style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 18,
@@ -203,8 +228,8 @@ class _HomePageState extends State<HomePage> {
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
-                            const Text(
-                              'Stödjer: Barncancerfonden',
+                            Text(
+                              'Stödjer: $charityName',
                               style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 16,

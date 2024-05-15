@@ -4,9 +4,11 @@ import 'package:flutter_application/api_utils/api_utils.dart';
 import 'package:flutter_application/components/donation_progress_bar.dart';
 import 'package:flutter_application/pages/navigation_bar/navigation_bar.dart';
 import 'package:flutter_application/session_manager.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:flutter_application/components/custom_app_bar.dart';
 import 'package:flutter_application/components/goal_box.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class MyTeamPage extends StatefulWidget {
   const MyTeamPage({Key? key}) : super(key: key);
@@ -119,8 +121,10 @@ class _MyTeamPageState extends State<MyTeamPage> {
                 title: Text(
                   members[i],
                   style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 14, // smaller font size
+                    color: Colors.white,
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    fontFamily: 'Sora', // smaller font size
                   ),
                 ),
               ),
@@ -130,8 +134,10 @@ class _MyTeamPageState extends State<MyTeamPage> {
                 title: Text(
                   members[i + 1],
                   style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 14, // smaller font size
+                    color: Colors.white,
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    fontFamily: 'Sora', // smaller font size
                   ),
                 ),
               ),
@@ -143,8 +149,10 @@ class _MyTeamPageState extends State<MyTeamPage> {
           title: Text(
             members[i],
             style: TextStyle(
-              color: Colors.black,
-              fontSize: 14, // smaller font size
+              color: Colors.white,
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+              fontFamily: 'Sora', // smaller font size
             ),
           ),
         ));
@@ -176,10 +184,12 @@ class _MyTeamPageState extends State<MyTeamPage> {
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: Center(
               child: Text(
-                'Lag: $teamName',
+                '$teamName',
                 style: TextStyle(
-                  fontSize: 24, // Adjust font size
+                  fontSize: 20, // Adjust font size
                   color: Colors.black, // Set color to black
+                  fontWeight: FontWeight.bold,
+                  fontFamily: 'Sora',
                 ),
               ),
             ),
@@ -205,7 +215,7 @@ class _MyTeamPageState extends State<MyTeamPage> {
               ),
             ),
           ),
-          const SizedBox(height: 20),
+          const SizedBox(height: 10),
           // Textbox with the donation pledge name
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -214,17 +224,26 @@ class _MyTeamPageState extends State<MyTeamPage> {
                 children: [
                   Text(
                     'Företag: $companyName', // Display the company name
-                    style: const TextStyle(fontSize: 16),
+                    style: const TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: 'Sora',
+                    ),
                   ),
                   Text(
                     'Stödjer: $charityName', // Display the charity name
-                    style: const TextStyle(fontSize: 16),
+                    style: const TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: 'Sora',
+                    ),
                   ),
                 ],
               ),
             ),
           ),
-          const SizedBox(height: 20),
+          const SizedBox(height: 10),
+
           // Container with team members name
           Padding(
             padding: const EdgeInsets.only(left: 20.0, right: 20.0),
@@ -254,10 +273,10 @@ class _MyTeamPageState extends State<MyTeamPage> {
                   Text(
                     'Lagmedlemmar',
                     style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18,
-                    ),
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 28,
+                        fontFamily: 'Sora'),
                   ),
                   SizedBox(height: 10),
                   // Check if members list is empty
@@ -267,9 +286,9 @@ class _MyTeamPageState extends State<MyTeamPage> {
                           child: Text(
                             'Inga lagmedlemmar än!',
                             style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 16,
-                            ),
+                                color: Colors.white,
+                                fontSize: 28,
+                                fontFamily: 'Sora'),
                           ),
                         )
                       : Column(
@@ -278,11 +297,11 @@ class _MyTeamPageState extends State<MyTeamPage> {
                             ...generateTeamList(),
                           ],
                         ),
-                  SizedBox(height: 20),
+                  SizedBox(height: 10),
                   // Display fetched data
                   Container(
                     width: MediaQuery.of(context).size.width,
-                    height: 150,
+                    height: 130,
                     decoration: BoxDecoration(
                       color: Colors.white30,
                       borderRadius: BorderRadius.circular(13.0),
@@ -301,13 +320,7 @@ class _MyTeamPageState extends State<MyTeamPage> {
                               '${totalDonations.toStringAsFixed(0)} kr insamlat',
                               style: TextStyle(
                                 color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            Text(
-                              'Mål: ${donationGoal.toStringAsFixed(0)} kr',
-                              style: TextStyle(
-                                color: Colors.white,
+                                fontSize: 28,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
@@ -315,7 +328,7 @@ class _MyTeamPageState extends State<MyTeamPage> {
                             SizedBox(
                               width: MediaQuery.of(context).size.width - 80,
                               child: const Padding(
-                                padding: EdgeInsets.only(left: 30, right: 30),
+                                padding: EdgeInsets.only(left: 35, right: 35),
                                 child: DonationProgressBar(),
                               ),
                             ),
@@ -323,8 +336,68 @@ class _MyTeamPageState extends State<MyTeamPage> {
                         ),
                         Positioned(
                           top: 60,
-                          right: 10,
-                          child: GoalBox(width: 60, height: 60),
+                          right: 1,
+                          child: GoalBox(height: 50, width: 90),
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(height: 20),
+                  // Sharing button
+                  Container(
+                    padding: const EdgeInsets.all(15),
+                    width: MediaQuery.of(context).size.width,
+                    height: 90,
+                    decoration: BoxDecoration(
+                      color: Colors.white30,
+                      borderRadius: BorderRadius.circular(13.0),
+                      border: Border.all(
+                        color: Colors.white60, // Border color
+                        width: 1.0, // Border width
+                      ),
+                    ),
+                    child: Row(
+                      children: [
+                        const Expanded(
+                          child: Text(
+                            'Dela bössan med vänner och familj!',
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                                fontFamily: 'Sora'),
+                          ),
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            ShareHelper.showShareDialog(context);
+                          },
+                          child: Container(
+                            padding: const EdgeInsets.all(10),
+                            width: 100,
+                            height: 50,
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(13.0),
+                            ),
+                            child: const Row(
+                              children: [
+                                Icon(
+                                  Iconsax.export_1,
+                                ),
+                                SizedBox(
+                                  width: 5,
+                                ),
+                                Text(
+                                  'Dela',
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                    fontFamily: 'Sora',
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
                         ),
                       ],
                     ),
@@ -335,6 +408,110 @@ class _MyTeamPageState extends State<MyTeamPage> {
           ),
         ],
       ),
+    );
+  }
+}
+
+class ShareHelper {
+  static void shareToTwitter() {
+    // url är en string, lägg till variabel för lagets personliga teamlänk i slutet.
+    const url =
+        'http://twitter.com/intent/tweet?text=Hjälp%20mitt%20lag%20att%20uppnå%20vårat%20donationsmål%20inför%20midnattsloppets%20race!%20Öppna%20länken%20här%20för%20att%20donera:%20example.com';
+    launch(url);
+  }
+
+  static void shareToFacebook() {
+    // url är en string, lägg till variabel för lagets personliga teamlänk i slutet.
+    const url =
+        'https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Fexample.com&quote=Hjälp%20mitt%20lag%20att%20uppnå%20vårat%20donationsmål%20inför%20midnattsloppets%20race!%20Öppna%20länken%20här%20för%20att%20donera:%20example.com';
+    launch(url);
+  }
+
+  static void shareToLinkedIn() {
+    // url är en string, lägg till variabel för lagets personliga teamlänk i slutet.
+    const url =
+        'https://www.linkedin.com/sharing/share-offsite/?url=http%3A%2F%2Fexample.com&summary=Hjälp%20mitt%20lag%20att%20uppnå%20vårat%20donationsmål%20inför%20midnattsloppets%20race!%20Öppna%20länken%20här%20för%20att%20donera:%20example.com';
+    launch(url);
+  }
+
+  static void openMail() async {
+    final Uri params = Uri(
+      scheme: 'mailto',
+      path: 'recipient@example.com',
+      query: 'subject=Your%20Subject&body=Your%20Body',
+    );
+    String url = params.toString();
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
+
+  static void showShareDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return SlideTransition(
+          position: Tween<Offset>(
+            begin: const Offset(0, -1),
+            end: Offset.zero,
+          ).animate(
+            CurvedAnimation(
+              parent: ModalRoute.of(context)!.animation!,
+              curve: Curves.easeInOut,
+            ),
+          ),
+          child: Dialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12.0),
+            ),
+            child: const Padding(
+              padding: EdgeInsets.all(20.0),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Dela via:',
+                    style: TextStyle(
+                      fontFamily: 'Sora',
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  SizedBox(height: 15),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      IconButton(
+                        onPressed: shareToTwitter,
+                        icon: FaIcon(FontAwesomeIcons.twitter),
+                        iconSize: 50,
+                      ),
+                      IconButton(
+                        onPressed: shareToFacebook,
+                        icon: FaIcon(FontAwesomeIcons.facebook),
+                        iconSize: 50,
+                      ),
+                      IconButton(
+                        onPressed: shareToLinkedIn,
+                        icon: FaIcon(FontAwesomeIcons.linkedin),
+                        iconSize: 50,
+                      ),
+                      IconButton(
+                        onPressed: openMail,
+                        icon: Icon(Icons.email),
+                        iconSize: 50,
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
     );
   }
 }
