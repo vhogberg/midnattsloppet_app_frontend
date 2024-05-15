@@ -1,4 +1,6 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.example.yourapp">
+
     <application
         android:label="flutter_application"
         android:name="${applicationName}"
@@ -31,20 +33,25 @@
             android:value="2" />
 
         <!-- NOTIFIKATIONER -->
-        <receiver android:exported="false"
-            android:name="com.dexterous.flutterlocalnotifications.ScheduledNotificationReceiver" />
-        <receiver android:exported="false"
-            android:name="com.dexterous.flutterlocalnotifications.ScheduledNotificationBootReceiver">
+        <!-- <receiver android:exported="true"
+            android:name="com.dexterous.flutterlocalnotifications.receivers.ActionBroadcastReceiver" />
+        <receiver android:exported="true"
+            android:name="com.dexterous.flutterlocalnotifications.receivers.DismissedReceiver" />
+        <receiver android:exported="true"
+            android:name="com.dexterous.flutterlocalnotifications.receivers.ScheduledNotificationReceiver" />
+        <receiver android:exported="true"
+            android:name="com.dexterous.flutterlocalnotifications.receivers.ScheduledNotificationBootReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
                 <action android:name="android.intent.action.QUICKBOOT_POWERON" />
                 <action android:name="com.htc.intent.action.QUICKBOOT_POWERON" />
             </intent-filter>
-        </receiver>
+        </receiver> -->
         <!-- NOTIFIKATIONER SLUT -->
 
     </application>
+
     <!-- Required to query activities that can process text, see:
          https://developer.android.com/training/package-visibility?hl=en and
          https://developer.android.com/reference/android/content/Intent#ACTION_PROCESS_TEXT.
@@ -56,15 +63,5 @@
             <data android:mimeType="text/plain" />
         </intent>
     </queries>
-
-
-    <!-- NOTIFIKATIONER -->
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
-    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
-    <!-- for this ^, call the requestExactAlarmsPermission() exposed by the
-    AndroidFlutterNotificationsPlugin class so that the user can grant the permission via the app -->
-    
-    <uses-permission android:name="android.permission.VIBRATE" />
-    <!-- NOTIFIKATIONER SLUT-->
 
 </manifest>
