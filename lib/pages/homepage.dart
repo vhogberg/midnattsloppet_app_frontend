@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application/api_utils/api_utils.dart';
 import 'package:flutter_application/components/donation_progress_bar.dart';
 import 'package:flutter_application/components/goal_box.dart';
+import 'package:flutter_application/components/gradient_container.dart';
 import 'package:flutter_application/pages/notification_page/notification_page.dart';
 import 'package:flutter_application/session_manager.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -62,158 +63,151 @@ class _HomePageState extends State<HomePage> {
       print("Error");
     }
   }
+
 //introducera fetchcharityname när api fungerar
 //edita rutan längst ner kopplat till topplista se topp 3
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(left: 20, right: 20, top: 50),
-            child: Row(
-              children: [
-                const Text(
-                  "Godmorgon!",
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black,
-                    fontFamily: 'Sora',
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(left: 20, right: 20, top: 50),
+              child: Row(
+                children: [
+                  const Text(
+                    "Godmorgon!",
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                      fontFamily: 'Sora',
+                    ),
                   ),
-                ),
-                const Spacer(),
-                GestureDetector(
-                  onTap: () {
-                    // Navigate to another page here
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => NotificationPage()),
-                    );
-                  },
-                  child: Stack(
-                    children: [
-                      const Icon(
-                        Iconsax.notification,
-                        size: 35,
-                        color: Color.fromARGB(255, 113, 113, 113),
-                      ),
-                      if (1==0 /** Denna if-satsen finns om vi hittar något sätt att kontrollera om det finns olästa notifikationer, just nu tar detta för mkt tid*/)
-                        Positioned(
-                          // position på cirkeln
-                          top: 0,
-                          right: 0,
-                          child: Container(
-                            padding:
-                                const EdgeInsets.all(1), // Storlek på cirkeln
-                            decoration: const BoxDecoration(
-                              color: Color.fromARGB(255, 241, 75, 75),
-                              shape: BoxShape.circle,
-                            ),
-                            child: const Icon(
-                              Iconsax.notification_12,
-                              size: 12,
-                              color: Colors.white,
-                            ),
-                          ),
-                        ),
-                    ],
-                  ),
-                ),
-                const SizedBox(width: 20),
-                GestureDetector(
-                  onTap: () {
-                    SessionManager.instance.signUserOut(context);
-                  },
-                  child: const CircleAvatar(
-                    radius: 35,
-                    backgroundColor: Colors.white,
-                    backgroundImage:
-                        AssetImage('images/stockholm-university.png'),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Column(
-            children: [
-              Padding(
-                padding:
-                    const EdgeInsets.only(top: 15.0, left: 22.0, right: 22.0),
-                child: Column(
-                  children: [
-                    Stack(
+                  const Spacer(),
+                  GestureDetector(
+                    onTap: () {
+                      // Navigate to another page here
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => NotificationPage()),
+                      );
+                    },
+                    child: Stack(
                       children: [
-                        Container(
-                          width: 400,
-                          height: 320,
-                          decoration: BoxDecoration(
-                            color: const Color(0XFF3C4785),
-                            borderRadius: BorderRadius.circular(13.0),
-                            gradient: const RadialGradient(
-                              radius: 0.8,
-                              center: Alignment(-0.5, 0.4),
-                              colors: [
-                                Color.fromARGB(
-                                    255, 140, 90, 100), // Start color
-                                Color(0xFF3C4785), // End color
-                              ],
-                              stops: [
-                                0.15,
-                                1.0,
-                              ],
+                        const Icon(
+                          Iconsax.notification,
+                          size: 35,
+                          color: Color.fromARGB(255, 113, 113, 113),
+                        ),
+                        if (1 == 0 /** Denna if-satsen finns om vi hittar något sätt att kontrollera om det finns olästa notifikationer, just nu tar detta för mkt tid*/)
+                          Positioned(
+                            // position på cirkeln
+                            top: 0,
+                            right: 0,
+                            child: Container(
+                              padding: const EdgeInsets.all(1), // Storlek på cirkeln
+                              decoration: const BoxDecoration(
+                                color: Color.fromARGB(255, 241, 75, 75),
+                                shape: BoxShape.circle,
+                              ),
+                              child: const Icon(
+                                Iconsax.notification_12,
+                                size: 12,
+                                color: Colors.white,
+                              ),
                             ),
                           ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(width: 20),
+                  GestureDetector(
+                    onTap: () {
+                      SessionManager.instance.signUserOut(context);
+                    },
+                    child: const CircleAvatar(
+                      radius: 35,
+                      backgroundColor: Colors.white,
+                      backgroundImage: AssetImage('images/stockholm-university.png'),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 10),
+            Padding(
+              padding: const EdgeInsets.only(left: 20.0, right: 20.0),
+              child: Column(
+                children: [
+                  Stack(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.all(20),
+                        width: MediaQuery.of(context).size.width,
+                        height: 320,
+                        decoration: BoxDecoration(
+                          color: const Color(0XFF3C4785),
+                          borderRadius: BorderRadius.circular(12.0),
+                          gradient: const RadialGradient(
+                            radius: 0.8,
+                            center: Alignment(-0.5, 0.4),
+                            colors: [
+                              Color.fromARGB(255, 140, 90, 100), // Start color
+                              Color(0xFF3C4785), // End color
+                            ],
+                            stops: [
+                              0.15,
+                              1.0,
+                            ],
+                          ),
                         ),
-                        Positioned(
-                          top: 10,
-                          left: 10,
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text(
+                              'Insamlingsbössa: Nordea Lag 5',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 18,
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                            Text(
+                              '${totalDonations.toStringAsFixed(0)} kr insamlat',
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 28,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            const Text(
+                              'Stödjer: Barncancerfonden',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 16,
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 15,
+                            ),
+                            SizedBox(
+                              width: MediaQuery.of(context).size.width - 80,
+                              child: const Padding(
+                                padding: EdgeInsets.only(left: 30, right: 30),
+                                child: DonationProgressBar(),
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 80,
+                            ),
+                            Stack(
                               children: [
-                                const Text(
-                                  'Insamlingsbössa: Nordea Lag 5',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.w400,
-                                  ),
-                                ),
-                                Text(
-                                  '${totalDonations.toStringAsFixed(0)} kr insamlat',
-                                  style: const TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 28,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                const Text(
-                                  'Stödjer: Barncancerfonden',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w400,
-                                  ),
-                                ),
-                                const SizedBox(
-                                  height: 15,
-                                ),
-                                const SizedBox(
-                                  width: 315,
-                                  child: Padding(
-                                    padding: EdgeInsets.only(left: 30),
-                                    child: DonationProgressBar(),
-                                  ),
-                                ),
-                                const SizedBox(
-                                  height: 80,
-                                ),
                                 Container(
-                                  width: 345,
+                                  padding: const EdgeInsets.all(15),
+                                  width: MediaQuery.of(context).size.width,
                                   height: 90,
                                   decoration: BoxDecoration(
                                     color: Colors.white30,
@@ -223,106 +217,84 @@ class _HomePageState extends State<HomePage> {
                                       width: 1.0, // Border width
                                     ),
                                   ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                        Positioned(
-                          top: 20,
-                          right: 20,
-                          child: Container(
-                            width: 65,
-                            height: 65,
-                            child: Image.asset(
-                                'images/chrome_DmBUq4pVqL-removebg-preview.png'),
-                          ),
-                        ),
-                        Positioned(
-                          top: 140,
-                          right: 35,
-                          child: GoalBox(width: 60, height: 60),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 20),
-                    Stack(
-                      children: [
-                        Container(
-                          width: 400,
-                          height: 320,
-                          decoration: BoxDecoration(
-                            color: const Color(0XFF3C4785),
-                            borderRadius: BorderRadius.circular(20.0),
-                            gradient: const RadialGradient(
-                              radius: 0.8,
-                              center: Alignment(0.7, -0.3),
-                              colors: [
-                                Color.fromARGB(
-                                    255, 140, 90, 100), // Start color
-                                Color(0xFF3C4785), // End color
-                              ],
-                              stops: [
-                                0.15,
-                                1.0,
-                              ],
-                            ),
-                          ),
-                        ),
-                        const Positioned(
-                          top: 10,
-                          left: 10,
-                          child: Padding(
-                            padding: EdgeInsets.all(8.0),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'Lag 1',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ),
-                                Text(
-                                  '45:59',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 36,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                SizedBox(height: 8.0),
-                                Text(
-                                  'Midnattsloppet race distance 10 km',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 17,
-                                    fontWeight: FontWeight.w400,
+                                  child: Row(
+                                    children: [
+                                      const Expanded(
+                                        child: Text(
+                                          'Dela bössan med vänner och familj!',
+                                          style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold, fontFamily: 'Sora'),
+                                        ),
+                                      ),
+                                      GestureDetector(
+                                        onTap: () {
+                                          ShareHelper.showShareDialog(context);
+                                        },
+                                        child: Container(
+                                          padding: const EdgeInsets.all(10),
+                                          width: 100,
+                                          height: 50,
+                                          decoration: BoxDecoration(
+                                            color: Colors.white,
+                                            borderRadius: BorderRadius.circular(13.0),
+                                          ),
+                                          child: const Row(
+                                            children: [
+                                              Icon(
+                                                Iconsax.export_1,
+                                              ),
+                                              SizedBox(
+                                                width: 5,
+                                              ),
+                                              Text(
+                                                'Dela',
+                                                style: TextStyle(
+                                                  fontSize: 20,
+                                                  fontFamily: 'Sora',
+                                                ),
+                                              )
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ),
                               ],
                             ),
-                          ),
+                          ],
                         ),
-                        Positioned(
-                          top: 20,
-                          right: 20,
-                          child: Container(
-                            width: 65,
-                            height: 65,
-                            child: Image.asset('images/Gold-Trophy-PNG.png'),
-                          ),
+                      ),
+                      Positioned(
+                        top: 20,
+                        right: 20,
+                        child: SizedBox(
+                          width: 65,
+                          height: 65,
+                          child: Image.asset('images/chrome_DmBUq4pVqL-removebg-preview.png'),
                         ),
-                      ],
-                    ),
-                  ],
-                ),
+                      ),
+                      const Positioned(
+                        top: 140,
+                        right: 20,
+                        child: GoalBox(height: 50, width: 70),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 20),
+                  Stack(
+                    children: [
+                      GradientContainer(
+                        width: MediaQuery.of(context).size.width,
+                        height: 320,
+                        gradientAlignment: const Alignment(0.7, -0.3),
+                      ),
+                    ],
+                  ),
+                ],
               ),
-            ],
-          ),
-        ],
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -332,22 +304,19 @@ class _HomePageState extends State<HomePage> {
 class ShareHelper {
   static void shareToTwitter() {
     // url är en string, lägg till variabel för lagets personliga teamlänk i slutet.
-    const url =
-        'http://twitter.com/intent/tweet?text=Hjälp%20mitt%20lag%20att%20uppnå%20vårat%20donationsmål%20inför%20midnattsloppets%20race!%20Öppna%20länken%20här%20för%20att%20donera:%20example.com';
+    const url = 'http://twitter.com/intent/tweet?text=Hjälp%20mitt%20lag%20att%20uppnå%20vårat%20donationsmål%20inför%20midnattsloppets%20race!%20Öppna%20länken%20här%20för%20att%20donera:%20example.com';
     launch(url);
   }
 
   static void shareToFacebook() {
     // url är en string, lägg till variabel för lagets personliga teamlänk i slutet.
-    const url =
-        'https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Fexample.com&quote=Hjälp%20mitt%20lag%20att%20uppnå%20vårat%20donationsmål%20inför%20midnattsloppets%20race!%20Öppna%20länken%20här%20för%20att%20donera:%20example.com';
+    const url = 'https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Fexample.com&quote=Hjälp%20mitt%20lag%20att%20uppnå%20vårat%20donationsmål%20inför%20midnattsloppets%20race!%20Öppna%20länken%20här%20för%20att%20donera:%20example.com';
     launch(url);
   }
 
   static void shareToLinkedIn() {
     // url är en string, lägg till variabel för lagets personliga teamlänk i slutet.
-    const url =
-        'https://www.linkedin.com/sharing/share-offsite/?url=http%3A%2F%2Fexample.com&summary=Hjälp%20mitt%20lag%20att%20uppnå%20vårat%20donationsmål%20inför%20midnattsloppets%20race!%20Öppna%20länken%20här%20för%20att%20donera:%20example.com';
+    const url = 'https://www.linkedin.com/sharing/share-offsite/?url=http%3A%2F%2Fexample.com&summary=Hjälp%20mitt%20lag%20att%20uppnå%20vårat%20donationsmål%20inför%20midnattsloppets%20race!%20Öppna%20länken%20här%20för%20att%20donera:%20example.com';
     launch(url);
   }
 
@@ -364,8 +333,6 @@ class ShareHelper {
       throw 'Could not launch $url';
     }
   }
-
-  
 
   // ruta som dyker upp
   // Kalla på den via "onPressed: () => ShareHelper.showShareDialog(context)""
