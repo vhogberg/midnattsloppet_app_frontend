@@ -36,6 +36,9 @@ dependencies:
   font_awesome_flutter: ^9.2.0  # twitter, facebook, linkedin, mail logo
   flutter_local_notifications: ^8.2.0 # notifikationer
 
+  # listen for notifications
+  rxdart: ^0.27.7
+
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.

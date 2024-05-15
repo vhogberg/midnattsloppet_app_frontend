@@ -2,9 +2,11 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_application/api_utils/api_utils.dart';
+import 'package:flutter_application/api_utils/notification_api.dart';
 import 'package:flutter_application/components/donation_progress_bar.dart';
 import 'package:flutter_application/components/goal_box.dart';
 import 'package:flutter_application/components/gradient_container.dart';
+import 'package:flutter_application/pages/notification_page/notification_manager.dart';
 import 'package:flutter_application/pages/notification_page/notification_page.dart';
 import 'package:flutter_application/session_manager.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -28,12 +30,33 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     username = SessionManager.instance.username;
+    NotificationApi.init(); 
+    listenNotifications(); 
     fetchGoal();
     fetchDonations();
     _timer = Timer.periodic(const Duration(seconds: 10), (timer) {
       fetchGoal();
       fetchDonations();
     });
+  }
+
+  void listenNotifications() =>
+      NotificationApi.onNotifications.stream.listen(onClickedNotification);
+
+  void onClickedNotification(String? payload) =>
+      Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) =>
+              NotificationPage())); // om payload ska följa med NotificationPage(payload: payload)
+
+  void triggerNotification() {
+    bool hasUnread = NotificationManager.instance.hasUnreadNotifications;
+
+    if(hasUnread){
+      NotificationApi.showNotification(
+        title: 'Du har olästa notiser!',
+        body: 'Gå in i notis-fliken och upptäck dina nya notiser!',
+      );
+    }
   }
 
   @override
@@ -63,6 +86,7 @@ class _HomePageState extends State<HomePage> {
       print("Error");
     }
   }
+
 
 //introducera fetchcharityname när api fungerar
 //edita rutan längst ner kopplat till topplista se topp 3

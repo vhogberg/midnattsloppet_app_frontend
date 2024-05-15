@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_application/pages/notification_page/notification_manager.dart';
 import 'package:flutter_application/session_manager.dart';
 import 'package:flutter_application/api_utils/api_utils.dart';
 import 'dart:async';
@@ -11,7 +12,7 @@ class NotificationItem {
   final String title;
   final String message;
   bool isRead; // Spåra om notisen är läst eller inte
-
+  //final String? payload;
   NotificationItem(
       {required this.title, required this.message, this.isRead = false});
 }
@@ -59,6 +60,7 @@ class _NotificationPageState extends State<NotificationPage>
     username = SessionManager.instance.username;
     dateNotifications(); // Lägg till anropet till metoden som ansvarar för datumsnotiser.
     donationNotifications(); // anrop till metoden som ansvarar för donationsnotiser.
+    unreadNotificationsExist();
     _timer = Timer.periodic(const Duration(seconds: 10), (timer) {
       fetchDonations();
       fetchGoal();
@@ -343,6 +345,12 @@ class _NotificationPageState extends State<NotificationPage>
     }
   }
 
+  void unreadNotificationsExist() {
+    bool hasUnread = true;
+    if (unreadNotifications.isNotEmpty) {
+      NotificationManager.instance.hasUnreadNotifications = hasUnread;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
