@@ -23,15 +23,40 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
       appBar: AppBar(
         title: Text('Leaderboard'),
       ),
-      body: ListView.builder(
-        itemCount: teams.length,
-        itemBuilder: (context, index) {
-          Team team = teams[index];
-          return ListTile(
-            title: Text(team.name), // Access team name using team.name
-            subtitle: Text('Fundraiser Box: ${team.fundraiserBox}'),
-          );
-        },
+      body: Center(
+        child: Container(
+          margin: EdgeInsets.all(16.0),
+          padding: EdgeInsets.all(8.0),
+          decoration: BoxDecoration(
+            color: Colors.grey[200], // Light grey background color
+            borderRadius: BorderRadius.circular(16.0), // Rounded corners
+          ),
+          child: ListView.builder(
+            itemCount: teams.length,
+            itemBuilder: (context, index) {
+              Team team = teams[index];
+              return Container(
+                margin: EdgeInsets.symmetric(vertical: 8.0),
+                decoration: BoxDecoration(
+                  color: Colors.white, // White background for each item
+                  borderRadius: BorderRadius.circular(12.0), // Smooth edges
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.5),
+                      spreadRadius: 2,
+                      blurRadius: 5,
+                      offset: Offset(0, 3), // changes position of shadow
+                    ),
+                  ],
+                ),
+                child: ListTile(
+                  title: Text(team.name), // Access team name using team.name
+                  subtitle: Text('Fundraiser Box: ${team.fundraiserBox}'),
+                ),
+              );
+            },
+          ),
+        ),
       ),
     );
   }
@@ -56,7 +81,7 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
       throw Exception('Failed to load teams from API');
     }
   }
-
+  
 
   List<Team> sortTeams(List<Team> teams) {
     teams.sort((a, b) => b.fundraiserBox.compareTo(a.fundraiserBox));
