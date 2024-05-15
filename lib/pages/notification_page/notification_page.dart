@@ -54,6 +54,8 @@ class _NotificationPageState extends State<NotificationPage> with SingleTickerPr
     dateNotifications(); // Lägg till anropet till metoden som ansvarar för datumsnotiser.
     donationNotifications(); // anrop till metoden som ansvarar för donationsnotiser.
     unreadNotificationsExist();
+    fetchDonations();
+    fetchGoal();
 
     _timer = Timer.periodic(const Duration(seconds: 10), (timer) {
       fetchDonations();
@@ -115,9 +117,11 @@ class _NotificationPageState extends State<NotificationPage> with SingleTickerPr
     }).toList();
   }
 
-  void donationNotifications() {
+  Future<void> donationNotifications() async {
+    double percentage = await calculateDonationPercentage();
+
     // Hårdkodade notifikationer baserat på procentandelen av donationsmålet
-    if (calculatePercentage() >= 30) {
+    if (percentage >= 30) {
       if (!notificationAlreadyExists("30% av donationsmålet uppnått!")) {
         allNotifications.add(
           NotificationItem(
@@ -128,7 +132,7 @@ class _NotificationPageState extends State<NotificationPage> with SingleTickerPr
       }
     }
 
-    if (calculatePercentage() >= 60) {
+    if (percentage >= 60) {
       if (!notificationAlreadyExists("60% av donationsmålet uppnått!")) {
         allNotifications.add(
           NotificationItem(
@@ -139,7 +143,7 @@ class _NotificationPageState extends State<NotificationPage> with SingleTickerPr
       }
     }
 
-    if (calculatePercentage() >= 90) {
+    if (percentage >= 90) {
       if (!notificationAlreadyExists("90% av donationsmålet uppnått")) {
         allNotifications.add(
           NotificationItem(
@@ -283,34 +287,58 @@ class _NotificationPageState extends State<NotificationPage> with SingleTickerPr
   }
 
   // Funktion för att hämta aktuella donationer
-  Future<void> fetchDonations() async {
+  Future<double> fetchDonations() async {
     try {
-      double total = await ApiUtils.fetchDonations(username);
+      double? total = await ApiUtils.fetchDonations(username);
+      if (total == null) {
+        throw Exception('Total donations returned null');
+      }
       setState(() {
         totalDonations = total;
       });
+      return totalDonations;
     } catch (e) {
       print("Error fetching donations: $e");
+      rethrow; // Rethrow the caught exception
     }
   }
 
   // Funktion för att hämta donationsmål
-  Future<void> fetchGoal() async {
+  Future<double> fetchGoal() async {
     try {
       double goal = await ApiUtils.fetchGoal(username);
+      if (goal == null) {
+        throw Exception('Total donations returned null');
+      }
       setState(() {
         donationGoal = goal;
       });
+      return donationGoal;
     } catch (e) {
       print("Error fetching goal: $e");
+      rethrow;
     }
   }
 
-  double calculatePercentage() {
-    if (donationGoal == 0) {
-      return 0.0; // Undvik division med noll
-    } else {
-      return (totalDonations / donationGoal) * 100;
+  //Metod för att använda inhämtae donationsmål och donationsvärde
+  Future<double> calculateDonationPercentage() async {
+    try {
+      // Fetch donations
+      double totalDonations = await fetchDonations();
+
+      // Fetch goal
+      double donationGoal = await fetchGoal();
+
+      // Calculate percentage
+      if (donationGoal == 0) {
+        return 0.0; // Avoid division by zero
+      }
+      double percentage = (totalDonations / donationGoal) * 100;
+
+      return percentage;
+    } catch (e) {
+      print("Error calculating donation percentage: $e");
+      rethrow; // Rethrow the caught exception
     }
   }
 
