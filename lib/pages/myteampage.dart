@@ -225,100 +225,112 @@ class _MyTeamPageState extends State<MyTeamPage> {
             ),
           ),
           const SizedBox(height: 20),
-          // Container with team members names
-          Container(
-            width: double.infinity,
-            height: 500,
-            padding: const EdgeInsets.all(20),
-            decoration: BoxDecoration(
-              color: const Color(0XFF3C4785),
-              borderRadius: BorderRadius.circular(13.0),
-              gradient: const RadialGradient(
-                radius: 0.8,
-                center: Alignment(-0.5, 0.4),
-                colors: [
-                  Color.fromARGB(255, 140, 90, 100), // Start color
-                  Color(0xFF3C4785), // End color
-                ],
-                stops: [
-                  0.15,
-                  1.0,
-                ],
-              ),
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Lagmedlemmar',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 18,
-                  ),
+          // Container with team members name
+          Padding(
+            padding: const EdgeInsets.only(left: 20.0, right: 20.0),
+            child: Container(
+              padding: const EdgeInsets.all(20),
+              width: MediaQuery.of(context).size.width,
+              height: 500,
+              decoration: BoxDecoration(
+                color: const Color(0XFF3C4785),
+                borderRadius: BorderRadius.circular(12.0),
+                gradient: const RadialGradient(
+                  radius: 0.8,
+                  center: Alignment(-0.5, 0.4),
+                  colors: [
+                    Color.fromARGB(255, 140, 90, 100), // Start color
+                    Color(0xFF3C4785), // End color
+                  ],
+                  stops: [
+                    0.15,
+                    1.0,
+                  ],
                 ),
-                SizedBox(height: 10),
-                // Check if members list is empty
-                members.isEmpty
-                    ? Padding(
-                        padding: const EdgeInsets.all(10),
-                        child: Text(
-                          'Inga lagmedlemmar än!',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 16,
-                          ),
-                        ),
-                      )
-                    : Column(
-                        // Generate ListTiles dynamically
-                        children: [
-                          ...generateTeamList(),
-                        ],
-                      ),
-                SizedBox(height: 20),
-                // Display fetched data
-                Container(
-                  width: 345,
-                  height: 150,
-                  decoration: BoxDecoration(
-                    color: Colors.white30,
-                    borderRadius: BorderRadius.circular(13.0),
-                    border: Border.all(
-                      color: Colors.white60, // Border color
-                      width: 1.0, // Border width
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Lagmedlemmar',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18,
                     ),
                   ),
-                  padding: EdgeInsets.all(10),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        '${totalDonations.toStringAsFixed(0)} kr insamlat',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      Text(
-                        'Mål: ${donationGoal.toStringAsFixed(0)} kr',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      SizedBox(height: 10),
-                      DonationProgressBar(),
-                      SizedBox(height: 5),
-                      Positioned(
-                          top: 100,
-                          right: 140,
-                        child: GoalBox(width: 60, height: 60),
+                  SizedBox(height: 10),
+                  // Check if members list is empty
+                  members.isEmpty
+                      ? Padding(
+                          padding: const EdgeInsets.all(10),
+                          child: Text(
+                            'Inga lagmedlemmar än!',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 16,
+                            ),
+                          ),
                         )
-                    ],
+                      : Column(
+                          // Generate ListTiles dynamically
+                          children: [
+                            ...generateTeamList(),
+                          ],
+                        ),
+                  SizedBox(height: 20),
+                  // Display fetched data
+                  Container(
+                    width: MediaQuery.of(context).size.width,
+                    height: 150,
+                    decoration: BoxDecoration(
+                      color: Colors.white30,
+                      borderRadius: BorderRadius.circular(13.0),
+                      border: Border.all(
+                        color: Colors.white60, // Border color
+                        width: 1.0, // Border width
+                      ),
+                    ),
+                    padding: EdgeInsets.all(10),
+                    child: Stack(
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              '${totalDonations.toStringAsFixed(0)} kr insamlat',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            Text(
+                              'Mål: ${donationGoal.toStringAsFixed(0)} kr',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            SizedBox(height: 10),
+                            SizedBox(
+                              width: MediaQuery.of(context).size.width - 80,
+                              child: const Padding(
+                                padding: EdgeInsets.only(left: 30, right: 30),
+                                child: DonationProgressBar(),
+                              ),
+                            ),
+                          ],
+                        ),
+                        Positioned(
+                          top: 60,
+                          right: 10,
+                          child: GoalBox(width: 60, height: 60),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ],
