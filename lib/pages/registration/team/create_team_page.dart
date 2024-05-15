@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application/components/my_navigation_bar.dart';
 import 'package:flutter_application/components/searchable_textfield.dart';
 import 'package:flutter_application/session_manager.dart';
 import 'package:http/http.dart' as http;
@@ -6,10 +7,8 @@ import 'dart:convert';
 
 import 'package:flutter_application/components/my_button.dart';
 import 'package:flutter_application/components/my_textfield.dart';
-import 'package:flutter_application/pages/homepage.dart';
 
 class CreateTeamPage extends StatefulWidget {
-
   CreateTeamPage({super.key});
 
   @override
@@ -45,8 +44,10 @@ class _CreateTeamPageState extends State<CreateTeamPage> {
     }
   }
 
-  Future<void> registerTeam(String username, String teamName, String charityName, String donationGoal) async {
-    final String url ='https://group-15-7.pvt.dsv.su.se/app/register/profile/register/team';
+  Future<void> registerTeam(String username, String teamName,
+      String charityName, String donationGoal) async {
+    final String url =
+        'https://group-15-7.pvt.dsv.su.se/app/register/profile/register/team';
 
     Map<String, String> requestBody = {
       'username': username,
@@ -73,7 +74,6 @@ class _CreateTeamPageState extends State<CreateTeamPage> {
       // Handle other error cases here, such as 500 Internal Server Error
     }
   }
-
 
   void filterSearchResults(String query) {
     List<String> searchResults = [];
@@ -157,7 +157,8 @@ class _CreateTeamPageState extends State<CreateTeamPage> {
                       registerTeam(username!, teamName, charity, donationGoal);
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => HomePage()),
+                        MaterialPageRoute(
+                            builder: (context) => MyNavigationBar()),
                       );
                     }),
                 const SizedBox(height: 50),

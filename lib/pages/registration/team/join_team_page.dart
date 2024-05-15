@@ -1,14 +1,14 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_application/components/my_navigation_bar.dart';
 import 'package:flutter_application/session_manager.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 import 'package:flutter_application/components/my_button.dart';
-import 'package:flutter_application/components/searchable_textfield.dart';
-import 'package:flutter_application/pages/homepage.dart';
 
 class JoinTeamPage extends StatefulWidget {
-
   JoinTeamPage({super.key});
 
   @override
@@ -16,14 +16,16 @@ class JoinTeamPage extends StatefulWidget {
 }
 
 class _JoinTeamPageState extends State<JoinTeamPage> {
-  final teamNameController = TextEditingController();
-  List<String> entities = [];
-  List<String> filteredEntities = [];
-  String? username;
+  TextEditingController searchController = TextEditingController();
+  List<String> teams = [];
+  List<String> filteredTeams = [];
+  String? selectedTeam;
+  String? username; // plockas från sessionmanager
 
   @override
   void initState() {
     super.initState();
+    filteredTeams.addAll(teams);
     fetchEntitiesFromAPI();
     username = SessionManager.instance.username;
   }
@@ -34,30 +36,34 @@ class _JoinTeamPageState extends State<JoinTeamPage> {
     if (response.statusCode == 200) {
       final List<dynamic> data = jsonDecode(response.body);
       setState(() {
-        entities = List<String>.from(data);
-        filteredEntities.addAll(entities);
+        teams = List<String>.from(data);
+        filteredTeams.addAll(teams);
       });
     } else {
-      throw Exception('Failed to load entities from API');
+      throw Exception('Failed to load teams from API');
     }
   }
 
+// Metod för att filtrera sökresultat
   void filterSearchResults(String query) {
     List<String> searchResults = [];
     if (query.isNotEmpty) {
-      for (String entity in entities) {
-        if (entity.toLowerCase().contains(query.toLowerCase())) {
-          searchResults.add(entity);
+      for (String team in teams) {
+        if (team.toLowerCase().contains(query.toLowerCase())) {
+          searchResults.add(team);
         }
       }
+    } else {
+      searchResults.addAll(teams);
     }
     setState(() {
-      filteredEntities = searchResults;
+      filteredTeams = searchResults;
     });
   }
 
   Future<void> joinTeam(String username, String teamName) async {
-    final String url = 'https://group-15-7.pvt.dsv.su.se/app/register/profile/join/team';
+    final String url =
+        'https://group-15-7.pvt.dsv.su.se/app/register/profile/join/team';
 
     Map<String, String> requestBody = {
       'username': username,
@@ -108,37 +114,43 @@ class _JoinTeamPageState extends State<JoinTeamPage> {
                     ),
                   ),
                   const SizedBox(height: 20),
-                  SearchableTextfield(
-                    controller: teamNameController,
-                    hintText: 'Sök efter lagnamn',
-                    obscureText: false,
-                    onChanged: (value) {
-                      filterSearchResults(value);
-                    },
-                  ),
-                  const SizedBox(height: 10),
-                  Flexible(
-                    child: ListView.builder(
-                      shrinkWrap: true,
-                      itemCount: filteredEntities.length,
-                      itemBuilder: (context, index) {
-                        return ListTile(
-                          title: Text(filteredEntities[index]),
-                          onTap: () {
-                            setState(() {
-                              teamNameController.text = filteredEntities[index];
-                              filteredEntities.clear();
-                            });
-                          },
-                        );
+                  // Sökfältknapp (copied from the first build method)
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                    child: TextField(
+                      controller: searchController,
+                      onChanged: (value) {
+                        filterSearchResults(value);
                       },
+                      onTap: () async {
+                        String? selectedValue =
+                            await _showSearchResultsPopup(context);
+                        if (selectedValue != null) {
+                          setState(() {
+                            searchController.text = selectedValue;
+                          });
+                        }
+                      },
+                      decoration: InputDecoration(
+                        enabledBorder: const OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.white),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.grey.shade400),
+                        ),
+                        fillColor: Colors.grey.shade200,
+                        filled: true,
+                        hintText: 'Välj ett lag att ansluta till',
+                        hintStyle: TextStyle(color: Colors.grey[500]),
+                      ),
                     ),
                   ),
+                  const SizedBox(height: 10),
                   const SizedBox(height: 20),
                   MyButton(
                     text: "Anslut",
                     onTap: () async {
-                      final teamName = teamNameController.text;
+                      final teamName = searchController.text;
 
                       if (teamName.isEmpty) {
                         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -150,10 +162,12 @@ class _JoinTeamPageState extends State<JoinTeamPage> {
                       joinTeam(username!, teamName);
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => HomePage()),
+                        MaterialPageRoute(
+                            builder: (context) => MyNavigationBar()),
                       );
                     },
                   ),
+
                   const SizedBox(height: 50),
                 ],
               ),
@@ -162,5 +176,84 @@ class _JoinTeamPageState extends State<JoinTeamPage> {
         ),
       ),
     );
+  }
+
+  Future<String?> _showSearchResultsPopup(BuildContext context) async {
+    String? selectedTeamName;
+
+    await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return Dialog(
+              insetPadding: EdgeInsets.all(20.0),
+              child: WillPopScope(
+                onWillPop: () async {
+                  searchController.clear();
+                  return true;
+                },
+                child: Container(
+                  width: MediaQuery.of(context).size.width * 0.8 +
+                      45, // bredd pop-up
+                  height:
+                      MediaQuery.of(context).size.height * 0.5, // höjd pop-up
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(20.0),
+                        child: TextField(
+                          controller: searchController,
+                          decoration: InputDecoration(
+                            hintText: 'Ange lagnamn...',
+                            prefixIcon: Icon(Icons.search),
+                            border: OutlineInputBorder(),
+                          ),
+                          onChanged: (value) {
+                            setState(() {
+                              filterSearchResults(value);
+                            });
+                          },
+                        ),
+                      ),
+                      // Generera lista av teams inuti pop-up
+                      Expanded(
+                        child: ListView.builder(
+                          itemCount: filteredTeams.length,
+                          itemBuilder: (context, index) {
+                            return ListTile(
+                              title: Text(
+                                filteredTeams[index],
+                                style: TextStyle(
+                                  fontSize: 18.0,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              onTap: () {
+                                selectedTeamName = filteredTeams[index];
+                                Navigator.pop(context);
+                              },
+                              selected: selectedTeam == filteredTeams[index],
+                            );
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            );
+          },
+        );
+      },
+    );
+
+    // Update the selected team name
+    setState(() {
+      selectedTeam = selectedTeamName;
+    });
+
+    // Return the selected team name
+    return selectedTeamName;
   }
 }
