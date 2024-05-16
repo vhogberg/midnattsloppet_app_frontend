@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'package:flutter_application/share_helper.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:flutter_application/api_utils/api_utils.dart';
@@ -12,7 +13,6 @@ import 'package:flutter_application/pages/notification_page/notification_page.da
 import 'package:flutter_application/session_manager.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -46,9 +46,13 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
-  void listenNotifications() => NotificationApi.onClickNotification.stream.listen(onClickedNotification);
+  void listenNotifications() =>
+      NotificationApi.onClickNotification.stream.listen(onClickedNotification);
 
-  void onClickedNotification(String? payload) => Navigator.of(context).push(MaterialPageRoute(builder: (context) => NotificationPage())); // om payload ska följa med NotificationPage(payload: payload)
+  void onClickedNotification(String? payload) =>
+      Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) =>
+              NotificationPage())); // om payload ska följa med NotificationPage(payload: payload)
 
   void triggerNotification() {
     bool hasUnread = NotificationManager.instance.hasUnreadNotifications;
@@ -137,7 +141,8 @@ class _HomePageState extends State<HomePage> {
                       // Navigate to another page here
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => NotificationPage()),
+                        MaterialPageRoute(
+                            builder: (context) => NotificationPage()),
                       );
                     },
                     child: Stack(
@@ -147,13 +152,15 @@ class _HomePageState extends State<HomePage> {
                           size: 35,
                           color: Color.fromARGB(255, 113, 113, 113),
                         ),
-                        if (1 == 0 /** Denna if-satsen finns om vi hittar något sätt att kontrollera om det finns olästa notifikationer, just nu tar detta för mkt tid*/)
+                        if (1 ==
+                            0 /** Denna if-satsen finns om vi hittar något sätt att kontrollera om det finns olästa notifikationer, just nu tar detta för mkt tid*/)
                           Positioned(
                             // position på cirkeln
                             top: 0,
                             right: 0,
                             child: Container(
-                              padding: const EdgeInsets.all(1), // Storlek på cirkeln
+                              padding:
+                                  const EdgeInsets.all(1), // Storlek på cirkeln
                               decoration: const BoxDecoration(
                                 color: Color.fromARGB(255, 241, 75, 75),
                                 shape: BoxShape.circle,
@@ -176,7 +183,8 @@ class _HomePageState extends State<HomePage> {
                     child: const CircleAvatar(
                       radius: 35,
                       backgroundColor: Colors.white,
-                      backgroundImage: AssetImage('images/stockholm-university.png'),
+                      backgroundImage:
+                          AssetImage('images/stockholm-university.png'),
                     ),
                   ),
                 ],
@@ -247,7 +255,9 @@ class _HomePageState extends State<HomePage> {
                               ),
                             ),
                             const SizedBox(height: 10),
-                            const Align(alignment: Alignment.topRight, child: GoalBox(height: 50, width: 75)),
+                            const Align(
+                                alignment: Alignment.topRight,
+                                child: GoalBox(height: 50, width: 75)),
                             const SizedBox(height: 10),
                             Stack(
                               children: [
@@ -268,12 +278,17 @@ class _HomePageState extends State<HomePage> {
                                       const Expanded(
                                         child: Text(
                                           'Dela bössan med vänner och familj!',
-                                          style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold, fontFamily: 'Sora'),
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.bold,
+                                              fontFamily: 'Sora'),
                                         ),
                                       ),
                                       GestureDetector(
                                         onTap: () {
-                                          ShareHelper.showShareDialog(context);
+                                          ShareHelper.showShareDialog(
+                                              context, teamName!);
                                         },
                                         child: Container(
                                           padding: const EdgeInsets.all(10),
@@ -281,7 +296,8 @@ class _HomePageState extends State<HomePage> {
                                           height: 50,
                                           decoration: BoxDecoration(
                                             color: Colors.white,
-                                            borderRadius: BorderRadius.circular(13.0),
+                                            borderRadius:
+                                                BorderRadius.circular(13.0),
                                           ),
                                           child: const Row(
                                             children: [
@@ -316,7 +332,8 @@ class _HomePageState extends State<HomePage> {
                         child: SizedBox(
                           width: 65,
                           height: 65,
-                          child: Image.asset('images/chrome_DmBUq4pVqL-removebg-preview.png'),
+                          child: Image.asset(
+                              'images/chrome_DmBUq4pVqL-removebg-preview.png'),
                         ),
                       ),
                     ],
@@ -368,110 +385,6 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
       ),
-    );
-  }
-}
-
-// klass för delning via sociala medier
-class ShareHelper {
-  static void shareToTwitter() {
-    // url är en string, lägg till variabel för lagets personliga teamlänk i slutet.
-    const url = 'http://twitter.com/intent/tweet?text=Hjälp%20mitt%20lag%20att%20uppnå%20vårat%20donationsmål%20inför%20midnattsloppets%20race!%20Öppna%20länken%20här%20för%20att%20donera:%20example.com';
-    launch(url);
-  }
-
-  static void shareToFacebook() {
-    // url är en string, lägg till variabel för lagets personliga teamlänk i slutet.
-    const url = 'https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Fexample.com&quote=Hjälp%20mitt%20lag%20att%20uppnå%20vårat%20donationsmål%20inför%20midnattsloppets%20race!%20Öppna%20länken%20här%20för%20att%20donera:%20example.com';
-    launch(url);
-  }
-
-  static void shareToLinkedIn() {
-    // url är en string, lägg till variabel för lagets personliga teamlänk i slutet.
-    const url = 'https://www.linkedin.com/sharing/share-offsite/?url=http%3A%2F%2Fexample.com&summary=Hjälp%20mitt%20lag%20att%20uppnå%20vårat%20donationsmål%20inför%20midnattsloppets%20race!%20Öppna%20länken%20här%20för%20att%20donera:%20example.com';
-    launch(url);
-  }
-
-  static void openMail() async {
-    final Uri params = Uri(
-      scheme: 'mailto',
-      path: 'recipient@example.com',
-      query: 'subject=Your%20Subject&body=Your%20Body',
-    );
-    String url = params.toString();
-    if (await canLaunch(url)) {
-      await launch(url);
-    } else {
-      throw 'Could not launch $url';
-    }
-  }
-
-  // ruta som dyker upp
-  // Kalla på den via "onPressed: () => ShareHelper.showShareDialog(context)""
-  static void showShareDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return SlideTransition(
-          position: Tween<Offset>(
-            begin: const Offset(0, -1),
-            end: Offset.zero,
-          ).animate(
-            CurvedAnimation(
-              parent: ModalRoute.of(context)!.animation!,
-              curve: Curves.easeInOut,
-            ),
-          ),
-          child: Dialog(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12.0),
-            ),
-            child: const Padding(
-              padding: EdgeInsets.all(20.0),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Dela via:',
-                    style: TextStyle(
-                      fontFamily: 'Sora',
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  SizedBox(height: 15),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      IconButton(
-                        onPressed: shareToTwitter,
-                        icon: FaIcon(FontAwesomeIcons.twitter),
-                        iconSize: 50,
-                      ),
-                      IconButton(
-                        onPressed: shareToFacebook,
-                        icon: FaIcon(FontAwesomeIcons.facebook),
-                        iconSize: 50,
-                      ),
-                      IconButton(
-                        onPressed: shareToLinkedIn,
-                        icon: FaIcon(FontAwesomeIcons.linkedin),
-                        iconSize: 50,
-                      ),
-                      IconButton(
-                        onPressed: openMail,
-                        icon: Icon(Icons.email),
-                        iconSize: 50,
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          ),
-        );
-      },
     );
   }
 }
