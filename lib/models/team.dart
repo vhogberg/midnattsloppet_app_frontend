@@ -1,7 +1,19 @@
 class Team {
-  String name;
-  int fundraiserBox;
-  String? companyName;
+  final String name;
+  final int fundraiserBox;
+  final String? companyName;
 
-  Team({required this.name, required this.fundraiserBox, required this.companyName});
+  Team({
+    required this.name, 
+    required this.fundraiserBox,
+    this.companyName,
+  });
+
+  factory Team.fromJson(Map<String, dynamic> json) {
+    return Team(
+      name: json['name'],
+      fundraiserBox: json['fundraiserBox'],
+      companyName: json['company'] != null ? json['company']['name'] : null,
+    );
+  }
 }
