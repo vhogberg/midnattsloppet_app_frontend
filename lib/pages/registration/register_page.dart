@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_application/components/my_button.dart';
 import 'package:flutter_application/components/my_textfield.dart';
@@ -27,39 +26,37 @@ class _RegisterPage extends State<RegisterPage> {
     username = SessionManager.instance.username;
   }
 
-  //TODO: move this to session manager(?)
   Future<String> registerUser(String username, String password) async {
-  // Construct the URL and request body
-  final url = Uri.parse('https://group-15-7.pvt.dsv.su.se/app/register');
-  final credentials = {'username': username, 'password': password};
-  final jsonBody = jsonEncode(credentials);
+    final url = Uri.parse('https://group-15-7.pvt.dsv.su.se/app/register');
+    final credentials = {'username': username, 'password': password};
+    final jsonBody = jsonEncode(credentials);
 
-  // Ensure the passwords match before attempting registration
-  if (passwordController.text != confirmPasswordController.text) {
-    throw Exception("Passwords don't match");
-  }
-
-  try {
-    // Make the HTTP POST request
-    final response = await http.post(
-      url,
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
-      body: jsonBody,
-    );
-
-    // Check for a successful response status
-    if (response.statusCode >= 200 && response.statusCode < 300) {
-      return response.body;
-    } else {
-      throw Exception('Failed to register: ${response.statusCode}');
+    if (passwordController.text != confirmPasswordController.text) {
+      throw Exception("Passwords don't match");
     }
-  } catch (e) {
-    throw Exception('Failed to register: $e');
-  }
-}
 
+    try {
+      final response = await http.post(
+        url,
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonBody,
+      );
+
+      // Log response for debugging
+      print('Response status: ${response.statusCode}');
+      print('Response body: ${response.body}');
+
+      if (response.statusCode >= 200 && response.statusCode < 300) {
+        return response.body;
+      } else {
+        throw Exception('Failed to register: ${response.statusCode} - ${response.body}');
+      }
+    } catch (e) {
+      throw Exception('Failed to register: $e');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -68,12 +65,12 @@ class _RegisterPage extends State<RegisterPage> {
       body: Center(
         child: SingleChildScrollView(
           child: Container(
-            height: 1000, //Fyller ut bakgrundsbilden
+            height: 1000,
             decoration: const BoxDecoration(
               image: DecorationImage(
-                  image: AssetImage("images/Midnattsloppet.jpg"),
-                  fit: BoxFit.fitHeight //Justera bakgrund
-                  ),
+                image: AssetImage("images/Midnattsloppet.jpg"),
+                fit: BoxFit.fitHeight,
+              ),
             ),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -120,20 +117,16 @@ class _RegisterPage extends State<RegisterPage> {
                     final username = emailController.text;
                     final password = passwordController.text;
 
-                    // Check if username or password is empty
                     if (username.isEmpty || password.isEmpty) {
                       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                        content: Text(
-                            'Vänligen ange både användarnamn och lösenord.'),
+                        content: Text('Vänligen ange både användarnamn och lösenord.'),
                       ));
-                      return; // Exit the function early if either field is empty
+                      return;
                     }
 
-                    // Show CircularProgressIndicator while registering the user
                     showDialog(
                       context: context,
-                      barrierDismissible:
-                          false, // Prevent user from dismissing the dialog
+                      barrierDismissible: false,
                       builder: (BuildContext context) {
                         return Center(
                           child: CircularProgressIndicator(),
@@ -141,31 +134,23 @@ class _RegisterPage extends State<RegisterPage> {
                       },
                     );
 
-                    // Proceed with registration if username and password are not empty
                     registerUser(username, password).then((response) {
-                      // Close the CircularProgressIndicator dialog
                       Navigator.of(context).pop();
 
-                      if (response == "User registered successfully") {
-                        // Log in the user after successful registration
+                      if (response.contains("User registered successfully")) {
                         SessionManager.instance.loginUser(username, password).then((_) {
-                          // Navigate to CompleteProfilePage after saving session token
                           Navigator.push(
                             context,
-                            MaterialPageRoute(
-                                builder: (context) =>
-                                    CompleteProfilePage()),
+                            MaterialPageRoute(builder: (context) => CompleteProfilePage()),
                           );
                         }).catchError((error) {
                           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                            content:
-                                Text('Failed to save session token: $error'),
+                            content: Text('Failed to save session token: $error'),
                           ));
                         });
-                      } else if (response == "Username already exists" ||
-                          response == "Username already exists") {
+                      } else if (response.contains("Username already exists")) {
                         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                          content: Text('Failed to register: $response'),
+                          content: Text('Användarnamnet finns redan.'),
                         ));
                       } else {
                         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -173,9 +158,7 @@ class _RegisterPage extends State<RegisterPage> {
                         ));
                       }
                     }).catchError((error) {
-                      // Close the CircularProgressIndicator dialog
                       Navigator.of(context).pop();
-
                       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                         content: Text('Failed to register: $error'),
                       ));
