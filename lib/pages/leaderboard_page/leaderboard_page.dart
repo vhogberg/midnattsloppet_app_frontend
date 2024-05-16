@@ -31,33 +31,104 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
             color: Colors.grey[200], // Light grey background color
             borderRadius: BorderRadius.circular(16.0), // Rounded corners
           ),
-          child: ListView.builder(
-            itemCount: teams.length,
-            itemBuilder: (context, index) {
-              Team team = teams[index];
-              return Container(
-                margin: EdgeInsets.symmetric(vertical: 8.0),
-                decoration: BoxDecoration(
-                  color: Colors.white, // White background for each item
-                  borderRadius: BorderRadius.circular(12.0), // Smooth edges
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(0.5),
-                      spreadRadius: 2,
-                      blurRadius: 5,
-                      offset: Offset(0, 3), // changes position of shadow
-                    ),
-                  ],
+          child: Column(
+            children: [
+              buildTopThreeTeams(),
+              Expanded(
+                child: ListView.builder(
+                  itemCount: teams.length,
+                  itemBuilder: (context, index) {
+                    Team team = teams[index];
+                    return Container(
+                      margin: EdgeInsets.symmetric(vertical: 8.0),
+                      decoration: BoxDecoration(
+                        color: Colors.white, // White background for each item
+                        borderRadius: BorderRadius.circular(12.0), // Smooth edges
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.5),
+                            spreadRadius: 2,
+                            blurRadius: 5,
+                            offset: Offset(0, 3), // changes position of shadow
+                          ),
+                        ],
+                      ),
+                      child: ListTile(
+                        title: Text(team.name), // Access team name using team.name
+                        subtitle: Text('Fundraiser Box: ${team.fundraiserBox}'),
+                      ),
+                    );
+                  },
                 ),
-                child: ListTile(
-                  title: Text(team.name), // Access team name using team.name
-                  subtitle: Text('Fundraiser Box: ${team.fundraiserBox}'),
-                ),
-              );
-            },
+              ),
+            ],
           ),
         ),
       ),
+    );
+  }
+
+  Widget buildTopThreeTeams() {
+    if (teams.length < 3) {
+      return SizedBox.shrink(); // Return an empty widget if there are less than 3 teams
+    }
+
+    List<Team> topThreeTeams = teams.take(3).toList();
+
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Expanded(
+            child: Column(
+              children: [
+                Container(height: 40), // Padding to offset the third place lower
+                buildTeamCircle(topThreeTeams[1], Colors.grey, '2'),
+              ],
+            ),
+          ),
+          Expanded(
+            child: Column(
+              children: [
+                buildTeamCircle(topThreeTeams[0], Colors.yellow, '1', isFirstPlace: true),
+              ],
+            ),
+          ),
+          Expanded(
+            child: Column(
+              children: [
+                Container(height: 40), // Padding to offset the third place lower
+                buildTeamCircle(topThreeTeams[2], Colors.brown, '3'),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget buildTeamCircle(Team team, Color color, String rank, {bool isFirstPlace = false}) {
+    return Column(
+      children: [
+        CircleAvatar(
+          radius: isFirstPlace ? 30.0 : 20.0, // Larger circle for the first place
+          backgroundColor: color,
+          child: Text(
+            rank,
+            style: TextStyle(color: Colors.white, fontSize: 18.0, fontWeight: FontWeight.bold),
+          ),
+        ),
+        SizedBox(height: 8.0),
+        Text(
+          team.name,
+          style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
+        ),
+        Text(
+          'Score: ${team.fundraiserBox}',
+          style: TextStyle(fontSize: 14.0),
+        ),
+      ],
     );
   }
 
