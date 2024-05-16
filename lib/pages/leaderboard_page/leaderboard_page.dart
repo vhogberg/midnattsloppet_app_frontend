@@ -1,7 +1,10 @@
-import 'dart:convert';
+import 'dart:convert'; // For jsonDecode
 import 'package:flutter/material.dart';
+import 'package:flutter_application/components/custom_app_bar.dart';
 import 'package:flutter_application/models/team.dart';
+import 'package:flutter_application/pages/searchpage.dart';
 import 'package:http/http.dart' as http;
+import 'package:iconsax/iconsax.dart'; // For http requests
 
 class LeaderboardPage extends StatefulWidget {
   @override
@@ -20,9 +23,18 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      //appBar: AppBar(
-      //  title: Text('Leaderboard'),
-      //),
+      appBar: CustomAppBar(
+        key: null,
+        title: 'Topplista',
+        // topplista ska ha en search-knapp till höger, så detta nedan sätts "true"
+        useActionButton: true,
+        // search knapp från Iconsax bilbiotek
+        actionIcon: Iconsax.search_normal,
+        // kalla på onActionPressed metoden också, öppna SearchPage(), funkar inte?
+        onActionPressed: () {
+          SearchPage();
+        },
+      ),
       body: Center(
         child: Column(
           children: [
@@ -116,7 +128,7 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
           children: [
             if (isFirstPlace)
               const Icon(
-                Icons.chair,
+                Icons.icecream, // Use crown icon to indicate first place
                 color: Colors.amber,
                 size: 30.0,
               ),
@@ -183,16 +195,26 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
 
   Future<void> fetchTeamsFromAPI() async {
     final response = await http.get(Uri.parse('https://group-15-7.pvt.dsv.su.se/app/all/teamswithbox'));
-
     if (response.statusCode == 200) {
-      final Map<String, dynamic> data = jsonDecode(response.body);
-      List<Team> fetchedTeams = []; // Create a temporary list to hold Team objects
-      data.forEach((key, value) {
+      final List<dynamic> data = jsonDecode(response.body);
+      List<Team> fetchedTeams = [];
+
+      for (var item in data) {
+        String name = item['name'];
+        int fundraiserBox = item['fundraiserBox'];
+        String? companyName;
+
+        if (item['company'] != null) {
+          companyName = item['company']['name'];
+        }
+
         fetchedTeams.add(Team(
-          name: key,
-          fundraiserBox: value,
+          name: name,
+          fundraiserBox: fundraiserBox,
+          companyName: companyName,
         ));
-      });
+      }
+
       fetchedTeams = sortTeams(fetchedTeams); // Sort the fetched teams
       setState(() {
         teams = fetchedTeams; // Update the state with the sorted teams
