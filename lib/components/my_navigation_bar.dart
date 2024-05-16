@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_application/pages/leaderboard_page/leaderboard_page.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:flutter_application/pages/challenge_page/challenge_page.dart';
 import 'package:flutter_application/pages/homepage.dart';
 import 'package:flutter_application/pages/myteampage.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class MyNavigationBar extends StatefulWidget {
   const MyNavigationBar({super.key});
@@ -14,10 +17,12 @@ class MyNavigationBar extends StatefulWidget {
 
 class _MyNavigationBarState extends State<MyNavigationBar> {
   int selectedPage = 0;
+  final Uri _url = Uri.parse('https://group-15-7.pvt.dsv.su.se/app/donate');
 
   final _pageOptions = [
     const HomePage(),
     ChallengePage(),
+    const SizedBox(), //Placeholder to avoid error when selecting page body
     LeaderboardPage(),
     const MyTeamPage(),
   ];
@@ -25,6 +30,22 @@ class _MyNavigationBarState extends State<MyNavigationBar> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        floatingActionButton: FloatingActionButton.large(
+          shape: const CircleBorder(eccentricity: 0),
+          backgroundColor: const Color(0XFF3C4785),
+          onPressed: () async {
+            if (!await launchUrl(_url)) {
+              throw Exception('Could not launch $_url');
+            }
+          },
+          clipBehavior: Clip.none,
+          child: const CircleAvatar(
+            radius: 40,
+            backgroundColor: Colors.white,
+            backgroundImage: AssetImage('images/swishlogo2.jpg.png'),
+          ),
+        ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
         bottomNavigationBar: NavigationBar(
           onDestinationSelected: (index) {
             setState(() {
@@ -59,6 +80,7 @@ class _MyNavigationBarState extends State<MyNavigationBar> {
               ),
               label: 'Lagkamp',
             ),
+            SizedBox(width: 20),
             NavigationDestination(
               icon: Icon(
                 Iconsax.receipt_item,
