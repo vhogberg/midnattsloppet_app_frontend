@@ -20,21 +20,21 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Leaderboard'),
-      ),
+      //appBar: AppBar(
+      //  title: Text('Leaderboard'),
+      //),
       body: Center(
-        child: Container(
-          margin: EdgeInsets.all(16.0),
-          padding: EdgeInsets.all(8.0),
-          decoration: BoxDecoration(
-            color: Colors.grey[200], // Light grey background color
-            borderRadius: BorderRadius.circular(16.0), // Rounded corners
-          ),
-          child: Column(
-            children: [
-              buildTopThreeTeams(),
-              Expanded(
+        child: Column(
+          children: [
+            buildTopThreeTeams(),
+            Expanded(
+              child: Container(
+                margin: EdgeInsets.all(16.0),
+                padding: EdgeInsets.all(8.0),
+                decoration: BoxDecoration(
+                  color: Colors.grey[200], // Light grey background color
+                  borderRadius: BorderRadius.circular(16.0), // Rounded corners
+                ),
                 child: ListView.builder(
                   itemCount: teams.length,
                   itemBuilder: (context, index) {
@@ -61,8 +61,8 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
                   },
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
@@ -83,7 +83,7 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
           Expanded(
             child: Column(
               children: [
-                Container(height: 40), // Padding to offset the third place lower
+                Container(height: 40), // Padding to offset the second place lower
                 buildTeamCircle(topThreeTeams[1], Colors.grey, '2'),
               ],
             ),
@@ -109,24 +109,73 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
   }
 
   Widget buildTeamCircle(Team team, Color color, String rank, {bool isFirstPlace = false}) {
-    return Column(
+    return Stack(
+      alignment: Alignment.center,
       children: [
-        CircleAvatar(
-          radius: isFirstPlace ? 30.0 : 20.0, // Larger circle for the first place
-          backgroundColor: color,
-          child: Text(
-            rank,
-            style: TextStyle(color: Colors.white, fontSize: 18.0, fontWeight: FontWeight.bold),
+        Column(
+          children: [
+            if (isFirstPlace)
+              const Icon(
+                Icons.chair,
+                color: Colors.amber,
+                size: 30.0,
+              ),
+            Container(
+              width: isFirstPlace ? 60.0 : 50.0,
+              height: isFirstPlace ? 60.0 : 50.0,
+              decoration: BoxDecoration(
+                color: color,
+                shape: BoxShape.circle,
+                border: Border.all(
+                  color: Colors.blue,
+                  width: 3.0,
+                ),
+              ),
+              child: Center(
+                child: Text(
+                  rank,
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 18.0,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ),
+            Text(
+              team.name,
+              style: const TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
+            ),
+            Text(
+              'Score: ${team.fundraiserBox}',
+              style: const TextStyle(fontSize: 14.0),
+            ),
+          ],
+        ),
+        Positioned(
+          bottom: -10.0,
+          child: Container(
+            width: 24.0,
+            height: 24.0,
+            decoration: BoxDecoration(
+              color: Colors.blue,
+              shape: BoxShape.circle,
+              border: Border.all(
+                color: Colors.white,
+                width: 2.0,
+              ),
+            ),
+            child: Center(
+              child: Text(
+                rank,
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 12.0,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
           ),
-        ),
-        SizedBox(height: 8.0),
-        Text(
-          team.name,
-          style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
-        ),
-        Text(
-          'Score: ${team.fundraiserBox}',
-          style: TextStyle(fontSize: 14.0),
         ),
       ],
     );
@@ -152,7 +201,6 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
       throw Exception('Failed to load teams from API');
     }
   }
-  
 
   List<Team> sortTeams(List<Team> teams) {
     teams.sort((a, b) => b.fundraiserBox.compareTo(a.fundraiserBox));
