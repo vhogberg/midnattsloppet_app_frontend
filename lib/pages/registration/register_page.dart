@@ -29,33 +29,37 @@ class _RegisterPage extends State<RegisterPage> {
 
   //TODO: move this to session manager(?)
   Future<String> registerUser(String username, String password) async {
-    //try registering user
-    final url = Uri.parse('https://group-15-7.pvt.dsv.su.se/app/register');
-    final credentials = {'username': username, 'password': password};
-    final jsonBody = jsonEncode(credentials);
+  // Construct the URL and request body
+  final url = Uri.parse('https://group-15-7.pvt.dsv.su.se/app/register');
+  final credentials = {'username': username, 'password': password};
+  final jsonBody = jsonEncode(credentials);
 
-    try {
-      if (passwordController.text == confirmPasswordController.text) {
-        final response = await http.post(
-          url,
-          headers: <String, String>{
-            'Content-Type': 'application/json; charset=UTF-8',
-          },
-          body: jsonBody,
-        );
-
-        if (response.statusCode == 200) {
-          return response.body;
-        } else {
-          throw Exception('Failed to register: ${response.statusCode}');
-        }
-      } else {
-        throw Exception("Passwords don't match");
-      }
-    } catch (e) {
-      throw Exception('Failed to register: $e');
-    }
+  // Ensure the passwords match before attempting registration
+  if (passwordController.text != confirmPasswordController.text) {
+    throw Exception("Passwords don't match");
   }
+
+  try {
+    // Make the HTTP POST request
+    final response = await http.post(
+      url,
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonBody,
+    );
+
+    // Check for a successful response status
+    if (response.statusCode >= 200 && response.statusCode < 300) {
+      return response.body;
+    } else {
+      throw Exception('Failed to register: ${response.statusCode}');
+    }
+  } catch (e) {
+    throw Exception('Failed to register: $e');
+  }
+}
+
 
   @override
   Widget build(BuildContext context) {
