@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:async';
+import 'package:flutter_application/models/team.dart';
 import 'package:http/http.dart' as http;
 
 class ApiUtils {
@@ -139,6 +140,38 @@ class ApiUtils {
     } catch (e) {
       print('Error fetching challenge status: $e');
       rethrow;
+    }
+  }
+
+  static Future<List<Team>> fetchTeamsWithBoxAndCompanyName() async {
+    final response = await http.get(
+        Uri.parse('https://group-15-7.pvt.dsv.su.se/app/all/teamswithbox'));
+
+    if (response.statusCode == 200) {
+      final List<dynamic> data = jsonDecode(response.body);
+      print(data); // Add this line to print the JSON response
+
+      List<Team> fetchedTeams = [];
+
+      for (var item in data) {
+        String name = item['name'];
+        int fundraiserBox = item['fundraiserBox'];
+        String? companyName;
+
+        if (item['company'] != null) {
+          companyName = item['company']['name'];
+        }
+
+        fetchedTeams.add(Team(
+          name: name,
+          fundraiserBox: fundraiserBox,
+          companyName: companyName,
+        ));
+      }
+
+      return fetchedTeams;
+    } else {
+      throw Exception('Failed to load teams from API');
     }
   }
 }
