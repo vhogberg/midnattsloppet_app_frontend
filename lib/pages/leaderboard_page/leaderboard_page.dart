@@ -12,12 +12,12 @@ class LeaderboardPage extends StatefulWidget {
 }
 
 class _LeaderboardPageState extends State<LeaderboardPage> {
-  List<Team> teams = []; // Define a list to hold Team objects
+  List<Team> teams = [];
 
   @override
   void initState() {
     super.initState();
-    fetchTeamsFromAPI(); // Call the method to fetch teams from API
+    fetchTeamsFromAPI();
   }
 
   @override
@@ -44,7 +44,7 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
                 margin: const EdgeInsets.all(16.0),
                 padding: const EdgeInsets.all(8.0),
                 decoration: BoxDecoration(
-                  color: Colors.grey[200], // Light grey background color
+                  color: Colors.grey[200],
                   borderRadius: BorderRadius.circular(16.0), // Rounded corners
                 ),
                 child: ListView.builder(
@@ -168,7 +168,7 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
                   const TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
             ),
             Text(
-              'Score: ${team.fundraiserBox}',
+              '${team.fundraiserBox} kr', // Ska ha en pengarikon
               style: const TextStyle(fontSize: 14.0),
             ),
           ],
@@ -240,5 +240,39 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
   List<Team> sortTeams(List<Team> teams) {
     teams.sort((a, b) => b.fundraiserBox.compareTo(a.fundraiserBox));
     return teams;
+  }
+}
+
+class TeamListItem extends StatelessWidget {
+  final int ranking;
+  final Team team;
+
+  const TeamListItem({super.key, required this.ranking, required this.team});
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      title: Row(
+        children: [
+          Text(
+            '$ranking. ', // Ranking position
+            style: const TextStyle(fontWeight: FontWeight.bold),
+          ),
+          Expanded(
+            child: Text(
+              team.name, // Team name
+              style: const TextStyle(fontWeight: FontWeight.normal),
+            ),
+          ),
+          Align(
+            alignment: Alignment.centerRight,
+            child: Text(
+              '${team.fundraiserBox}', // Fundraiser box number
+              style: const TextStyle(fontWeight: FontWeight.normal),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }
