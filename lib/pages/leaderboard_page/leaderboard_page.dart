@@ -18,6 +18,16 @@ class LeaderboardPage extends StatefulWidget {
 class _LeaderboardPageState extends State<LeaderboardPage> {
   List<Team> teams = [];
 
+//metod för att hämta "plats X av X till myteampage"
+    int getTeamRank(String teamName) {
+    for (int i = 0; i < teams.length; i++) {
+      if (teams[i].name == teamName) {
+        return i + 1;
+      }
+    }
+    return -1; // Return -1 if the team is not found
+  }
+
   @override
   void initState() {
     super.initState();
