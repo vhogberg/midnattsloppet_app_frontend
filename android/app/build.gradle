@@ -49,7 +49,7 @@ android {
         targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
-        multiDexEnabled true // NOTIFIKATIONER https://pub.dev/packages/flutter_local_notifications#-supported-platforms
+        //multiDexEnabled true // NOTIFIKATIONER https://pub.dev/packages/flutter_local_notifications#-supported-platforms
     }
 
     // NOTIFIKATIONER https://pub.dev/packages/flutter_local_notifications#-supported-platforms

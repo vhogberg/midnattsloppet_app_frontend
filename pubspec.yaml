@@ -34,8 +34,12 @@ dependencies:
   shared_preferences: ^2.0.8
   url_launcher: ^6.0.9
   font_awesome_flutter: ^9.2.0  # twitter, facebook, linkedin, mail logo
-  flutter_local_notifications: ^17.1.0 # notifikationer
-
+  
+  # notifikationer
+  # flutter_local_notifications: ^17.1.0 # notifikationer som ej fungerade, ny version trasig?
+  flutter_local_notifications: ^15.1.1
+  flutter_timezone: ^1.0.7
+  
   # listen for notifications
   rxdart: ^0.27.7
 

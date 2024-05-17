@@ -32,8 +32,8 @@
             android:name="flutterEmbedding"
             android:value="2" />
 
-        <!-- NOTIFIKATIONER -->
-        <!-- <receiver android:exported="true"
+        <!-- NOTIFIKATIONER 
+        <receiver android:exported="true"
             android:name="com.dexterous.flutterlocalnotifications.receivers.ActionBroadcastReceiver" />
         <receiver android:exported="true"
             android:name="com.dexterous.flutterlocalnotifications.receivers.DismissedReceiver" />
@@ -47,21 +47,47 @@
                 <action android:name="android.intent.action.QUICKBOOT_POWERON" />
                 <action android:name="com.htc.intent.action.QUICKBOOT_POWERON" />
             </intent-filter>
-        </receiver> -->
-        <!-- NOTIFIKATIONER SLUT -->
+        </receiver>
+-->
+
+        <!-- NOTIFIKATIONER 
+        <receiver android:exported="false"
+            android:name="com.dexterous.flutterlocalnotifications.ActionBroadcastReceiver" />
+
+        NOTIFIKATIONER SLUT -->
 
     </application>
+
+    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
+    <uses-permission android:name="android.permission.USE_EXACT_ALARM" />
 
     <!-- Required to query activities that can process text, see:
          https://developer.android.com/training/package-visibility?hl=en and
          https://developer.android.com/reference/android/content/Intent#ACTION_PROCESS_TEXT.
 
-         In particular, this is used by the Flutter engine in io.flutter.plugin.text.ProcessTextPlugin. -->
+         In particular, this is used by the Flutter engine in io.flutter.plugin.text.ProcessTextPlugin. 
     <queries>
         <intent>
             <action android:name="android.intent.action.PROCESS_TEXT" />
             <data android:mimeType="text/plain" />
         </intent>
     </queries>
+
+    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
+    <uses-permission android:name="android.permission.USE_EXACT_ALARM" />
+    <uses-permission android:name="android.permission.USE_FULL_SCREEN_INTENT" />
+
+
+    notifikation 2.0 
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    
+    THIS CAUSES CRASH, DO NOT USE.
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+    <uses-permission android:name="android.permission.USE_FULL_SCREEN_INTENT" />
+    -->
+
 
 </manifest>
