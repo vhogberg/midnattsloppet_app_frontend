@@ -131,8 +131,8 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
           children: [
             if (isFirstPlace)
               const Icon(           
-                Iconsax.crown1, // Should have a crown, not a delicious icecream mmm
-                color: Colors.amber,
+                Iconsax.crown2,
+                color: Colors.deepPurple,
                 size: 40.0,
               ),
             Container(
@@ -142,7 +142,7 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
                 color: color,
                 shape: BoxShape.circle,
                 border: Border.all(
-                  color: const Color.fromRGBO(41, 75, 102, 1),
+                  color: Colors.deepPurple,
                   width: 3.0,
                 ),
               ),
@@ -169,15 +169,15 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
           ],
         ),
         Positioned(
-          bottom: 36.0,
+          bottom: 30.0,
           child: Container(
             width: 24.0,
             height: 24.0,
             decoration: BoxDecoration(
-              color: Colors.blue,
+              color: Colors.deepPurple,
               shape: BoxShape.circle,
               border: Border.all(
-                color: Colors.white,
+                color: Colors.deepPurple,
                 width: 2.0,
               ),
             ),
