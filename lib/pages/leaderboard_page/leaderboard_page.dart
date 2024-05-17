@@ -1,3 +1,5 @@
+// ignore_for_file: library_private_types_in_public_api
+
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_application/components/custom_app_bar.dart';
@@ -7,6 +9,8 @@ import 'package:http/http.dart' as http;
 import 'package:iconsax/iconsax.dart';
 
 class LeaderboardPage extends StatefulWidget {
+  const LeaderboardPage({super.key});
+
   @override
   _LeaderboardPageState createState() => _LeaderboardPageState();
 }
@@ -50,28 +54,9 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
                 child: ListView.builder(
                   itemCount: teams.length,
                   itemBuilder: (context, index) {
-                    Team team = teams[index];
-                    return Container(
-                      margin: const EdgeInsets.symmetric(vertical: 8.0),
-                      decoration: BoxDecoration(
-                        color: Colors.white, // White background for each item
-                        borderRadius:
-                            BorderRadius.circular(12.0), // Smooth edges
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey.withOpacity(0.5),
-                            spreadRadius: 2,
-                            blurRadius: 5,
-                            offset: const Offset(
-                                0, 3), // changes position of shadow
-                          ),
-                        ],
-                      ),
-                      child: ListTile(
-                        title:
-                            Text(team.name), // Access team name using team.name
-                        subtitle: Text('Fundraiser Box: ${team.fundraiserBox}'),
-                      ),
+                    return TeamListItem(
+                      ranking: index + 1,
+                      team: teams[index],
                     );
                   },
                 ),
@@ -136,7 +121,8 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
           children: [
             if (isFirstPlace)
               const Icon(
-                Icons.icecream, // Use crown icon to indicate first place
+                Icons
+                    .icecream, // Should have a crown, not a delicious icecream mmm
                 color: Colors.amber,
                 size: 30.0,
               ),
@@ -168,7 +154,7 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
                   const TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
             ),
             Text(
-              '${team.fundraiserBox} kr', // Ska ha en pengarikon
+              '${team.fundraiserBox} kr', // Ska ha en myntikon
               style: const TextStyle(fontSize: 14.0),
             ),
           ],
