@@ -4,7 +4,7 @@ import 'package:flutter_application/api_utils/api_utils.dart';
 import 'package:flutter_application/session_manager.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-// Skapa en klass för notifikationen
+// Skapa en klass för notifikationen.
 class NotificationItem {
   final String title;
   final String message;
