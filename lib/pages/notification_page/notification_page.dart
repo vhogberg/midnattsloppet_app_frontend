@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_application/api_utils/api_utils.dart';
 import 'package:flutter_application/session_manager.dart';
@@ -10,9 +9,14 @@ class NotificationItem {
   final String title;
   final String message;
   bool isRead; // Spåra om notisen är läst eller inte
-  //final String? payload;
-  NotificationItem(
-      {required this.title, required this.message, this.isRead = false});
+  final DateTime timestamp; // Lägg till ett timestamp för notisen
+
+  NotificationItem({
+    required this.title,
+    required this.message,
+    this.isRead = false,
+    required this.timestamp, // Lägg till timestamp här
+  });
 }
 
 class NotificationPage extends StatefulWidget {
@@ -21,28 +25,22 @@ class NotificationPage extends StatefulWidget {
   _NotificationPageState createState() => _NotificationPageState();
 }
 
-class _NotificationPageState extends State<NotificationPage>
-    with SingleTickerProviderStateMixin {
+class _NotificationPageState extends State<NotificationPage> {
   late SharedPreferences _prefs; // SharedPreferences-instans
-  late TabController
-      _tabController; // TabController för att hantera TabBar och TabBarView
   final TextEditingController _searchController =
       TextEditingController(); // Controller för sökfältet
   String _searchTerm = ''; // Söktermen
-  String?
-      username; // Användarnamn för att hämta mängden insamlat i insamlingbössan och donationsmålet
+  String? username; // Användarnamn för att hämta mängden insamlat i insamlingbössan och donationsmålet
 
   // Notifikationslistan.
   List<NotificationItem> allNotifications = [
     NotificationItem(
       title: "Välkommen till Midnattsloppet Fortal!",
       message:
-          "Tillsammans ska vi göra detta till en oförglömlig upplevelse! Glöm inte att hålla ögonen öppna för kommande uppdateringar och spännande nyheter.\n\nLycka till med din träning och vi ses på startlinjen!",
+          "Tillsammans ska vi göra detta till en oförglömlig upplevelse! \nGlöm inte att hålla ögonen öppna för kommande uppdateringar.\n\nLycka till med din träning och vi ses på startlinjen!",
+      timestamp: DateTime.now(),
     ),
   ];
-
-  List<NotificationItem> unreadNotifications = [];
-  List<NotificationItem> readNotifications = [];
 
   double donationGoal = 0;
   double totalDonations = 0;
@@ -53,61 +51,22 @@ class _NotificationPageState extends State<NotificationPage>
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(
-        length: 3, vsync: this); // Skapa en TabController med 3 flikar
     username = SessionManager.instance.username;
     dateNotifications(); // Lägg till anropet till metoden som ansvarar för datumsnotiser.
     donationNotifications(); // anrop till metoden som ansvarar för donationsnotiser.
-    unreadNotificationsExist();
     fetchDonations();
     fetchGoal();
-    initializeSharedPreferences();
     _timer = Timer.periodic(const Duration(seconds: 10), (timer) {
       fetchDonations();
       fetchGoal();
     });
   }
 
-  void resetLists() {
-    setState(() {
-      unreadNotifications.clear();
-      readNotifications.clear();
-      separateNotifications();
-    });
-  }
-
   @override
   void dispose() {
-    _tabController.dispose(); // Ta bort TabController när widgeten förstörs
     _searchController.dispose(); // Ta bort TextEditingController
     _timer.cancel();
     super.dispose();
-  }
-
-  // Hämta SharedPreferences-instans och notisstatus
-  void initializeSharedPreferences() async {
-    _prefs = await SharedPreferences.getInstance();
-    fetchNotificationStatus(); // Hämta notisstatus från SharedPreferences
-    separateNotifications();
-  }
-
-  // Hämta och uppdatera notisernas lässtatus från SharedPreferences
-  void fetchNotificationStatus() {
-    for (var notification in allNotifications) {
-      bool isRead = _prefs.getBool(notification.title) ?? false;
-      notification.isRead = isRead;
-    }
-  }
-
-  // Separera notifikationer baserat på om de är lästa eller olästa
-  void separateNotifications() {
-    for (var notification in allNotifications) {
-      if (notification.isRead) {
-        readNotifications.add(notification);
-      } else {
-        unreadNotifications.add(notification);
-      }
-    }
   }
 
   // Uppdatera notisens lässtatus i SharedPreferences
@@ -136,6 +95,7 @@ class _NotificationPageState extends State<NotificationPage>
             title: "30% av donationsmålet uppnått!",
             message:
                 "Ni har uppnått 30% av erat donationsmål! \nGrattis och fortsätt!",
+            timestamp: DateTime.now(),
           ),
         );
       }
@@ -148,6 +108,7 @@ class _NotificationPageState extends State<NotificationPage>
             title: "60% av donationsmålet uppnått!",
             message:
                 "Ni har uppnått 60% av erat donationsmål! \nGrattis och fortsätt!",
+            timestamp: DateTime.now(),
           ),
         );
       }
@@ -160,10 +121,12 @@ class _NotificationPageState extends State<NotificationPage>
             title: "90% av donationsmålet uppnått",
             message:
                 "Ni har uppnått 90% av erat donationsmål! \nGrattis och fortsätt!",
+            timestamp: DateTime.now(),
           ),
         );
       }
     }
+    sortNotificationsByDate();
   }
 
   void challengeNotifications() {
@@ -173,6 +136,7 @@ class _NotificationPageState extends State<NotificationPage>
           NotificationItem(
             title: "Ni har blivit utmanade eller utmanat ett annat lag!",
             message: "Gör er redo för lagkamp!",
+            timestamp: DateTime.now(),
           ),
         );
       }
@@ -185,6 +149,7 @@ class _NotificationPageState extends State<NotificationPage>
             title: "Du befinner dig i en lagkamp!",
             message:
                 "Du och ditt lag befinner sig nu i en lagkamp!\nGe allt för att vinna och ha kul!",
+            timestamp: DateTime.now(),
           ),
         );
       }
@@ -197,10 +162,12 @@ class _NotificationPageState extends State<NotificationPage>
           NotificationItem(
             title: "{lagnamn} avböjde din inbjudan på att starta lagkamp",
             message: "",
+            timestamp: DateTime.now(),
           ),
         );
       }
     }
+    sortNotificationsByDate();
   }
 
   void showNotificationIfNeeded(daysLeft) {
@@ -213,6 +180,7 @@ class _NotificationPageState extends State<NotificationPage>
             title: "50 dagar kvar till loppet",
             message:
                 "Det är 50 dagar kvar till midnattsloppets racestart! \nSpara datumet: 17 Augusti 2024",
+            timestamp: DateTime.now(),
           ),
         );
       }
@@ -227,10 +195,12 @@ class _NotificationPageState extends State<NotificationPage>
             title: "100 dagar kvar till loppet",
             message:
                 "Det är 100 dagar kvar till midnattsloppets racestart! \nSpara datumet: 17 Augusti 2024",
+            timestamp: DateTime.now(),
           ),
         );
       }
     }
+    sortNotificationsByDate();
   }
 
   void dateNotifications() {
@@ -372,13 +342,13 @@ class _NotificationPageState extends State<NotificationPage>
     }
   }
 
-  void unreadNotificationsExist() {
-    bool hasUnread = true;
-    if (unreadNotifications.isNotEmpty) {}
+  void sortNotificationsByDate() {
+    allNotifications.sort((a, b) => b.timestamp.compareTo(a.timestamp));
   }
 
   @override
   Widget build(BuildContext context) {
+    sortNotificationsByDate(); // Sortera notiser vid rendering
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -398,40 +368,18 @@ class _NotificationPageState extends State<NotificationPage>
             ),
           ),
         ],
-        bottom: TabBar(
-          controller: _tabController,
-          tabs: const [
-            Tab(text: 'Alla'),
-            Tab(text: 'Olästa'),
-            Tab(text: 'Lästa'),
-          ],
-        ),
       ),
       body: Column(
         children: [
+          Container(
+            color: Color(0xFF3C4785), // Färgen på strecket
+            height: 4.0, // Tjockleken på strecket
+          ),
           Expanded(
-            child: TabBarView(
-              controller: _tabController,
-              children: [
-                NotificationList(
-                  notifications: _searchTerm.isEmpty
-                      ? allNotifications
-                      : filterNotifications(_searchTerm),
-                  updateStatus: updateNotificationStatus,
-                ),
-                NotificationList(
-                  notifications: _searchTerm.isEmpty
-                      ? unreadNotifications
-                      : filterNotifications(_searchTerm),
-                  updateStatus: updateNotificationStatus,
-                ),
-                NotificationList(
-                  notifications: _searchTerm.isEmpty
-                      ? readNotifications
-                      : filterNotifications(_searchTerm),
-                  updateStatus: updateNotificationStatus,
-                ),
-              ],
+            child: NotificationList(
+              notifications: _searchTerm.isEmpty
+                  ? allNotifications
+                  : filterNotifications(_searchTerm),
             ),
           ),
         ],
@@ -442,66 +390,84 @@ class _NotificationPageState extends State<NotificationPage>
 
 class NotificationList extends StatelessWidget {
   final List<NotificationItem> notifications;
-  final Function(NotificationItem)
-      updateStatus; // Funktion för att uppdatera notisstatus
 
-  const NotificationList(
-      {required this.notifications, required this.updateStatus});
+  const NotificationList({required this.notifications});
 
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
       itemCount: notifications.length,
       itemBuilder: (context, index) {
+        final notification = notifications[index];
         return GestureDetector(
           onTap: () {
             // Markera notisen som läst när den klickas på
-            notifications[index].isRead = true;
-            // Uppdatera notisens status i SharedPreferences
-            updateStatus(notifications[index]);
             // Uppdatera UI när en notis klickas på
             Navigator.push(
               context,
               MaterialPageRoute(
                 builder: (context) =>
-                    NotificationDetail(notification: notifications[index]),
+                    NotificationDetail(notification: notification),
               ),
-            ).then((value) {
-              // Återställ listorna när användaren återvänder från notisdetaljsidan
-              _NotificationPageState notificationPageState =
-                  context.findAncestorStateOfType<_NotificationPageState>()!;
-              notificationPageState.resetLists();
-            });
+            );
           },
           child: Container(
+            padding: const EdgeInsets.symmetric(vertical: 16.0), // Ökad padding för större avstånd
             decoration: BoxDecoration(
               border: Border(
                 bottom: BorderSide(
-                  color: Colors.black.withOpacity(0.1),
+                  color: Colors.black.withOpacity(0.9),
                   width: 0.7,
                 ),
               ),
             ),
-            child: ListTile(
-              title: Text(
-                notifications[index].title,
-                style: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16.0,
+            child: Stack(
+              children: [
+                ListTile(
+                  title: Text(
+                    notification.title,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18.0, // Ökad textstorlek
+                    ),
+                  ),
+                  subtitle: Text(
+                    notification.message,
+                    maxLines: 2, // Begränsa till två rader
+                    overflow: TextOverflow.ellipsis, // Visa "..." om texten är för lång
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 14.0, // Ökad textstorlek
+                    ),
+                  ),
                 ),
-              ),
-              subtitle: Text(
-                notifications[index].message,
-                style: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 12.0,
-                ),
-              ),
+                if (_isTextOverflowing(notification.message)) // Kontrollera om texten är avklippt
+                  Positioned(
+                    bottom: 8.0,
+                    right: 16.0,
+                    child: Text(
+                      'Klicka för att läsa mer',
+                      style: TextStyle(
+                        fontSize: 12.0,
+                        color: Colors.grey[600],
+                      ),
+                    ),
+                  ),
+              ],
             ),
           ),
         );
       },
     );
+  }
+
+  bool _isTextOverflowing(String text) {
+    final TextPainter textPainter = TextPainter(
+      text: TextSpan(text: text, style: const TextStyle(fontSize: 14.0)),
+      maxLines: 2,
+      textDirection: TextDirection.ltr,
+    )..layout(maxWidth: 100); // Justera maxWidth till bredden på ListTile
+    return textPainter.didExceedMaxLines;
   }
 }
 
@@ -530,7 +496,7 @@ class NotificationDetail extends StatelessWidget {
               notification.message,
               style: const TextStyle(
                 fontWeight: FontWeight.bold,
-                fontSize: 16.0,
+                fontSize: 16.0, // Ökad textstorlek
               ),
             ),
             const SizedBox(height: 16.0),
