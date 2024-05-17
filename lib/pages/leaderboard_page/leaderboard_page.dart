@@ -1,7 +1,10 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter_application/components/custom_app_bar.dart';
 import 'package:flutter_application/models/team.dart';
+import 'package:flutter_application/pages/searchpage.dart';
 import 'package:http/http.dart' as http;
+import 'package:iconsax/iconsax.dart';
 
 class LeaderboardPage extends StatefulWidget {
   @override
@@ -20,17 +23,26 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      //appBar: AppBar(
-      //  title: Text('Leaderboard'),
-      //),
+      appBar: CustomAppBar(
+        key: null,
+        title: 'Topplista',
+        useActionButton: true,
+        actionIcon: Iconsax.search_normal,
+        onActionPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => SearchPage()),
+          );
+        },
+      ),
       body: Center(
         child: Column(
           children: [
             buildTopThreeTeams(),
             Expanded(
               child: Container(
-                margin: EdgeInsets.all(16.0),
-                padding: EdgeInsets.all(8.0),
+                margin: const EdgeInsets.all(16.0),
+                padding: const EdgeInsets.all(8.0),
                 decoration: BoxDecoration(
                   color: Colors.grey[200], // Light grey background color
                   borderRadius: BorderRadius.circular(16.0), // Rounded corners
@@ -40,21 +52,24 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
                   itemBuilder: (context, index) {
                     Team team = teams[index];
                     return Container(
-                      margin: EdgeInsets.symmetric(vertical: 8.0),
+                      margin: const EdgeInsets.symmetric(vertical: 8.0),
                       decoration: BoxDecoration(
                         color: Colors.white, // White background for each item
-                        borderRadius: BorderRadius.circular(12.0), // Smooth edges
+                        borderRadius:
+                            BorderRadius.circular(12.0), // Smooth edges
                         boxShadow: [
                           BoxShadow(
                             color: Colors.grey.withOpacity(0.5),
                             spreadRadius: 2,
                             blurRadius: 5,
-                            offset: Offset(0, 3), // changes position of shadow
+                            offset: const Offset(
+                                0, 3), // changes position of shadow
                           ),
                         ],
                       ),
                       child: ListTile(
-                        title: Text(team.name), // Access team name using team.name
+                        title:
+                            Text(team.name), // Access team name using team.name
                         subtitle: Text('Fundraiser Box: ${team.fundraiserBox}'),
                       ),
                     );
@@ -70,7 +85,8 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
 
   Widget buildTopThreeTeams() {
     if (teams.length < 3) {
-      return SizedBox.shrink(); // Return an empty widget if there are less than 3 teams
+      return const SizedBox
+          .shrink(); // Return an empty widget if there are less than 3 teams
     }
 
     List<Team> topThreeTeams = teams.take(3).toList();
@@ -83,7 +99,8 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
           Expanded(
             child: Column(
               children: [
-                Container(height: 40), // Padding to offset the second place lower
+                Container(
+                    height: 40), // Padding to offset the second place lower
                 buildTeamCircle(topThreeTeams[1], Colors.grey, '2'),
               ],
             ),
@@ -91,14 +108,16 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
           Expanded(
             child: Column(
               children: [
-                buildTeamCircle(topThreeTeams[0], Colors.yellow, '1', isFirstPlace: true),
+                buildTeamCircle(topThreeTeams[0], Colors.yellow, '1',
+                    isFirstPlace: true),
               ],
             ),
           ),
           Expanded(
             child: Column(
               children: [
-                Container(height: 40), // Padding to offset the third place lower
+                Container(
+                    height: 40), // Padding to offset the third place lower
                 buildTeamCircle(topThreeTeams[2], Colors.brown, '3'),
               ],
             ),
@@ -108,7 +127,8 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
     );
   }
 
-  Widget buildTeamCircle(Team team, Color color, String rank, {bool isFirstPlace = false}) {
+  Widget buildTeamCircle(Team team, Color color, String rank,
+      {bool isFirstPlace = false}) {
     return Stack(
       alignment: Alignment.center,
       children: [
@@ -116,7 +136,7 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
           children: [
             if (isFirstPlace)
               const Icon(
-                Icons.chair,
+                Icons.icecream, // Use crown icon to indicate first place
                 color: Colors.amber,
                 size: 30.0,
               ),
@@ -134,7 +154,7 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
               child: Center(
                 child: Text(
                   rank,
-                  style: TextStyle(
+                  style: const TextStyle(
                     color: Colors.white,
                     fontSize: 18.0,
                     fontWeight: FontWeight.bold,
@@ -144,7 +164,8 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
             ),
             Text(
               team.name,
-              style: const TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
+              style:
+                  const TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
             ),
             Text(
               'Score: ${team.fundraiserBox}',
@@ -182,17 +203,31 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
   }
 
   Future<void> fetchTeamsFromAPI() async {
-    final response = await http.get(Uri.parse('https://group-15-7.pvt.dsv.su.se/app/all/teamswithbox'));
+    final response = await http.get(
+        Uri.parse('https://group-15-7.pvt.dsv.su.se/app/all/teamswithbox'));
 
     if (response.statusCode == 200) {
-      final Map<String, dynamic> data = jsonDecode(response.body);
-      List<Team> fetchedTeams = []; // Create a temporary list to hold Team objects
-      data.forEach((key, value) {
+      final List<dynamic> data = jsonDecode(response.body);
+      print(data); // Add this line to print the JSON response
+
+      List<Team> fetchedTeams = [];
+
+      for (var item in data) {
+        String name = item['name'];
+        int fundraiserBox = item['fundraiserBox'];
+        String? companyName;
+
+        if (item['company'] != null) {
+          companyName = item['company']['name'];
+        }
+
         fetchedTeams.add(Team(
-          name: key,
-          fundraiserBox: value,
+          name: name,
+          fundraiserBox: fundraiserBox,
+          companyName: companyName,
         ));
-      });
+      }
+
       fetchedTeams = sortTeams(fetchedTeams); // Sort the fetched teams
       setState(() {
         teams = fetchedTeams; // Update the state with the sorted teams

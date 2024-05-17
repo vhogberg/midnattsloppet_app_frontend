@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_application/pages/leaderboard_page/leaderboard_page.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:flutter_application/pages/challenge_page/challenge_page.dart';
@@ -30,15 +28,26 @@ class _MyNavigationBarState extends State<MyNavigationBar> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        resizeToAvoidBottomInset: false,
         floatingActionButton: FloatingActionButton.large(
           shape: const CircleBorder(eccentricity: 0),
           backgroundColor: const Color(0XFF3C4785),
           onPressed: () async {
-            if (!await launchUrl(_url)) {
-              throw Exception('Could not launch $_url');
+            try {
+              if (!await launchUrl(_url)) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('Could not launch URL'),
+                    behavior: SnackBarBehavior.floating,
+                  ),
+                );
+              }
+            } catch (e) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text('An error occurred: $e')),
+              );
             }
           },
-          clipBehavior: Clip.none,
           child: const CircleAvatar(
             radius: 40,
             backgroundColor: Colors.white,

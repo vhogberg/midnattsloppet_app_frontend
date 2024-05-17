@@ -10,6 +10,8 @@ import 'package:flutter_application/components/custom_app_bar.dart';
 import 'package:flutter_application/components/goal_box.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../share_helper.dart';
+
 class MyTeamPage extends StatefulWidget {
   const MyTeamPage({Key? key}) : super(key: key);
 
@@ -376,7 +378,7 @@ class _MyTeamPageState extends State<MyTeamPage> {
                         ),
                         GestureDetector(
                           onTap: () {
-                            ShareHelper.showShareDialog(context);
+                            ShareHelper.showShareDialog(context, teamName!);
                           },
                           child: Container(
                             padding: const EdgeInsets.all(10),
@@ -414,110 +416,6 @@ class _MyTeamPageState extends State<MyTeamPage> {
           ),
         ],
       ),
-    );
-  }
-}
-
-class ShareHelper {
-  static void shareToTwitter() {
-    // url är en string, lägg till variabel för lagets personliga teamlänk i slutet.
-    const url =
-        'http://twitter.com/intent/tweet?text=Hjälp%20mitt%20lag%20att%20uppnå%20vårat%20donationsmål%20inför%20midnattsloppets%20race!%20Öppna%20länken%20här%20för%20att%20donera:%20example.com';
-    launch(url);
-  }
-
-  static void shareToFacebook() {
-    // url är en string, lägg till variabel för lagets personliga teamlänk i slutet.
-    const url =
-        'https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Fexample.com&quote=Hjälp%20mitt%20lag%20att%20uppnå%20vårat%20donationsmål%20inför%20midnattsloppets%20race!%20Öppna%20länken%20här%20för%20att%20donera:%20example.com';
-    launch(url);
-  }
-
-  static void shareToLinkedIn() {
-    // url är en string, lägg till variabel för lagets personliga teamlänk i slutet.
-    const url =
-        'https://www.linkedin.com/sharing/share-offsite/?url=http%3A%2F%2Fexample.com&summary=Hjälp%20mitt%20lag%20att%20uppnå%20vårat%20donationsmål%20inför%20midnattsloppets%20race!%20Öppna%20länken%20här%20för%20att%20donera:%20example.com';
-    launch(url);
-  }
-
-  static void openMail() async {
-    final Uri params = Uri(
-      scheme: 'mailto',
-      path: 'recipient@example.com',
-      query: 'subject=Your%20Subject&body=Your%20Body',
-    );
-    String url = params.toString();
-    if (await canLaunch(url)) {
-      await launch(url);
-    } else {
-      throw 'Could not launch $url';
-    }
-  }
-
-  static void showShareDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return SlideTransition(
-          position: Tween<Offset>(
-            begin: const Offset(0, -1),
-            end: Offset.zero,
-          ).animate(
-            CurvedAnimation(
-              parent: ModalRoute.of(context)!.animation!,
-              curve: Curves.easeInOut,
-            ),
-          ),
-          child: Dialog(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12.0),
-            ),
-            child: const Padding(
-              padding: EdgeInsets.all(20.0),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Dela via:',
-                    style: TextStyle(
-                      fontFamily: 'Sora',
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  SizedBox(height: 15),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      IconButton(
-                        onPressed: shareToTwitter,
-                        icon: FaIcon(FontAwesomeIcons.twitter),
-                        iconSize: 50,
-                      ),
-                      IconButton(
-                        onPressed: shareToFacebook,
-                        icon: FaIcon(FontAwesomeIcons.facebook),
-                        iconSize: 50,
-                      ),
-                      IconButton(
-                        onPressed: shareToLinkedIn,
-                        icon: FaIcon(FontAwesomeIcons.linkedin),
-                        iconSize: 50,
-                      ),
-                      IconButton(
-                        onPressed: openMail,
-                        icon: Icon(Icons.email),
-                        iconSize: 50,
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          ),
-        );
-      },
     );
   }
 }
