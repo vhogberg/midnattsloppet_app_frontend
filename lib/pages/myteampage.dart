@@ -474,6 +474,6 @@ class _MyTeamPageState extends State<MyTeamPage> {
           ],
         ),
       ),
-    ));
+    );
   }
 }
