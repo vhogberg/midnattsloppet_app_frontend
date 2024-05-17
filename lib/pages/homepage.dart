@@ -7,6 +7,7 @@ import 'package:flutter_application/components/donation_progress_bar.dart';
 import 'package:flutter_application/components/goal_box.dart';
 import 'package:flutter_application/main.dart';
 import 'package:flutter_application/pages/notification_page/notification_page.dart';
+import 'package:flutter_application/pages/notification_page/notification_page_2.dart';
 import 'package:flutter_application/session_manager.dart';
 import 'package:flutter_application/share_helper.dart';
 import 'package:iconsax/iconsax.dart';
@@ -119,7 +120,7 @@ class _HomePageState extends State<HomePage> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => NotificationPage()),
+                            builder: (context) => NotificationPage2()),
                       );
                     },
                     child: Stack(
