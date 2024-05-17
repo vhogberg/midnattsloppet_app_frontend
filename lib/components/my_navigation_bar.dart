@@ -44,7 +44,10 @@ class _MyNavigationBarState extends State<MyNavigationBar> {
               }
             } catch (e) {
               ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text('An error occurred: $e')),
+                SnackBar(
+                  content: Text('An error occurred: $e'),
+                  behavior: SnackBarBehavior.floating,
+                ),
               );
             }
           },

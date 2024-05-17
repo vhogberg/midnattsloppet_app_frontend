@@ -11,26 +11,33 @@ class NotificationItem {
   final String message;
   bool isRead; // Spåra om notisen är läst eller inte
   //final String? payload;
-  NotificationItem({required this.title, required this.message, this.isRead = false});
+  NotificationItem(
+      {required this.title, required this.message, this.isRead = false});
 }
 
 class NotificationPage extends StatefulWidget {
+  static const routeName = '/notificationPage';
   @override
   _NotificationPageState createState() => _NotificationPageState();
 }
 
-class _NotificationPageState extends State<NotificationPage> with SingleTickerProviderStateMixin {
+class _NotificationPageState extends State<NotificationPage>
+    with SingleTickerProviderStateMixin {
   late SharedPreferences _prefs; // SharedPreferences-instans
-  late TabController _tabController; // TabController för att hantera TabBar och TabBarView
-  final TextEditingController _searchController = TextEditingController(); // Controller för sökfältet
+  late TabController
+      _tabController; // TabController för att hantera TabBar och TabBarView
+  final TextEditingController _searchController =
+      TextEditingController(); // Controller för sökfältet
   String _searchTerm = ''; // Söktermen
-  String? username; // Användarnamn för att hämta mängden insamlat i insamlingbössan och donationsmålet
+  String?
+      username; // Användarnamn för att hämta mängden insamlat i insamlingbössan och donationsmålet
 
   // Notifikationslistan.
   List<NotificationItem> allNotifications = [
     NotificationItem(
       title: "Välkommen till Midnattsloppet Fortal!",
-      message: "Tillsammans ska vi göra detta till en oförglömlig upplevelse! Glöm inte att hålla ögonen öppna för kommande uppdateringar och spännande nyheter.\n\nLycka till med din träning och vi ses på startlinjen!",
+      message:
+          "Tillsammans ska vi göra detta till en oförglömlig upplevelse! Glöm inte att hålla ögonen öppna för kommande uppdateringar och spännande nyheter.\n\nLycka till med din träning och vi ses på startlinjen!",
     ),
   ];
 
@@ -46,15 +53,15 @@ class _NotificationPageState extends State<NotificationPage> with SingleTickerPr
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 3, vsync: this); // Skapa en TabController med 3 flikar
-    initializeSharedPreferences();
+    _tabController = TabController(
+        length: 3, vsync: this); // Skapa en TabController med 3 flikar
     username = SessionManager.instance.username;
     dateNotifications(); // Lägg till anropet till metoden som ansvarar för datumsnotiser.
     donationNotifications(); // anrop till metoden som ansvarar för donationsnotiser.
     unreadNotificationsExist();
     fetchDonations();
     fetchGoal();
-
+    initializeSharedPreferences();
     _timer = Timer.periodic(const Duration(seconds: 10), (timer) {
       fetchDonations();
       fetchGoal();
@@ -111,7 +118,10 @@ class _NotificationPageState extends State<NotificationPage> with SingleTickerPr
   // Funktion för filtrering av notifikationer baserat på söktermen
   List<NotificationItem> filterNotifications(String searchTerm) {
     return allNotifications.where((notification) {
-      return notification.title.toLowerCase().contains(searchTerm.toLowerCase()) || notification.message.toLowerCase().contains(searchTerm.toLowerCase());
+      return notification.title
+              .toLowerCase()
+              .contains(searchTerm.toLowerCase()) ||
+          notification.message.toLowerCase().contains(searchTerm.toLowerCase());
     }).toList();
   }
 
@@ -124,7 +134,8 @@ class _NotificationPageState extends State<NotificationPage> with SingleTickerPr
         allNotifications.add(
           NotificationItem(
             title: "30% av donationsmålet uppnått!",
-            message: "Ni har uppnått 30% av erat donationsmål! \nGrattis och fortsätt!",
+            message:
+                "Ni har uppnått 30% av erat donationsmål! \nGrattis och fortsätt!",
           ),
         );
       }
@@ -135,7 +146,8 @@ class _NotificationPageState extends State<NotificationPage> with SingleTickerPr
         allNotifications.add(
           NotificationItem(
             title: "60% av donationsmålet uppnått!",
-            message: "Ni har uppnått 60% av erat donationsmål! \nGrattis och fortsätt!",
+            message:
+                "Ni har uppnått 60% av erat donationsmål! \nGrattis och fortsätt!",
           ),
         );
       }
@@ -146,7 +158,8 @@ class _NotificationPageState extends State<NotificationPage> with SingleTickerPr
         allNotifications.add(
           NotificationItem(
             title: "90% av donationsmålet uppnått",
-            message: "Ni har uppnått 90% av erat donationsmål! \nGrattis och fortsätt!",
+            message:
+                "Ni har uppnått 90% av erat donationsmål! \nGrattis och fortsätt!",
           ),
         );
       }
@@ -170,14 +183,16 @@ class _NotificationPageState extends State<NotificationPage> with SingleTickerPr
         allNotifications.add(
           NotificationItem(
             title: "Du befinner dig i en lagkamp!",
-            message: "Du och ditt lag befinner sig nu i en lagkamp!\nGe allt för att vinna och ha kul!",
+            message:
+                "Du och ditt lag befinner sig nu i en lagkamp!\nGe allt för att vinna och ha kul!",
           ),
         );
       }
     }
 
     if (challengeStatus.contains("REJECTED")) {
-      if (!notificationAlreadyExists("{lagnamn} avböjde din inbjudan på att starta lagkamp")) {
+      if (!notificationAlreadyExists(
+          "{lagnamn} avböjde din inbjudan på att starta lagkamp")) {
         allNotifications.add(
           NotificationItem(
             title: "{lagnamn} avböjde din inbjudan på att starta lagkamp",
@@ -196,7 +211,8 @@ class _NotificationPageState extends State<NotificationPage> with SingleTickerPr
         allNotifications.add(
           NotificationItem(
             title: "50 dagar kvar till loppet",
-            message: "Det är 50 dagar kvar till midnattsloppets racestart! \nSpara datumet: 17 Augusti 2024",
+            message:
+                "Det är 50 dagar kvar till midnattsloppets racestart! \nSpara datumet: 17 Augusti 2024",
           ),
         );
       }
@@ -209,7 +225,8 @@ class _NotificationPageState extends State<NotificationPage> with SingleTickerPr
         allNotifications.add(
           NotificationItem(
             title: "100 dagar kvar till loppet",
-            message: "Det är 100 dagar kvar till midnattsloppets racestart! \nSpara datumet: 17 Augusti 2024",
+            message:
+                "Det är 100 dagar kvar till midnattsloppets racestart! \nSpara datumet: 17 Augusti 2024",
           ),
         );
       }
@@ -228,7 +245,7 @@ class _NotificationPageState extends State<NotificationPage> with SingleTickerPr
     showNotificationIfNeeded(daysLeft);
   }
 
-// Funktion för att kontrollera om en notifikation redan finns
+  // Funktion för att kontrollera om en notifikation redan finns
   bool notificationAlreadyExists(String title) {
     return allNotifications.any((notification) => notification.title == title);
   }
@@ -357,9 +374,7 @@ class _NotificationPageState extends State<NotificationPage> with SingleTickerPr
 
   void unreadNotificationsExist() {
     bool hasUnread = true;
-    if (unreadNotifications.isNotEmpty) {
-      
-    }
+    if (unreadNotifications.isNotEmpty) {}
   }
 
   @override
@@ -399,15 +414,21 @@ class _NotificationPageState extends State<NotificationPage> with SingleTickerPr
               controller: _tabController,
               children: [
                 NotificationList(
-                  notifications: _searchTerm.isEmpty ? allNotifications : filterNotifications(_searchTerm),
+                  notifications: _searchTerm.isEmpty
+                      ? allNotifications
+                      : filterNotifications(_searchTerm),
                   updateStatus: updateNotificationStatus,
                 ),
                 NotificationList(
-                  notifications: _searchTerm.isEmpty ? unreadNotifications : filterNotifications(_searchTerm),
+                  notifications: _searchTerm.isEmpty
+                      ? unreadNotifications
+                      : filterNotifications(_searchTerm),
                   updateStatus: updateNotificationStatus,
                 ),
                 NotificationList(
-                  notifications: _searchTerm.isEmpty ? readNotifications : filterNotifications(_searchTerm),
+                  notifications: _searchTerm.isEmpty
+                      ? readNotifications
+                      : filterNotifications(_searchTerm),
                   updateStatus: updateNotificationStatus,
                 ),
               ],
@@ -421,9 +442,11 @@ class _NotificationPageState extends State<NotificationPage> with SingleTickerPr
 
 class NotificationList extends StatelessWidget {
   final List<NotificationItem> notifications;
-  final Function(NotificationItem) updateStatus; // Funktion för att uppdatera notisstatus
+  final Function(NotificationItem)
+      updateStatus; // Funktion för att uppdatera notisstatus
 
-  const NotificationList({required this.notifications, required this.updateStatus});
+  const NotificationList(
+      {required this.notifications, required this.updateStatus});
 
   @override
   Widget build(BuildContext context) {
@@ -440,11 +463,13 @@ class NotificationList extends StatelessWidget {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => NotificationDetail(notification: notifications[index]),
+                builder: (context) =>
+                    NotificationDetail(notification: notifications[index]),
               ),
             ).then((value) {
               // Återställ listorna när användaren återvänder från notisdetaljsidan
-              _NotificationPageState notificationPageState = context.findAncestorStateOfType<_NotificationPageState>()!;
+              _NotificationPageState notificationPageState =
+                  context.findAncestorStateOfType<_NotificationPageState>()!;
               notificationPageState.resetLists();
             });
           },

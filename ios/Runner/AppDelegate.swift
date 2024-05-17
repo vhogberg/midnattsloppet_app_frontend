@@ -23,7 +23,7 @@ import flutter_local_notifications
     UIApplication.shared.cancelAllLocalNotifications()
     UserDefaults.standard.set(true, forKey: "Notification")
 }
-    GeneratedPluginRegistrant.register(with: self)
+    /* GeneratedPluginRegistrant.register(with: self) */
 
     // NOTIFIKATIONER SLUT
     return super.application(application, didFinishLaunchingWithOptions: launchOptions)

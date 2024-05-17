@@ -2,9 +2,10 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_application/api_utils/api_utils.dart';
-import 'package:flutter_application/api_utils/notification_api.dart';
+import 'package:flutter_application/api_utils/local_notifications.dart';
 import 'package:flutter_application/components/donation_progress_bar.dart';
 import 'package:flutter_application/components/goal_box.dart';
+import 'package:flutter_application/main.dart';
 import 'package:flutter_application/pages/notification_page/notification_page.dart';
 import 'package:flutter_application/session_manager.dart';
 import 'package:flutter_application/share_helper.dart';
@@ -25,91 +26,22 @@ class _HomePageState extends State<HomePage> {
   double donationGoal = 0;
   double totalDonations = 0;
   late Timer _timer;
-  bool notificationShowed = false;
 
   @override
   void initState() {
     super.initState();
     username = SessionManager.instance.username;
-    LocalNotifications.init();
-    listenNotifications();
+    //LocalNotifications.init();
     fetchGoal();
     fetchDonations();
     fetchCharityName();
     fetchTeamName();
-    triggerPeriodicNotification();
-    //NotificationApi.repeatNotification();
-    // LocalNotifications.cancelAll();
-    //print(NotificationApi.showPeriodicNotifications.toString());
 
     _timer = Timer.periodic(const Duration(seconds: 10), (timer) {
       fetchGoal();
       fetchDonations();
-      print('testnotifications 10s');
-
-      /** 
-      NotificationApi.showSimpleNotification(
-        title: 'Du har olästa notiser!',
-        body: 'Gå in i notis-fliken och upptäck dina nya notiser!',
-        payload: 'test',
-      );
-      */
     });
   }
-
-  // Funktion för att markera att registreringsmetoden har körts
-  Future<void> markPeriodicNotificationExecuted() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setBool('periodic_notification_method_executed', true);
-  }
-
-// Funktion för att kontrollera om registreringsmetoden har körts
-  Future<bool> isPeriodicNotificationExecuted() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    return prefs.getBool('periodic_notification_method_executed') ?? false;
-  }
-
-  Future<void> triggerPeriodicNotification() async {
-    bool isExecuted = await isPeriodicNotificationExecuted();
-    // kolla om redan kört
-    
-    if (!isExecuted) { // falsk första gången
-      // trigga en periodic notification (1 gång per dag)
-      LocalNotifications.showPeriodicNotifications(
-          title: "Periodic Notification",
-          body: "This is a Periodic Notification",
-          payload: "This is periodic data");
-
-      await markPeriodicNotificationExecuted();
-
-      setState(() {
-        //sätt booleanen till true
-        notificationShowed = true;
-      });
-    }
-  }
-
-  void listenNotifications() => LocalNotifications.onClickNotification.stream
-      .listen(onClickedNotification);
-
-  void onClickedNotification(String? payload) =>
-      Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) =>
-              NotificationPage())); // om payload ska följa med NotificationPage(payload: payload)
-
-/*
-  void triggerNotification() {
-    bool hasUnread = true;
-
-    if (hasUnread) {
-      LocalNotifications.showSimpleNotification(
-        title: 'Du har olästa notiser!',
-        body: 'Gå in i notis-fliken och upptäck dina nya notiser!',
-        payload: 'test',
-      );
-    }
-  }
-  */
 
   @override
   void dispose() {
@@ -394,7 +326,7 @@ class _HomePageState extends State<HomePage> {
                           borderRadius: BorderRadius.circular(20.0),
                           gradient: const RadialGradient(
                             radius: 0.8,
-                            center: Alignment(0.7, -0.3),
+                            center: Alignment(0.2, 0.6),
                             colors: [
                               Color.fromARGB(255, 140, 90, 100), // Start color
                               Color(0xFF3C4785), // End color
