@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application/api_utils/notification_api.dart';
+import 'package:flutter_application/auth_page.dart';
 import 'package:flutter_application/pages/login_page/login_widget.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
@@ -43,7 +44,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       navigatorKey: navigatorKey,
       debugShowCheckedModeBanner: false,
-      home: LoginPage(),
+      home: AuthPage(),
     );
   }
 }
