@@ -1,10 +1,8 @@
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_application/pages/notification_page/notification_manager.dart';
-import 'package:flutter_application/session_manager.dart';
-import 'package:flutter_application/api_utils/api_utils.dart';
 import 'dart:async';
 
+import 'package:flutter/material.dart';
+import 'package:flutter_application/api_utils/api_utils.dart';
+import 'package:flutter_application/session_manager.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 // Skapa en klass för notifikationen
@@ -360,7 +358,7 @@ class _NotificationPageState extends State<NotificationPage> with SingleTickerPr
   void unreadNotificationsExist() {
     bool hasUnread = true;
     if (unreadNotifications.isNotEmpty) {
-      NotificationManager.instance.hasUnreadNotifications = hasUnread;
+      
     }
   }
 

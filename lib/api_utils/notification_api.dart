@@ -1,9 +1,9 @@
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:rxdart/rxdart.dart';
-import 'package:timezone/data/latest.dart' as utc;
-import 'package:timezone/timezone.dart' as utc;
+import 'package:timezone/data/latest.dart' as tz;
+import 'package:timezone/timezone.dart' as tz;
 
-class NotificationApi {
+class LocalNotifications {
   static final FlutterLocalNotificationsPlugin
       _flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
   static final onClickNotification = BehaviorSubject<String>();
@@ -22,11 +22,19 @@ class NotificationApi {
         DarwinInitializationSettings(
       onDidReceiveLocalNotification: (id, title, body, payload) =>null,
     );
+    final LinuxInitializationSettings initializationSettingsLinux =
+        LinuxInitializationSettings(defaultActionName: 'Open notification');
     final InitializationSettings initializationSettings =
         InitializationSettings(
             android: initializationSettingsAndroid,
             iOS: initializationSettingsDarwin,
-            );    
+            linux: initializationSettingsLinux);
+
+    // request notification permissions
+    _flutterLocalNotificationsPlugin
+        .resolvePlatformSpecificImplementation<
+            AndroidFlutterLocalNotificationsPlugin>()!.requestPermission();
+  
     
     _flutterLocalNotificationsPlugin.initialize(initializationSettings,
         onDidReceiveNotificationResponse: onNotificationTap,
@@ -66,7 +74,7 @@ class NotificationApi {
     const NotificationDetails notificationDetails =
         NotificationDetails(android: androidNotificationDetails);
     await _flutterLocalNotificationsPlugin.periodicallyShow(
-        1, title, body, RepeatInterval.everyMinute, notificationDetails,
+        1, title, body, RepeatInterval.daily, notificationDetails,
         androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
         payload: payload);
   }
@@ -77,12 +85,12 @@ class NotificationApi {
     required String body,
     required String payload,
   }) async {
-    utc.initializeTimeZones();
+    tz.initializeTimeZones();
     await _flutterLocalNotificationsPlugin.zonedSchedule(
         2,
         title,
         body,
-        utc.TZDateTime.now(utc.local).add(const Duration(seconds: 5)),
+        tz.TZDateTime.now(tz.local).add(const Duration(seconds: 5)),
         const NotificationDetails(
             android: AndroidNotificationDetails(
                 'channel 3', 'your channel name',

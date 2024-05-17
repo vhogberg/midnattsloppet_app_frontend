@@ -1,17 +1,15 @@
 import 'dart:async';
-import 'dart:convert';
-import 'package:http/http.dart' as http;
+
 import 'package:flutter/material.dart';
 import 'package:flutter_application/api_utils/api_utils.dart';
 import 'package:flutter_application/api_utils/notification_api.dart';
 import 'package:flutter_application/components/donation_progress_bar.dart';
 import 'package:flutter_application/components/goal_box.dart';
-import 'package:flutter_application/components/gradient_container.dart';
-import 'package:flutter_application/pages/notification_page/notification_manager.dart';
 import 'package:flutter_application/pages/notification_page/notification_page.dart';
 import 'package:flutter_application/session_manager.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class HomePage extends StatefulWidget {
@@ -28,39 +26,91 @@ class _HomePageState extends State<HomePage> {
   double donationGoal = 0;
   double totalDonations = 0;
   late Timer _timer;
+  bool notificationShowed = false;
 
   @override
   void initState() {
     super.initState();
     username = SessionManager.instance.username;
-    NotificationApi.init();
+    LocalNotifications.init();
     listenNotifications();
     fetchGoal();
     fetchDonations();
     fetchCharityName();
     fetchTeamName();
+    triggerPeriodicNotification();
+    //NotificationApi.repeatNotification();
+    // LocalNotifications.cancelAll();
+    //print(NotificationApi.showPeriodicNotifications.toString());
+
     _timer = Timer.periodic(const Duration(seconds: 10), (timer) {
       fetchGoal();
       fetchDonations();
-      print(NotificationManager.instance.hasUnreadNotifications);
+      print('testnotifications 10s');
+
+      /** 
+      NotificationApi.showSimpleNotification(
+        title: 'Du har olästa notiser!',
+        body: 'Gå in i notis-fliken och upptäck dina nya notiser!',
+        payload: 'test',
+      );
+      */
     });
   }
 
-  void listenNotifications() => NotificationApi.onClickNotification.stream.listen(onClickedNotification);
+  // Funktion för att markera att registreringsmetoden har körts
+  Future<void> markPeriodicNotificationExecuted() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('periodic_notification_method_executed', true);
+  }
 
-  void onClickedNotification(String? payload) => Navigator.of(context).push(MaterialPageRoute(builder: (context) => NotificationPage())); // om payload ska följa med NotificationPage(payload: payload)
+// Funktion för att kontrollera om registreringsmetoden har körts
+  Future<bool> isPeriodicNotificationExecuted() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getBool('periodic_notification_method_executed') ?? false;
+  }
 
+  Future<void> triggerPeriodicNotification() async {
+    bool isExecuted = await isPeriodicNotificationExecuted();
+    // kolla om redan kört
+    
+    if (!isExecuted) { // falsk första gången
+      // trigga en periodic notification (1 gång per dag)
+      LocalNotifications.showPeriodicNotifications(
+          title: "Periodic Notification",
+          body: "This is a Periodic Notification",
+          payload: "This is periodic data");
+
+      await markPeriodicNotificationExecuted();
+
+      setState(() {
+        //sätt booleanen till true
+        notificationShowed = true;
+      });
+    }
+  }
+
+  void listenNotifications() => LocalNotifications.onClickNotification.stream
+      .listen(onClickedNotification);
+
+  void onClickedNotification(String? payload) =>
+      Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) =>
+              NotificationPage())); // om payload ska följa med NotificationPage(payload: payload)
+
+/*
   void triggerNotification() {
-    bool hasUnread = NotificationManager.instance.hasUnreadNotifications;
+    bool hasUnread = true;
 
     if (hasUnread) {
-      NotificationApi.showSimpleNotification(
+      LocalNotifications.showSimpleNotification(
         title: 'Du har olästa notiser!',
         body: 'Gå in i notis-fliken och upptäck dina nya notiser!',
         payload: 'test',
       );
     }
   }
+  */
 
   @override
   void dispose() {
@@ -137,7 +187,8 @@ class _HomePageState extends State<HomePage> {
                       // Navigate to another page here
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => NotificationPage()),
+                        MaterialPageRoute(
+                            builder: (context) => NotificationPage()),
                       );
                     },
                     child: Stack(
@@ -147,13 +198,15 @@ class _HomePageState extends State<HomePage> {
                           size: 35,
                           color: Color.fromARGB(255, 113, 113, 113),
                         ),
-                        if (1 == 0 /** Denna if-satsen finns om vi hittar något sätt att kontrollera om det finns olästa notifikationer, just nu tar detta för mkt tid*/)
+                        if (1 ==
+                            0 /** Denna if-satsen finns om vi hittar något sätt att kontrollera om det finns olästa notifikationer, just nu tar detta för mkt tid*/)
                           Positioned(
                             // position på cirkeln
                             top: 0,
                             right: 0,
                             child: Container(
-                              padding: const EdgeInsets.all(1), // Storlek på cirkeln
+                              padding:
+                                  const EdgeInsets.all(1), // Storlek på cirkeln
                               decoration: const BoxDecoration(
                                 color: Color.fromARGB(255, 241, 75, 75),
                                 shape: BoxShape.circle,
@@ -176,7 +229,8 @@ class _HomePageState extends State<HomePage> {
                     child: const CircleAvatar(
                       radius: 35,
                       backgroundColor: Colors.white,
-                      backgroundImage: AssetImage('images/stockholm-university.png'),
+                      backgroundImage:
+                          AssetImage('images/stockholm-university.png'),
                     ),
                   ),
                 ],
@@ -247,7 +301,9 @@ class _HomePageState extends State<HomePage> {
                               ),
                             ),
                             const SizedBox(height: 10),
-                            const Align(alignment: Alignment.topRight, child: GoalBox(height: 50, width: 75)),
+                            const Align(
+                                alignment: Alignment.topRight,
+                                child: GoalBox(height: 50, width: 75)),
                             const SizedBox(height: 10),
                             Stack(
                               children: [
@@ -268,7 +324,11 @@ class _HomePageState extends State<HomePage> {
                                       const Expanded(
                                         child: Text(
                                           'Dela bössan med vänner och familj!',
-                                          style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold, fontFamily: 'Sora'),
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.bold,
+                                              fontFamily: 'Sora'),
                                         ),
                                       ),
                                       GestureDetector(
@@ -281,7 +341,8 @@ class _HomePageState extends State<HomePage> {
                                           height: 50,
                                           decoration: BoxDecoration(
                                             color: Colors.white,
-                                            borderRadius: BorderRadius.circular(13.0),
+                                            borderRadius:
+                                                BorderRadius.circular(13.0),
                                           ),
                                           child: const Row(
                                             children: [
@@ -316,7 +377,8 @@ class _HomePageState extends State<HomePage> {
                         child: SizedBox(
                           width: 65,
                           height: 65,
-                          child: Image.asset('images/chrome_DmBUq4pVqL-removebg-preview.png'),
+                          child: Image.asset(
+                              'images/chrome_DmBUq4pVqL-removebg-preview.png'),
                         ),
                       ),
                     ],
@@ -376,19 +438,22 @@ class _HomePageState extends State<HomePage> {
 class ShareHelper {
   static void shareToTwitter() {
     // url är en string, lägg till variabel för lagets personliga teamlänk i slutet.
-    const url = 'http://twitter.com/intent/tweet?text=Hjälp%20mitt%20lag%20att%20uppnå%20vårat%20donationsmål%20inför%20midnattsloppets%20race!%20Öppna%20länken%20här%20för%20att%20donera:%20example.com';
+    const url =
+        'http://twitter.com/intent/tweet?text=Hjälp%20mitt%20lag%20att%20uppnå%20vårat%20donationsmål%20inför%20midnattsloppets%20race!%20Öppna%20länken%20här%20för%20att%20donera:%20example.com';
     launch(url);
   }
 
   static void shareToFacebook() {
     // url är en string, lägg till variabel för lagets personliga teamlänk i slutet.
-    const url = 'https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Fexample.com&quote=Hjälp%20mitt%20lag%20att%20uppnå%20vårat%20donationsmål%20inför%20midnattsloppets%20race!%20Öppna%20länken%20här%20för%20att%20donera:%20example.com';
+    const url =
+        'https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Fexample.com&quote=Hjälp%20mitt%20lag%20att%20uppnå%20vårat%20donationsmål%20inför%20midnattsloppets%20race!%20Öppna%20länken%20här%20för%20att%20donera:%20example.com';
     launch(url);
   }
 
   static void shareToLinkedIn() {
     // url är en string, lägg till variabel för lagets personliga teamlänk i slutet.
-    const url = 'https://www.linkedin.com/sharing/share-offsite/?url=http%3A%2F%2Fexample.com&summary=Hjälp%20mitt%20lag%20att%20uppnå%20vårat%20donationsmål%20inför%20midnattsloppets%20race!%20Öppna%20länken%20här%20för%20att%20donera:%20example.com';
+    const url =
+        'https://www.linkedin.com/sharing/share-offsite/?url=http%3A%2F%2Fexample.com&summary=Hjälp%20mitt%20lag%20att%20uppnå%20vårat%20donationsmål%20inför%20midnattsloppets%20race!%20Öppna%20länken%20här%20för%20att%20donera:%20example.com';
     launch(url);
   }
 
