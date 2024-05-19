@@ -1,5 +1,3 @@
-// leaderboard_page.dart
-
 import 'package:flutter/material.dart';
 import 'package:flutter_application/api_utils/api_utils.dart';
 import 'package:flutter_application/components/custom_app_bar.dart';
@@ -40,15 +38,6 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
       });
       print('Error fetching teams: $e');
     }
-  }
-
-  int getTeamRank(String teamName) {
-    for (int i = 0; i < teams.length; i++) {
-      if (teams[i].name == teamName) {
-        return i + 1;
-      }
-    }
-    return -1; // Return -1 if the team is not found
   }
 
   @override
@@ -105,29 +94,57 @@ class TeamListItem extends StatelessWidget {
 
   const TeamListItem({super.key, required this.ranking, required this.team});
 
+  String getFormattedRanking(int ranking) {
+    return ranking.toString();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      title: Row(
-        children: [
-          Text(
-            '$ranking. ', // Ranking position
-            style: const TextStyle(fontWeight: FontWeight.bold),
-          ),
-          Expanded(
-            child: Text(
-              team.name, // Team name
-              style: const TextStyle(fontWeight: FontWeight.normal),
-            ),
-          ),
-          Align(
-            alignment: Alignment.centerRight,
-            child: Text(
-              '${team.fundraiserBox}', // Fundraiser box number
-              style: const TextStyle(fontWeight: FontWeight.normal),
-            ),
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 16.0),
+      padding: const EdgeInsets.all(8.0),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(20.0), // Rounded corners
+        boxShadow: const [
+          BoxShadow(
+            color: Colors.black12,
+            blurRadius: 6.0,
+            offset: Offset(0, 2),
           ),
         ],
+      ),
+      child: ListTile(
+        title: Row(
+          children: [
+            Text(
+              getFormattedRanking(ranking),
+              style: const TextStyle(fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(width: 8), // Spacing between the avatar and text
+            if (team.companyName != null)
+              CircleAvatar(
+                radius: 20,
+                backgroundColor: Colors.white,
+                backgroundImage:
+                    AssetImage('images/company_logos/${team.companyName}.png'),
+              ),
+            const SizedBox(width: 8), // Spacing between the avatar and text
+            Expanded(
+              child: Text(
+                team.name, // Team name
+                style: const TextStyle(fontWeight: FontWeight.normal),
+              ),
+            ),
+            Align(
+              alignment: Alignment.centerRight,
+              child: Text(
+                '${team.fundraiserBox}kr',
+                style: const TextStyle(fontWeight: FontWeight.normal),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
