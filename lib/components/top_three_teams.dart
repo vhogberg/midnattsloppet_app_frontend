@@ -22,7 +22,8 @@ class _TopThreeTeamsState extends State<TopThreeTeams> {
 
   Future<void> fetchTeams() async {
     try {
-      List<Team> fetchedTeams = await ApiUtils.fetchTeamsWithBoxAndCompanyName();
+      List<Team> fetchedTeams =
+          await ApiUtils.fetchTeamsWithBoxAndCompanyName();
       setState(() {
         teams = fetchedTeams;
         isLoading = false;
@@ -58,15 +59,15 @@ class _TopThreeTeamsState extends State<TopThreeTeams> {
             child: Column(
               children: [
                 Container(
-                    height: 40), // Padding to offset the second place lower
-                buildTeamCircle(topThreeTeams[1], Colors.grey, '2'),
+                    height: 50), // Padding to offset the second place lower
+                buildTeamCircle(topThreeTeams[1], Colors.grey),
               ],
             ),
           ),
           Expanded(
             child: Column(
               children: [
-                buildTeamCircle(topThreeTeams[0], Colors.yellow, '1',
+                buildTeamCircle(topThreeTeams[0], Colors.yellow,
                     isFirstPlace: true),
               ],
             ),
@@ -75,8 +76,8 @@ class _TopThreeTeamsState extends State<TopThreeTeams> {
             child: Column(
               children: [
                 Container(
-                    height: 40), // Padding to offset the third place lower
-                buildTeamCircle(topThreeTeams[2], Colors.brown, '3'),
+                    height: 50), // Padding to offset the third place lower
+                buildTeamCircle(topThreeTeams[2], Colors.brown),
               ],
             ),
           ),
@@ -85,8 +86,9 @@ class _TopThreeTeamsState extends State<TopThreeTeams> {
     );
   }
 
-  Widget buildTeamCircle(Team team, Color color, String rank,
-      {bool isFirstPlace = false}) {
+  Widget buildTeamCircle(Team team, Color color, {bool isFirstPlace = false}) {
+    double circleSize = isFirstPlace ? 80.0 : 60.0; // Adjusted sizes
+
     return Stack(
       alignment: Alignment.center,
       children: [
@@ -94,13 +96,13 @@ class _TopThreeTeamsState extends State<TopThreeTeams> {
           children: [
             if (isFirstPlace)
               const Icon(
-                Iconsax.crown, // Ensure to use the correct icon package
+                Iconsax.crown,
                 color: Colors.deepPurple,
                 size: 40.0,
               ),
             Container(
-              width: isFirstPlace ? 60.0 : 50.0,
-              height: isFirstPlace ? 60.0 : 50.0,
+              width: circleSize,
+              height: circleSize,
               decoration: BoxDecoration(
                 color: color,
                 shape: BoxShape.circle,
@@ -110,12 +112,25 @@ class _TopThreeTeamsState extends State<TopThreeTeams> {
                 ),
               ),
               child: Center(
-                child: Text(
-                  rank,
-                  style: const TextStyle(
+                child: Container(
+                  width: circleSize -
+                      10, // Slightly smaller than the outer container
+                  height: circleSize -
+                      10, // Slightly smaller than the outer container
+                  decoration: const BoxDecoration(
                     color: Colors.white,
-                    fontSize: 18.0,
-                    fontWeight: FontWeight.bold,
+                    shape: BoxShape.circle,
+                  ),
+                  child: Padding(
+                    padding:
+                        const EdgeInsets.all(5.0), // Padding around the image
+                    child: Image(
+                      image: AssetImage(
+                          'images/company_logos/${team.companyName}.png'),
+                      width: circleSize - 20,
+                      height: circleSize - 20,
+                      fit: BoxFit.contain,
+                    ),
                   ),
                 ),
               ),
