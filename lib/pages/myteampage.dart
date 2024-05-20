@@ -251,21 +251,22 @@ class _MyTeamPageState extends State<MyTeamPage> {
             // Circular team picture at the middle top
             Center(
               child: Container(
-                width: 150,
-                height: 150,
-                decoration: const BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: Color(0XFF3C4785), // Use the blue color provided
-                ),
-                child: const Center(
-                  child: CircleAvatar(
-                    radius: 74,
-                    backgroundColor: Colors.white,
-                    backgroundImage:
-                        AssetImage('images/stockholm-university.png'),
+                  width: 150,
+                  height: 150,
+                  decoration: const BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Color(0XFF3C4785), // Use the blue color provided
                   ),
-                ),
-              ),
+                  child: Center(
+                    child: companyName != null
+                        ? CircleAvatar(
+                            radius: 74,
+                            backgroundColor: Colors.white,
+                            backgroundImage: AssetImage(
+                                'images/company_logos/$companyName.png'),
+                          )
+                        : CircularProgressIndicator(), // Show a loading indicator
+                  )),
             ),
             const SizedBox(height: 10),
             // Textbox with the donation pledge name

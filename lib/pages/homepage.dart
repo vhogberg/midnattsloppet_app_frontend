@@ -24,6 +24,7 @@ class _HomePageState extends State<HomePage> {
   String? username;
   String? charityName;
   String? teamName;
+  String? companyName;
   double donationGoal = 0;
   double totalDonations = 0;
   late Timer _timer;
@@ -33,6 +34,7 @@ class _HomePageState extends State<HomePage> {
     super.initState();
     username = SessionManager.instance.username;
     //LocalNotifications.init();
+    fetchCompanyName();
     fetchGoal();
     fetchDonations();
     fetchCharityName();
@@ -91,6 +93,17 @@ class _HomePageState extends State<HomePage> {
       });
     } catch (e) {
       print("Error fetching charity name: $e");
+    }
+  }
+
+  Future<void> fetchCompanyName() async {
+    try {
+      String? coName = await ApiUtils.fetchCompanyName(username);
+      setState(() {
+        companyName = coName;
+      });
+    } catch (e) {
+      print("Error fetching company name: $e");
     }
   }
 
@@ -158,12 +171,14 @@ class _HomePageState extends State<HomePage> {
                     onTap: () {
                       SessionManager.instance.signUserOut(context);
                     },
-                    child: const CircleAvatar(
-                      radius: 35,
-                      backgroundColor: Colors.white,
-                      backgroundImage:
-                          AssetImage('images/stockholm-university.png'),
-                    ),
+                    child: companyName != null
+                        ? CircleAvatar(
+                            radius: 35,
+                            backgroundColor: Colors.white,
+                            backgroundImage: AssetImage(
+                                'images/company_logos/$companyName.png'),
+                          )
+                        : CircularProgressIndicator(), // Show a loading indicator
                   ),
                 ],
               ),

@@ -4,7 +4,7 @@ import 'package:flutter_application/models/team.dart';
 import 'package:http/http.dart' as http;
 
 class ApiUtils {
-   static Future<double> fetchDonations(String? username) async {
+  static Future<double> fetchDonations(String? username) async {
     try {
       var response = await http.get(Uri.parse(
           'https://group-15-7.pvt.dsv.su.se/app/team/$username/donatedAmount'));
@@ -114,7 +114,8 @@ class ApiUtils {
       if (response.statusCode == 200) {
         Map<String, dynamic> data = jsonDecode(response.body);
         List<dynamic> membersData = data['members'];
-        List<String> members = membersData.map((member) => member['username'].toString()).toList();
+        List<String> members =
+            membersData.map((member) => member['username'].toString()).toList();
         return members;
       } else {
         throw Exception('Failed to fetch members');
@@ -169,7 +170,14 @@ class ApiUtils {
         ));
       }
 
-      return fetchedTeams;
+      List<Team> sortTeams(List<Team> teams) {
+        teams.sort((a, b) => b.fundraiserBox.compareTo(a.fundraiserBox));
+        return teams;
+      }
+
+      List<Team> sortedTeams = sortTeams(fetchedTeams);
+
+      return sortedTeams;
     } else {
       throw Exception('Failed to load teams from API');
     }

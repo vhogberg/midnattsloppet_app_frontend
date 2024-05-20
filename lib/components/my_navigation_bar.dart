@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application/api_utils/api_utils.dart';
 import 'package:flutter_application/pages/leaderboard_page/leaderboard_page.dart';
+import 'package:flutter_application/session_manager.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:flutter_application/pages/challenge_page/challenge_page.dart';
 import 'package:flutter_application/pages/homepage.dart';
 import 'package:flutter_application/pages/myteampage.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 class MyNavigationBar extends StatefulWidget {
   const MyNavigationBar({super.key});
@@ -14,8 +17,16 @@ class MyNavigationBar extends StatefulWidget {
 }
 
 class _MyNavigationBarState extends State<MyNavigationBar> {
+  String? username;
+  String? teamName;
+  @override
+  void initState() {
+    super.initState();
+    username = SessionManager.instance.username;
+    fetchTeamName();
+  }
+
   int selectedPage = 0;
-  final Uri _url = Uri.parse('https://group-15-7.pvt.dsv.su.se/app/donate');
 
   final _pageOptions = [
     const HomePage(),
@@ -24,6 +35,17 @@ class _MyNavigationBarState extends State<MyNavigationBar> {
     LeaderboardPage(),
     const MyTeamPage(),
   ];
+
+  Future<void> fetchTeamName() async {
+    try {
+      String? teName = await ApiUtils.fetchTeamName(username);
+      setState(() {
+        teamName = teName;
+      });
+    } catch (e) {
+      print("Error fetching teamname: $e");
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +56,8 @@ class _MyNavigationBarState extends State<MyNavigationBar> {
           backgroundColor: const Color(0XFF3C4785),
           onPressed: () async {
             try {
-              if (!await launchUrl(_url)) {
+              if (!await launchUrlString(
+                  'https://group-15-7.pvt.dsv.su.se/app/donate/$teamName')) {
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(
                     content: Text('Could not launch URL'),
