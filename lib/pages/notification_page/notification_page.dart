@@ -97,7 +97,7 @@ class _NotificationPageState extends State<NotificationPage> {
           NotificationItem(
             title: "30% av donationsmålet uppnått!",
             message:
-                "Ni har uppnått 30% av erat donationsmål! \nGrattis och fortsätt!",
+                "Ni har uppnått 30% av erat donationsmål!\n\nGrattis och fortsätt!\n\nEr generösa donation gör också en enorm skillnad i världen. Varje krona ni samlar in hjälper till att finansiera viktiga välgörenhetsprojekt som bidrar till att förbättra livet för de mindre bemedlade. Ert Engagemang och er insats är ovärderlig!\n\nVisste du att löpning inte bara förbättrar din fysiska hälsa utan även din mentala hälsa? Studier har visat att regelbunden löpning kan minska stress, förbättra humöret och öka din koncentration.\n\nFortsätt springa och ha kul!",
             timestamp: DateTime.now(),
           ),
         );
@@ -110,7 +110,7 @@ class _NotificationPageState extends State<NotificationPage> {
           NotificationItem(
             title: "60% av donationsmålet uppnått!",
             message:
-                "Ni har uppnått 60% av erat donationsmål! \nGrattis och fortsätt!",
+                "Ni har uppnått 60% av erat donationsmål!\n\nGrattis och fortsätt!\n\nTänk på detta när ni tränar inför Midnattsloppet: En genomsnittlig löpare tar cirka 1 500 steg per kilometer. Så när du har sprungit 10 km har du tagit ungefär 15 000 steg! Varje steg tar dig närmare dina mål och samtidigt gör ni världen till en bättre plats.\n\nGlöm inte att ha kul!",
             timestamp: DateTime.now(),
           ),
         );
@@ -123,7 +123,21 @@ class _NotificationPageState extends State<NotificationPage> {
           NotificationItem(
             title: "90% av donationsmålet uppnått",
             message:
-                "Ni har uppnått 90% av erat donationsmål! \nGrattis och fortsätt!",
+                "Ni har uppnått 90% av erat donationsmål!\n\nGrattis och fortsätt!\n\n Ni är så nära att nå ert nål! Visste ni att löpning är en av de mest effektiva aktiviteterna för att förbättre hjärt- och kärnhälsan? Regelbunden löpning kan minska risken för hjärtsjukdomar med upp till 45%. Dessutom ökar det syreupptagningsförmågan och stärker musklerna, vilket gör att ni orkar mer både i och utanför spåret.\n\nFortsätt springa!",
+            timestamp: DateTime.now(),
+          ),
+        );
+      }
+    }
+    sortNotificationsByDate();
+
+    if (percentage == 100) {
+      if (!notificationAlreadyExists("100% av donationsmålet uppnått")) {
+        allNotifications.add(
+          NotificationItem(
+            title: "100% av donationsmålet uppnått",
+            message:
+                "Ni har uppnått 100% av erat donationsmål!\n\nSUPER BRA JOBBAT!\n\nFantastiskt arbete! Ni har nått ert donationsmål och gör en verklig skillnad. Era generösa donationer gör en enorm skillnad i världen. Varje krona ni har samlat in går till att stödja viktiga välgörenhetsprohekt som förändrar liv till det bättre. Ert engagemang och er insats hjälper till att skapa en bättre framtid för många.\n\nFortsätt springa och inspirera!",
             timestamp: DateTime.now(),
           ),
         );
@@ -182,7 +196,7 @@ class _NotificationPageState extends State<NotificationPage> {
           NotificationItem(
             title: "50 dagar kvar till loppet",
             message:
-                "Det är 50 dagar kvar till midnattsloppets racestart! \nSpara datumet: 17 Augusti 2024",
+                "Det är 50 dagar kvar till midnattsloppets racestart!\n\nSpara datumet: 17 Augusti 2024\n\nFun fact: Regelbunden löpning kan hjälpa till att förbättra sömnkvaliteten, vilket gör att löpare ofta sover djupare och vaknar mer utvilade.",
             timestamp: DateTime.now(),
           ),
         );
@@ -197,7 +211,7 @@ class _NotificationPageState extends State<NotificationPage> {
           NotificationItem(
             title: "100 dagar kvar till loppet",
             message:
-                "Det är 100 dagar kvar till midnattsloppets racestart! \nSpara datumet: 17 Augusti 2024",
+                "Det är 100 dagar kvar till midnattsloppets racestart!\n\nSpara datumet: 17 Augusti 2024\n\nHirstorisk fun fact: Det första moderna maratonloppet hölls under de olympiska spelen i Aten 1896. Det inspirerades av den mytiska språngmarschen av greken Pheidippides från slaget vid Marathon till Aten.",
             timestamp: DateTime.now(),
           ),
         );
