@@ -231,8 +231,8 @@ class _HomePageState extends State<HomePage> {
                             ),
                             Text(
                               'Stödjer: $charityName',
-                              style: TextStyle(
-                                color: Colors.white,
+                              style: const TextStyle(
+                                color:Colors.white,
                                 fontSize: 16,
                                 fontWeight: FontWeight.w400,
                               ),
@@ -335,7 +335,7 @@ class _HomePageState extends State<HomePage> {
                   Stack(
                     children: [
                       Container(
-                        width: 400,
+                        width: MediaQuery.of(context).size.width,
                         height: 320,
                         decoration: BoxDecoration(
                           color: const Color(0XFF3C4785),
@@ -356,7 +356,7 @@ class _HomePageState extends State<HomePage> {
                         padding: EdgeInsets.all(20),
                         child: Center(
                           child: Container(
-                            padding: EdgeInsets.all(50),
+                            padding: EdgeInsets.all(10),
                             width: MediaQuery.of(context).size.width,
                             height: MediaQuery.of(context).size.height,
                             decoration: BoxDecoration(
@@ -366,6 +366,45 @@ class _HomePageState extends State<HomePage> {
                                 color: Colors.white60, // Border color
                                 width: 1.0, // Border width
                               ),
+                            ),
+                            child: Stack(
+                              children: [
+                                const Align (
+                                  alignment: Alignment.center,
+                                  child: Divider(
+                                    color: Colors
+                                        .white, // Vit färg på avskiljningslinjen
+                                    thickness: 3, // Tjocklek på linjen
+                                    indent: 0, // Indrag från vänster
+                                    endIndent: 0, // Indrag från höger
+                                  ),
+                                ),
+                                Positioned(
+                                  bottom: 0,
+                                  right: 0,
+                                  child: Container(
+                                    padding: const EdgeInsets.all(10),
+                                    width: 120,
+                                    height: 50,
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.circular(13.0),
+                                    ),
+                                    child: const Row(
+                                      children: [
+                                        SizedBox(width: 5),
+                                        Text(
+                                          'Topplista',
+                                          style: TextStyle(
+                                            fontSize: 20,
+                                            fontFamily: 'Sora',
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
                         ),
