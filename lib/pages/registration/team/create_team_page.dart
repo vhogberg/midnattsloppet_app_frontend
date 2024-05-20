@@ -17,16 +17,17 @@ class CreateTeamPage extends StatefulWidget {
 
 class _CreateTeamPageState extends State<CreateTeamPage> {
   final teamNameController = TextEditingController();
-  final charityController = TextEditingController();
+  TextEditingController charityController = TextEditingController();
   final donationGoalController = TextEditingController();
   List<String> entities = [];
   List<String> filteredEntities = [];
+  String? selectedCharity;
   String? username;
 
   @override
   void initState() {
     super.initState();
-    // Access the username from the SessionManager
+    fetchEntitiesFromAPI();
     username = SessionManager.instance.username;
   }
 
@@ -40,7 +41,7 @@ class _CreateTeamPageState extends State<CreateTeamPage> {
         filteredEntities.addAll(entities);
       });
     } else {
-      throw Exception('Failed to load entities from API');
+      throw Exception('Failed to load teams from API');
     }
   }
 
@@ -75,14 +76,17 @@ class _CreateTeamPageState extends State<CreateTeamPage> {
     }
   }
 
+// Metod för att filtrera sökresultat
   void filterSearchResults(String query) {
     List<String> searchResults = [];
     if (query.isNotEmpty) {
-      for (String entity in entities) {
-        if (entity.toLowerCase().contains(query.toLowerCase())) {
-          searchResults.add(entity);
+      for (String charity in entities) {
+        if (charity.toLowerCase().contains(query.toLowerCase())) {
+          searchResults.add(charity);
         }
       }
+    } else {
+      searchResults.addAll(entities);
     }
     setState(() {
       filteredEntities = searchResults;
@@ -96,12 +100,12 @@ class _CreateTeamPageState extends State<CreateTeamPage> {
       body: Center(
         child: SingleChildScrollView(
           child: Container(
-            height: 1000, //Fyller ut bakgrundsbilden
+            height: 1000, // Fyller ut bakgrundsbilden
             decoration: const BoxDecoration(
               image: DecorationImage(
-                  image: AssetImage("images/Midnattsloppet.jpg"),
-                  fit: BoxFit.fitHeight //Justera bakgrund
-                  ),
+                image: AssetImage("images/Midnattsloppet.jpg"),
+                fit: BoxFit.fitHeight, // Justera bakgrund
+              ),
             ),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -109,7 +113,7 @@ class _CreateTeamPageState extends State<CreateTeamPage> {
                 const SizedBox(height: 50),
                 const SizedBox(height: 20),
                 Text(
-                  'Välj eller skapa ett lag',
+                  'Skapa ett lag',
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 16,
@@ -122,13 +126,35 @@ class _CreateTeamPageState extends State<CreateTeamPage> {
                   obscureText: false,
                 ),
                 const SizedBox(height: 10),
-                SearchableTextfield(
-                  controller: charityController,
-                  hintText: 'Vänligen ange välgörenhetsorganisation',
-                  obscureText: false,
-                  onChanged: (value) {
-                    filterSearchResults(value);
-                  },
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                  child: TextField(
+                    controller: charityController,
+                    onChanged: (value) {
+                      filterSearchResults(value);
+                    },
+                    onTap: () async {
+                      String? selectedValue =
+                          await _showSearchResultsPopup(context);
+                      if (selectedValue != null) {
+                        setState(() {
+                          charityController.text = selectedValue;
+                        });
+                      }
+                    },
+                    decoration: InputDecoration(
+                      enabledBorder: const OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.white),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.grey.shade400),
+                      ),
+                      fillColor: Colors.grey.shade200,
+                      filled: true,
+                      hintText: 'Välj en välgörenhetsorganisation',
+                      hintStyle: TextStyle(color: Colors.grey[500]),
+                    ),
+                  ),
                 ),
                 const SizedBox(height: 10),
                 MyTextField(
@@ -139,28 +165,29 @@ class _CreateTeamPageState extends State<CreateTeamPage> {
                 const SizedBox(height: 10),
                 const SizedBox(height: 25),
                 MyButton(
-                    text: "Skapa lag",
-                    onTap: () async {
-                      final teamName = teamNameController.text;
-                      final charity = charityController.text;
-                      final donationGoal = donationGoalController.text;
+                  text: "Skapa lag",
+                  onTap: () async {
+                    final teamName = teamNameController.text;
+                    final charity = charityController.text;
+                    final donationGoal = donationGoalController.text;
 
-                      if (teamName.isEmpty ||
-                          charity.isEmpty ||
-                          donationGoal.isEmpty) {
-                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                          content: Text(
-                              'Vänligen fyll i alla uppgifter för att fortsätta.'),
-                        ));
-                        return;
-                      }
-                      registerTeam(username!, teamName, charity, donationGoal);
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => MyNavigationBar()),
-                      );
-                    }),
+                    if (teamName.isEmpty ||
+                        charity.isEmpty ||
+                        donationGoal.isEmpty) {
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        content: Text(
+                            'Vänligen fyll i alla uppgifter för att fortsätta.'),
+                      ));
+                      return;
+                    }
+                    registerTeam(username!, teamName, charity, donationGoal);
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => MyNavigationBar()),
+                    );
+                  },
+                ),
                 const SizedBox(height: 50),
               ],
             ),
@@ -168,5 +195,85 @@ class _CreateTeamPageState extends State<CreateTeamPage> {
         ),
       ),
     );
+  }
+
+  Future<String?> _showSearchResultsPopup(BuildContext context) async {
+    String? selectedCharityName;
+
+    await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return Dialog(
+              insetPadding: EdgeInsets.all(20.0),
+              child: WillPopScope(
+                onWillPop: () async {
+                  charityController.clear();
+                  return true;
+                },
+                child: Container(
+                  width: MediaQuery.of(context).size.width * 0.8 +
+                      45, // bredd pop-up
+                  height:
+                      MediaQuery.of(context).size.height * 0.5, // höjd pop-up
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(20.0),
+                        child: TextField(
+                          controller: charityController,
+                          decoration: InputDecoration(
+                            hintText: 'Ange välgörenhetsorganisation...',
+                            prefixIcon: Icon(Icons.search),
+                            border: OutlineInputBorder(),
+                          ),
+                          onChanged: (value) {
+                            setState(() {
+                              filterSearchResults(value);
+                            });
+                          },
+                        ),
+                      ),
+                      // Generera lista av teams inuti pop-up
+                      Expanded(
+                        child: ListView.builder(
+                          itemCount: filteredEntities.length,
+                          itemBuilder: (context, index) {
+                            return ListTile(
+                              title: Text(
+                                filteredEntities[index],
+                                style: TextStyle(
+                                  fontSize: 18.0,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              onTap: () {
+                                selectedCharityName = filteredEntities[index];
+                                Navigator.pop(context);
+                              },
+                              selected:
+                                  selectedCharity == filteredEntities[index],
+                            );
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            );
+          },
+        );
+      },
+    );
+
+    // Update the selected charity name
+    setState(() {
+      selectedCharity = selectedCharityName;
+    });
+
+    // Return the selected charity name
+    return selectedCharityName;
   }
 }
