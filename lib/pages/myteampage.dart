@@ -394,7 +394,7 @@ class _MyTeamPageState extends State<MyTeamPage> {
                         ],
                       ),
                     ),
-                    SizedBox(height: 20),
+                    SizedBox(height: 10),
                     // Sharing button
                     Container(
                       padding: const EdgeInsets.all(15),
@@ -454,7 +454,7 @@ class _MyTeamPageState extends State<MyTeamPage> {
                         ],
                       ),
                     ),
-                    SizedBox(height: 20),
+                    SizedBox(height: 10),
                     // Add the leaderboard rank display
                     Text(
                       teamRank != -1
