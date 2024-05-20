@@ -79,29 +79,87 @@ class LocalNotifications {
   }
 
   // to schedule a local notification
-  static Future showScheduleNotification({
+  static Future<void> showScheduleNotification({
+    required int id,
+    required String title,
+    required String body,
+    required String payload,
+    required Duration delay,
+  }) async {
+    tz.initializeTimeZones();
+    await _flutterLocalNotificationsPlugin.zonedSchedule(
+      id,
+      title,
+      body,
+      tz.TZDateTime.now(tz.local).add(delay),
+      const NotificationDetails(
+        android: AndroidNotificationDetails(
+          'channel 3', 'your channel name',
+          channelDescription: 'your channel description',
+          importance: Importance.max,
+          priority: Priority.high,
+          ticker: 'ticker',
+        ),
+      ),
+      androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
+      uiLocalNotificationDateInterpretation:
+          UILocalNotificationDateInterpretation.absoluteTime,
+      payload: payload,
+    );
+  }
+
+  static Future<void> showNotificationWhen100DaysLeft({
+    required int id,
     required String title,
     required String body,
     required String payload,
   }) async {
-    tz.initializeTimeZones();
-    await _flutterLocalNotificationsPlugin.zonedSchedule(
-        2,
-        title,
-        body,
-        tz.TZDateTime.now(tz.local).add(const Duration(seconds: 5)),
-        const NotificationDetails(
-            android: AndroidNotificationDetails(
-                'channel 3', 'your channel name',
-                channelDescription: 'your channel description',
-                importance: Importance.max,
-                priority: Priority.high,
-                ticker: 'ticker')),
-        androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
-        uiLocalNotificationDateInterpretation:
-            UILocalNotificationDateInterpretation.absoluteTime,
-        payload: payload);
+    final targetDate = DateTime(2024, 8, 17);
+    final currentDate = DateTime.now();
+    final durationUntilTarget = targetDate.difference(currentDate);
+    final durationUntilNotification = durationUntilTarget - Duration(days: 100);
+
+    if (durationUntilNotification.isNegative) {
+      print('The date has already passed for showing a notification 100 days before the target date.');
+      return;
+    }
+
+    await showScheduleNotification(
+      id: id,
+      title: title,
+      body: body,
+      payload: payload,
+      delay: durationUntilNotification,
+    );
   }
+
+  static Future<void> showNotificationWhen50DaysLeft({
+    required int id,
+    required String title,
+    required String body,
+    required String payload,
+  }) async {
+    final targetDate = DateTime(2024, 8, 17);
+    final currentDate = DateTime.now();
+    final durationUntilTarget = targetDate.difference(currentDate);
+    final durationUntilNotification = durationUntilTarget - Duration(days: 50);
+
+    if (durationUntilNotification.isNegative) {
+      print('The date has already passed for showing a notification 50 days before the target date.');
+      return;
+    }
+
+    await showScheduleNotification(
+      id: id,
+      title: title,
+      body: body,
+      payload: payload,
+      delay: durationUntilNotification,
+    );
+  }
+
+
+
 
   // close a specific channel notification
   static Future cancel(int id) async {
