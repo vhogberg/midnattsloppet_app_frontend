@@ -7,7 +7,7 @@ class ApiUtils {
   static const String _apiKeyHeader = 'X-API-KEY';
   static const String _apiKey =
       '8292EB40F91DCF46950913B1ECC1AB22ED3F7C7491186059D7FAF71D161D791F';
-  static const String baseUrl = 'https://group-15-7.pvt.dsv.su.se/app';
+  static const String baseURL = 'https://group-15-7.pvt.dsv.su.se/app';
 
   static Future<http.Response> get(String url) async {
     return await http.get(
@@ -55,7 +55,7 @@ class ApiUtils {
 
   static Future<List<String>> fetchCharitiesFromAPI() async {
     final response = await http.get(
-      Uri.parse('$baseUrl/all/charities'),
+      Uri.parse('$baseURL/all/charities'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         _apiKeyHeader: _apiKey,
@@ -72,7 +72,7 @@ class ApiUtils {
 
   static Future<void> registerTeam(String username, String teamName,
       String charityName, String donationGoal) async {
-    final String url = '$baseUrl/register/profile/register/team';
+    final String url = '$baseURL/register/profile/register/team';
 
     Map<String, String> requestBody = {
       'username': username,
@@ -98,7 +98,7 @@ class ApiUtils {
 
   static Future<List<String>> fetchTeamsFromAPI() async {
     final response = await http.get(
-      Uri.parse('$baseUrl/all/teams'),
+      Uri.parse('$baseURL/all/teams'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         _apiKeyHeader: _apiKey,
@@ -114,7 +114,7 @@ class ApiUtils {
   }
 
   static Future<void> joinTeam(String username, String teamName) async {
-    final String url = '$baseUrl/register/profile/join/team';
+    final String url = '$baseURL/register/profile/join/team';
 
     Map<String, String> requestBody = {
       'username': username,
@@ -139,7 +139,7 @@ class ApiUtils {
   static Future<double> fetchDonations(String? username) async {
     try {
       var response = await http.get(
-        Uri.parse('$baseUrl/team/$username/donatedAmount'),
+        Uri.parse('$baseURL/team/$username/donatedAmount'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
           _apiKeyHeader: _apiKey,
@@ -161,7 +161,7 @@ class ApiUtils {
   static Future<double> fetchGoal(String? username) async {
     try {
       var response = await http.get(
-        Uri.parse('$baseUrl/team/$username/donationGoal'),
+        Uri.parse('$baseURL/team/$username/donationGoal'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
           _apiKeyHeader: _apiKey,
@@ -183,7 +183,7 @@ class ApiUtils {
   static Future<String?> fetchTeamName(String? username) async {
     try {
       var response = await http.get(
-        Uri.parse('$baseUrl/team/$username'),
+        Uri.parse('$baseURL/team/$username'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
           _apiKeyHeader: _apiKey,
@@ -205,7 +205,7 @@ class ApiUtils {
   static Future<String?> fetchCompanyName(String? username) async {
     try {
       var response = await http.get(
-        Uri.parse('$baseUrl/team/$username'),
+        Uri.parse('$baseURL/team/$username'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
           _apiKeyHeader: _apiKey,
@@ -227,7 +227,7 @@ class ApiUtils {
   static Future<String?> fetchCharityName(String? username) async {
     try {
       var response = await http.get(
-        Uri.parse('$baseUrl/team/$username'),
+        Uri.parse('$baseURL/team/$username'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
           _apiKeyHeader: _apiKey,
@@ -249,7 +249,7 @@ class ApiUtils {
   static Future<int?> fetchFundraiserBox(String? username) async {
     try {
       var response = await http.get(
-        Uri.parse('$baseUrl/team/$username'),
+        Uri.parse('$baseURL/team/$username'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
           _apiKeyHeader: _apiKey,
@@ -271,7 +271,7 @@ class ApiUtils {
   static Future<List<String>?> fetchMembers(String? username) async {
     try {
       var response = await http.get(
-        Uri.parse('$baseUrl/team/$username'),
+        Uri.parse('$baseURL/team/$username'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
           _apiKeyHeader: _apiKey,
@@ -296,7 +296,7 @@ class ApiUtils {
   static Future<String?> fetchChallengeStatus(String? username) async {
     try {
       var response = await http.get(
-        Uri.parse('$baseUrl/$username/challenge'),
+        Uri.parse('$baseURL/$username/challenge'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
           _apiKeyHeader: _apiKey,
@@ -318,7 +318,7 @@ class ApiUtils {
 
   static Future<List<Team>> fetchTeamsWithBoxAndCompanyName() async {
     final response = await http.get(
-      Uri.parse('$baseUrl/all/teamswithbox'),
+      Uri.parse('$baseURL/all/teamswithbox'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         _apiKeyHeader: _apiKey,
