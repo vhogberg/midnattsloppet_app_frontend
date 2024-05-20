@@ -51,11 +51,19 @@ class _RegisterPage extends State<RegisterPage> {
       if (response.statusCode >= 200 && response.statusCode < 300) {
         return response.body;
       } else {
-        throw Exception('Failed to register: ${response.statusCode} - ${response.body}');
+        throw Exception(
+            'Failed to register: ${response.statusCode} - ${response.body}');
       }
     } catch (e) {
       throw Exception('Failed to register: $e');
     }
+  }
+
+  bool isValidEmail(String email) {
+    // Define the email pattern
+    String emailRegex = r'^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$';
+    RegExp regex = RegExp(emailRegex);
+    return regex.hasMatch(email);
   }
 
   @override
@@ -87,7 +95,7 @@ class _RegisterPage extends State<RegisterPage> {
                 const SizedBox(height: 25),
                 MyTextField(
                   controller: emailController,
-                  hintText: 'Användarnamn',
+                  hintText: 'E-postadress',
                   obscureText: false,
                 ),
                 const SizedBox(height: 10),
@@ -119,7 +127,15 @@ class _RegisterPage extends State<RegisterPage> {
 
                     if (username.isEmpty || password.isEmpty) {
                       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                        content: Text('Vänligen ange både användarnamn och lösenord.'),
+                        content: Text(
+                            'Vänligen ange både e-postadress och lösenord.'),
+                      ));
+                      return;
+                    }
+
+                    if (!isValidEmail(username)) {
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        content: Text('Vänligen ange en giltig e-postadress.'),
                       ));
                       return;
                     }
@@ -138,14 +154,18 @@ class _RegisterPage extends State<RegisterPage> {
                       Navigator.of(context).pop();
 
                       if (response.contains("User registered successfully")) {
-                        SessionManager.instance.loginUser(username, password).then((_) {
+                        SessionManager.instance
+                            .loginUser(username, password)
+                            .then((_) {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => CompleteProfilePage()),
+                            MaterialPageRoute(
+                                builder: (context) => CompleteProfilePage()),
                           );
                         }).catchError((error) {
                           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                            content: Text('Failed to save session token: $error'),
+                            content:
+                                Text('Failed to save session token: $error'),
                           ));
                         });
                       } else if (response.contains("Username already exists")) {

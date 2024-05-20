@@ -89,7 +89,7 @@ class _CompleteProfilePage extends State<CompleteProfilePage> {
                 const SizedBox(height: 20),
                 MyTextField(
                   controller: nameController,
-                  hintText: 'Namn',
+                  hintText: 'Användarnamn',
                   obscureText: false,
                 ),
                 const SizedBox(height: 10),
