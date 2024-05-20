@@ -18,6 +18,8 @@ void main() async {
   // se till att notifikationsklass alltid körs
   await LocalNotifications.init();
   DailyAbsenceCheck().dailyNotification();
+  ScheduledNotification().notification50DaysLeft();
+  ScheduledNotification().notification100DaysLet();
 
 // NOTIFIKATIONER
   //  hantera  i vissa states
@@ -59,10 +61,22 @@ class MyApp extends StatelessWidget {
 
 class DailyAbsenceCheck {
   void dailyNotification() {
-    LocalNotifications.cancelAll();
+    LocalNotifications.cancel(1);
     LocalNotifications.showPeriodicNotifications(
         title: "Gå in i appen och se hur erat lag ligger till!",
         body: "Kolla på sidorna för lapkamp och topplista för mer information",
         payload: "notification_page");
+  }
+}
+
+class ScheduledNotification {
+  void notification50DaysLeft() {
+    LocalNotifications.showNotificationWhen50DaysLeft(
+        id: 10, title: "50 Dagar kvar till loppet!", body: "Nu är det bara 50 dagar kvar!", payload: "50 dagar");
+  }
+
+  void notification100DaysLet() {
+    LocalNotifications.showNotificationWhen100DaysLeft(
+        id: 20, title: "100 Dagar kvar till loppet!", body: "Nu är det bara 100 dagar kvar!", payload: "100 dagar");
   }
 }
