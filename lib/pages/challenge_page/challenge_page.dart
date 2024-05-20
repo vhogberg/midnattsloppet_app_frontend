@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_application/components/custom_app_bar.dart';
+import 'package:flutter_application/pages/challenge_page/challenge_wizard_dialog.dart';
 import 'package:flutter_application/session_manager.dart';
 import 'package:http/http.dart' as http;
 import 'package:iconsax/iconsax.dart';
@@ -31,6 +32,7 @@ class _ChallengePageState extends State<ChallengePage> {
     username = SessionManager.instance.username;
   }
 
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -52,28 +54,7 @@ class _ChallengePageState extends State<ChallengePage> {
                 'images/CompetitionImage.png',
                 fit: BoxFit.fitWidth, //  Anpassa bildens bredd horisontellt
               ),
-              const SizedBox(height: 6), // lite vertikalt space under bilden
-
-              // Sökfältknapp
-              Padding(
-                padding: const EdgeInsets.only(
-                    top: 10, bottom: 10), // space över och under sökfältet
-                child: TextField(
-                  controller: searchController,
-                  onChanged: (value) {
-                    filterSearchResults(value);
-                  },
-                  onTap: () {
-                    _showSearchResultsPopup(context);
-                  },
-                  decoration: InputDecoration(
-                    hintText: 'Sök upp lag att utmana...',
-                    prefixIcon: Icon(Icons.search),
-                    border: OutlineInputBorder(),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 4), // lite vertikalt mellanrum
+              const SizedBox(height: 16), // lite vertikalt space under bilden
               const Align(
                 alignment: Alignment.centerLeft,
                 child: Column(
@@ -123,32 +104,13 @@ class _ChallengePageState extends State<ChallengePage> {
                   children: [
                     Expanded(
                       child: GestureDetector(
-                        // Skicka iväg utmaningslogik nedan
-                        onTap: () async {
-                          final String url =
-                              'https://group-15-7.pvt.dsv.su.se/app/${username}/createchallenge';
-                          final Map<String, String> requestData = {
-                            'name': 'Mitt challenge namn', // namn
-                            'description':
-                                'Min challenge beskrivning', // beskrivning
-                            'challenger':
-                                selectedTeam!, // Antar att man har ett selected team
-                          };
-
-                          final response = await http.post(
-                            Uri.parse(url),
-                            body: jsonEncode(requestData),
-                            headers: {'Content-Type': 'application/json'},
+                        onTap: () {
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return WizardDialog();
+                            },
                           );
-
-                          // error hantering
-                          if (response.statusCode == 200) {
-                            // Challenge created successfully, handle response if needed
-                            print('Challenge sent successfully');
-                          } else {
-                            // Handle error response
-                            print('Failed to send challenge: ${response.body}');
-                          }
                         },
                         child: Container(
                           decoration: BoxDecoration(
@@ -170,7 +132,7 @@ class _ChallengePageState extends State<ChallengePage> {
                               ),
                               const SizedBox(width: 10),
                               const Text(
-                                'Skicka iväg utmaningen!',
+                                'Starta en lagkamp',
                                 style: TextStyle(
                                   color: Colors.white,
                                   fontSize: 18,
@@ -192,10 +154,22 @@ class _ChallengePageState extends State<ChallengePage> {
                 ),
               ),
 
+              Padding(
+                
+                      padding: EdgeInsets.only(bottom: 2.0, top: 20.0), // space nedåt
+                      child: Text(
+                        'Inbox',
+                        style: TextStyle(
+                          fontSize: 20.0,
+                          fontFamily: 'Sora',
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
               Container(
                 margin: const EdgeInsets.symmetric(
                     vertical:
-                        12.0), // maringal vertikalt mellan skicka-iväg knapp och inbox-låda
+                      3.0), // maringal vertikalt mellan skicka-iväg knapp och inbox-låda
                 padding: const EdgeInsets.all(
                     20.0), // space-hantering inuti inbox-låda
                 decoration: BoxDecoration(
@@ -221,7 +195,6 @@ class _ChallengePageState extends State<ChallengePage> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               ElevatedButton(
-                                
                                 // Acceptera lagkamp logik här
                                 onPressed: () async {
                                   challengeFate = 'ACCEPTED';
@@ -281,7 +254,7 @@ class _ChallengePageState extends State<ChallengePage> {
                                   );
 
                                   if (response.statusCode == 200) {
-                                    // Challenge avböjd lyckat 
+                                    // Challenge avböjd lyckat
                                     print('Challenge declined successfully');
                                   } else {
                                     // Handle error response
@@ -352,84 +325,80 @@ class _ChallengePageState extends State<ChallengePage> {
   }
 
   // Sökresultat pop-up ruta när man klickar sökfältet.
-  void _showSearchResultsPopup(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return StatefulBuilder(
-          builder: (context, setState) {
-            return Dialog(
-              insetPadding: EdgeInsets.all(20.0),
-              child: WillPopScope(
-                onWillPop: () async {
-                  searchController.clear();
-                  return true;
-                },
-                child: Container(
-                  width: MediaQuery.of(context).size.width * 0.8 +
-                      45, // bredd pop-up
-                  height:
-                      MediaQuery.of(context).size.height * 0.5, // höjd pop-up
-                  child: Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(20.0),
-                        child: TextField(
-                          controller: searchController,
-                          decoration: InputDecoration(
-                            hintText: 'Ange lagnamn...',
-                            prefixIcon: Icon(Icons.search),
-                            border: OutlineInputBorder(),
-                          ),
-                          onChanged: (value) {
-                            setState(() {
-                              filterSearchResults(value);
-                            });
-                          },
+  // challenge_page.dart (add this method inside _ChallengePageState)
+void _showSearchResultsPopup(BuildContext context, {Function(String)? onTeamSelected}) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return StatefulBuilder(
+        builder: (context, setState) {
+          return Dialog(
+            insetPadding: EdgeInsets.all(20.0),
+            child: WillPopScope(
+              onWillPop: () async {
+                searchController.clear();
+                return true;
+              },
+              child: Container(
+                width: MediaQuery.of(context).size.width * 0.8 + 45,
+                height: MediaQuery.of(context).size.height * 0.5,
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(20.0),
+                      child: TextField(
+                        controller: searchController,
+                        decoration: InputDecoration(
+                          hintText: 'Ange lagnamn...',
+                          prefixIcon: Icon(Icons.search),
+                          border: OutlineInputBorder(),
                         ),
+                        onChanged: (value) {
+                          setState(() {
+                            filterSearchResults(value);
+                          });
+                        },
                       ),
-                      // Generera lista av teams inuti pop-up
-                      Expanded(
-                        child: ListView.builder(
-                          itemCount: filteredTeams.length,
-                          itemBuilder: (context, index) {
-                            return ListTile(
-                              title: Text(
-                                filteredTeams[index],
-                                style: TextStyle(
-                                  fontSize: 18.0,
-                                  fontWeight: FontWeight.bold,
-                                ),
+                    ),
+                    Expanded(
+                      child: ListView.builder(
+                        itemCount: filteredTeams.length,
+                        itemBuilder: (context, index) {
+                          return ListTile(
+                            title: Text(
+                              filteredTeams[index],
+                              style: TextStyle(
+                                fontSize: 18.0,
+                                fontWeight: FontWeight.bold,
                               ),
-                              onTap: () {
-                                setState(() {
-                                  selectedTeam = filteredTeams[index];
-                                });
-                                Navigator.pop(context);
-                              },
-                              selected: selectedTeam == filteredTeams[index],
-                            );
-                          },
-                        ),
+                            ),
+                            onTap: () {
+                              setState(() {
+                                selectedTeam = filteredTeams[index];
+                                if (onTeamSelected != null) {
+                                  onTeamSelected!(selectedTeam!);
+                                }
+                              });
+                              Navigator.pop(context);
+                            },
+                            selected: selectedTeam == filteredTeams[index],
+                          );
+                        },
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
-            );
-          },
-        );
-      },
-    ).then((value) {
-      // Töm tidigare sökningar när pop-up stängs eller team väljs
-      searchController.clear();
-    });
+            ),
+          );
+        },
+      );
+    },
+  ).then((value) {
+    searchController.clear();
+  });
+}
 
-    // Töm tidigare filtrerade teams
-    filteredTeams.clear();
-    // Lägg till alla teams igen
-    filteredTeams.addAll(teams);
-  }
 
 // Metod för att filtrera sökresultat
   void filterSearchResults(String query) {
@@ -463,3 +432,37 @@ class _ChallengePageState extends State<ChallengePage> {
     }
   }
 }
+
+
+
+
+/**
+ * 
+ * // Skicka iväg utmaningslogik nedan
+                        onTap: () async {
+                          final String url =
+                              'https://group-15-7.pvt.dsv.su.se/app/${username}/createchallenge';
+                          final Map<String, String> requestData = {
+                            'name': 'Mitt challenge namn', // namn
+                            'description':
+                                'Min challenge beskrivning', // beskrivning
+                            'challenger':
+                                selectedTeam!, // Antar att man har ett selected team
+                          };
+
+                          final response = await http.post(
+                            Uri.parse(url),
+                            body: jsonEncode(requestData),
+                            headers: {'Content-Type': 'application/json'},
+                          );
+
+                          // error hantering
+                          if (response.statusCode == 200) {
+                            // Challenge created successfully, handle response if needed
+                            print('Challenge sent successfully');
+                          } else {
+                            // Handle error response
+                            print('Failed to send challenge: ${response.body}');
+                          }
+                        },
+ */
