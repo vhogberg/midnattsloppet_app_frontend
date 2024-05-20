@@ -1,7 +1,8 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
+import 'package:flutter_application/api_utils/api_utils.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import 'package:http/http.dart' as http;
 
 class SessionManager {
   static final SessionManager _instance = SessionManager._internal();
@@ -44,28 +45,62 @@ class SessionManager {
   }
 
   Future<String> loginUser(String username, String password) async {
-    final url = Uri.parse('https://group-15-7.pvt.dsv.su.se/app/login');
+    final url = 'https://group-15-7.pvt.dsv.su.se/app/login';
     final credentials = {'username': username, 'password': password};
-    final jsonBody = jsonEncode(credentials);
+    final response = await ApiUtils.post(url, credentials);
+
+    if (response.statusCode == 200) {
+      final String sessionToken = response.body;
+      await saveSessionToken(sessionToken);
+      return sessionToken;
+    } else {
+      throw Exception('Failed to login: ${response.statusCode}');
+    }
+  }
+
+  Future<String> registerUser(String username, String password) async {
+    final url = 'https://group-15-7.pvt.dsv.su.se/app/register';
+    final credentials = {'username': username, 'password': password};
 
     try {
-      final response = await http.post(
+      final response = await ApiUtils.post(
         url,
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-        },
-        body: jsonBody,
+        credentials,
       );
 
-      if (response.statusCode == 200) {
-        final String sessionToken = response.body;
-        await saveSessionToken(sessionToken);
-        return sessionToken;
+      if (response.statusCode >= 200 && response.statusCode < 300) {
+        return response.body;
       } else {
-        throw Exception('Failed to login: ${response.statusCode}');
+        throw Exception(
+            'Failed to register: ${response.statusCode} - ${response.body}');
       }
     } catch (e) {
-      throw Exception('Failed to login: $e');
+      throw Exception('Failed to register: $e');
+    }
+  }
+
+  Future<void> completeProfile(
+      String username, String name, String voucherCode) async {
+    final url = 'https://group-15-7.pvt.dsv.su.se/app/register/profile';
+    final payload = {
+      'username': username,
+      'name': name,
+      'voucherCode': voucherCode,
+    };
+
+    try {
+      final response = await ApiUtils.post(url, payload);
+
+      if (response.statusCode == 200) {
+        // Handle success response
+        print('Profile updated successfully');
+      } else {
+        // Handle error response
+        print('Error: ${response.body}');
+      }
+    } catch (e) {
+      // Handle exceptions
+      print('Exception: $e');
     }
   }
 
@@ -74,19 +109,15 @@ class SessionManager {
       final SharedPreferences prefs = await SharedPreferences.getInstance();
       final String? sessionToken = prefs.getString(_sessionKey);
       if (sessionToken != null) {
-        // Call logout endpoint on the backend
-        final url = Uri.parse('https://group-15-7.pvt.dsv.su.se/app/logout');
-        final response = await http.post(
+        final url = 'https://group-15-7.pvt.dsv.su.se/app/logout';
+        final response = await ApiUtils.logout(
           url,
-          headers: <String, String>{
-            'Authorization':
-                'Bearer $sessionToken', // Include session token in the request header
+          headers: {
+            'Authorization': 'Bearer $sessionToken',
           },
         );
         if (response.statusCode == 200) {
-          // Clear session token from local storage
           prefs.remove(_sessionKey);
-          // Navigate back to the login screen and remove all routes on top
           Navigator.pushNamedAndRemoveUntil(context, '/', (route) => false);
           print("Logout successful");
         } else {

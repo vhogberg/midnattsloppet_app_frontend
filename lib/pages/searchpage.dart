@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application/api_utils/api_utils.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
@@ -17,7 +18,7 @@ class _SearchPageState extends State<SearchPage> {
   @override
   void initState() {
     super.initState();
-    fetchEntitiesFromAPI();
+    fetchTeams();
   }
 
   @override
@@ -97,25 +98,23 @@ class _SearchPageState extends State<SearchPage> {
     );
   }
 
-  Future<void> fetchEntitiesFromAPI() async {
-    final response = await http
-        .get(Uri.parse('https://group-15-7.pvt.dsv.su.se/app/all/teams'));
-    if (response.statusCode == 200) {
-      final List<dynamic> data = jsonDecode(response.body);
+  Future<void> fetchTeams() async {
+    try {
+      final data = await ApiUtils.fetchTeamsFromAPI();
       setState(() {
-        teams = List<String>.from(data);
+        teams = data;
         filteredTeams.addAll(teams);
       });
-    } else {
-      throw Exception('Failed to load teams from API');
+    } catch (e) {
+      print('Failed to fetch teams: $e');
     }
   }
 
   void _filterTeams(String searchTerm) {
     setState(() {
       filteredTeams = teams
-          .where((team) =>
-              team.toLowerCase().contains(searchTerm.toLowerCase()))
+          .where(
+              (team) => team.toLowerCase().contains(searchTerm.toLowerCase()))
           .toList();
     });
   }

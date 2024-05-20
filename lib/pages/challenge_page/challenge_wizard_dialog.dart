@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_application/api_utils/api_utils.dart';
 import 'package:http/http.dart' as http;
 
 class WizardDialog extends StatefulWidget {
@@ -22,7 +23,7 @@ class _WizardDialogState extends State<WizardDialog> {
   @override
   void initState() {
     super.initState();
-    fetchTeamsFromAPI();
+    fetchTeams();
     fetchUserTeam(); // används för titel på lagkamp, t.ex "mitt lag vs nordea lag 7", mitt lag ersätts med användarens lag.
   }
 
@@ -184,22 +185,15 @@ class _WizardDialogState extends State<WizardDialog> {
   }
 
   // Hämta team för sökfunktionen för API
-  Future<void> fetchTeamsFromAPI() async {
+  Future<void> fetchTeams() async {
     try {
-      final response = await http
-          .get(Uri.parse('https://group-15-7.pvt.dsv.su.se/app/all/teams'));
-      if (response.statusCode == 200) {
-        final List<dynamic> data = jsonDecode(response.body);
-        setState(() {
-          teams = List<String>.from(data.map((item) => item as String));
-          filteredTeams = List.from(teams);
-        });
-        print('Teams fetched: $teams');
-      } else {
-        throw Exception('Failed to load teams from API');
-      }
-    } catch (error) {
-      print('Error fetching teams: $error');
+      final data = await ApiUtils.fetchTeamsFromAPI();
+      setState(() {
+        teams = data;
+        filteredTeams.addAll(teams);
+      });
+    } catch (e) {
+      print('Failed to fetch teams: $e');
     }
   }
 
@@ -278,10 +272,9 @@ class _WizardDialogState extends State<WizardDialog> {
     return Padding(
       padding: const EdgeInsets.all(20.0),
       child: Card(
-        elevation: 4, 
+        elevation: 4,
         shape: RoundedRectangleBorder(
-          borderRadius:
-              BorderRadius.circular(10), 
+          borderRadius: BorderRadius.circular(10),
         ),
         child: Padding(
           padding: const EdgeInsets.all(20.0),
@@ -330,35 +323,17 @@ class _WizardDialogState extends State<WizardDialog> {
     );
   }
 
-  // hämta användarens lag de är med i 
+// hämta användarens lag de är med i
   Future<void> fetchUserTeam() async {
     try {
       // Replace 'username' with the actual username
       String? username = 'username';
-      String? teamName = await fetchTeamName(username);
+      String? teamName = await ApiUtils.fetchTeamName(username);
       setState(() {
         userTeam = teamName;
       });
     } catch (e) {
       print('Error fetching user team: $e');
-    }
-  }
-
-  // hämta användarens lag de är med i stödmetod
-  static Future<String?> fetchTeamName(String? username) async {
-    try {
-      var response = await http.get(
-          Uri.parse('https://group-15-7.pvt.dsv.su.se/app/team/$username'));
-
-      if (response.statusCode == 200) {
-        Map<String, dynamic> data = jsonDecode(response.body);
-        return data['name'];
-      } else {
-        throw Exception('Failed to fetch team name');
-      }
-    } catch (e) {
-      print('Error fetching team name: $e');
-      rethrow;
     }
   }
 }

@@ -49,8 +49,8 @@ class _MyTeamPageState extends State<MyTeamPage> {
 
   Future<void> fetchLeaderboardData() async {
     try {
-      final response = await http.get(
-          Uri.parse('https://group-15-7.pvt.dsv.su.se/app/all/teamswithbox'));
+      final response = await ApiUtils.get(
+          ('https://group-15-7.pvt.dsv.su.se/app/all/teamswithbox'));
 
       if (response.statusCode == 200) {
         final List<dynamic> data = jsonDecode(response.body);

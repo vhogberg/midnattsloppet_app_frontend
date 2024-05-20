@@ -26,39 +26,6 @@ class _RegisterPage extends State<RegisterPage> {
     username = SessionManager.instance.username;
   }
 
-  Future<String> registerUser(String username, String password) async {
-    final url = Uri.parse('https://group-15-7.pvt.dsv.su.se/app/register');
-    final credentials = {'username': username, 'password': password};
-    final jsonBody = jsonEncode(credentials);
-
-    if (passwordController.text != confirmPasswordController.text) {
-      throw Exception("Passwords don't match");
-    }
-
-    try {
-      final response = await http.post(
-        url,
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-        },
-        body: jsonBody,
-      );
-
-      // Log response for debugging
-      print('Response status: ${response.statusCode}');
-      print('Response body: ${response.body}');
-
-      if (response.statusCode >= 200 && response.statusCode < 300) {
-        return response.body;
-      } else {
-        throw Exception(
-            'Failed to register: ${response.statusCode} - ${response.body}');
-      }
-    } catch (e) {
-      throw Exception('Failed to register: $e');
-    }
-  }
-
   bool isValidEmail(String email) {
     // Define the email pattern
     String emailRegex = r'^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$';
@@ -150,7 +117,9 @@ class _RegisterPage extends State<RegisterPage> {
                       },
                     );
 
-                    registerUser(username, password).then((response) {
+                    SessionManager.instance
+                        .registerUser(username, password)
+                        .then((response) {
                       Navigator.of(context).pop();
 
                       if (response.contains("User registered successfully")) {

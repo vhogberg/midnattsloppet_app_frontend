@@ -1,10 +1,10 @@
-import 'dart:convert';
+import 'package:http/http.dart' as http;
 
 import 'package:flutter/material.dart';
+import 'package:flutter_application/api_utils/api_utils.dart';
 import 'package:flutter_application/components/custom_app_bar.dart';
 import 'package:flutter_application/pages/challenge_page/challenge_wizard_dialog.dart';
 import 'package:flutter_application/session_manager.dart';
-import 'package:http/http.dart' as http;
 import 'package:iconsax/iconsax.dart';
 
 class ChallengePage extends StatefulWidget {
@@ -28,11 +28,10 @@ class _ChallengePageState extends State<ChallengePage> {
   void initState() {
     super.initState();
     filteredTeams.addAll(teams);
-    fetchEntitiesFromAPI();
+    fetchTeams();
     username = SessionManager.instance.username;
   }
 
-  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -155,21 +154,20 @@ class _ChallengePageState extends State<ChallengePage> {
               ),
 
               Padding(
-                
-                      padding: EdgeInsets.only(bottom: 2.0, top: 20.0), // space nedåt
-                      child: Text(
-                        'Inbox',
-                        style: TextStyle(
-                          fontSize: 20.0,
-                          fontFamily: 'Sora',
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
+                padding: EdgeInsets.only(bottom: 2.0, top: 20.0), // space nedåt
+                child: Text(
+                  'Inbox',
+                  style: TextStyle(
+                    fontSize: 20.0,
+                    fontFamily: 'Sora',
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
               Container(
                 margin: const EdgeInsets.symmetric(
                     vertical:
-                      3.0), // maringal vertikalt mellan skicka-iväg knapp och inbox-låda
+                        3.0), // maringal vertikalt mellan skicka-iväg knapp och inbox-låda
                 padding: const EdgeInsets.all(
                     20.0), // space-hantering inuti inbox-låda
                 decoration: BoxDecoration(
@@ -200,7 +198,7 @@ class _ChallengePageState extends State<ChallengePage> {
                                   challengeFate = 'ACCEPTED';
                                   final String url =
                                       'https://group-15-7.pvt.dsv.su.se/app/${username}/acceptchallenge/${challengeFate}';
-
+                                  //anropa ApiUtils här, alla api anrop skall ske därifrån f r o m nu
                                   final response = await http.post(
                                     Uri.parse(url),
                                     // ytterligare data?
@@ -247,7 +245,7 @@ class _ChallengePageState extends State<ChallengePage> {
                                   challengeFate = 'DECLINED';
                                   final String url =
                                       'https://group-15-7.pvt.dsv.su.se/app/${username}/acceptchallenge/${challengeFate}';
-
+                                  //anropa ApiUtils här, alla api anrop skall ske därifrån f r o m nu
                                   final response = await http.post(
                                     Uri.parse(url),
                                     // ytterligare data?
@@ -326,79 +324,79 @@ class _ChallengePageState extends State<ChallengePage> {
 
   // Sökresultat pop-up ruta när man klickar sökfältet.
   // challenge_page.dart (add this method inside _ChallengePageState)
-void _showSearchResultsPopup(BuildContext context, {Function(String)? onTeamSelected}) {
-  showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return StatefulBuilder(
-        builder: (context, setState) {
-          return Dialog(
-            insetPadding: EdgeInsets.all(20.0),
-            child: WillPopScope(
-              onWillPop: () async {
-                searchController.clear();
-                return true;
-              },
-              child: Container(
-                width: MediaQuery.of(context).size.width * 0.8 + 45,
-                height: MediaQuery.of(context).size.height * 0.5,
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(20.0),
-                      child: TextField(
-                        controller: searchController,
-                        decoration: InputDecoration(
-                          hintText: 'Ange lagnamn...',
-                          prefixIcon: Icon(Icons.search),
-                          border: OutlineInputBorder(),
+  void _showSearchResultsPopup(BuildContext context,
+      {Function(String)? onTeamSelected}) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return Dialog(
+              insetPadding: EdgeInsets.all(20.0),
+              child: WillPopScope(
+                onWillPop: () async {
+                  searchController.clear();
+                  return true;
+                },
+                child: Container(
+                  width: MediaQuery.of(context).size.width * 0.8 + 45,
+                  height: MediaQuery.of(context).size.height * 0.5,
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(20.0),
+                        child: TextField(
+                          controller: searchController,
+                          decoration: InputDecoration(
+                            hintText: 'Ange lagnamn...',
+                            prefixIcon: Icon(Icons.search),
+                            border: OutlineInputBorder(),
+                          ),
+                          onChanged: (value) {
+                            setState(() {
+                              filterSearchResults(value);
+                            });
+                          },
                         ),
-                        onChanged: (value) {
-                          setState(() {
-                            filterSearchResults(value);
-                          });
-                        },
                       ),
-                    ),
-                    Expanded(
-                      child: ListView.builder(
-                        itemCount: filteredTeams.length,
-                        itemBuilder: (context, index) {
-                          return ListTile(
-                            title: Text(
-                              filteredTeams[index],
-                              style: TextStyle(
-                                fontSize: 18.0,
-                                fontWeight: FontWeight.bold,
+                      Expanded(
+                        child: ListView.builder(
+                          itemCount: filteredTeams.length,
+                          itemBuilder: (context, index) {
+                            return ListTile(
+                              title: Text(
+                                filteredTeams[index],
+                                style: TextStyle(
+                                  fontSize: 18.0,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
-                            ),
-                            onTap: () {
-                              setState(() {
-                                selectedTeam = filteredTeams[index];
-                                if (onTeamSelected != null) {
-                                  onTeamSelected!(selectedTeam!);
-                                }
-                              });
-                              Navigator.pop(context);
-                            },
-                            selected: selectedTeam == filteredTeams[index],
-                          );
-                        },
+                              onTap: () {
+                                setState(() {
+                                  selectedTeam = filteredTeams[index];
+                                  if (onTeamSelected != null) {
+                                    onTeamSelected!(selectedTeam!);
+                                  }
+                                });
+                                Navigator.pop(context);
+                              },
+                              selected: selectedTeam == filteredTeams[index],
+                            );
+                          },
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
-            ),
-          );
-        },
-      );
-    },
-  ).then((value) {
-    searchController.clear();
-  });
-}
-
+            );
+          },
+        );
+      },
+    ).then((value) {
+      searchController.clear();
+    });
+  }
 
 // Metod för att filtrera sökresultat
   void filterSearchResults(String query) {
@@ -418,17 +416,15 @@ void _showSearchResultsPopup(BuildContext context, {Function(String)? onTeamSele
   }
 
 // Hämta lag från API
-  Future<void> fetchEntitiesFromAPI() async {
-    final response = await http
-        .get(Uri.parse('https://group-15-7.pvt.dsv.su.se/app/all/teams'));
-    if (response.statusCode == 200) {
-      final List<dynamic> data = jsonDecode(response.body);
+  Future<void> fetchTeams() async {
+    try {
+      final data = await ApiUtils.fetchTeamsFromAPI();
       setState(() {
-        teams = List<String>.from(data);
+        teams = data;
         filteredTeams.addAll(teams);
       });
-    } else {
-      throw Exception('Failed to load teams from API');
+    } catch (e) {
+      print('Failed to fetch teams: $e');
     }
   }
 }

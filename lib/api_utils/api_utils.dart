@@ -4,10 +4,147 @@ import 'package:flutter_application/models/team.dart';
 import 'package:http/http.dart' as http;
 
 class ApiUtils {
+  static const String _apiKeyHeader = 'X-API-KEY';
+  static const String _apiKey =
+      '8292EB40F91DCF46950913B1ECC1AB22ED3F7C7491186059D7FAF71D161D791F';
+  static const String baseUrl = 'https://group-15-7.pvt.dsv.su.se/app';
+
+  static Future<http.Response> get(String url) async {
+    return await http.get(
+      Uri.parse(url),
+      headers: {_apiKeyHeader: _apiKey},
+    );
+  }
+
+  static Future<http.Response> post(String url, dynamic body) async {
+    return await http.post(
+      Uri.parse(url),
+      headers: {
+        _apiKeyHeader: _apiKey,
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: utf8.encode(jsonEncode(body)),
+    );
+  }
+
+  static Future<http.Response> logout(String url,
+      {Map<String, String>? headers, dynamic body}) async {
+    try {
+      final response = await http.post(
+        Uri.parse(url),
+        headers: _buildHeaders(headers),
+        body: body != null ? jsonEncode(body) : null,
+      );
+      return response;
+    } catch (e) {
+      throw Exception('Failed to send request: $e');
+    }
+  }
+
+  static Map<String, String> _buildHeaders(
+      Map<String, String>? additionalHeaders) {
+    Map<String, String> headers = {
+      'Content-Type': 'application/json; charset=UTF-8',
+      _apiKeyHeader: _apiKey,
+    };
+    if (additionalHeaders != null) {
+      headers.addAll(additionalHeaders);
+    }
+    return headers;
+  }
+
+  static Future<List<String>> fetchCharitiesFromAPI() async {
+    final response = await http.get(
+      Uri.parse('$baseUrl/all/charities'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        _apiKeyHeader: _apiKey,
+      },
+    );
+
+    if (response.statusCode == 200) {
+      final List<dynamic> data = jsonDecode(utf8.decode(response.bodyBytes));
+      return List<String>.from(data);
+    } else {
+      throw Exception('Failed to load charities from API');
+    }
+  }
+
+  static Future<void> registerTeam(String username, String teamName,
+      String charityName, String donationGoal) async {
+    final String url = '$baseUrl/register/profile/register/team';
+
+    Map<String, String> requestBody = {
+      'username': username,
+      'teamName': teamName,
+      'charityName': charityName,
+      'donationGoal': donationGoal,
+    };
+
+    final response = await http.post(
+      Uri.parse(url),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        _apiKeyHeader: _apiKey,
+      },
+      body: jsonEncode(requestBody),
+    );
+
+    if (response.statusCode != 200) {
+      throw Exception(
+          'Failed to register team: ${response.statusCode} ${response.body}');
+    }
+  }
+
+  static Future<List<String>> fetchTeamsFromAPI() async {
+    final response = await http.get(
+      Uri.parse('$baseUrl/all/teams'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        _apiKeyHeader: _apiKey,
+      },
+    );
+
+    if (response.statusCode == 200) {
+      final List<dynamic> data = jsonDecode(utf8.decode(response.bodyBytes));
+      return List<String>.from(data);
+    } else {
+      throw Exception('Failed to load charities from API');
+    }
+  }
+
+  static Future<void> joinTeam(String username, String teamName) async {
+    final String url = '$baseUrl/register/profile/join/team';
+
+    Map<String, String> requestBody = {
+      'username': username,
+      'teamName': teamName,
+    };
+
+    final response = await http.post(
+      Uri.parse(url),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        _apiKeyHeader: _apiKey,
+      },
+      body: jsonEncode(requestBody),
+    );
+
+    if (response.statusCode != 200) {
+      throw Exception(
+          'Failed to join team: ${response.statusCode} ${response.body}');
+    }
+  }
+
   static Future<double> fetchDonations(String? username) async {
     try {
-      var response = await http.get(Uri.parse(
-          'https://group-15-7.pvt.dsv.su.se/app/team/$username/donatedAmount'));
+      var response = await http.get(
+        Uri.parse('$baseUrl/team/$username/donatedAmount'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          _apiKeyHeader: _apiKey,
+        },
+      );
 
       if (response.statusCode == 200) {
         double donations = double.parse(response.body);
@@ -17,14 +154,19 @@ class ApiUtils {
       }
     } catch (e) {
       print('Error fetching donations: $e');
-      rethrow; // Rethrow the exception to handle it in the calling code
+      rethrow;
     }
   }
 
   static Future<double> fetchGoal(String? username) async {
     try {
-      var response = await http.get(Uri.parse(
-          'https://group-15-7.pvt.dsv.su.se/app/team/$username/donationGoal'));
+      var response = await http.get(
+        Uri.parse('$baseUrl/team/$username/donationGoal'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          _apiKeyHeader: _apiKey,
+        },
+      );
 
       if (response.statusCode == 200) {
         double goal = double.parse(response.body);
@@ -34,17 +176,22 @@ class ApiUtils {
       }
     } catch (e) {
       print('Error fetching goal: $e');
-      rethrow; // Rethrow the exception to handle it in the calling code
+      rethrow;
     }
   }
 
   static Future<String?> fetchTeamName(String? username) async {
     try {
       var response = await http.get(
-          Uri.parse('https://group-15-7.pvt.dsv.su.se/app/team/$username'));
+        Uri.parse('$baseUrl/team/$username'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          _apiKeyHeader: _apiKey,
+        },
+      );
 
       if (response.statusCode == 200) {
-        Map<String, dynamic> data = jsonDecode(response.body);
+        Map<String, dynamic> data = jsonDecode(utf8.decode(response.bodyBytes));
         return data['name'];
       } else {
         throw Exception('Failed to fetch team name');
@@ -58,10 +205,15 @@ class ApiUtils {
   static Future<String?> fetchCompanyName(String? username) async {
     try {
       var response = await http.get(
-          Uri.parse('https://group-15-7.pvt.dsv.su.se/app/team/$username'));
+        Uri.parse('$baseUrl/team/$username'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          _apiKeyHeader: _apiKey,
+        },
+      );
 
       if (response.statusCode == 200) {
-        Map<String, dynamic> data = jsonDecode(response.body);
+        Map<String, dynamic> data = jsonDecode(utf8.decode(response.bodyBytes));
         return data['company']['name'];
       } else {
         throw Exception('Failed to fetch company name');
@@ -75,10 +227,15 @@ class ApiUtils {
   static Future<String?> fetchCharityName(String? username) async {
     try {
       var response = await http.get(
-          Uri.parse('https://group-15-7.pvt.dsv.su.se/app/team/$username'));
+        Uri.parse('$baseUrl/team/$username'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          _apiKeyHeader: _apiKey,
+        },
+      );
 
       if (response.statusCode == 200) {
-        Map<String, dynamic> data = jsonDecode(response.body);
+        Map<String, dynamic> data = jsonDecode(utf8.decode(response.bodyBytes));
         return data['charityOrganization']['name'];
       } else {
         throw Exception('Failed to fetch charity name');
@@ -92,10 +249,15 @@ class ApiUtils {
   static Future<int?> fetchFundraiserBox(String? username) async {
     try {
       var response = await http.get(
-          Uri.parse('https://group-15-7.pvt.dsv.su.se/app/team/$username'));
+        Uri.parse('$baseUrl/team/$username'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          _apiKeyHeader: _apiKey,
+        },
+      );
 
       if (response.statusCode == 200) {
-        Map<String, dynamic> data = jsonDecode(response.body);
+        Map<String, dynamic> data = jsonDecode(utf8.decode(response.bodyBytes));
         return data['fundraiserBox'];
       } else {
         throw Exception('Failed to fetch fundraiser box');
@@ -109,10 +271,15 @@ class ApiUtils {
   static Future<List<String>?> fetchMembers(String? username) async {
     try {
       var response = await http.get(
-          Uri.parse('https://group-15-7.pvt.dsv.su.se/app/team/$username'));
+        Uri.parse('$baseUrl/team/$username'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          _apiKeyHeader: _apiKey,
+        },
+      );
 
       if (response.statusCode == 200) {
-        Map<String, dynamic> data = jsonDecode(response.body);
+        Map<String, dynamic> data = jsonDecode(utf8.decode(response.bodyBytes));
         List<dynamic> membersData = data['members'];
         List<String> members =
             membersData.map((member) => member['username'].toString()).toList();
@@ -128,11 +295,16 @@ class ApiUtils {
 
   static Future<String?> fetchChallengeStatus(String? username) async {
     try {
-      var response = await http.get(Uri.parse(
-          'https://group-15-7.pvt.dsv.su.se/app/$username/challenge'));
+      var response = await http.get(
+        Uri.parse('$baseUrl/$username/challenge'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          _apiKeyHeader: _apiKey,
+        },
+      );
 
       if (response.statusCode == 200) {
-        var responseData = jsonDecode(response.body);
+        var responseData = jsonDecode(utf8.decode(response.bodyBytes));
         var challengeStatus = responseData['status'];
         return challengeStatus;
       } else {
@@ -146,10 +318,15 @@ class ApiUtils {
 
   static Future<List<Team>> fetchTeamsWithBoxAndCompanyName() async {
     final response = await http.get(
-        Uri.parse('https://group-15-7.pvt.dsv.su.se/app/all/teamswithbox'));
+      Uri.parse('$baseUrl/all/teamswithbox'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        _apiKeyHeader: _apiKey,
+      },
+    );
 
     if (response.statusCode == 200) {
-      final List<dynamic> data = jsonDecode(response.body);
+      final List<dynamic> data = jsonDecode(utf8.decode(response.bodyBytes));
       print(data); // Add this line to print the JSON response
 
       List<Team> fetchedTeams = [];
