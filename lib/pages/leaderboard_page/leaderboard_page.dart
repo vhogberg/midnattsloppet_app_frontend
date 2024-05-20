@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application/api_utils/api_utils.dart';
 import 'package:flutter_application/components/custom_app_bar.dart';
-import 'package:flutter_application/components/top_three_teams.dart'; // Import the new component
+import 'package:flutter_application/components/top_three_teams.dart';
 import 'package:flutter_application/models/team.dart';
 import 'package:flutter_application/pages/searchpage.dart';
+import 'package:flutter_application/pages/otherteampage.dart';
+import 'package:flutter_application/pages/myteampage.dart';
+import 'package:flutter_application/session_manager.dart';
 import 'package:iconsax/iconsax.dart';
 
 class LeaderboardPage extends StatefulWidget {
@@ -40,6 +43,35 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
     }
   }
 
+  Future<void> _onTeamTap(Team team) async {
+    String? username = SessionManager.instance.username;
+    bool isUserInTeam = false;
+
+    // Fetch team members
+    try {
+      List<dynamic>? teamMembers = await ApiUtils.fetchMembers(team.name);
+      if (teamMembers != null) {
+        isUserInTeam = teamMembers.any((member) => member['username'] == username);
+      }
+    } catch (e) {
+      print('Error fetching team members: $e');
+    }
+
+    if (isUserInTeam) {
+      // Navigate to MyTeamPage
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => MyTeamPage()),
+      );
+    } else {
+      // Navigate to OtherTeamPage with the team details
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => OtherTeamPage(team: team)),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -60,15 +92,14 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
           : Center(
               child: Column(
                 children: [
-                  const TopThreeTeams(), // Component!
+                  const TopThreeTeams(),
                   Expanded(
                     child: Container(
                       margin: const EdgeInsets.all(16.0),
                       padding: const EdgeInsets.all(8.0),
                       decoration: BoxDecoration(
                         color: Colors.grey[200],
-                        borderRadius:
-                            BorderRadius.circular(16.0), // Rounded corners
+                        borderRadius: BorderRadius.circular(16.0),
                       ),
                       child: ListView.builder(
                         itemCount: teams.length,
@@ -76,6 +107,7 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
                           return TeamListItem(
                             ranking: index + 1,
                             team: teams[index],
+                            onTap: _onTeamTap,
                           );
                         },
                       ),
@@ -91,8 +123,14 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
 class TeamListItem extends StatelessWidget {
   final int ranking;
   final Team team;
+  final Function(Team) onTap;
 
-  const TeamListItem({super.key, required this.ranking, required this.team});
+  const TeamListItem({
+    super.key,
+    required this.ranking,
+    required this.team,
+    required this.onTap,
+  });
 
   String getFormattedRanking(int ranking) {
     return ranking.toString();
@@ -100,50 +138,53 @@ class TeamListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 16.0),
-      padding: const EdgeInsets.all(8.0),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(20.0), // Rounded corners
-        boxShadow: const [
-          BoxShadow(
-            color: Colors.black12,
-            blurRadius: 6.0,
-            offset: Offset(0, 2),
-          ),
-        ],
-      ),
-      child: ListTile(
-        title: Row(
-          children: [
-            Text(
-              getFormattedRanking(ranking),
-              style: const TextStyle(fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(width: 8), // Spacing between the avatar and text
-            if (team.companyName != null)
-              CircleAvatar(
-                radius: 20,
-                backgroundColor: Colors.white,
-                backgroundImage:
-                    AssetImage('images/company_logos/${team.companyName}.png'),
-              ),
-            const SizedBox(width: 8), // Spacing between the avatar and text
-            Expanded(
-              child: Text(
-                team.name, // Team name
-                style: const TextStyle(fontWeight: FontWeight.normal),
-              ),
-            ),
-            Align(
-              alignment: Alignment.centerRight,
-              child: Text(
-                '${team.fundraiserBox}kr',
-                style: const TextStyle(fontWeight: FontWeight.normal),
-              ),
+    return InkWell(
+      onTap: () => onTap(team),
+      child: Container(
+        margin: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 16.0),
+        padding: const EdgeInsets.all(8.0),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(20.0),
+          boxShadow: const [
+            BoxShadow(
+              color: Colors.black12,
+              blurRadius: 6.0,
+              offset: Offset(0, 2),
             ),
           ],
+        ),
+        child: ListTile(
+          title: Row(
+            children: [
+              Text(
+                getFormattedRanking(ranking),
+                style: const TextStyle(fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(width: 8),
+              if (team.companyName != null)
+                CircleAvatar(
+                  radius: 20,
+                  backgroundColor: Colors.white,
+                  backgroundImage: AssetImage(
+                      'images/company_logos/${team.companyName}.png'),
+                ),
+              const SizedBox(width: 8),
+              Expanded(
+                child: Text(
+                  team.name,
+                  style: const TextStyle(fontWeight: FontWeight.normal),
+                ),
+              ),
+              Align(
+                alignment: Alignment.centerRight,
+                child: Text(
+                  '${team.fundraiserBox}kr',
+                  style: const TextStyle(fontWeight: FontWeight.normal),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

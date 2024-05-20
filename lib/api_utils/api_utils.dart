@@ -182,4 +182,102 @@ class ApiUtils {
       throw Exception('Failed to load teams from API');
     }
   }
+  //getters för otherteampage som tar info baserat på lagnamn ist. för username
+  static const String baseUrl = 'https://group-15-7.pvt.dsv.su.se/app/team/byTeamName/';
+
+  static Future<String?> fetchOtherTeamName(String teamName) async {
+    try {
+      var response = await http.get(Uri.parse('$baseUrl$teamName'));
+
+      if (response.statusCode == 200) {
+        Map<String, dynamic> data = jsonDecode(response.body);
+        return data['name'];
+      } else {
+        throw Exception('Failed to fetch team name');
+      }
+    } catch (e) {
+      print('Error fetching team name: $e');
+      rethrow;
+    }
+  }
+
+  static Future<int?> fetchOtherDonationGoal(String teamName) async {
+    try {
+      var response = await http.get(Uri.parse('$baseUrl$teamName'));
+
+      if (response.statusCode == 200) {
+        Map<String, dynamic> data = jsonDecode(response.body);
+        return data['donationGoal'];
+      } else {
+        throw Exception('Failed to fetch donation goal');
+      }
+    } catch (e) {
+      print('Error fetching donation goal: $e');
+      rethrow;
+    }
+  }
+
+  static Future<int?> fetchOtherFundraiserBox(String teamName) async {
+    try {
+      var response = await http.get(Uri.parse('$baseUrl$teamName'));
+
+      if (response.statusCode == 200) {
+        Map<String, dynamic> data = jsonDecode(response.body);
+        return data['fundraiserBox'];
+      } else {
+        throw Exception('Failed to fetch fundraiser box');
+      }
+    } catch (e) {
+      print('Error fetching fundraiser box: $e');
+      rethrow;
+    }
+  }
+
+  static Future<String?> fetchOtherCharityOrganization(String teamName) async {
+    try {
+      var response = await http.get(Uri.parse('$baseUrl$teamName'));
+
+      if (response.statusCode == 200) {
+        Map<String, dynamic> data = jsonDecode(response.body);
+        return data['charityOrganization']['name'];
+      } else {
+        throw Exception('Failed to fetch charity organization');
+      }
+    } catch (e) {
+      print('Error fetching charity organization: $e');
+      rethrow;
+    }
+  }
+
+  static Future<String?> fetchOtherCompanyName(String teamName) async {
+    try {
+      var response = await http.get(Uri.parse('$baseUrl$teamName'));
+
+      if (response.statusCode == 200) {
+        Map<String, dynamic> data = jsonDecode(response.body);
+        return data['company']['name'];
+      } else {
+        throw Exception('Failed to fetch company name');
+      }
+    } catch (e) {
+      print('Error fetching company name: $e');
+      rethrow;
+    }
+  }
+
+  static Future<List<dynamic>?> fetchOtherMembers(String teamName) async {
+    try {
+      var response = await http.get(Uri.parse('$baseUrl$teamName'));
+
+      if (response.statusCode == 200) {
+        Map<String, dynamic> data = jsonDecode(response.body);
+        return data['members'];
+      } else {
+        throw Exception('Failed to fetch team members');
+      }
+    } catch (e) {
+      print('Error fetching team members: $e');
+      rethrow;
+    }
+  }
 }

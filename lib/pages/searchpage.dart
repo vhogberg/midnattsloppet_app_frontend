@@ -30,11 +30,14 @@ class _SearchPageState extends State<SearchPage> {
             color: Colors.black,
             fontSize: 24,
             fontWeight: FontWeight.bold,
+            fontFamily: 'Sora',
           ),
         ),
+        backgroundColor: Colors.white,
+        iconTheme: const IconThemeData(color: Colors.black),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(20.0),
+        padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -48,42 +51,39 @@ class _SearchPageState extends State<SearchPage> {
                 _filterTeams(value); // Filter teams based on input text
               },
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 16),
             Expanded(
               child: Container(
-                width: double.infinity,
+                padding: const EdgeInsets.all(8.0),
                 decoration: BoxDecoration(
-                  color: Colors.grey.withOpacity(0.2),
-                  borderRadius: BorderRadius.circular(20.0),
+                  color: Colors.grey[200],
+                  borderRadius: BorderRadius.circular(16.0),
                 ),
                 child: ListView.builder(
                   itemCount: filteredTeams.length,
                   itemBuilder: (BuildContext context, int index) {
                     return Container(
-                      margin: const EdgeInsets.symmetric(vertical: 5.0),
-                      padding: const EdgeInsets.all(10.0),
+                      margin: const EdgeInsets.symmetric(vertical: 8.0),
+                      padding: const EdgeInsets.all(8.0),
                       decoration: BoxDecoration(
-                        color: const Color(0XFF3C4785),
+                        color: Colors.white,
                         borderRadius: BorderRadius.circular(20.0),
-                        gradient: const RadialGradient(
-                          radius: 0.8,
-                          center: Alignment(-0.5, 0.4),
-                          colors: [
-                            Color.fromARGB(255, 140, 90, 100), // Start color
-                            Color(0xFF3C4785), // End color
-                          ],
-                          stops: [
-                            0.15,
-                            1.0,
-                          ],
-                        ),
+                        boxShadow: const [
+                          BoxShadow(
+                            color: Colors.black12,
+                            blurRadius: 6.0,
+                            offset: Offset(0, 2),
+                          ),
+                        ],
                       ),
-                      child: Text(
-                        filteredTeams[index],
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
+                      child: ListTile(
+                        title: Text(
+                          filteredTeams[index],
+                          style: const TextStyle(
+                            color: Colors.black,
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
                     );
