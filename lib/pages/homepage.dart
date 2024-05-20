@@ -5,6 +5,7 @@ import 'package:flutter_application/api_utils/api_utils.dart';
 import 'package:flutter_application/api_utils/local_notifications.dart';
 import 'package:flutter_application/components/donation_progress_bar.dart';
 import 'package:flutter_application/components/goal_box.dart';
+import 'package:flutter_application/components/top_three_teams.dart';
 import 'package:flutter_application/main.dart';
 import 'package:flutter_application/pages/notification_page/notification_page.dart';
 import 'package:flutter_application/pages/notification_page/notification_page_2.dart';
@@ -232,7 +233,7 @@ class _HomePageState extends State<HomePage> {
                             Text(
                               'Stödjer: $charityName',
                               style: const TextStyle(
-                                color:Colors.white,
+                                color: Colors.white,
                                 fontSize: 16,
                                 fontWeight: FontWeight.w400,
                               ),
@@ -356,7 +357,7 @@ class _HomePageState extends State<HomePage> {
                         padding: EdgeInsets.all(20),
                         child: Center(
                           child: Container(
-                            padding: EdgeInsets.all(10),
+                            padding: const EdgeInsets.all(10),
                             width: MediaQuery.of(context).size.width,
                             height: MediaQuery.of(context).size.height,
                             decoration: BoxDecoration(
@@ -367,42 +368,48 @@ class _HomePageState extends State<HomePage> {
                                 width: 1.0, // Border width
                               ),
                             ),
-                            child: Stack(
+                            child: Column(
                               children: [
-                                const Align (
-                                  alignment: Alignment.center,
-                                  child: Divider(
-                                    color: Colors
-                                        .white, // Vit färg på avskiljningslinjen
-                                    thickness: 3, // Tjocklek på linjen
-                                    indent: 0, // Indrag från vänster
-                                    endIndent: 0, // Indrag från höger
-                                  ),
+                                const TopThreeTeams(),
+                                Stack(
+                                  children: [
+                                    const Align(
+                                      alignment: Alignment.center,
+                                      child: Divider(
+                                        color: Colors
+                                            .white, // Vit färg på avskiljningslinjen
+                                        thickness: 3, // Tjocklek på linjen
+                                        indent: 0, // Indrag från vänster
+                                        endIndent: 0, // Indrag från höger
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                                Positioned(
-                                  bottom: 0,
-                                  right: 0,
-                                  child: Container(
-                                    padding: const EdgeInsets.all(10),
-                                    width: 120,
-                                    height: 50,
-                                    decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      borderRadius: BorderRadius.circular(13.0),
+                                SizedBox(height: 5),
+                                Row(
+                                  //Row med ruta och text!
+                                  children: [
+                                    const Text('hej'),
+                                    const Spacer(),
+                                    Container(
+                                      alignment: Alignment.centerRight,
+                                      padding: const EdgeInsets.all(10),
+                                      width: 120,
+                                      height: 50,
+                                      decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius:
+                                            BorderRadius.circular(13.0),
+                                      ),
+                                      child: const Text(
+                                        'Topplista',
+                                        style: TextStyle(
+                                          fontSize: 20,
+                                          fontFamily: 'Sora',
+                                        ),
+                                      ),
                                     ),
-                                    child: const Row(
-                                      children: [
-                                        SizedBox(width: 5),
-                                        Text(
-                                          'Topplista',
-                                          style: TextStyle(
-                                            fontSize: 20,
-                                            fontFamily: 'Sora',
-                                          ),
-                                        )
-                                      ],
-                                    ),
-                                  ),
+                                  ],
                                 ),
                               ],
                             ),
