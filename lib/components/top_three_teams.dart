@@ -60,7 +60,7 @@ class _TopThreeTeamsState extends State<TopThreeTeams> {
               children: [
                 Container(
                     height: 50), // Padding to offset the second place lower
-                buildTeamCircle(topThreeTeams[1], Colors.grey),
+                buildTeamCircle(topThreeTeams[1], Colors.grey, rank: 2),
               ],
             ),
           ),
@@ -68,7 +68,7 @@ class _TopThreeTeamsState extends State<TopThreeTeams> {
             child: Column(
               children: [
                 buildTeamCircle(topThreeTeams[0], Colors.yellow,
-                    isFirstPlace: true),
+                    isFirstPlace: true, rank: 1),
               ],
             ),
           ),
@@ -77,7 +77,7 @@ class _TopThreeTeamsState extends State<TopThreeTeams> {
               children: [
                 Container(
                     height: 50), // Padding to offset the third place lower
-                buildTeamCircle(topThreeTeams[2], Colors.brown),
+                buildTeamCircle(topThreeTeams[2], Colors.brown, rank: 3),
               ],
             ),
           ),
@@ -86,8 +86,10 @@ class _TopThreeTeamsState extends State<TopThreeTeams> {
     );
   }
 
-  Widget buildTeamCircle(Team team, Color color, {bool isFirstPlace = false}) {
-    double circleSize = isFirstPlace ? 80.0 : 60.0; 
+  Widget buildTeamCircle(Team team, Color color,
+      {bool isFirstPlace = false, required int rank}) {
+    double circleSize = isFirstPlace ? 80.0 : 60.0;
+    double smallCircleSize = 20.0;
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -98,8 +100,7 @@ class _TopThreeTeamsState extends State<TopThreeTeams> {
             color: Color.fromRGBO(200, 200, 39, 1),
             size: 40.0,
           ),
-        if (isFirstPlace)
-          const SizedBox(height: 1.0), 
+        if (isFirstPlace) const SizedBox(height: 1.0),
         Container(
           width: circleSize,
           height: circleSize,
@@ -118,6 +119,32 @@ class _TopThreeTeamsState extends State<TopThreeTeams> {
               width: circleSize - 20,
               height: circleSize - 20,
               fit: BoxFit.contain,
+            ),
+          ),
+        ),
+        Positioned(
+          bottom: -30.0, // Trying to adjust this value to move the small circle up and down, but can't make it work. Otherwise put everythin into a column maybe
+          child: Container(
+            width: smallCircleSize,
+            height: smallCircleSize,
+            decoration: BoxDecoration(
+              color:
+                  Colors.indigo, 
+              shape: BoxShape.circle,
+              border: Border.all(
+                color: Colors.indigo,
+                width: 2.0,
+              ),
+            ),
+            child: Center(
+              child: Text(
+                '$rank',
+                style: const TextStyle(
+                  fontSize: 12.0,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white, 
+                ),
+              ),
             ),
           ),
         ),
