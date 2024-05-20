@@ -97,41 +97,28 @@ class _TopThreeTeamsState extends State<TopThreeTeams> {
             if (isFirstPlace)
               const Icon(
                 Iconsax.crown,
-                color: Colors.deepPurple,
+                color: Colors.yellowAccent,
                 size: 40.0,
               ),
             Container(
               width: circleSize,
               height: circleSize,
               decoration: BoxDecoration(
-                color: color,
+                color: Colors.white, 
                 shape: BoxShape.circle,
                 border: Border.all(
-                  color: Colors.deepPurple,
+                  color: Colors.deepPurpleAccent,
                   width: 3.0,
                 ),
               ),
-              child: Center(
-                child: Container(
-                  width: circleSize -
-                      10, // Slightly smaller than the outer container
-                  height: circleSize -
-                      10, // Slightly smaller than the outer container
-                  decoration: const BoxDecoration(
-                    color: Colors.white,
-                    shape: BoxShape.circle,
-                  ),
-                  child: Padding(
-                    padding:
-                        const EdgeInsets.all(5.0), // Padding around the image
-                    child: Image(
-                      image: AssetImage(
-                          'images/company_logos/${team.companyName}.png'),
-                      width: circleSize - 20,
-                      height: circleSize - 20,
-                      fit: BoxFit.contain,
-                    ),
-                  ),
+              child: Padding(
+                padding: const EdgeInsets.all(5.0), // Padding around the image
+                child: Image(
+                  image: AssetImage(
+                      'images/company_logos/${team.companyName}.png'),
+                  width: circleSize - 20,
+                  height: circleSize - 20,
+                  fit: BoxFit.contain,
                 ),
               ),
             ),
@@ -141,7 +128,7 @@ class _TopThreeTeamsState extends State<TopThreeTeams> {
                   const TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
             ),
             Text(
-              '${team.fundraiserBox} kr',
+              '${team.fundraiserBox}kr',
               style: const TextStyle(fontSize: 14.0),
             ),
           ],
