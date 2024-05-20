@@ -30,7 +30,8 @@ class _NotificationPageState extends State<NotificationPage> {
   final TextEditingController _searchController =
       TextEditingController(); // Controller för sökfältet
   String _searchTerm = ''; // Söktermen
-  String? username; // Användarnamn för att hämta mängden insamlat i insamlingbössan och donationsmålet
+  String?
+      username; // Användarnamn för att hämta mängden insamlat i insamlingbössan och donationsmålet
 
   // Notifikationslistan.
   List<NotificationItem> allNotifications = [
@@ -44,7 +45,7 @@ class _NotificationPageState extends State<NotificationPage> {
 
   double donationGoal = 0;
   double totalDonations = 0;
-  String challengeStatus = "";
+  String? challengeStatus = "";
 
   late Timer _timer;
 
@@ -56,9 +57,11 @@ class _NotificationPageState extends State<NotificationPage> {
     donationNotifications(); // anrop till metoden som ansvarar för donationsnotiser.
     fetchDonations();
     fetchGoal();
+    getChallengeStatus(username);
     _timer = Timer.periodic(const Duration(seconds: 10), (timer) {
       fetchDonations();
       fetchGoal();
+      getChallengeStatus(username);
     });
   }
 
@@ -130,7 +133,7 @@ class _NotificationPageState extends State<NotificationPage> {
   }
 
   void challengeNotifications() {
-    if (challengeStatus.contains("PENDING")) {
+    if (challengeStatus!.contains("PENDING")) {
       if (!notificationAlreadyExists("50 dagar kvar till loppet")) {
         allNotifications.add(
           NotificationItem(
@@ -142,7 +145,7 @@ class _NotificationPageState extends State<NotificationPage> {
       }
     }
 
-    if (challengeStatus.contains("ACCEPTED")) {
+    if (challengeStatus!.contains("ACCEPTED")) {
       if (!notificationAlreadyExists("Du befinner dig i en lagkamp!")) {
         allNotifications.add(
           NotificationItem(
@@ -155,7 +158,7 @@ class _NotificationPageState extends State<NotificationPage> {
       }
     }
 
-    if (challengeStatus.contains("REJECTED")) {
+    if (challengeStatus!.contains("REJECTED")) {
       if (!notificationAlreadyExists(
           "{lagnamn} avböjde din inbjudan på att starta lagkamp")) {
         allNotifications.add(
@@ -327,15 +330,19 @@ class _NotificationPageState extends State<NotificationPage> {
     }
   }
 
-  void getChallengeStatus(String? username) async {
+  Future<String?> getChallengeStatus(String? username) async {
     try {
       var status = await ApiUtils.fetchChallengeStatus(username);
-      if (status != null) {
-        challengeStatus = status;
+      if (status == null) {
+        print(
+            "Error: the challenge status fetched by the API call in JSON format was null");
       } else {
         // Hantera om statusen inte är tillgänglig
         print('Challenge status not available');
       }
+
+      challengeStatus = status;
+      return challengeStatus;
     } catch (e) {
       // Hantera eventuella fel vid hämtning av statusen
       print('Error: $e');
@@ -392,74 +399,75 @@ class NotificationList extends StatelessWidget {
   final List<NotificationItem> notifications;
 
   const NotificationList({required this.notifications});
-
-  @override
-  Widget build(BuildContext context) {
-    return ListView.builder(
-      itemCount: notifications.length,
-      itemBuilder: (context, index) {
-        final notification = notifications[index];
-        return GestureDetector(
-          onTap: () {
-            // Markera notisen som läst när den klickas på
-            // Uppdatera UI när en notis klickas på
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) =>
-                    NotificationDetail(notification: notification),
-              ),
-            );
-          },
-          child: Container(
-            padding: const EdgeInsets.symmetric(vertical: 16.0), // Ökad padding för större avstånd
-            decoration: BoxDecoration(
-              border: Border(
-                bottom: BorderSide(
-                  color: Colors.black.withOpacity(0.9),
-                  width: 0.7,
-                ),
-              ),
+@override
+Widget build(BuildContext context) {
+  return ListView.builder(
+    itemCount: notifications.length,
+    itemBuilder: (context, index) {
+      final notification = notifications[index];
+      return GestureDetector(
+        onTap: () {
+          // Markera notisen som läst när den klickas på
+          // Uppdatera UI när en notis klickas på
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) =>
+                  NotificationDetail(notification: notification),
             ),
-            child: Stack(
-              children: [
-                ListTile(
-                  title: Text(
-                    notification.title,
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18.0, // Ökad textstorlek
-                    ),
-                  ),
-                  subtitle: Text(
-                    notification.message,
-                    maxLines: 2, // Begränsa till två rader
-                    overflow: TextOverflow.ellipsis, // Visa "..." om texten är för lång
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 14.0, // Ökad textstorlek
-                    ),
-                  ),
-                ),
-                if (_isTextOverflowing(notification.message)) // Kontrollera om texten är avklippt
-                  Positioned(
-                    bottom: 8.0,
-                    right: 16.0,
-                    child: Text(
-                      'Klicka för att läsa mer',
-                      style: TextStyle(
-                        fontSize: 12.0,
-                        color: Colors.grey[600],
-                      ),
-                    ),
-                  ),
-              ],
+          );
+        },
+        child: Container(
+          padding: const EdgeInsets.symmetric(
+              vertical: 16.0), // Ökad padding för större avstånd
+          decoration: BoxDecoration(
+            border: Border(
+              bottom: BorderSide(
+                color: Colors.black.withOpacity(0.9),
+                width: 0.7,
+              ),
             ),
           ),
-        );
-      },
-    );
-  }
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              ListTile(
+                title: Text(
+                  notification.title,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 18.0, // Ökad textstorlek
+                  ),
+                ),
+                subtitle: Text(
+                  notification.message,
+                  maxLines: 2, // Begränsa till två rader
+                  overflow: TextOverflow.ellipsis, // Visa "..." om texten är för lång
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 14.0, // Ökad textstorlek
+                  ),
+                ),
+              ),
+              if (_isTextOverflowing(notification.message)) // Kontrollera om texten är avklippt
+                Padding(
+                  padding: const EdgeInsets.only(left: 16.0, top: 8.0),
+                  child: Text(
+                    'Klicka för att läsa mer',
+                    style: TextStyle(
+                      fontSize: 12.0,
+                      color: Colors.grey[600],
+                    ),
+                  ),
+                ),
+            ],
+          ),
+        ),
+      );
+    },
+  );
+}
+
 
   bool _isTextOverflowing(String text) {
     final TextPainter textPainter = TextPainter(
