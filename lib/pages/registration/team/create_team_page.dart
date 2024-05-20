@@ -32,10 +32,11 @@ class _CreateTeamPageState extends State<CreateTeamPage> {
   }
 
   Future<void> fetchEntitiesFromAPI() async {
-    final response = await http
-        .get(Uri.parse('https://group-15-7.pvt.dsv.su.se/app/all/charities'));
+    final response =
+        await http.get(Uri.parse('https://group-15-7.pvt.dsv.su.se/app/all/charities'));
     if (response.statusCode == 200) {
-      final List<dynamic> data = jsonDecode(response.body);
+      // Decode the response body using UTF-8
+      final List<dynamic> data = jsonDecode(utf8.decode(response.bodyBytes));
       setState(() {
         entities = List<String>.from(data);
         filteredEntities.addAll(entities);
