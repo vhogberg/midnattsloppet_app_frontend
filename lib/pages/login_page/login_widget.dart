@@ -51,7 +51,7 @@ class _LoginPageState extends State<LoginPage> {
                 const SizedBox(height: 10),
                 MyTextField(
                   controller: _usernameController,
-                  hintText: 'Användarnamn',
+                  hintText: 'E-postadress',
                   obscureText: false,
                 ),
                 const SizedBox(height: 10),
@@ -85,7 +85,7 @@ class _LoginPageState extends State<LoginPage> {
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
                           content: Text(
-                            'Vänligen ange både användarnamn och lösenord.',
+                            'Vänligen ange både e-postadress och lösenord.',
                           ),
                         ),
                       );

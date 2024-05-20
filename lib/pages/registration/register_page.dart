@@ -95,7 +95,7 @@ class _RegisterPage extends State<RegisterPage> {
                 const SizedBox(height: 25),
                 MyTextField(
                   controller: emailController,
-                  hintText: 'Användarnamn',
+                  hintText: 'E-postadress',
                   obscureText: false,
                 ),
                 const SizedBox(height: 10),
@@ -128,7 +128,7 @@ class _RegisterPage extends State<RegisterPage> {
                     if (username.isEmpty || password.isEmpty) {
                       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                         content: Text(
-                            'Vänligen ange både användarnamn och lösenord.'),
+                            'Vänligen ange både e-postadress och lösenord.'),
                       ));
                       return;
                     }
