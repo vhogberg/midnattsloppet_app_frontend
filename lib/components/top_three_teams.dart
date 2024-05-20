@@ -87,46 +87,53 @@ class _TopThreeTeamsState extends State<TopThreeTeams> {
   }
 
   Widget buildTeamCircle(Team team, Color color, {bool isFirstPlace = false}) {
-    double circleSize = isFirstPlace ? 80.0 : 60.0; // Adjusted sizes
+    double circleSize = isFirstPlace ? 80.0 : 60.0; 
 
-    return Stack(
-      alignment: Alignment.center,
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Column(
+        if (isFirstPlace)
+          const Icon(
+            Iconsax.crown,
+            color: Color.fromRGBO(200, 200, 39, 1),
+            size: 40.0,
+          ),
+        if (isFirstPlace)
+          const SizedBox(height: 1.0), 
+        Container(
+          width: circleSize,
+          height: circleSize,
+          decoration: BoxDecoration(
+            color: Colors.white,
+            shape: BoxShape.circle,
+            border: Border.all(
+              color: Colors.indigo,
+              width: 3.0,
+            ),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(5.0), // Padding around the image
+            child: Image(
+              image: AssetImage('images/company_logos/${team.companyName}.png'),
+              width: circleSize - 20,
+              height: circleSize - 20,
+              fit: BoxFit.contain,
+            ),
+          ),
+        ),
+        Text(
+          team.name,
+          style: const TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
+        ),
+        Row(
+          mainAxisSize: MainAxisSize.min,
           children: [
-            if (isFirstPlace)
-              const Icon(
-                Iconsax.crown,
-                color: Colors.yellowAccent,
-                size: 40.0,
-              ),
-            Container(
-              width: circleSize,
-              height: circleSize,
-              decoration: BoxDecoration(
-                color: Colors.white, 
-                shape: BoxShape.circle,
-                border: Border.all(
-                  color: Colors.deepPurpleAccent,
-                  width: 3.0,
-                ),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(5.0), // Padding around the image
-                child: Image(
-                  image: AssetImage(
-                      'images/company_logos/${team.companyName}.png'),
-                  width: circleSize - 20,
-                  height: circleSize - 20,
-                  fit: BoxFit.contain,
-                ),
-              ),
+            const Icon(
+              Iconsax.coin,
+              color: Color.fromRGBO(200, 200, 39, 1),
+              size: 12.0,
             ),
-            Text(
-              team.name,
-              style:
-                  const TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
-            ),
+            const SizedBox(width: 4.0),
             Text(
               '${team.fundraiserBox}kr',
               style: const TextStyle(fontSize: 14.0),
