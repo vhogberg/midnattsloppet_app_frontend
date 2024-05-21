@@ -371,120 +371,146 @@ class ApiUtils {
       'https://group-15-7.pvt.dsv.su.se/app/team/byTeamName/';
 
   static Future<String?> fetchOtherTeamName(String teamName) async {
+    final String url = '$baseUrl$teamName';
     try {
-      var response = await http
-          .get(Uri.parse('$baseUrl$teamName'), headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-        _apiKeyHeader: _apiKey,
-      });
+      final response = await http.get(
+        Uri.parse(url),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          _apiKeyHeader: _apiKey,
+        },
+      );
 
       if (response.statusCode == 200) {
-        Map<String, dynamic> data = jsonDecode(utf8.decode(response.bodyBytes));
+        final Map<String, dynamic> data = jsonDecode(response.body);
         return data['name'];
       } else {
-        throw Exception('Failed to fetch team name');
+        throw Exception(
+            'Failed to fetch team name: ${response.statusCode} ${response.reasonPhrase}');
       }
     } catch (e) {
       print('Error fetching team name: $e');
-      rethrow;
+      return null;
     }
   }
 
-static Future<int?> fetchOtherDonationGoal(String teamName) async {
+  static Future<int?> fetchOtherDonationGoal(String teamName) async {
+    final String url = '$baseUrl$teamName';
     try {
-      var response = await http
-          .get(Uri.parse('$baseUrl$teamName'), headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-        _apiKeyHeader: _apiKey,
-      });
+      final response = await http.get(
+        Uri.parse(url),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          _apiKeyHeader: _apiKey,
+        },
+      );
 
       if (response.statusCode == 200) {
-        final Map<String, dynamic> data = jsonDecode(utf8.decode(response.bodyBytes));
+        final Map<String, dynamic> data = jsonDecode(response.body);
         return data['donationGoal'];
       } else {
-        throw Exception('Failed to fetch donation goal');
+        throw Exception(
+            'Failed to fetch donation goal: ${response.statusCode} ${response.reasonPhrase}');
       }
     } catch (e) {
       print('Error fetching donation goal: $e');
-      rethrow;
+      return null;
     }
   }
 
   static Future<int?> fetchOtherFundraiserBox(String teamName) async {
+    final String url = '$baseUrl$teamName';
     try {
-      var response = await http
-          .get(Uri.parse('$baseUrl$teamName'), headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-        _apiKeyHeader: _apiKey,
-      });
+      final response = await http.get(
+        Uri.parse(url),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          _apiKeyHeader: _apiKey,
+        },
+      );
 
       if (response.statusCode == 200) {
-        Map<String, dynamic> data = jsonDecode(utf8.decode(response.bodyBytes));
+        final Map<String, dynamic> data = jsonDecode(response.body);
         return data['fundraiserBox'];
       } else {
-        throw Exception('Failed to fetch fundraiser box');
+        throw Exception(
+            'Failed to fetch fundraiser box: ${response.statusCode} ${response.reasonPhrase}');
       }
     } catch (e) {
       print('Error fetching fundraiser box: $e');
-      rethrow;
+      return null;
     }
   }
 
   static Future<String?> fetchOtherCharityOrganization(String teamName) async {
+    final String url = '$baseUrl$teamName';
     try {
-      var response = await http
-          .get(Uri.parse('$baseUrl$teamName'), headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-        _apiKeyHeader: _apiKey,
-      });
+      final response = await http.get(
+        Uri.parse(url),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          _apiKeyHeader: _apiKey,
+        },
+      );
+
       if (response.statusCode == 200) {
-        Map<String, dynamic> data = jsonDecode(utf8.decode(response.bodyBytes));
+        final Map<String, dynamic> data = jsonDecode(response.body);
         return data['charityOrganization']['name'];
       } else {
-        throw Exception('Failed to fetch charity organization');
+        throw Exception(
+            'Failed to fetch charity organization: ${response.statusCode} ${response.reasonPhrase}');
       }
     } catch (e) {
       print('Error fetching charity organization: $e');
-      rethrow;
+      return null;
     }
   }
 
   static Future<String?> fetchOtherCompanyName(String teamName) async {
+    final String url = '$baseUrl$teamName';
     try {
-      var response = await http
-          .get(Uri.parse('$baseUrl$teamName'), headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-        _apiKeyHeader: _apiKey,
-      });
+      final response = await http.get(
+        Uri.parse(url),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          _apiKeyHeader: _apiKey,
+        },
+      );
 
       if (response.statusCode == 200) {
-        Map<String, dynamic> data = jsonDecode(utf8.decode(response.bodyBytes));
+        final Map<String, dynamic> data = jsonDecode(response.body);
         return data['company']['name'];
       } else {
-        throw Exception('Failed to fetch company name');
+        throw Exception(
+            'Failed to fetch company name: ${response.statusCode} ${response.reasonPhrase}');
       }
     } catch (e) {
       print('Error fetching company name: $e');
-      rethrow;
+      return null;
     }
   }
 
   static Future<List<dynamic>?> fetchOtherMembers(String teamName) async {
+    final String url = '$baseUrl$teamName';
     try {
-      var response = await http
-          .get(Uri.parse('$baseUrl$teamName'), headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-        _apiKeyHeader: _apiKey,
-      });
+      final response = await http.get(
+        Uri.parse(url),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          _apiKeyHeader: _apiKey,
+        },
+      );
+
       if (response.statusCode == 200) {
-        Map<String, dynamic> data = jsonDecode(utf8.decode(response.bodyBytes));
+        final Map<String, dynamic> data = jsonDecode(response.body);
         return data['members'];
       } else {
-        throw Exception('Failed to fetch team members');
+        throw Exception(
+            'Failed to fetch team members: ${response.statusCode} ${response.reasonPhrase}');
       }
     } catch (e) {
       print('Error fetching team members: $e');
-      rethrow;
+      return null;
     }
   }
 }
