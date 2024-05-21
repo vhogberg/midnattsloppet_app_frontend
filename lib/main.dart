@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application/api_utils/local_notifications.dart';
 import 'package:flutter_application/auth_page.dart';
-import 'package:flutter_application/pages/login_page/login_widget.dart';
 import 'package:flutter_application/pages/notification_page/notification_page.dart';
 import 'package:flutter_application/pages/notification_page/notification_page_2.dart';
-import 'package:flutter_application/pages/registration/team/create_team_page.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:provider/provider.dart';
 

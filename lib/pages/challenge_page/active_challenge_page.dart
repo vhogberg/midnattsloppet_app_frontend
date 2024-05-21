@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application/components/gradient_container.dart';
-import 'package:flutter_application/pages/navigation_bar/navigation_bar.dart';
 
 class ActiveChallengePage extends StatelessWidget {
   @override

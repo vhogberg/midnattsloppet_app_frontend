@@ -1,8 +1,6 @@
-import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_application/api_utils/api_utils.dart';
-import 'package:http/http.dart' as http;
 
 class WizardDialog extends StatefulWidget {
   @override

@@ -117,7 +117,7 @@ class _ChallengePageState extends State<ChallengePage> {
                             borderRadius:
                                 BorderRadius.circular(4.0), // Avrunda hörnen
                           ),
-                          padding: EdgeInsets.symmetric(
+                          padding: const EdgeInsets.symmetric(
                               vertical:
                                   15), // höjd på skicka-iväg utmaning knapp.
                           child: Row(
@@ -153,7 +153,7 @@ class _ChallengePageState extends State<ChallengePage> {
                 ),
               ),
 
-              Padding(
+              const Padding(
                 padding: EdgeInsets.only(bottom: 2.0, top: 20.0), // space nedåt
                 child: Text(
                   'Inbox',
@@ -332,7 +332,7 @@ class _ChallengePageState extends State<ChallengePage> {
         return StatefulBuilder(
           builder: (context, setState) {
             return Dialog(
-              insetPadding: EdgeInsets.all(20.0),
+              insetPadding: const EdgeInsets.all(20.0),
               child: WillPopScope(
                 onWillPop: () async {
                   searchController.clear();
@@ -347,7 +347,7 @@ class _ChallengePageState extends State<ChallengePage> {
                         padding: const EdgeInsets.all(20.0),
                         child: TextField(
                           controller: searchController,
-                          decoration: InputDecoration(
+                          decoration: const InputDecoration(
                             hintText: 'Ange lagnamn...',
                             prefixIcon: Icon(Icons.search),
                             border: OutlineInputBorder(),
@@ -366,7 +366,7 @@ class _ChallengePageState extends State<ChallengePage> {
                             return ListTile(
                               title: Text(
                                 filteredTeams[index],
-                                style: TextStyle(
+                                style: const TextStyle(
                                   fontSize: 18.0,
                                   fontWeight: FontWeight.bold,
                                 ),
