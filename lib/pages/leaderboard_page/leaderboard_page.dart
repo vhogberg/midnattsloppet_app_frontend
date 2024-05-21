@@ -10,7 +10,9 @@ import 'package:flutter_application/session_manager.dart';
 import 'package:iconsax/iconsax.dart';
 
 class LeaderboardPage extends StatefulWidget {
-  const LeaderboardPage({super.key});
+  final Function(int) navigateToPage;
+  const LeaderboardPage({Key? key, required this.navigateToPage})
+      : super(key: key);
 
   @override
   _LeaderboardPageState createState() => _LeaderboardPageState();
@@ -51,7 +53,8 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
     try {
       List<dynamic>? teamMembers = await ApiUtils.fetchOtherMembers(team.name);
       if (teamMembers != null) {
-        isUserInTeam = teamMembers.any((member) => member['username'] == username);
+        isUserInTeam =
+            teamMembers.any((member) => member['username'] == username);
       }
     } catch (e) {
       print('Error fetching team members: $e');
@@ -59,10 +62,7 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
 
     if (isUserInTeam) {
       // Navigate to MyTeamPage
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => MyTeamPage()),
-      );
+      widget.navigateToPage(4);
     } else {
       // Navigate to OtherTeamPage with the team details
       Navigator.push(

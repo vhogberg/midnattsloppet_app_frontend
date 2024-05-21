@@ -11,7 +11,8 @@ import 'package:flutter_application/share_helper.dart';
 import 'package:iconsax/iconsax.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
+  final Function(int) navigateToPage;
+  const HomePage({Key? key, required this.navigateToPage}) : super(key: key);
 
   @override
   _HomePageState createState() => _HomePageState();
@@ -30,7 +31,6 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     username = SessionManager.instance.username;
-    //LocalNotifications.init();
     fetchCompanyName();
     fetchGoal();
     fetchDonations();
@@ -126,21 +126,20 @@ class _HomePageState extends State<HomePage> {
                   const Spacer(),
                   GestureDetector(
                     onTap: () {
-                      // Navigate to another page here
                       Navigator.push(
                         context,
                         MaterialPageRoute(
                             builder: (context) => NotificationPage()),
                       );
                     },
-                    child: Stack(
+                    child: const Stack(
                       children: [
-                        const Icon(
+                        Icon(
                           Iconsax.notification,
                           size: 35,
                           color: Color.fromARGB(255, 113, 113, 113),
                         ),
-                        if (1 ==
+                        /* if (1 ==
                             0 /** Denna if-satsen finns om vi hittar något sätt att kontrollera om det finns olästa notifikationer, just nu tar detta för mkt tid*/)
                           Positioned(
                             // position på cirkeln
@@ -159,14 +158,14 @@ class _HomePageState extends State<HomePage> {
                                 color: Colors.white,
                               ),
                             ),
-                          ),
+                          ), */
                       ],
                     ),
                   ),
                   const SizedBox(width: 20),
                   GestureDetector(
                     onTap: () {
-                      SessionManager.instance.signUserOut(context);
+                      widget.navigateToPage(4);
                     },
                     child: companyName != null
                         ? CircleAvatar(
@@ -175,7 +174,7 @@ class _HomePageState extends State<HomePage> {
                             backgroundImage: AssetImage(
                                 'images/company_logos/$companyName.png'),
                           )
-                        : CircularProgressIndicator(), // Show a loading indicator
+                        : const CircularProgressIndicator(), // Show a loading indicator
                   ),
                 ],
               ),
@@ -207,113 +206,115 @@ class _HomePageState extends State<HomePage> {
                             ],
                           ),
                         ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Insamlingsbössa: $teamName',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 18,
-                                fontWeight: FontWeight.w400,
+                        child: SingleChildScrollView(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Insamlingsbössa: $teamName',
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w400,
+                                ),
                               ),
-                            ),
-                            Text(
-                              '${totalDonations.toStringAsFixed(0)} kr insamlat',
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontSize: 28,
-                                fontWeight: FontWeight.bold,
+                              Text(
+                                '${totalDonations.toStringAsFixed(0)} kr insamlat',
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 28,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
-                            ),
-                            Text(
-                              'Stödjer: $charityName',
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontSize: 16,
-                                fontWeight: FontWeight.w400,
+                              Text(
+                                'Stödjer: $charityName',
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w400,
+                                ),
                               ),
-                            ),
-                            const SizedBox(
-                              height: 15,
-                            ),
-                            SizedBox(
-                              width: MediaQuery.of(context).size.width - 80,
-                              child: const Padding(
-                                padding: EdgeInsets.only(left: 30, right: 30),
-                                child: DonationProgressBar(),
+                              const SizedBox(
+                                height: 15,
                               ),
-                            ),
-                            const SizedBox(height: 10),
-                            const Align(
-                                alignment: Alignment.topRight,
-                                child: GoalBox(height: 50, width: 75)),
-                            const SizedBox(height: 10),
-                            Stack(
-                              children: [
-                                Container(
-                                  padding: const EdgeInsets.all(15),
-                                  width: MediaQuery.of(context).size.width,
-                                  height: 90,
-                                  decoration: BoxDecoration(
-                                    color: Colors.white30,
-                                    borderRadius: BorderRadius.circular(13.0),
-                                    border: Border.all(
-                                      color: Colors.white60, // Border color
-                                      width: 1.0, // Border width
+                              SizedBox(
+                                width: MediaQuery.of(context).size.width - 80,
+                                child: const Padding(
+                                  padding: EdgeInsets.only(left: 30, right: 30),
+                                  child: DonationProgressBar(),
+                                ),
+                              ),
+                              const SizedBox(height: 10),
+                              const Align(
+                                  alignment: Alignment.topRight,
+                                  child: GoalBox(height: 50, width: 75)),
+                              const SizedBox(height: 10),
+                              Stack(
+                                children: [
+                                  Container(
+                                    padding: const EdgeInsets.all(15),
+                                    width: MediaQuery.of(context).size.width,
+                                    height: 90,
+                                    decoration: BoxDecoration(
+                                      color: Colors.white30,
+                                      borderRadius: BorderRadius.circular(13.0),
+                                      border: Border.all(
+                                        color: Colors.white60, // Border color
+                                        width: 1.0, // Border width
+                                      ),
+                                    ),
+                                    child: Row(
+                                      children: [
+                                        const Expanded(
+                                          child: Text(
+                                            'Dela bössan med vänner och familj!',
+                                            style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 20,
+                                                fontWeight: FontWeight.bold,
+                                                fontFamily: 'Sora'),
+                                          ),
+                                        ),
+                                        GestureDetector(
+                                          onTap: () {
+                                            ShareHelper.showShareDialog(
+                                                context, teamName!);
+                                          },
+                                          child: Container(
+                                            padding: const EdgeInsets.all(10),
+                                            width: 100,
+                                            height: 50,
+                                            decoration: BoxDecoration(
+                                              color: Colors.white,
+                                              borderRadius:
+                                                  BorderRadius.circular(13.0),
+                                            ),
+                                            child: const Row(
+                                              children: [
+                                                Icon(
+                                                  Iconsax.export_1,
+                                                ),
+                                                SizedBox(
+                                                  width: 5,
+                                                ),
+                                                Text(
+                                                  'Dela',
+                                                  style: TextStyle(
+                                                    fontSize: 20,
+                                                    fontFamily: 'Sora',
+                                                  ),
+                                                )
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                      ],
                                     ),
                                   ),
-                                  child: Row(
-                                    children: [
-                                      const Expanded(
-                                        child: Text(
-                                          'Dela bössan med vänner och familj!',
-                                          style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 17,
-                                              fontWeight: FontWeight.bold,
-                                              fontFamily: 'Sora'),
-                                        ),
-                                      ),
-                                      GestureDetector(
-                                        onTap: () {
-                                          ShareHelper.showShareDialog(
-                                              context, teamName!);
-                                        },
-                                        child: Container(
-                                          padding: const EdgeInsets.all(10),
-                                          width: 100,
-                                          height: 50,
-                                          decoration: BoxDecoration(
-                                            color: Colors.white,
-                                            borderRadius:
-                                                BorderRadius.circular(13.0),
-                                          ),
-                                          child: const Row(
-                                            children: [
-                                              Icon(
-                                                Iconsax.export_1,
-                                              ),
-                                              SizedBox(
-                                                width: 5,
-                                              ),
-                                              Text(
-                                                'Dela',
-                                                style: TextStyle(
-                                                  fontSize: 20,
-                                                  fontFamily: 'Sora',
-                                                ),
-                                              )
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
+                                ],
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                       Positioned(
@@ -350,7 +351,7 @@ class _HomePageState extends State<HomePage> {
                             ],
                           ),
                         ),
-                        padding: EdgeInsets.all(20),
+                        padding: const EdgeInsets.all(20),
                         child: Center(
                           child: Container(
                             padding: const EdgeInsets.all(10),
@@ -367,9 +368,9 @@ class _HomePageState extends State<HomePage> {
                             child: Column(
                               children: [
                                 const TopThreeTeams(),
-                                Stack(
+                                const Stack(
                                   children: [
-                                    const Align(
+                                    Align(
                                       alignment: Alignment.center,
                                       child: Divider(
                                         color: Colors
@@ -381,8 +382,8 @@ class _HomePageState extends State<HomePage> {
                                     ),
                                   ],
                                 ),
-                                SizedBox(height: 5),
-                                Row(
+                                const SizedBox(height: 5),
+                                /* Row(
                                   //Row med ruta och text!
                                   children: [
                                     const Text('hej'),
@@ -406,7 +407,7 @@ class _HomePageState extends State<HomePage> {
                                       ),
                                     ),
                                   ],
-                                ),
+                                ), */
                               ],
                             ),
                           ),
