@@ -54,7 +54,7 @@ class _HomePageState extends State<HomePage> {
     super.dispose();
   }
 
-Future<void> fetchLeaderboardData() async {
+  Future<void> fetchLeaderboardData() async {
     try {
       final response = await ApiUtils.get(
           ('https://group-15-7.pvt.dsv.su.se/app/all/teamswithbox'));
@@ -93,6 +93,7 @@ Future<void> fetchLeaderboardData() async {
       print("Error fetching leaderboard data: $e");
     }
   }
+
   Future<void> fetchDonations() async {
     try {
       double total = await ApiUtils.fetchDonations(username);
@@ -410,11 +411,10 @@ Future<void> fetchLeaderboardData() async {
                               ),
                             ),
                             //child: Transform.translate(offset: Offset (0, -8)),
-                              child: Column(
+                            child: Column(
                               children: [
                                 const Flexible(
-                                child: 
-                                  TopThreeTeams(),
+                                  child: TopThreeTeams(),
                                 ),
                                 const Divider(
                                   color: Colors
@@ -474,7 +474,7 @@ Future<void> fetchLeaderboardData() async {
                                       ),
                                     ),
                                   ],
-                                ), */
+                                ),
                               ],
                             ),
                           ),
