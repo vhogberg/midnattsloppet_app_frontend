@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_application/api_utils/api_utils.dart';
 import 'package:flutter_application/components/donation_progress_bar.dart';
+import 'package:flutter_application/components/return_arrow_argument.dart';
 import 'package:flutter_application/models/team.dart';
 import 'package:flutter_application/session_manager.dart';
 import 'package:iconsax/iconsax.dart';
@@ -100,7 +101,6 @@ class _OtherTeamPageState extends State<OtherTeamPage> {
     }
   }
 
-
   Future<void> fetchDonationGoal() async {
     if (teamName != null) {
       try {
@@ -186,10 +186,15 @@ class _OtherTeamPageState extends State<OtherTeamPage> {
 
   @override
   Widget build(BuildContext context) {
+    //Extract argument and set boolean based on where user navigated from
+    final ReturnArrowArgument args =
+        ModalRoute.of(context)!.settings.arguments as ReturnArrowArgument;
+
     return Scaffold(
       appBar: CustomAppBar(
         key: null,
         title: 'Mitt lag',
+        showReturnArrow: args.showReturnArrow,
         useActionButton: true,
         actionIcon: Iconsax.logout_1,
         onActionPressed: () {

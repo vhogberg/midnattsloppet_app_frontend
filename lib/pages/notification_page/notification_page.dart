@@ -1,7 +1,10 @@
 import 'dart:async';
+
+import 'package:add_2_calendar/add_2_calendar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application/api_utils/api_utils.dart';
 import 'package:flutter_application/session_manager.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 // Skapa en klass för notifikationen.
@@ -196,7 +199,7 @@ class _NotificationPageState extends State<NotificationPage> {
           NotificationItem(
             title: "50 dagar kvar till loppet",
             message:
-                "Det är 50 dagar kvar till midnattsloppets racestart!\n\nSpara datumet: 17 Augusti 2024\n\nFun fact: Regelbunden löpning kan hjälpa till att förbättra sömnkvaliteten, vilket gör att löpare ofta sover djupare och vaknar mer utvilade.",
+                "Det är 50 dagar kvar till midnattsloppets racestart!\n\nFun fact: Regelbunden löpning kan hjälpa till att förbättra sömnkvaliteten, vilket gör att löpare ofta sover djupare och vaknar mer utvilade.\n\nSpara datumet: 17 Augusti 2024",
             timestamp: DateTime.now(),
           ),
         );
@@ -211,7 +214,7 @@ class _NotificationPageState extends State<NotificationPage> {
           NotificationItem(
             title: "100 dagar kvar till loppet",
             message:
-                "Det är 100 dagar kvar till midnattsloppets racestart!\n\nSpara datumet: 17 Augusti 2024\n\nHirstorisk fun fact: Det första moderna maratonloppet hölls under de olympiska spelen i Aten 1896. Det inspirerades av den mytiska språngmarschen av greken Pheidippides från slaget vid Marathon till Aten.",
+                "Det är 100 dagar kvar till midnattsloppets racestart!\n\nHirstorisk fun fact: Det första moderna maratonloppet hölls under de olympiska spelen i Aten 1896. Det inspirerades av den mytiska språngmarschen av greken Pheidippides från slaget vid Marathon till Aten.\n\nSpara datumet: 17 Augusti 2024",
             timestamp: DateTime.now(),
           ),
         );
@@ -267,6 +270,9 @@ class _NotificationPageState extends State<NotificationPage> {
                 controller: _searchController,
                 decoration: const InputDecoration(
                   labelText: 'Sök',
+                  labelStyle: TextStyle(
+                    fontFamily: 'Sora',
+                  ),
                 ),
                 onChanged: (value) {
                   setState(() {
@@ -279,7 +285,12 @@ class _NotificationPageState extends State<NotificationPage> {
                 onPressed: () {
                   Navigator.pop(context);
                 },
-                child: const Text('Sök'),
+                child: const Text(
+                  'Sök',
+                  style: TextStyle(
+                    fontFamily: 'Sora',
+                  ),
+                ),
               ),
             ],
           ),
@@ -292,34 +303,28 @@ class _NotificationPageState extends State<NotificationPage> {
   Future<double> fetchDonations() async {
     try {
       double? total = await ApiUtils.fetchDonations(username);
-      if (total == null) {
-        throw Exception('Total donations returned null');
-      }
       setState(() {
         totalDonations = total;
       });
       return totalDonations;
     } catch (e) {
       print("Error fetching donations: $e");
-      rethrow; // Rethrow the caught exception
     }
+    return 0;
   }
 
   // Funktion för att hämta donationsmål
   Future<double> fetchGoal() async {
     try {
       double goal = await ApiUtils.fetchGoal(username);
-      if (goal == null) {
-        throw Exception('Total donations returned null');
-      }
       setState(() {
         donationGoal = goal;
       });
       return donationGoal;
     } catch (e) {
       print("Error fetching goal: $e");
-      rethrow;
     }
+    return 0;
   }
 
   //Metod för att använda inhämtae donationsmål och donationsvärde
@@ -376,6 +381,7 @@ class _NotificationPageState extends State<NotificationPage> {
           'Notifikationer',
           style: TextStyle(
             fontWeight: FontWeight.w700,
+            fontFamily: 'Sora',
           ),
         ),
         actions: [
@@ -413,79 +419,85 @@ class NotificationList extends StatelessWidget {
   final List<NotificationItem> notifications;
 
   const NotificationList({required this.notifications});
-@override
-Widget build(BuildContext context) {
-  return ListView.builder(
-    itemCount: notifications.length,
-    itemBuilder: (context, index) {
-      final notification = notifications[index];
-      return GestureDetector(
-        onTap: () {
-          // Markera notisen som läst när den klickas på
-          // Uppdatera UI när en notis klickas på
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) =>
-                  NotificationDetail(notification: notification),
-            ),
-          );
-        },
-        child: Container(
-          padding: const EdgeInsets.symmetric(
-              vertical: 16.0), // Ökad padding för större avstånd
-          decoration: BoxDecoration(
-            border: Border(
-              bottom: BorderSide(
-                color: Colors.black.withOpacity(0.9),
-                width: 0.7,
+  @override
+  Widget build(BuildContext context) {
+    return ListView.builder(
+      itemCount: notifications.length,
+      itemBuilder: (context, index) {
+        final notification = notifications[index];
+        return GestureDetector(
+          onTap: () {
+            // Markera notisen som läst när den klickas på
+            // Uppdatera UI när en notis klickas på
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) =>
+                    NotificationDetail(notification: notification),
               ),
-            ),
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              ListTile(
-                title: Text(
-                  notification.title,
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 18.0, // Ökad textstorlek
-                  ),
-                ),
-                subtitle: Text(
-                  notification.message,
-                  maxLines: 2, // Begränsa till två rader
-                  overflow: TextOverflow.ellipsis, // Visa "..." om texten är för lång
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 14.0, // Ökad textstorlek
-                  ),
+            );
+          },
+          child: Container(
+            padding: const EdgeInsets.symmetric(
+                vertical: 16.0), // Ökad padding för större avstånd
+            decoration: BoxDecoration(
+              border: Border(
+                bottom: BorderSide(
+                  color: Colors.black.withOpacity(0.9),
+                  width: 0.7,
                 ),
               ),
-              if (_isTextOverflowing(notification.message)) // Kontrollera om texten är avklippt
-                Padding(
-                  padding: const EdgeInsets.only(left: 16.0, top: 8.0),
-                  child: Text(
-                    'Klicka för att läsa mer',
-                    style: TextStyle(
-                      fontSize: 12.0,
-                      color: Colors.grey[600],
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                ListTile(
+                  title: Text(
+                    notification.title,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18.0, // Ökad textstorlek
+                      fontFamily: 'Sora',
+                    ),
+                  ),
+                  subtitle: Text(
+                    notification.message,
+                    maxLines: 2, // Begränsa till två rader
+                    overflow: TextOverflow
+                        .ellipsis, // Visa "..." om texten är för lång
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 14.0, // Ökad textstorlek
+                      fontFamily: 'Sora',
                     ),
                   ),
                 ),
-            ],
+                if (_isTextOverflowing(
+                    notification.message)) // Kontrollera om texten är avklippt
+                  Padding(
+                    padding: const EdgeInsets.only(left: 16.0, top: 8.0),
+                    child: Text(
+                      'Klicka för att läsa mer',
+                      style: TextStyle(
+                        fontSize: 12.0,
+                        color: Colors.grey[600],
+                        fontFamily: 'Sora',
+                      ),
+                    ),
+                  ),
+              ],
+            ),
           ),
-        ),
-      );
-    },
-  );
-}
-
+        );
+      },
+    );
+  }
 
   bool _isTextOverflowing(String text) {
     final TextPainter textPainter = TextPainter(
-      text: TextSpan(text: text, style: const TextStyle(fontSize: 14.0)),
+      text: TextSpan(
+          text: text,
+          style: const TextStyle(fontSize: 14.0, fontFamily: 'Sora')),
       maxLines: 2,
       textDirection: TextDirection.ltr,
     )..layout(maxWidth: 100); // Justera maxWidth till bredden på ListTile
@@ -500,12 +512,16 @@ class NotificationDetail extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    bool showSaveDateButton =
+        notification.message.contains("Spara datumet: 17 Augusti 2024");
+
     return Scaffold(
       appBar: AppBar(
         title: Text(
           notification.title,
           style: const TextStyle(
             fontWeight: FontWeight.w700,
+            fontFamily: 'Sora',
           ),
         ),
       ),
@@ -519,12 +535,91 @@ class NotificationDetail extends StatelessWidget {
               style: const TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 16.0, // Ökad textstorlek
+                fontFamily: 'Sora',
               ),
             ),
             const SizedBox(height: 16.0),
+            if (showSaveDateButton)
+              GestureDetector(
+                onTap: () {
+                  final Event event = Event(
+                    title: 'Midnattloppet',
+                    description: 'Distans 10 km',
+                    location: 'Södermalm',
+                    startDate: DateTime(2024, 8, 17, 21, 45),
+                    endDate: DateTime(2024, 8, 17, 24, 00),
+                    iosParams: const IOSParams(
+                      url:
+                          'https://midnattsloppet.com/midnattsloppet-stockholm/',
+                    ),
+                    androidParams: const AndroidParams(
+                      emailInvites: [], // on Android, you can add invite emails to your event.
+                    ),
+                  );
+                  Add2Calendar.addEvent2Cal(event);
+                },
+                child: Container(
+                  padding: const EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(13.0),
+                    border: Border.all(
+                      color: Colors.black,
+                      width: 1.0,
+                    ),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.2),
+                        spreadRadius: 2,
+                        blurRadius: 5,
+                        offset: Offset(0, 3),
+                      ),
+                    ],
+                  ),
+                  child: const Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(
+                        Iconsax.calendar_add,
+                      ),
+                      SizedBox(
+                        width: 5,
+                      ),
+                      Text(
+                        'Spara datumet!',
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontFamily: 'Sora',
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              ),
           ],
         ),
       ),
     );
   }
 }
+
+/*
+
+final Event event = Event(
+                    title: 'Midnattloppet',
+                    description: 'Distans 10 km',
+                    location: 'Södermalm',
+                    startDate: DateTime(2024, 8, 17, 21, 45),
+                    endDate: DateTime(2024, 8, 17, 24, 00),
+                    iosParams: const IOSParams(
+                      url:
+                          'https://midnattsloppet.com/midnattsloppet-stockholm/',
+                    ),
+                    androidParams: const AndroidParams(
+                      emailInvites: [], // on Android, you can add invite emails to your event.
+                    ),
+                  );
+                  Add2Calendar.addEvent2Cal(event);
+                  
+                  
+*/

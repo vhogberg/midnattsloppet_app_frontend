@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application/components/custom_navigation_bar.dart';
 import 'package:flutter_application/components/my_button.dart';
-import 'package:flutter_application/components/my_navigation_bar.dart';
 import 'package:flutter_application/components/my_textfield.dart';
 import 'package:flutter_application/pages/registration/register_page.dart';
 import 'package:flutter_application/session_manager.dart';
@@ -102,7 +102,8 @@ class _LoginPageState extends State<LoginPage> {
                           .then((_) {
                         Navigator.pushReplacement(
                           context,
-                          MaterialPageRoute(builder: (context) => MyNavigationBar()),
+                          MaterialPageRoute(
+                              builder: (context) => CustomNavigationBar()),
                         );
                       });
                     }).catchError((error) {

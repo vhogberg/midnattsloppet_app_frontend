@@ -1,21 +1,20 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_application/api_utils/api_utils.dart';
-import 'package:flutter_application/api_utils/local_notifications.dart';
 import 'package:flutter_application/components/donation_progress_bar.dart';
 import 'package:flutter_application/components/goal_box.dart';
 import 'package:flutter_application/components/top_three_teams.dart';
-import 'package:flutter_application/main.dart';
+import 'package:flutter_application/models/team.dart';
 import 'package:flutter_application/pages/notification_page/notification_page.dart';
-import 'package:flutter_application/pages/notification_page/notification_page_2.dart';
 import 'package:flutter_application/session_manager.dart';
 import 'package:flutter_application/share_helper.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
+  final Function(int) navigateToPage;
+  const HomePage({Key? key, required this.navigateToPage}) : super(key: key);
 
   @override
   _HomePageState createState() => _HomePageState();
@@ -26,6 +25,8 @@ class _HomePageState extends State<HomePage> {
   String? charityName;
   String? teamName;
   String? companyName;
+  int teamRank = -1;
+  int totalTeams = 0;
   double donationGoal = 0;
   double totalDonations = 0;
   late Timer _timer;
@@ -34,12 +35,12 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     username = SessionManager.instance.username;
-    //LocalNotifications.init();
     fetchCompanyName();
     fetchGoal();
     fetchDonations();
     fetchCharityName();
     fetchTeamName();
+    fetchLeaderboardData();
 
     _timer = Timer.periodic(const Duration(seconds: 10), (timer) {
       fetchGoal();
@@ -51,6 +52,46 @@ class _HomePageState extends State<HomePage> {
   void dispose() {
     _timer.cancel();
     super.dispose();
+  }
+
+  Future<void> fetchLeaderboardData() async {
+    try {
+      final response = await ApiUtils.get(
+          ('https://group-15-7.pvt.dsv.su.se/app/all/teamswithbox'));
+
+      if (response.statusCode == 200) {
+        final List<dynamic> data = jsonDecode(response.body);
+
+        List<Team> fetchedTeams = [];
+
+        for (var item in data) {
+          String name = item['name'];
+          int fundraiserBox = item['fundraiserBox'];
+          String? companyName;
+
+          if (item['company'] != null) {
+            companyName = item['company']['name'];
+          }
+
+          fetchedTeams.add(Team(
+            name: name,
+            fundraiserBox: fundraiserBox,
+            companyName: companyName,
+          ));
+        }
+
+        fetchedTeams.sort((a, b) => b.fundraiserBox.compareTo(a.fundraiserBox));
+        setState(() {
+          totalTeams = fetchedTeams.length;
+          teamRank =
+              fetchedTeams.indexWhere((team) => team.name == teamName) + 1;
+        });
+      } else {
+        throw Exception('Failed to load teams from API');
+      }
+    } catch (e) {
+      print("Error fetching leaderboard data: $e");
+    }
   }
 
   Future<void> fetchDonations() async {
@@ -130,21 +171,20 @@ class _HomePageState extends State<HomePage> {
                   const Spacer(),
                   GestureDetector(
                     onTap: () {
-                      // Navigate to another page here
                       Navigator.push(
                         context,
                         MaterialPageRoute(
                             builder: (context) => NotificationPage()),
                       );
                     },
-                    child: Stack(
+                    child: const Stack(
                       children: [
-                        const Icon(
+                        Icon(
                           Iconsax.notification,
                           size: 35,
                           color: Color.fromARGB(255, 113, 113, 113),
                         ),
-                        if (1 ==
+                        /* if (1 ==
                             0 /** Denna if-satsen finns om vi hittar något sätt att kontrollera om det finns olästa notifikationer, just nu tar detta för mkt tid*/)
                           Positioned(
                             // position på cirkeln
@@ -163,14 +203,14 @@ class _HomePageState extends State<HomePage> {
                                 color: Colors.white,
                               ),
                             ),
-                          ),
+                          ), */
                       ],
                     ),
                   ),
                   const SizedBox(width: 20),
                   GestureDetector(
                     onTap: () {
-                      SessionManager.instance.signUserOut(context);
+                      widget.navigateToPage(4);
                     },
                     child: companyName != null
                         ? CircleAvatar(
@@ -179,7 +219,7 @@ class _HomePageState extends State<HomePage> {
                             backgroundImage: AssetImage(
                                 'images/company_logos/$companyName.png'),
                           )
-                        : CircularProgressIndicator(), // Show a loading indicator
+                        : const CircularProgressIndicator(), // Show a loading indicator
                   ),
                 ],
               ),
@@ -211,113 +251,115 @@ class _HomePageState extends State<HomePage> {
                             ],
                           ),
                         ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Insamlingsbössa: $teamName',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 18,
-                                fontWeight: FontWeight.w400,
+                        child: SingleChildScrollView(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Insamlingsbössa: $teamName',
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w400,
+                                ),
                               ),
-                            ),
-                            Text(
-                              '${totalDonations.toStringAsFixed(0)} kr insamlat',
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontSize: 28,
-                                fontWeight: FontWeight.bold,
+                              Text(
+                                '${totalDonations.toStringAsFixed(0)} kr insamlat',
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 28,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
-                            ),
-                            Text(
-                              'Stödjer: $charityName',
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontSize: 16,
-                                fontWeight: FontWeight.w400,
+                              Text(
+                                'Stödjer: $charityName',
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w400,
+                                ),
                               ),
-                            ),
-                            const SizedBox(
-                              height: 15,
-                            ),
-                            SizedBox(
-                              width: MediaQuery.of(context).size.width - 80,
-                              child: const Padding(
-                                padding: EdgeInsets.only(left: 30, right: 30),
-                                child: DonationProgressBar(),
+                              const SizedBox(
+                                height: 15,
                               ),
-                            ),
-                            const SizedBox(height: 10),
-                            const Align(
-                                alignment: Alignment.topRight,
-                                child: GoalBox(height: 50, width: 75)),
-                            const SizedBox(height: 10),
-                            Stack(
-                              children: [
-                                Container(
-                                  padding: const EdgeInsets.all(15),
-                                  width: MediaQuery.of(context).size.width,
-                                  height: 90,
-                                  decoration: BoxDecoration(
-                                    color: Colors.white30,
-                                    borderRadius: BorderRadius.circular(13.0),
-                                    border: Border.all(
-                                      color: Colors.white60, // Border color
-                                      width: 1.0, // Border width
+                              SizedBox(
+                                width: MediaQuery.of(context).size.width - 80,
+                                child: const Padding(
+                                  padding: EdgeInsets.only(left: 30, right: 30),
+                                  child: DonationProgressBar(),
+                                ),
+                              ),
+                              const SizedBox(height: 10),
+                              const Align(
+                                  alignment: Alignment.topRight,
+                                  child: GoalBox(height: 50, width: 75)),
+                              const SizedBox(height: 10),
+                              Stack(
+                                children: [
+                                  Container(
+                                    padding: const EdgeInsets.all(15),
+                                    width: MediaQuery.of(context).size.width,
+                                    height: 90,
+                                    decoration: BoxDecoration(
+                                      color: Colors.white30,
+                                      borderRadius: BorderRadius.circular(13.0),
+                                      border: Border.all(
+                                        color: Colors.white60, // Border color
+                                        width: 1.0, // Border width
+                                      ),
+                                    ),
+                                    child: Row(
+                                      children: [
+                                        const Expanded(
+                                          child: Text(
+                                            'Dela bössan med vänner och familj!',
+                                            style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 20,
+                                                fontWeight: FontWeight.bold,
+                                                fontFamily: 'Sora'),
+                                          ),
+                                        ),
+                                        GestureDetector(
+                                          onTap: () {
+                                            ShareHelper.showShareDialog(
+                                                context, teamName!);
+                                          },
+                                          child: Container(
+                                            padding: const EdgeInsets.all(10),
+                                            width: 100,
+                                            height: 50,
+                                            decoration: BoxDecoration(
+                                              color: Colors.white,
+                                              borderRadius:
+                                                  BorderRadius.circular(13.0),
+                                            ),
+                                            child: const Row(
+                                              children: [
+                                                Icon(
+                                                  Iconsax.export_1,
+                                                ),
+                                                SizedBox(
+                                                  width: 5,
+                                                ),
+                                                Text(
+                                                  'Dela',
+                                                  style: TextStyle(
+                                                    fontSize: 20,
+                                                    fontFamily: 'Sora',
+                                                  ),
+                                                )
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                      ],
                                     ),
                                   ),
-                                  child: Row(
-                                    children: [
-                                      const Expanded(
-                                        child: Text(
-                                          'Dela bössan med vänner och familj!',
-                                          style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 17,
-                                              fontWeight: FontWeight.bold,
-                                              fontFamily: 'Sora'),
-                                        ),
-                                      ),
-                                      GestureDetector(
-                                        onTap: () {
-                                          ShareHelper.showShareDialog(
-                                              context, teamName!);
-                                        },
-                                        child: Container(
-                                          padding: const EdgeInsets.all(10),
-                                          width: 100,
-                                          height: 50,
-                                          decoration: BoxDecoration(
-                                            color: Colors.white,
-                                            borderRadius:
-                                                BorderRadius.circular(13.0),
-                                          ),
-                                          child: const Row(
-                                            children: [
-                                              Icon(
-                                                Iconsax.export_1,
-                                              ),
-                                              SizedBox(
-                                                width: 5,
-                                              ),
-                                              Text(
-                                                'Dela',
-                                                style: TextStyle(
-                                                  fontSize: 20,
-                                                  fontFamily: 'Sora',
-                                                ),
-                                              )
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
+                                ],
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                       Positioned(
@@ -340,7 +382,7 @@ class _HomePageState extends State<HomePage> {
                         height: 320,
                         decoration: BoxDecoration(
                           color: const Color(0XFF3C4785),
-                          borderRadius: BorderRadius.circular(20.0),
+                          borderRadius: BorderRadius.circular(12.0),
                           gradient: const RadialGradient(
                             radius: 0.8,
                             center: Alignment(0.2, 0.6),
@@ -354,59 +396,81 @@ class _HomePageState extends State<HomePage> {
                             ],
                           ),
                         ),
-                        padding: EdgeInsets.all(20),
+                        padding: EdgeInsets.all(18),
                         child: Center(
                           child: Container(
-                            padding: const EdgeInsets.all(10),
+                            padding: const EdgeInsets.all(5),
                             width: MediaQuery.of(context).size.width,
                             height: MediaQuery.of(context).size.height,
                             decoration: BoxDecoration(
                               color: Colors.white30,
-                              borderRadius: BorderRadius.circular(13.0),
+                              borderRadius: BorderRadius.circular(12.0),
                               border: Border.all(
                                 color: Colors.white60, // Border color
                                 width: 1.0, // Border width
                               ),
                             ),
+                            //child: Transform.translate(offset: Offset (0, -8)),
                             child: Column(
                               children: [
-                                const TopThreeTeams(),
-                                Stack(
+                                const Flexible(
+                                  child: TopThreeTeams(),
+                                ),
+                                const Divider(
+                                  color: Colors
+                                      .white, // Vit färg på avskiljningslinjen
+                                  thickness: 3, // Tjocklek på linjen
+                                  indent: 0, // Indrag från vänster
+                                  endIndent: 0, // Indrag från höger
+                                ),
+                                //SizedBox(height: 1),
+                                Row(
                                   children: [
-                                    const Align(
-                                      alignment: Alignment.center,
-                                      child: Divider(
-                                        color: Colors
-                                            .white, // Vit färg på avskiljningslinjen
-                                        thickness: 3, // Tjocklek på linjen
-                                        indent: 0, // Indrag från vänster
-                                        endIndent: 0, // Indrag från höger
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            teamRank != -1
+                                                ? 'Plats: #$teamRank av $totalTeams'
+                                                : 'Rankning saknas',
+                                            style: const TextStyle(
+                                                fontSize: 16.0,
+                                                fontWeight: FontWeight.bold,
+                                                fontFamily: 'Sora'),
+                                          ),
+                                          const SizedBox(
+                                              height:
+                                                  8.0), // För att skapa lite avstånd mellan texterna
+                                          const Text(
+                                            'YY Dagar till lopp', //YY => $daysToEvent
+                                            style: TextStyle(
+                                                fontSize: 14.0,
+                                                fontFamily: 'Sora'),
+                                          ),
+                                        ],
                                       ),
                                     ),
-                                  ],
-                                ),
-                                SizedBox(height: 5),
-                                Row(
-                                  //Row med ruta och text!
-                                  children: [
-                                    const Text('hej'),
-                                    const Spacer(),
-                                    Container(
-                                      alignment: Alignment.centerRight,
-                                      padding: const EdgeInsets.all(10),
-                                      width: 120,
-                                      height: 50,
-                                      decoration: BoxDecoration(
-                                        color: Colors.white,
-                                        borderRadius:
-                                            BorderRadius.circular(13.0),
+                                    const SizedBox(
+                                        width:
+                                            14.0), // För att skapa lite avstånd mellan kolumnen och knappen
+                                    ElevatedButton(
+                                      onPressed: () {
+                                        // Knappens funktionalitet ska in här
+                                      },
+                                      style: ElevatedButton.styleFrom(
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(8.0),
+                                        ),
                                       ),
                                       child: const Text(
                                         'Topplista',
                                         style: TextStyle(
-                                          fontSize: 20,
-                                          fontFamily: 'Sora',
-                                        ),
+                                            fontSize: 14.0,
+                                            fontWeight: FontWeight.bold,
+                                            fontFamily: 'Sora'),
                                       ),
                                     ),
                                   ],

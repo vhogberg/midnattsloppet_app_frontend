@@ -1,5 +1,6 @@
-import 'dart:convert';
 import 'dart:async';
+import 'dart:convert';
+
 import 'package:flutter_application/models/team.dart';
 import 'package:http/http.dart' as http;
 
@@ -321,6 +322,44 @@ class ApiUtils {
       rethrow;
     }
   }
+
+  static Future<Map<String, dynamic>> fetchChallengeActivity(String? username) async {
+  try {
+    final response = await http.get(
+      Uri.parse('$baseURL/$username/challenge'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        _apiKeyHeader: _apiKey,
+      },
+    );
+
+    if (response.statusCode == 200) {
+      final data = jsonDecode(utf8.decode(response.bodyBytes)) as List<dynamic>;
+      bool challengeSent = data.any((challenge) =>
+          challenge['challengerTeamName'] == username && challenge['status'] == 'PENDING');
+      bool challengeReceived = data.any((challenge) =>
+          challenge['challengedTeamName'] == username && challenge['status'] == 'PENDING');
+      
+      String senderTeam = '';
+      if (challengeReceived) {
+        senderTeam = data.firstWhere((challenge) =>
+          challenge['challengedTeamName'] == username && challenge['status'] == 'PENDING')['challengerTeamName'];
+      }
+
+      return {
+        'challengeSent': challengeSent,
+        'challengeReceived': challengeReceived,
+        'senderTeam': senderTeam,
+      };
+    } else {
+      throw Exception('Failed to fetch challenge status');
+    }
+  } catch (e) {
+    print('Error fetching challenge status: $e');
+    rethrow;
+  }
+}
+
 
   static Future<List<Team>> fetchTeamsWithBoxAndCompanyName() async {
     final response = await http.get(

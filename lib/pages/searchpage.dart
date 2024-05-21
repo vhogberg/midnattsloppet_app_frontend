@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application/api_utils/api_utils.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
 
 class SearchPage extends StatefulWidget {
   SearchPage({Key? key}) : super(key: key);

@@ -1,11 +1,9 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_application/components/my_button.dart';
 import 'package:flutter_application/components/my_textfield.dart';
 import 'package:flutter_application/pages/login_page/login_widget.dart';
 import 'package:flutter_application/pages/registration/complete_profile_page.dart';
 import 'package:flutter_application/session_manager.dart';
-import 'package:http/http.dart' as http;
 
 class RegisterPage extends StatefulWidget {
   RegisterPage({super.key});
@@ -52,7 +50,7 @@ class _RegisterPage extends State<RegisterPage> {
               children: [
                 const SizedBox(height: 25),
                 const SizedBox(height: 50),
-                Text(
+                const Text(
                   'Låt oss skapa ditt konto!',
                   style: TextStyle(
                     color: Colors.white,
@@ -78,8 +76,8 @@ class _RegisterPage extends State<RegisterPage> {
                   obscureText: true,
                 ),
                 const SizedBox(height: 10),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 25.0),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [],
@@ -93,7 +91,7 @@ class _RegisterPage extends State<RegisterPage> {
                     final password = passwordController.text;
 
                     if (username.isEmpty || password.isEmpty) {
-                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                         content: Text(
                             'Vänligen ange både e-postadress och lösenord.'),
                       ));
@@ -101,7 +99,7 @@ class _RegisterPage extends State<RegisterPage> {
                     }
 
                     if (!isValidEmail(username)) {
-                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                         content: Text('Vänligen ange en giltig e-postadress.'),
                       ));
                       return;
@@ -111,7 +109,7 @@ class _RegisterPage extends State<RegisterPage> {
                       context: context,
                       barrierDismissible: false,
                       builder: (BuildContext context) {
-                        return Center(
+                        return const Center(
                           child: CircularProgressIndicator(),
                         );
                       },
@@ -138,7 +136,7 @@ class _RegisterPage extends State<RegisterPage> {
                           ));
                         });
                       } else if (response.contains("Username already exists")) {
-                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                           content: Text('Användarnamnet finns redan.'),
                         ));
                       } else {
@@ -159,18 +157,18 @@ class _RegisterPage extends State<RegisterPage> {
                   onTap: () {
                     Navigator.pushReplacement(
                       context,
-                      MaterialPageRoute(builder: (context) => LoginPage()),
+                      MaterialPageRoute(builder: (context) => const LoginPage()),
                     );
                   },
-                  child: Row(
+                  child: const Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
                         'Har du redan ett användarkonto?',
                         style: TextStyle(color: Colors.white),
                       ),
-                      const SizedBox(width: 4),
-                      const Text(
+                      SizedBox(width: 4),
+                      Text(
                         'Logga in',
                         style: TextStyle(
                           color: Colors.blue,

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application/api_utils/api_utils.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'package:http/http.dart' as http;
 
 class SessionManager {
   static final SessionManager _instance = SessionManager._internal();
