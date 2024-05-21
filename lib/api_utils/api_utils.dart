@@ -382,7 +382,7 @@ class ApiUtils {
       );
 
       if (response.statusCode == 200) {
-        final Map<String, dynamic> data = jsonDecode(response.body);
+        final Map<String, dynamic> data = jsonDecode(utf8.decode(response.bodyBytes));
         return data['name'];
       } else {
         throw Exception(
@@ -406,7 +406,7 @@ class ApiUtils {
       );
 
       if (response.statusCode == 200) {
-        final Map<String, dynamic> data = jsonDecode(response.body);
+        final Map<String, dynamic> data = jsonDecode(utf8.decode(response.bodyBytes));
         return data['donationGoal'];
       } else {
         throw Exception(
@@ -430,7 +430,7 @@ class ApiUtils {
       );
 
       if (response.statusCode == 200) {
-        final Map<String, dynamic> data = jsonDecode(response.body);
+        final Map<String, dynamic> data = jsonDecode(utf8.decode(response.bodyBytes));
         return data['fundraiserBox'];
       } else {
         throw Exception(
@@ -454,7 +454,7 @@ class ApiUtils {
       );
 
       if (response.statusCode == 200) {
-        final Map<String, dynamic> data = jsonDecode(response.body);
+        final Map<String, dynamic> data = jsonDecode(utf8.decode(response.bodyBytes));
         return data['charityOrganization']['name'];
       } else {
         throw Exception(
@@ -478,7 +478,7 @@ class ApiUtils {
       );
 
       if (response.statusCode == 200) {
-        final Map<String, dynamic> data = jsonDecode(response.body);
+        final Map<String, dynamic> data = jsonDecode(utf8.decode(response.bodyBytes));
         return data['company']['name'];
       } else {
         throw Exception(
@@ -502,7 +502,7 @@ class ApiUtils {
       );
 
       if (response.statusCode == 200) {
-        final Map<String, dynamic> data = jsonDecode(response.body);
+        final Map<String, dynamic> data = jsonDecode(utf8.decode(response.bodyBytes));
         return data['members'];
       } else {
         throw Exception(

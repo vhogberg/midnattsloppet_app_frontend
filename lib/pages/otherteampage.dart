@@ -8,7 +8,6 @@ import 'package:flutter_application/session_manager.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:flutter_application/components/custom_app_bar.dart';
 import 'package:flutter_application/components/other_goal_box.dart';
-import 'package:http/http.dart' as http;
 import '../share_helper.dart';
 
 class OtherTeamPage extends StatefulWidget {
@@ -38,10 +37,6 @@ class _OtherTeamPageState extends State<OtherTeamPage> {
     companyName = widget.team.companyName;
     fetchTeamDetails();
     fetchLeaderboardData();
-    timer = Timer.periodic(const Duration(seconds: 10), (timer) {
-      fetchDonationGoal();
-      fetchDonatedAmount();
-    });
   }
 
   Future<void> fetchTeamDetails() async {
@@ -445,5 +440,4 @@ class _OtherTeamPageState extends State<OtherTeamPage> {
       ),
     );
   }
-}
 }
