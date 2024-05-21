@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application/api_utils/api_utils.dart';
 import 'package:flutter_application/components/custom_app_bar.dart';
 import 'package:flutter_application/components/top_three_teams.dart';
+import 'package:flutter_application/components/return_arrow_argument.dart';
 import 'package:flutter_application/models/team.dart';
 import 'package:flutter_application/pages/searchpage.dart';
 import 'package:flutter_application/pages/otherteampage.dart';
@@ -67,7 +68,12 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
       // Navigate to OtherTeamPage with the team details
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => OtherTeamPage(team: team)),
+        MaterialPageRoute(
+          builder: (context) => OtherTeamPage(team: team),
+          settings: RouteSettings(
+            arguments: ReturnArrowArgument(showReturnArrow: true),
+          ),
+        ),
       );
     }
   }
