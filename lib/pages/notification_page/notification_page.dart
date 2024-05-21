@@ -4,6 +4,7 @@ import 'package:add_2_calendar/add_2_calendar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application/api_utils/api_utils.dart';
 import 'package:flutter_application/session_manager.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 // Skapa en klass för notifikationen.
@@ -269,6 +270,9 @@ class _NotificationPageState extends State<NotificationPage> {
                 controller: _searchController,
                 decoration: const InputDecoration(
                   labelText: 'Sök',
+                  labelStyle: TextStyle(
+                    fontFamily: 'Sora',
+                  ),
                 ),
                 onChanged: (value) {
                   setState(() {
@@ -281,7 +285,12 @@ class _NotificationPageState extends State<NotificationPage> {
                 onPressed: () {
                   Navigator.pop(context);
                 },
-                child: const Text('Sök'),
+                child: const Text(
+                  'Sök',
+                  style: TextStyle(
+                    fontFamily: 'Sora',
+                  ),
+                ),
               ),
             ],
           ),
@@ -317,7 +326,6 @@ class _NotificationPageState extends State<NotificationPage> {
     }
     return 0;
   }
-
 
   //Metod för att använda inhämtae donationsmål och donationsvärde
   Future<double> calculateDonationPercentage() async {
@@ -373,6 +381,7 @@ class _NotificationPageState extends State<NotificationPage> {
           'Notifikationer',
           style: TextStyle(
             fontWeight: FontWeight.w700,
+            fontFamily: 'Sora',
           ),
         ),
         actions: [
@@ -448,6 +457,7 @@ class NotificationList extends StatelessWidget {
                     style: const TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 18.0, // Ökad textstorlek
+                      fontFamily: 'Sora',
                     ),
                   ),
                   subtitle: Text(
@@ -458,6 +468,7 @@ class NotificationList extends StatelessWidget {
                     style: const TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 14.0, // Ökad textstorlek
+                      fontFamily: 'Sora',
                     ),
                   ),
                 ),
@@ -470,6 +481,7 @@ class NotificationList extends StatelessWidget {
                       style: TextStyle(
                         fontSize: 12.0,
                         color: Colors.grey[600],
+                        fontFamily: 'Sora',
                       ),
                     ),
                   ),
@@ -483,7 +495,9 @@ class NotificationList extends StatelessWidget {
 
   bool _isTextOverflowing(String text) {
     final TextPainter textPainter = TextPainter(
-      text: TextSpan(text: text, style: const TextStyle(fontSize: 14.0)),
+      text: TextSpan(
+          text: text,
+          style: const TextStyle(fontSize: 14.0, fontFamily: 'Sora')),
       maxLines: 2,
       textDirection: TextDirection.ltr,
     )..layout(maxWidth: 100); // Justera maxWidth till bredden på ListTile
@@ -507,6 +521,7 @@ class NotificationDetail extends StatelessWidget {
           notification.title,
           style: const TextStyle(
             fontWeight: FontWeight.w700,
+            fontFamily: 'Sora',
           ),
         ),
       ),
@@ -520,12 +535,13 @@ class NotificationDetail extends StatelessWidget {
               style: const TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 16.0, // Ökad textstorlek
+                fontFamily: 'Sora',
               ),
             ),
             const SizedBox(height: 16.0),
             if (showSaveDateButton)
-              ElevatedButton(
-                onPressed: () {
+              GestureDetector(
+                onTap: () {
                   final Event event = Event(
                     title: 'Midnattloppet',
                     description: 'Distans 10 km',
@@ -541,9 +557,44 @@ class NotificationDetail extends StatelessWidget {
                     ),
                   );
                   Add2Calendar.addEvent2Cal(event);
-                  print("Datumet har sparats!");
                 },
-                child: const Text('Spara datumet'),
+                child: Container(
+                  padding: const EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(13.0),
+                    border: Border.all(
+                      color: Colors.black,
+                      width: 1.0,
+                    ),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.2),
+                        spreadRadius: 2,
+                        blurRadius: 5,
+                        offset: Offset(0, 3),
+                      ),
+                    ],
+                  ),
+                  child: const Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(
+                        Iconsax.calendar_add,
+                      ),
+                      SizedBox(
+                        width: 5,
+                      ),
+                      Text(
+                        'Spara datumet!',
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontFamily: 'Sora',
+                        ),
+                      )
+                    ],
+                  ),
+                ),
               ),
           ],
         ),
@@ -551,3 +602,24 @@ class NotificationDetail extends StatelessWidget {
     );
   }
 }
+
+/*
+
+final Event event = Event(
+                    title: 'Midnattloppet',
+                    description: 'Distans 10 km',
+                    location: 'Södermalm',
+                    startDate: DateTime(2024, 8, 17, 21, 45),
+                    endDate: DateTime(2024, 8, 17, 24, 00),
+                    iosParams: const IOSParams(
+                      url:
+                          'https://midnattsloppet.com/midnattsloppet-stockholm/',
+                    ),
+                    androidParams: const AndroidParams(
+                      emailInvites: [], // on Android, you can add invite emails to your event.
+                    ),
+                  );
+                  Add2Calendar.addEvent2Cal(event);
+                  
+                  
+*/

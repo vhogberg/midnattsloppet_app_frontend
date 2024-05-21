@@ -5,6 +5,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final bool useActionButton;
   final IconData? actionIcon;
   final Function()? onActionPressed;
+  final bool showReturnArrow;
 
   const CustomAppBar({
     Key? key,
@@ -12,6 +13,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     required this.useActionButton,
     this.actionIcon,
     this.onActionPressed,
+    this.showReturnArrow = false,
   }) : super(key: key);
 
   @override
@@ -26,19 +28,22 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
           centerTitle: true, // centrera titeln
           title: Row(
             children: [
-              // IconButton är tillbaka-pilen till vänster om titeln
-              IconButton(
-                icon: const Icon(
-                  Icons.arrow_back,
-                  
-                  //color: Color(0xFF4F4F4F),
-                  color: Color(0xFFFDFDFD), // färg för att göra osynlig
-                  size: 30
-                ),
-                onPressed: () => DoNothingAction(), // gör ingenting, sparar för framtid...
-                // onPressed: () => Navigator.of(context).pop(), tidigare implementation
-              ),
-              SizedBox(width: 8), // Padding
+              // Visa endast tillbakapil om showReturnArrow är sann
+              if (showReturnArrow)
+                IconButton(
+                  icon: const Icon(
+                    Icons.arrow_back,
+                    color: Color(0xFF4F4F4F), // färg för pilen
+                    size: 30,
+                  ),
+                  onPressed: () => Navigator.of(context).pop(),
+                )
+              else
+                const SizedBox(
+                    width:
+                        48), // Kompensera för saknat avstånd om pilen inte visas
+
+              const SizedBox(width: 8), // Padding
               Expanded(
                 // titelns egenskaper
                 child: Text(

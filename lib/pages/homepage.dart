@@ -1,10 +1,12 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_application/api_utils/api_utils.dart';
 import 'package:flutter_application/components/donation_progress_bar.dart';
 import 'package:flutter_application/components/goal_box.dart';
 import 'package:flutter_application/components/top_three_teams.dart';
+import 'package:flutter_application/models/team.dart';
 import 'package:flutter_application/pages/notification_page/notification_page.dart';
 import 'package:flutter_application/session_manager.dart';
 import 'package:flutter_application/share_helper.dart';
@@ -23,6 +25,8 @@ class _HomePageState extends State<HomePage> {
   String? charityName;
   String? teamName;
   String? companyName;
+  int teamRank = -1;
+  int totalTeams = 0;
   double donationGoal = 0;
   double totalDonations = 0;
   late Timer _timer;
@@ -36,6 +40,7 @@ class _HomePageState extends State<HomePage> {
     fetchDonations();
     fetchCharityName();
     fetchTeamName();
+    fetchLeaderboardData();
 
     _timer = Timer.periodic(const Duration(seconds: 10), (timer) {
       fetchGoal();
@@ -47,6 +52,46 @@ class _HomePageState extends State<HomePage> {
   void dispose() {
     _timer.cancel();
     super.dispose();
+  }
+
+  Future<void> fetchLeaderboardData() async {
+    try {
+      final response = await ApiUtils.get(
+          ('https://group-15-7.pvt.dsv.su.se/app/all/teamswithbox'));
+
+      if (response.statusCode == 200) {
+        final List<dynamic> data = jsonDecode(response.body);
+
+        List<Team> fetchedTeams = [];
+
+        for (var item in data) {
+          String name = item['name'];
+          int fundraiserBox = item['fundraiserBox'];
+          String? companyName;
+
+          if (item['company'] != null) {
+            companyName = item['company']['name'];
+          }
+
+          fetchedTeams.add(Team(
+            name: name,
+            fundraiserBox: fundraiserBox,
+            companyName: companyName,
+          ));
+        }
+
+        fetchedTeams.sort((a, b) => b.fundraiserBox.compareTo(a.fundraiserBox));
+        setState(() {
+          totalTeams = fetchedTeams.length;
+          teamRank =
+              fetchedTeams.indexWhere((team) => team.name == teamName) + 1;
+        });
+      } else {
+        throw Exception('Failed to load teams from API');
+      }
+    } catch (e) {
+      print("Error fetching leaderboard data: $e");
+    }
   }
 
   Future<void> fetchDonations() async {
@@ -337,7 +382,7 @@ class _HomePageState extends State<HomePage> {
                         height: 320,
                         decoration: BoxDecoration(
                           color: const Color(0XFF3C4785),
-                          borderRadius: BorderRadius.circular(20.0),
+                          borderRadius: BorderRadius.circular(12.0),
                           gradient: const RadialGradient(
                             radius: 0.8,
                             center: Alignment(0.2, 0.6),
@@ -351,63 +396,85 @@ class _HomePageState extends State<HomePage> {
                             ],
                           ),
                         ),
-                        padding: const EdgeInsets.all(20),
+                        padding: EdgeInsets.all(18),
                         child: Center(
                           child: Container(
-                            padding: const EdgeInsets.all(10),
+                            padding: const EdgeInsets.all(5),
                             width: MediaQuery.of(context).size.width,
                             height: MediaQuery.of(context).size.height,
                             decoration: BoxDecoration(
                               color: Colors.white30,
-                              borderRadius: BorderRadius.circular(13.0),
+                              borderRadius: BorderRadius.circular(12.0),
                               border: Border.all(
                                 color: Colors.white60, // Border color
                                 width: 1.0, // Border width
                               ),
                             ),
+                            //child: Transform.translate(offset: Offset (0, -8)),
                             child: Column(
                               children: [
-                                const TopThreeTeams(),
-                                const Stack(
+                                const Flexible(
+                                  child: TopThreeTeams(),
+                                ),
+                                const Divider(
+                                  color: Colors
+                                      .white, // Vit färg på avskiljningslinjen
+                                  thickness: 3, // Tjocklek på linjen
+                                  indent: 0, // Indrag från vänster
+                                  endIndent: 0, // Indrag från höger
+                                ),
+                                //SizedBox(height: 1),
+                                Row(
                                   children: [
-                                    Align(
-                                      alignment: Alignment.center,
-                                      child: Divider(
-                                        color: Colors
-                                            .white, // Vit färg på avskiljningslinjen
-                                        thickness: 3, // Tjocklek på linjen
-                                        indent: 0, // Indrag från vänster
-                                        endIndent: 0, // Indrag från höger
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            teamRank != -1
+                                                ? 'Plats: #$teamRank av $totalTeams'
+                                                : 'Rankning saknas',
+                                            style: const TextStyle(
+                                                fontSize: 16.0,
+                                                fontWeight: FontWeight.bold,
+                                                fontFamily: 'Sora'),
+                                          ),
+                                          const SizedBox(
+                                              height:
+                                                  8.0), // För att skapa lite avstånd mellan texterna
+                                          const Text(
+                                            'YY Dagar till lopp', //YY => $daysToEvent
+                                            style: TextStyle(
+                                                fontSize: 14.0,
+                                                fontFamily: 'Sora'),
+                                          ),
+                                        ],
                                       ),
                                     ),
-                                  ],
-                                ),
-                                const SizedBox(height: 5),
-                                /* Row(
-                                  //Row med ruta och text!
-                                  children: [
-                                    const Text('hej'),
-                                    const Spacer(),
-                                    Container(
-                                      alignment: Alignment.centerRight,
-                                      padding: const EdgeInsets.all(10),
-                                      width: 120,
-                                      height: 50,
-                                      decoration: BoxDecoration(
-                                        color: Colors.white,
-                                        borderRadius:
-                                            BorderRadius.circular(13.0),
+                                    const SizedBox(
+                                        width:
+                                            14.0), // För att skapa lite avstånd mellan kolumnen och knappen
+                                    ElevatedButton(
+                                      onPressed: () {
+                                        // Knappens funktionalitet ska in här
+                                      },
+                                      style: ElevatedButton.styleFrom(
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(8.0),
+                                        ),
                                       ),
                                       child: const Text(
                                         'Topplista',
                                         style: TextStyle(
-                                          fontSize: 20,
-                                          fontFamily: 'Sora',
-                                        ),
+                                            fontSize: 14.0,
+                                            fontWeight: FontWeight.bold,
+                                            fontFamily: 'Sora'),
                                       ),
                                     ),
                                   ],
-                                ), */
+                                ),
                               ],
                             ),
                           ),
