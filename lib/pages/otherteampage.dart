@@ -105,7 +105,6 @@ class _OtherTeamPageState extends State<OtherTeamPage> {
     }
   }
 
-
   Future<void> fetchDonationGoal() async {
     if (teamName != null) {
       try {
@@ -445,5 +444,4 @@ class _OtherTeamPageState extends State<OtherTeamPage> {
       ),
     );
   }
-}
 }
