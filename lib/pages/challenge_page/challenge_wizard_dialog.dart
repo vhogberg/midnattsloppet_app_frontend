@@ -46,61 +46,44 @@ class _WizardDialogState extends State<WizardDialog> {
     });
   }
 
-  // skicka iväg utmaning till backend
-  void _onSend() async {
-    final String url =
-        'https://group-15-7.pvt.dsv.su.se/app/$username/createchallenge';
+void _onSend() async {
+  final String url = 'https://group-15-7.pvt.dsv.su.se/app/$username/createchallenge';
 
-    // hämta data från de tre olika stegen i wizard
-    final Map<String, String> requestData = {
-      'name': titleController.text,
-      'description': descriptionController.text,
-      'teamtochallenge': selectedTeam!,
-    };
+  // hämta data från de tre olika stegen i wizard
+  final Map<String, String> requestData = {
+    'name': titleController.text,
+    'description': descriptionController.text,
+    'teamtochallenge': selectedTeam!,
+  };
 
-    print(requestData);
-    
-    try {
-      print (url);
-      // Skicka POST request (try)
-      final response = await ApiUtils.post(
-        url,
-        jsonEncode(requestData),
-        
-      );
-      
+  print('Request Data: $requestData');
+  print('URL: $url');
+  
+  try {
+    // Skicka POST request (try)
+    final response = await ApiUtils.post(
+      url,
+      utf8.encode(jsonEncode(requestData)),
+    );
 
-      // Hantera respons, printar i konsol atm
-      if (response.statusCode == 200) {
-        print('Challenge sent successfully');
-        // Om lyckat: stäng wizard, kanske ha ett steg 5 som säger lyckat?
-        Navigator.pop(context);
-      } else {
-        // Hantera error
-        print('Failed to send challenge: ${response.body}');
-        // Visa error till användare.
-        showDialog(
-          context: context,
-          builder: (context) => AlertDialog(
-            title: Text('Fel'),
-            content: Text('Lyckades inte att skicka. Försök igen senare.'),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.pop(context),
-                child: Text('Ok'),
-              ),
-            ],
-          ),
-        );
-      }
-    } catch (e) {
-      print('Error sending challenge: $e');
-      // (catch) för felhantering
+    print('Response Status Code: ${response.statusCode}');
+    print('Response Headers: ${response.headers}');
+    print('Response Body: ${response.body}');
+
+    // Hantera respons, printar i konsol atm
+    if (response.statusCode == 200) {
+      print('Challenge sent successfully');
+      // Om lyckat: stäng wizard, kanske ha ett steg 5 som säger lyckat?
+      Navigator.pop(context);
+    } else {
+      // Hantera error
+      print('Failed to send challenge: ${response.body}');
+      // Visa error till användare.
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
           title: Text('Fel'),
-          content: Text('Lyckades inte att skicka. Försök igen senare.'),
+          content: const Text('Lyckades inte att skicka. Försök igen senare.'),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
@@ -110,7 +93,24 @@ class _WizardDialogState extends State<WizardDialog> {
         ),
       );
     }
+  } catch (e) {
+    print('Error sending challenge: $e');
+    // (catch) för felhantering
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text('Fel'),
+        content: Text('Lyckades inte att skicka. Försök igen senare.'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text('Ok'),
+          ),
+        ],
+      ),
+    );
   }
+}
 
   void _handleGoBack() {
     Navigator.pop(context);
