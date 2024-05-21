@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_application/api_utils/api_utils.dart';
-import 'package:flutter_application/components/my_navigation_bar.dart';
+import 'package:flutter_application/components/custom_navigation_bar.dart';
 import 'package:flutter_application/components/search_popup.dart';
 import 'package:flutter_application/session_manager.dart';
 
@@ -141,7 +141,7 @@ class _JoinTeamPageState extends State<JoinTeamPage> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => MyNavigationBar()),
+                              builder: (context) => CustomNavigationBar()),
                         );
                       } catch (e) {
                         print('Failed to join team: $e');

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application/components/my_navigation_bar.dart';
+import 'package:flutter_application/components/custom_navigation_bar.dart';
 import 'package:flutter_application/pages/login_page/login_widget.dart';
 import 'package:flutter_application/session_manager.dart';
 
@@ -37,7 +37,7 @@ class _AuthPageState extends State<AuthPage> {
 
           // Handle loaded state
           if (snapshot.hasData && snapshot.data != null) {
-            return MyNavigationBar();
+            return CustomNavigationBar();
           } else {
             return LoginPage();
           }

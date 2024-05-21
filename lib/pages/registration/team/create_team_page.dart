@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application/api_utils/api_utils.dart';
-import 'package:flutter_application/components/my_navigation_bar.dart';
+import 'package:flutter_application/components/custom_navigation_bar.dart';
 import 'package:flutter_application/components/search_popup.dart';
 import 'package:flutter_application/session_manager.dart';
 
@@ -152,11 +152,12 @@ class _CreateTeamPageState extends State<CreateTeamPage> {
                       ));
                       return;
                     }
-                    await ApiUtils.registerTeam(username!, teamName, charity, donationGoal);
+                    await ApiUtils.registerTeam(
+                        username!, teamName, charity, donationGoal);
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => MyNavigationBar()),
+                          builder: (context) => CustomNavigationBar()),
                     );
                   },
                 ),

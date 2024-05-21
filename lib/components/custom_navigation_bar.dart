@@ -8,16 +8,19 @@ import 'package:flutter_application/pages/homepage.dart';
 import 'package:flutter_application/pages/myteampage.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
-class MyNavigationBar extends StatefulWidget {
-  const MyNavigationBar({super.key});
+class CustomNavigationBar extends StatefulWidget {
+  const CustomNavigationBar({super.key});
 
   @override
-  _MyNavigationBarState createState() => _MyNavigationBarState();
+  _CustomNavigationBarState createState() => _CustomNavigationBarState();
 }
 
-class _MyNavigationBarState extends State<MyNavigationBar> {
+class _CustomNavigationBarState extends State<CustomNavigationBar> {
   String? username;
   String? teamName;
+  Color iconColor = const Color.fromARGB(255, 148, 148, 148);
+  Color selectedIconColor = const Color(0XFF3C4785);
+
   @override
   void initState() {
     super.initState();
@@ -27,19 +30,18 @@ class _MyNavigationBarState extends State<MyNavigationBar> {
 
   int selectedPage = 0;
 
-  final _pageOptions = [
-    const HomePage(),
-    ChallengePage(),
-    const SizedBox(), //Placeholder to avoid error when selecting page body
-    LeaderboardPage(),
-    const MyTeamPage(),
-  ];
+  //navigateToPage allows the navigation index to be passed to the pages themselves
+  void navigateToPage(int index) {
+    setState(() {
+      selectedPage = index;
+    });
+  }
 
   Future<void> fetchTeamName() async {
     try {
-      String? teName = await ApiUtils.fetchTeamName(username);
+      String? fetchedTeamName = await ApiUtils.fetchTeamName(username);
       setState(() {
-        teamName = teName;
+        teamName = fetchedTeamName;
       });
     } catch (e) {
       print("Error fetching teamname: $e");
@@ -48,11 +50,20 @@ class _MyNavigationBarState extends State<MyNavigationBar> {
 
   @override
   Widget build(BuildContext context) {
+    final pageOptions = [
+      HomePage(navigateToPage: navigateToPage),
+      ChallengePage(),
+      const SizedBox(), //Placeholder to allow index of selection to match with navigation bar destination page
+      LeaderboardPage(navigateToPage: navigateToPage),
+      const MyTeamPage(),
+    ];
+
     return Scaffold(
         resizeToAvoidBottomInset: false,
+        //Swish button in center of navigation bar
         floatingActionButton: FloatingActionButton.large(
-          shape: const CircleBorder(eccentricity: 0),
-          backgroundColor: const Color(0XFF3C4785),
+          shape: const CircleBorder(),
+          backgroundColor: selectedIconColor,
           onPressed: () async {
             try {
               if (!await launchUrlString(
@@ -87,17 +98,17 @@ class _MyNavigationBarState extends State<MyNavigationBar> {
             });
           },
           selectedIndex: selectedPage,
-          destinations: const [
+          destinations: [
             NavigationDestination(
               icon: Icon(
                 Iconsax.home_2,
                 size: 30,
-                color: Color.fromARGB(255, 148, 148, 148),
+                color: iconColor,
               ),
               selectedIcon: Icon(
                 Iconsax.home_25,
                 size: 30,
-                color: Color(0XFF3C4785),
+                color: selectedIconColor,
               ),
               label: 'Hem',
             ),
@@ -105,26 +116,28 @@ class _MyNavigationBarState extends State<MyNavigationBar> {
               icon: Icon(
                 Iconsax.medal_star,
                 size: 30,
-                color: Color.fromARGB(255, 148, 148, 148),
+                color: iconColor,
               ),
               selectedIcon: Icon(
                 Iconsax.medal_star5,
                 size: 30,
-                color: Color(0XFF3C4785),
+                color: selectedIconColor,
               ),
               label: 'Lagkamp',
             ),
-            SizedBox(width: 20),
+            const SizedBox(
+                width:
+                    20), //UI placeholder to create space for center navigation bar Swish button
             NavigationDestination(
               icon: Icon(
                 Iconsax.receipt_item,
                 size: 30,
-                color: Color.fromARGB(255, 148, 148, 148),
+                color: iconColor,
               ),
               selectedIcon: Icon(
                 Iconsax.receipt_item5,
                 size: 30,
-                color: Color(0XFF3C4785),
+                color: selectedIconColor,
               ),
               label: 'Topplista',
             ),
@@ -132,12 +145,12 @@ class _MyNavigationBarState extends State<MyNavigationBar> {
               icon: Icon(
                 Iconsax.smileys,
                 size: 30,
-                color: Color.fromARGB(255, 148, 148, 148),
+                color: iconColor,
               ),
               selectedIcon: Icon(
                 Iconsax.smileys5,
                 size: 30,
-                color: Color(0XFF3C4785),
+                color: selectedIconColor,
               ),
               label: 'Mitt lag',
             ),
@@ -148,6 +161,7 @@ class _MyNavigationBarState extends State<MyNavigationBar> {
           indicatorColor: Colors.transparent,
           indicatorShape: const CircleBorder(),
         ),
-        body: _pageOptions[selectedPage]);
+        body: pageOptions[
+            selectedPage]); //Change the body of the app so it displays the desired page
   }
 }
