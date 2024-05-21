@@ -8,7 +8,6 @@ import 'package:flutter_application/session_manager.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:flutter_application/components/custom_app_bar.dart';
 import 'package:flutter_application/components/goal_box.dart';
-import 'package:http/http.dart' as http;
 import '../share_helper.dart';
 
 class MyTeamPage extends StatefulWidget {

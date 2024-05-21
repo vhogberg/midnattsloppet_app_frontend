@@ -6,7 +6,6 @@ import 'package:iconsax/iconsax.dart';
 import 'package:flutter_application/pages/challenge_page/challenge_page.dart';
 import 'package:flutter_application/pages/homepage.dart';
 import 'package:flutter_application/pages/myteampage.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 class MyNavigationBar extends StatefulWidget {

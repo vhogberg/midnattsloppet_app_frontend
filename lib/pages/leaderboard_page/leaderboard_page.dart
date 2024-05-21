@@ -49,7 +49,7 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
 
     // Fetch team members
     try {
-      List<dynamic>? teamMembers = await ApiUtils.fetchMembers(team.name);
+      List<dynamic>? teamMembers = await ApiUtils.fetchOtherMembers(team.name);
       if (teamMembers != null) {
         isUserInTeam = teamMembers.any((member) => member['username'] == username);
       }

@@ -7,10 +7,8 @@ import 'package:flutter_application/models/team.dart';
 import 'package:flutter_application/session_manager.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:flutter_application/components/custom_app_bar.dart';
-import 'package:flutter_application/components/goal_box.dart';
-import 'package:http/http.dart' as http;
+import 'package:flutter_application/components/other_goal_box.dart';
 import '../share_helper.dart';
-
 
 class OtherTeamPage extends StatefulWidget {
   final Team team;
@@ -56,18 +54,20 @@ class _OtherTeamPageState extends State<OtherTeamPage> {
         charityName = charity;
         donationGoal = goal ?? 0;
         totalDonations = donations ?? 0;
-        members = teamMembers?.map((member) => member['username'].toString()).toList() ?? [];
+        members = teamMembers
+                ?.map((member) => member['username'].toString())
+                .toList() ??
+            [];
       });
     } catch (e) {
       print("Error fetching team details: $e");
     }
   }
 
-
   Future<void> fetchLeaderboardData() async {
     try {
-      final response = await http.get(
-          Uri.parse('https://group-15-7.pvt.dsv.su.se/app/all/teamswithbox'));
+      final response = await ApiUtils.get(
+          ('https://group-15-7.pvt.dsv.su.se/app/all/teamswithbox'));
 
       if (response.statusCode == 200) {
         final List<dynamic> data = jsonDecode(response.body);
@@ -93,7 +93,8 @@ class _OtherTeamPageState extends State<OtherTeamPage> {
         fetchedTeams.sort((a, b) => b.fundraiserBox.compareTo(a.fundraiserBox));
         setState(() {
           totalTeams = fetchedTeams.length;
-          teamRank = fetchedTeams.indexWhere((team) => team.name == teamName) + 1;
+          teamRank =
+              fetchedTeams.indexWhere((team) => team.name == teamName) + 1;
         });
       } else {
         throw Exception('Failed to load teams from API');
@@ -103,7 +104,7 @@ class _OtherTeamPageState extends State<OtherTeamPage> {
     }
   }
 
- Future<void> fetchDonationGoal() async {
+  Future<void> fetchDonationGoal() async {
     if (teamName != null) {
       try {
         int? goal = await ApiUtils.fetchOtherDonationGoal(teamName!);
@@ -350,10 +351,14 @@ class _OtherTeamPageState extends State<OtherTeamPage> {
                               ),
                             ],
                           ),
-                          const Positioned(
+                          Positioned(
                             top: 60,
                             right: 1,
-                            child: GoalBox(height: 50, width: 90),
+                            child: OtherGoalBox(
+                              height: 50,
+                              width: 90,
+                              teamName: teamName!, // Pass team name here
+                            ),
                           ),
                         ],
                       ),
