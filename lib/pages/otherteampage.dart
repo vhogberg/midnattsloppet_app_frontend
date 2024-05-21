@@ -7,7 +7,7 @@ import 'package:flutter_application/models/team.dart';
 import 'package:flutter_application/session_manager.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:flutter_application/components/custom_app_bar.dart';
-import 'package:flutter_application/components/goal_box.dart';
+import 'package:flutter_application/components/other_goal_box.dart';
 import 'package:http/http.dart' as http;
 import '../share_helper.dart';
 
@@ -65,43 +65,46 @@ class _OtherTeamPageState extends State<OtherTeamPage> {
 
 
   Future<void> fetchLeaderboardData() async {
-    try {
-      final response = await http.get(
-          Uri.parse('https://group-15-7.pvt.dsv.su.se/app/all/teamswithbox'));
+  const String url = 'https://group-15-7.pvt.dsv.su.se/app/all/teamswithbox';
 
-      if (response.statusCode == 200) {
-        final List<dynamic> data = jsonDecode(response.body);
+  try {
+    final response = await ApiUtils.get(url);
 
-        List<Team> fetchedTeams = [];
+    if (response.statusCode == 200) {
+      final List<dynamic> data = jsonDecode(response.body);
 
-        for (var item in data) {
-          String name = item['name'];
-          int fundraiserBox = item['fundraiserBox'];
-          String? companyName;
+      List<Team> fetchedTeams = [];
 
-          if (item['company'] != null) {
-            companyName = item['company']['name'];
-          }
+      for (var item in data) {
+        String name = item['name'];
+        int fundraiserBox = item['fundraiserBox'];
+        String? companyName;
 
-          fetchedTeams.add(Team(
-            name: name,
-            fundraiserBox: fundraiserBox,
-            companyName: companyName,
-          ));
+        if (item['company'] != null) {
+          companyName = item['company']['name'];
         }
 
-        fetchedTeams.sort((a, b) => b.fundraiserBox.compareTo(a.fundraiserBox));
-        setState(() {
-          totalTeams = fetchedTeams.length;
-          teamRank = fetchedTeams.indexWhere((team) => team.name == teamName) + 1;
-        });
-      } else {
-        throw Exception('Failed to load teams from API');
+        fetchedTeams.add(Team(
+          name: name,
+          fundraiserBox: fundraiserBox,
+          companyName: companyName,
+        ));
       }
-    } catch (e) {
-      print("Error fetching leaderboard data: $e");
+
+      fetchedTeams.sort((a, b) => b.fundraiserBox.compareTo(a.fundraiserBox));
+      
+      setState(() {
+        totalTeams = fetchedTeams.length;
+        teamRank = fetchedTeams.indexWhere((team) => team.name == teamName) + 1;
+      });
+    } else {
+      throw Exception('Failed to load teams from API, status code: ${response.statusCode}');
     }
+  } catch (e) {
+    print("Error fetching leaderboard data: $e");
   }
+}
+
 
  Future<void> fetchDonationGoal() async {
     if (teamName != null) {
@@ -350,10 +353,14 @@ class _OtherTeamPageState extends State<OtherTeamPage> {
                               ),
                             ],
                           ),
-                          const Positioned(
+                          Positioned(
                             top: 60,
                             right: 1,
-                            child: GoalBox(height: 50, width: 90),
+                            child: OtherGoalBox(
+                              height: 50,
+                              width: 90,
+                              teamName: teamName!, // Pass team name here
+                            ),
                           ),
                         ],
                       ),
