@@ -45,5 +45,12 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+
+	<key>NSCalendarsUsageDescription</key> <!-- iOS calendar plugin -->
+    <string>INSERT_REASON_HERE</string>
+
+    <key>NSContactsUsageDescription</key> <!-- iOS calendar key -->
+    <string>INSERT_REASON_HERE</string>
+	
 </dict>
 </plist>

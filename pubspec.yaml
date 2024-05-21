@@ -39,6 +39,9 @@ dependencies:
   # flutter_local_notifications: ^17.1.0 # notifikationer som ej fungerade, ny version trasig?
   flutter_local_notifications: ^15.1.1
   flutter_timezone: ^1.0.7
+
+  # kalender: allow the application to read and modify the default calendar on the users device
+  add_2_calendar: ^2.1.2
   
   # provider
   provider: ^6.0.0
