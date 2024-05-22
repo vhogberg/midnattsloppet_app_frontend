@@ -410,72 +410,77 @@ class _HomePageState extends State<HomePage> {
                                 width: 1.0, // Border width
                               ),
                             ),
-                            //child: Transform.translate(offset: Offset (0, -8)),
-                            child: Column(
-                              children: [
-                                const Flexible(
-                                  child: TopThreeTeams(),
-                                ),
-                                const Divider(
-                                  color: Colors
-                                      .white, // Vit färg på avskiljningslinjen
-                                  thickness: 3, // Tjocklek på linjen
-                                  indent: 0, // Indrag från vänster
-                                  endIndent: 0, // Indrag från höger
-                                ),
-                                //SizedBox(height: 1),
-                                Row(
-                                  children: [
-                                    Expanded(
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            teamRank != -1
-                                                ? 'Plats: #$teamRank av $totalTeams'
-                                                : 'Rankning saknas',
-                                            style: const TextStyle(
-                                                fontSize: 16.0,
-                                                fontWeight: FontWeight.bold,
-                                                fontFamily: 'Sora'),
-                                          ),
-                                          const SizedBox(
-                                              height:
-                                                  8.0), // För att skapa lite avstånd mellan texterna
-                                          const Text(
-                                            'YY Dagar till lopp', //YY => $daysToEvent
-                                            style: TextStyle(
-                                                fontSize: 14.0,
-                                                fontFamily: 'Sora'),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    const SizedBox(
-                                        width:
-                                            14.0), // För att skapa lite avstånd mellan kolumnen och knappen
-                                    ElevatedButton(
-                                      onPressed: () {
-                                        // Knappens funktionalitet ska in här
-                                      },
-                                      style: ElevatedButton.styleFrom(
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(8.0),
+                            child: Transform.translate(
+                              offset: Offset(0, -8),
+                              child: Column(
+                                children: [
+                                  const Flexible(
+                                    child: TopThreeTeams(),
+                                  ),
+                                  const Divider(
+                                    color: Colors
+                                        .white, // Vit färg på avskiljningslinjen
+                                    thickness: 3, // Tjocklek på linjen
+                                    indent: 0, // Indrag från vänster
+                                    endIndent: 0, // Indrag från höger
+                                  ),
+                                  //SizedBox(height: 1),
+                                  Row(
+                                    children: [
+                                      Expanded(
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              teamRank != -1
+                                                  ? 'Plats: #$teamRank av $totalTeams'
+                                                  : 'Rankning saknas',
+                                              style: const TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 16.0,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontFamily: 'Sora'),
+                                            ),
+                                            const SizedBox(
+                                                height:
+                                                    8.0), // För att skapa lite avstånd mellan texterna
+                                            const Text(
+                                              'YY Dagar till lopp', //YY => $daysToEvent
+                                              style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 14.0,
+                                                  fontFamily: 'Sora'),
+                                            ),
+                                          ],
                                         ),
                                       ),
-                                      child: const Text(
-                                        'Topplista',
-                                        style: TextStyle(
-                                            fontSize: 14.0,
-                                            fontWeight: FontWeight.bold,
-                                            fontFamily: 'Sora'),
+                                      const SizedBox(
+                                          width:
+                                              14.0), // För att skapa lite avstånd mellan kolumnen och knappen
+                                      ElevatedButton(
+                                        onPressed: () {
+                                          // Knappens funktionalitet ska in här
+                                        },
+                                        style: ElevatedButton.styleFrom(
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(8.0),
+                                          ),
+                                        ),
+                                        child: const Text(
+                                          'Topplista',
+                                          style: TextStyle(
+                                              color: Colors.black,
+                                              fontSize: 14.0,
+                                              fontWeight: FontWeight.bold,
+                                              fontFamily: 'Sora'),
+                                        ),
                                       ),
-                                    ),
-                                  ],
-                                ),
-                              ],
+                                    ],
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
                         ),
