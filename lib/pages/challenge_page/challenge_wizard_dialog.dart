@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_application/api_utils/api_utils.dart';
 import 'package:flutter_application/session_manager.dart';
+import 'package:http/http.dart' as http;
 
 class WizardDialog extends StatefulWidget {
   @override
@@ -21,12 +22,29 @@ class _WizardDialogState extends State<WizardDialog> {
   List<String> teams = [];
   List<String> filteredTeams = [];
 
+  static const String _apiKeyHeader = 'X-API-KEY';
+  static const String _apiKey =
+      '8292EB40F91DCF46950913B1ECC1AB22ED3F7C7491186059D7FAF71D161D791F';
+
   @override
   void initState() {
     super.initState();
+    username = SessionManager.instance.username;
     fetchTeams();
     fetchUserTeam(); // används för titel på lagkamp, t.ex "mitt lag vs nordea lag 7", mitt lag ersätts med användarens lag.
-    username = SessionManager.instance.username;
+  }
+
+  // hämta användarens lag de är med i
+  Future<void> fetchUserTeam() async {
+    try {
+
+      String? teamName = await ApiUtils.fetchTeamName(username);
+      setState(() {
+        userTeam = teamName;
+      });
+    } catch (e) {
+      print('Error fetching user team: $e');
+    }
   }
 
   // hantera wizard steg
@@ -46,44 +64,67 @@ class _WizardDialogState extends State<WizardDialog> {
     });
   }
 
-void _onSend() async {
-  final String url = 'https://group-15-7.pvt.dsv.su.se/app/$username/createchallenge';
+  void _onSend() async {
+    final String url =
+        'https://group-15-7.pvt.dsv.su.se/app/$username/createchallenge';
 
-  // hämta data från de tre olika stegen i wizard
-  final Map<String, String> requestData = {
-    'name': titleController.text,
-    'description': descriptionController.text,
-    'teamtochallenge': selectedTeam!,
-  };
+    // hämta data från de tre olika stegen i wizard
+    final Map<String, String> requestData = {
+      'name': titleController.text,
+      'description': descriptionController.text,
+      'teamtochallenge': selectedTeam!,
+    };
 
-  print('Request Data: $requestData');
-  print('URL: $url');
-  
-  try {
-    // Skicka POST request (try)
-    final response = await ApiUtils.post(
-      url,
-      utf8.encode(jsonEncode(requestData)),
-    );
+    print('Request Data: $requestData');
+    print('URL: $url');
 
-    print('Response Status Code: ${response.statusCode}');
-    print('Response Headers: ${response.headers}');
-    print('Response Body: ${response.body}');
+    try {
+      // Skicka POST request (try)
+      final response = await http.post(
+        Uri.parse(url),
+        headers: {
+        _apiKeyHeader: _apiKey,
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: utf8.encode(jsonEncode(requestData)),
+      );
 
-    // Hantera respons, printar i konsol atm
-    if (response.statusCode == 200) {
-      print('Challenge sent successfully');
-      // Om lyckat: stäng wizard, kanske ha ett steg 5 som säger lyckat?
-      Navigator.pop(context);
-    } else {
-      // Hantera error
-      print('Failed to send challenge: ${response.body}');
-      // Visa error till användare.
+      print('Response Status Code: ${response.statusCode}');
+      print('Response Headers: ${response.headers}');
+      print('Response Body: ${response.body}');
+
+      // Hantera respons, printar i konsol atm
+      if (response.statusCode == 200) {
+        print('Challenge sent successfully');
+        // Om lyckat: stäng wizard, kanske ha ett steg 5 som säger lyckat?
+        Navigator.pop(context);
+      } else {
+        // Hantera error
+        print('Failed to send challenge: ${response.body}');
+        // Visa error till användare.
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: Text('Fel'),
+            content:
+                const Text('Lyckades inte att skicka. Försök igen senare.'),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: Text('Ok'),
+              ),
+            ],
+          ),
+        );
+      }
+    } catch (e) {
+      print('Error sending challenge: $e');
+      // (catch) för felhantering
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
           title: Text('Fel'),
-          content: const Text('Lyckades inte att skicka. Försök igen senare.'),
+          content: Text('Lyckades inte att skicka. Försök igen senare.'),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
@@ -93,24 +134,7 @@ void _onSend() async {
         ),
       );
     }
-  } catch (e) {
-    print('Error sending challenge: $e');
-    // (catch) för felhantering
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text('Fel'),
-        content: Text('Lyckades inte att skicka. Försök igen senare.'),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: Text('Ok'),
-          ),
-        ],
-      ),
-    );
   }
-}
 
   void _handleGoBack() {
     Navigator.pop(context);
@@ -384,19 +408,5 @@ void _onSend() async {
         ),
       ),
     );
-  }
-
-// hämta användarens lag de är med i
-  Future<void> fetchUserTeam() async {
-    try {
-      // Replace 'username' with the actual username
-      String? username = 'username';
-      String? teamName = await ApiUtils.fetchTeamName(username);
-      setState(() {
-        userTeam = teamName;
-      });
-    } catch (e) {
-      print('Error fetching user team: $e');
-    }
   }
 }
