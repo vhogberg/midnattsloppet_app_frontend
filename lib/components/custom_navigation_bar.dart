@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application/api_utils/api_utils.dart';
+import 'package:flutter_application/pages/challenge_page/active_challenge_page.dart';
 import 'package:flutter_application/pages/leaderboard_page/leaderboard_page.dart';
 import 'package:flutter_application/session_manager.dart';
 import 'package:iconsax/iconsax.dart';
@@ -20,12 +21,14 @@ class _CustomNavigationBarState extends State<CustomNavigationBar> {
   String? teamName;
   Color iconColor = const Color.fromARGB(255, 148, 148, 148);
   Color selectedIconColor = const Color(0XFF3C4785);
+  bool isChallengeAccepted = false;
 
   @override
   void initState() {
     super.initState();
     username = SessionManager.instance.username;
     fetchTeamName();
+    fetchChallengeStatus();
   }
 
   int selectedPage = 0;
@@ -48,11 +51,22 @@ class _CustomNavigationBarState extends State<CustomNavigationBar> {
     }
   }
 
+  Future<void> fetchChallengeStatus() async {
+    try {
+      String? challengeStatus = await ApiUtils.fetchChallengeStatus(username);
+      setState(() {
+        isChallengeAccepted = (challengeStatus == 'ACCEPTED');
+      });
+    } catch (e) {
+      print("Error fetching challenge status: $e");
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final pageOptions = [
       HomePage(navigateToPage: navigateToPage),
-      ChallengePage(),
+      isChallengeAccepted ? const ActiveChallengePage() : ChallengePage(),
       const SizedBox(), //Placeholder to allow index of selection to match with navigation bar destination page
       LeaderboardPage(navigateToPage: navigateToPage),
       const MyTeamPage(),
