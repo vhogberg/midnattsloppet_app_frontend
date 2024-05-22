@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application/api_utils/api_utils.dart';
-import 'package:flutter_application/components/gradient_container.dart';
 import 'package:flutter_application/session_manager.dart';
 import 'package:iconsax/iconsax.dart';
 
@@ -100,63 +99,69 @@ class _ActiveChallengePageState extends State<ActiveChallengePage> {
                           ),
                         ),
                         const SizedBox(height: 10),
-                        Column(children: [
-                          const Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                'Insamlat',
-                                style: TextStyle(
-                                  fontSize: 18.0,
+                        IntrinsicHeight(
+                          child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    const Text(
+                                      'Insamlat',
+                                      style: TextStyle(
+                                        fontSize: 18.0,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 10),
+                                    Text(
+                                      '${totalDonations.toStringAsFixed(0)} kr',
+                                      style: const TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 28,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 10),
+                                  ],
+                                ),
+                                const VerticalDivider(
+                                  width: 60,
+                                  thickness: 2,
+                                  indent: 0,
+                                  endIndent: 0,
                                   color: Colors.white,
                                 ),
-                              ),
-                              VerticalDivider(
-                                width: 20,
-                                thickness: 5,
-                                indent: 0,
-                                endIndent: 0,
-                                color: Colors.white,
-                              ),
-                              Text(
-                                'Insamlat',
-                                style: TextStyle(
-                                  fontSize: 18.0,
-                                  color: Colors.white,
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    const Text(
+                                      'Insamlat',
+                                      style: TextStyle(
+                                        fontSize: 18.0,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 10),
+                                    Text(
+                                      '${totalDonations.toStringAsFixed(0)} kr',
+                                      style: const TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 28,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 5),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                '${totalDonations.toStringAsFixed(0)} kr',
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 28,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              Text(
-                                '${totalDonations.toStringAsFixed(0)} kr',
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 28,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ]),
-                        const SizedBox(height: 5),
+                              ]),
+                        ),
                         const Divider(
+                          height: 0,
                           color: Colors.white,
                           thickness: 2,
                         ),
                         const SizedBox(height: 10),
-                        Text(
+                        const Text(
                           'Egen tävling: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
                           style: TextStyle(
                             fontSize: 16.0,
@@ -173,7 +178,7 @@ class _ActiveChallengePageState extends State<ActiveChallengePage> {
                               borderRadius: BorderRadius.circular(8.0),
                             ),
                           ),
-                          child: Row(
+                          child: const Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               Icon(
@@ -199,16 +204,16 @@ class _ActiveChallengePageState extends State<ActiveChallengePage> {
                         ),
                         Row(
                           children: [
-                            Expanded(
+                            const Expanded(
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  const SizedBox(
+                                  SizedBox(
                                       height:
                                           8.0), // För att skapa lite avstånd mellan texterna
-                                  const Text(
+                                  Text(
                                     'Tidsresultat publiceras på\nMidnattsloppets hemsida:',
-                                    style: const TextStyle(
+                                    style: TextStyle(
                                         fontSize: 14.0, fontFamily: 'Sora'),
                                   ),
                                 ],
@@ -242,166 +247,6 @@ class _ActiveChallengePageState extends State<ActiveChallengePage> {
                     ),
                   ),
                 ),
-                /*GradientContainer(
-
-                  width: MediaQuery.of(context).size.width,
-                  height: 460,
-                  gradientAlignment: Alignment(0.4, 0.5),
-                ),*/
-                /* Column(
-                  children: [
-                    const SizedBox(height: 10),
-                    const Center(
-                      child: Text(
-                        'Nordea lag 5 vs. Nordea lag 7',
-                        style: TextStyle(
-                          fontSize: 18.0,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 10),
-                    const Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          'Insamlat',
-                          style: TextStyle(
-                            fontSize: 18.0,
-                            color: Colors.white,
-                          ),
-                        ),
-                        SizedBox(width: 60),
-                        Text(
-                          'Insamlat',
-                          style: TextStyle(
-                            fontSize: 18.0,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 5),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          '${totalDonations.toStringAsFixed(0)} kr',
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 28,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        const SizedBox(width: 60),
-                        Text(
-                          '${totalDonations.toStringAsFixed(0)} kr',
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 28,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 5),
-                    const Divider(
-                      color: Colors.white,
-                      thickness: 2,
-                      indent: 10, // Indrag från vänster
-                      endIndent: 10, // Indrag från höger
-                    ),
-                    const SizedBox(height: 20),
-                    const Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 20.0),
-                      child: Text(
-                        'Egen tävling: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
-                        style: TextStyle(
-                          fontSize: 16.0,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 20),
-                    ElevatedButton(
-                      onPressed: () {
-                        // Knappens funktionalitet ska in här
-                      },
-                      style: ElevatedButton.styleFrom(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8.0),
-                        ),
-                      ),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Icon(
-                            Iconsax.export_1,
-                          ),
-                          SizedBox(
-                            width: 5,
-                          ),
-                          Text(
-                            'Redigera utmaningar',
-                            style: TextStyle(
-                              fontSize: 14.0,
-                              fontWeight: FontWeight.bold,
-                              fontFamily: 'Sora',
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    const Divider(
-                      color: Colors.white,
-                      thickness: 2,
-                      indent: 10, // Indrag från vänster
-                      endIndent: 10, // Indrag från höger
-                    ),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const SizedBox(
-                                  height:
-                                      8.0), // För att skapa lite avstånd mellan texterna
-                              const Text(
-                                'Tidsresultat publiceras på\nMidnattsloppets hemsida:',
-                                style: const TextStyle(
-                                    fontSize: 14.0, fontFamily: 'Sora'),
-                              ),
-                            ],
-                          ),
-                        ),
-
-                        const SizedBox(
-                            width:
-                                14.0), // För att skapa lite avstånd mellan kolumnen och knappen
-                        ElevatedButton(
-                          onPressed: () {
-                            // Knappens funktionalitet ska in här
-                          },
-                          style: ElevatedButton.styleFrom(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8.0),
-                            ),
-                          ),
-                          child: const Text(
-                            'Hemsida',
-                            style: TextStyle(
-                                fontSize: 14.0,
-                                fontWeight: FontWeight.bold,
-                                fontFamily: 'Sora'),
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 20),
-                  ],
-                ), */
               ],
             ),
           ],
