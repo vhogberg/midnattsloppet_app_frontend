@@ -218,7 +218,7 @@ class _ActiveChallengePageState extends State<ActiveChallengePage> {
                                 Text(
                                   'Tidsresultat publiceras på\nMidnattsloppets hemsida:',
                                   style: TextStyle(
-                                      fontSize: 14.0, fontFamily: 'Sora'),
+                                      fontSize: 14.0, color: Colors.white, fontFamily: 'Sora'),
                                 ),
                               ],
                             ),
