@@ -85,166 +85,167 @@ class _ActiveChallengePageState extends State<ActiveChallengePage> {
                       ],
                     ),
                   ),
-                  child: SingleChildScrollView(
-                    child: Column(
-                      children: [
-                        const Center(
+                  child: Column(
+                    children: [
+                      const Center(
+                        child: Text(
+                          'Nordea lag 5 vs. Nordea lag 7',
+                          style: TextStyle(
+                            fontSize: 18.0,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 10),
+                      IntrinsicHeight(
+                        child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  const Text(
+                                    'Insamlat',
+                                    style: TextStyle(
+                                      fontSize: 18.0,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 10),
+                                  Text(
+                                    '${totalDonations.toStringAsFixed(0)} kr',
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 28,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 10),
+                                ],
+                              ),
+                              const VerticalDivider(
+                                width: 60,
+                                thickness: 2,
+                                indent: 0,
+                                endIndent: 0,
+                                color: Colors.white,
+                              ),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  const Text(
+                                    'Insamlat',
+                                    style: TextStyle(
+                                      fontSize: 18.0,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 10),
+                                  Text(
+                                    '${totalDonations.toStringAsFixed(0)} kr',
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 28,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ]),
+                      ),
+                      const Divider(
+                        height: 0,
+                        color: Colors.white,
+                        thickness: 2,
+                      ),
+                      const SizedBox(height: 10),
+                      ConstrainedBox(
+                        constraints: const BoxConstraints(maxHeight: 170),
+                        child: const SingleChildScrollView(
                           child: Text(
-                            'Nordea lag 5 vs. Nordea lag 7',
+                            'Egen tävling: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor inciLorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmodLorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmodLorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmodLorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmodLorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmoddidunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
                             style: TextStyle(
-                              fontSize: 18.0,
-                              fontWeight: FontWeight.bold,
+                              fontSize: 16.0,
                               color: Colors.white,
                             ),
                           ),
                         ),
-                        const SizedBox(height: 10),
-                        IntrinsicHeight(
-                          child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    const Text(
-                                      'Insamlat',
-                                      style: TextStyle(
-                                        fontSize: 18.0,
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                    const SizedBox(height: 10),
-                                    Text(
-                                      '${totalDonations.toStringAsFixed(0)} kr',
-                                      style: const TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 28,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                    const SizedBox(height: 10),
-                                  ],
-                                ),
-                                const VerticalDivider(
-                                  width: 60,
-                                  thickness: 2,
-                                  indent: 0,
-                                  endIndent: 0,
-                                  color: Colors.white,
-                                ),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    const Text(
-                                      'Insamlat',
-                                      style: TextStyle(
-                                        fontSize: 18.0,
-                                        color: Colors.white,
-                                      ),
-                                    ),
-                                    const SizedBox(height: 10),
-                                    Text(
-                                      '${totalDonations.toStringAsFixed(0)} kr',
-                                      style: const TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 28,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ]),
-                        ),
-                        const Divider(
-                          height: 0,
-                          color: Colors.white,
-                          thickness: 2,
-                        ),
-                        const SizedBox(height: 10),
-                        const Text(
-                          'Egen tävling: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
-                          style: TextStyle(
-                            fontSize: 16.0,
-                            color: Colors.white,
+                      ),
+                      const Spacer(),
+                      ElevatedButton(
+                        onPressed: () {
+                          // Knappens funktionalitet ska in här
+                        },
+                        style: ElevatedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8.0),
                           ),
                         ),
-                        const SizedBox(height: 20),
-                        ElevatedButton(
-                          onPressed: () {
-                            // Knappens funktionalitet ska in här
-                          },
-                          style: ElevatedButton.styleFrom(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8.0),
-                            ),
-                          ),
-                          child: const Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Icon(
-                                Iconsax.export_1,
-                              ),
-                              SizedBox(
-                                width: 5,
-                              ),
-                              Text(
-                                'Redigera utmaningar',
-                                style: TextStyle(
-                                  fontSize: 14.0,
-                                  fontWeight: FontWeight.bold,
-                                  fontFamily: 'Sora',
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        const Divider(
-                          color: Colors.white,
-                          thickness: 2,
-                        ),
-                        Row(
+                        child: const Row(
+                          mainAxisSize: MainAxisSize.min,
                           children: [
-                            const Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  SizedBox(
-                                      height:
-                                          8.0), // För att skapa lite avstånd mellan texterna
-                                  Text(
-                                    'Tidsresultat publiceras på\nMidnattsloppets hemsida:',
-                                    style: TextStyle(
-                                        fontSize: 14.0, fontFamily: 'Sora'),
-                                  ),
-                                ],
-                              ),
+                            Icon(
+                              Iconsax.export_1,
                             ),
-
-                            const SizedBox(
-                                width:
-                                    14.0), // För att skapa lite avstånd mellan kolumnen och knappen
-                            ElevatedButton(
-                              onPressed: () {
-                                // Knappens funktionalitet ska in här
-                              },
-                              style: ElevatedButton.styleFrom(
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(8.0),
-                                ),
-                              ),
-                              child: const Text(
-                                'Hemsida',
-                                style: TextStyle(
-                                    fontSize: 14.0,
-                                    fontWeight: FontWeight.bold,
-                                    fontFamily: 'Sora'),
+                            SizedBox(
+                              width: 5,
+                            ),
+                            Text(
+                              'Redigera utmaningar',
+                              style: TextStyle(
+                                fontSize: 14.0,
+                                fontWeight: FontWeight.bold,
+                                fontFamily: 'Sora',
                               ),
                             ),
                           ],
                         ),
-                        const SizedBox(height: 20),
-                      ],
-                    ),
+                      ),
+                      const Divider(
+                        color: Colors.white,
+                        thickness: 2,
+                      ),
+                      Row(
+                        children: [
+                          const Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                SizedBox(
+                                    height:
+                                        8.0), // För att skapa lite avstånd mellan texterna
+                                Text(
+                                  'Tidsresultat publiceras på\nMidnattsloppets hemsida:',
+                                  style: TextStyle(
+                                      fontSize: 14.0, fontFamily: 'Sora'),
+                                ),
+                              ],
+                            ),
+                          ),
+                          const SizedBox(
+                              width:
+                                  14.0), // För att skapa lite avstånd mellan kolumnen och knappen
+                          ElevatedButton(
+                            onPressed: () {
+                              // Knappens funktionalitet ska in här
+                            },
+                            style: ElevatedButton.styleFrom(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8.0),
+                              ),
+                            ),
+                            child: const Text(
+                              'Hemsida',
+                              style: TextStyle(
+                                  fontSize: 14.0,
+                                  fontWeight: FontWeight.bold,
+                                  fontFamily: 'Sora'),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
                 ),
               ],
