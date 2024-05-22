@@ -30,6 +30,7 @@ class _HomePageState extends State<HomePage> {
   double donationGoal = 0;
   double totalDonations = 0;
   late Timer _timer;
+  int numberOfDaysLeft = 0;
 
   @override
   void initState() {
@@ -41,10 +42,12 @@ class _HomePageState extends State<HomePage> {
     fetchCharityName();
     fetchTeamName();
     fetchLeaderboardData();
+    daysLeft();
 
     _timer = Timer.periodic(const Duration(seconds: 10), (timer) {
       fetchGoal();
       fetchDonations();
+      daysLeft();
     });
   }
 
@@ -149,6 +152,19 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
+  void daysLeft() {
+    // Target date for the countdown
+    DateTime targetDate = DateTime(2024, 8, 17);
+
+    // Get current date and time
+    DateTime now = DateTime.now();
+
+    // Calculate the difference in days
+    setState(() {
+      numberOfDaysLeft = targetDate.difference(now).inDays;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -184,26 +200,6 @@ class _HomePageState extends State<HomePage> {
                           size: 35,
                           color: Color.fromARGB(255, 113, 113, 113),
                         ),
-                        /* if (1 ==
-                            0 /** Denna if-satsen finns om vi hittar något sätt att kontrollera om det finns olästa notifikationer, just nu tar detta för mkt tid*/)
-                          Positioned(
-                            // position på cirkeln
-                            top: 0,
-                            right: 0,
-                            child: Container(
-                              padding:
-                                  const EdgeInsets.all(1), // Storlek på cirkeln
-                              decoration: const BoxDecoration(
-                                color: Color.fromARGB(255, 241, 75, 75),
-                                shape: BoxShape.circle,
-                              ),
-                              child: const Icon(
-                                Iconsax.notification_12,
-                                size: 12,
-                                color: Colors.white,
-                              ),
-                            ),
-                          ), */
                       ],
                     ),
                   ),
@@ -396,10 +392,10 @@ class _HomePageState extends State<HomePage> {
                             ],
                           ),
                         ),
-                        padding: EdgeInsets.all(18),
+                        padding: const EdgeInsets.all(20),
                         child: Center(
                           child: Container(
-                            padding: const EdgeInsets.all(5),
+                            padding: const EdgeInsets.only(left: 10, right: 10),
                             width: MediaQuery.of(context).size.width,
                             height: MediaQuery.of(context).size.height,
                             decoration: BoxDecoration(
@@ -410,72 +406,78 @@ class _HomePageState extends State<HomePage> {
                                 width: 1.0, // Border width
                               ),
                             ),
-                            //child: Transform.translate(offset: Offset (0, -8)),
-                            child: Column(
-                              children: [
-                                const Flexible(
-                                  child: TopThreeTeams(),
-                                ),
-                                const Divider(
-                                  color: Colors
-                                      .white, // Vit färg på avskiljningslinjen
-                                  thickness: 3, // Tjocklek på linjen
-                                  indent: 0, // Indrag från vänster
-                                  endIndent: 0, // Indrag från höger
-                                ),
-                                //SizedBox(height: 1),
-                                Row(
-                                  children: [
-                                    Expanded(
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            teamRank != -1
-                                                ? 'Plats: #$teamRank av $totalTeams'
-                                                : 'Rankning saknas',
-                                            style: const TextStyle(
-                                                fontSize: 16.0,
-                                                fontWeight: FontWeight.bold,
-                                                fontFamily: 'Sora'),
-                                          ),
-                                          const SizedBox(
-                                              height:
-                                                  8.0), // För att skapa lite avstånd mellan texterna
-                                          const Text(
-                                            'YY Dagar till lopp', //YY => $daysToEvent
-                                            style: TextStyle(
-                                                fontSize: 14.0,
-                                                fontFamily: 'Sora'),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    const SizedBox(
-                                        width:
-                                            14.0), // För att skapa lite avstånd mellan kolumnen och knappen
-                                    ElevatedButton(
-                                      onPressed: () {
-                                        // Knappens funktionalitet ska in här
-                                      },
-                                      style: ElevatedButton.styleFrom(
-                                        shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(8.0),
+                            child: Transform.translate(
+                              offset: const Offset(0, -8),
+                              child: Column(
+                                children: [
+                                  const Flexible(
+                                    child: TopThreeTeams(),
+                                  ),
+                                  const Divider(
+                                    height: 0,
+                                    color: Colors
+                                        .white, // Vit färg på avskiljningslinjen
+                                    thickness: 2, // Tjocklek på linjen
+                                    indent: 0, // Indrag från vänster
+                                    endIndent: 0, // Indrag från höger
+                                  ),
+                                  //SizedBox(height: 1),
+                                  Row(
+                                    children: [
+                                      Expanded(
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              teamRank != -1
+                                                  ? 'Plats: #$teamRank av $totalTeams'
+                                                  : 'Rankning saknas',
+                                              style: const TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 16.0,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontFamily: 'Sora'),
+                                            ),
+                                            const SizedBox(
+                                                height:
+                                                    8.0), // För att skapa lite avstånd mellan texterna
+                                            Text(
+                                              '$numberOfDaysLeft Dagar till lopp', //YY => $daysToEvent
+                                              style: const TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 14.0,
+                                                  fontFamily: 'Sora'),
+                                            ),
+                                          ],
                                         ),
                                       ),
-                                      child: const Text(
-                                        'Topplista',
-                                        style: TextStyle(
-                                            fontSize: 14.0,
-                                            fontWeight: FontWeight.bold,
-                                            fontFamily: 'Sora'),
+                                      const SizedBox(
+                                          width:
+                                              14.0), // För att skapa lite avstånd mellan kolumnen och knappen
+                                      ElevatedButton(
+                                        onPressed: () {
+                                          // Knappens funktionalitet ska in här
+                                        },
+                                        style: ElevatedButton.styleFrom(
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(8.0),
+                                          ),
+                                        ),
+                                        child: const Text(
+                                          'Topplista',
+                                          style: TextStyle(
+                                              color: Colors.black,
+                                              fontSize: 14.0,
+                                              fontWeight: FontWeight.bold,
+                                              fontFamily: 'Sora'),
+                                        ),
                                       ),
-                                    ),
-                                  ],
-                                ),
-                              ],
+                                    ],
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
                         ),
