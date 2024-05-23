@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application/api_utils/api_utils.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-
 class SessionManager {
   static final SessionManager _instance = SessionManager._internal();
 
@@ -103,7 +102,7 @@ class SessionManager {
     }
   }
 
-  Future<void> signUserOut(BuildContext context) async {
+  Future<bool> signUserOut() async {
     try {
       final SharedPreferences prefs = await SharedPreferences.getInstance();
       final String? sessionToken = prefs.getString(_sessionKey);
@@ -117,18 +116,18 @@ class SessionManager {
         );
         if (response.statusCode == 200) {
           prefs.remove(_sessionKey);
-          Navigator.pushNamedAndRemoveUntil(context, '/', (route) => false);
           print("Logout successful");
+          return true; // Sign-out successful
         } else {
           throw Exception('Failed to logout: ${response.statusCode}');
         }
+      } else {
+        // Session token is already null, so consider it as successful sign-out
+        return true;
       }
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Failed to logout: $e'),
-        ),
-      );
+      print('Failed to logout: $e');
+      return false; // Sign-out failed
     }
   }
 }

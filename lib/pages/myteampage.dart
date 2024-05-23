@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_application/api_utils/api_utils.dart';
 import 'package:flutter_application/components/donation_progress_bar.dart';
+import 'package:flutter_application/components/logout_dialog.dart';
 import 'package:flutter_application/models/team.dart';
 import 'package:flutter_application/session_manager.dart';
 import 'package:iconsax/iconsax.dart';
@@ -222,7 +223,7 @@ class _MyTeamPageState extends State<MyTeamPage> {
         actionIcon: Iconsax.logout_1,
         // kalla på onActionPressed metoden också, använd sessionmanager för att logga ut
         onActionPressed: () {
-          SessionManager.instance.signUserOut(context);
+          SignOutDialog.show(context); // Call the sign-out dialog
         },
       ),
       body: SingleChildScrollView(

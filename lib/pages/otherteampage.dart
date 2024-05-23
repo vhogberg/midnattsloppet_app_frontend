@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_application/api_utils/api_utils.dart';
 import 'package:flutter_application/components/donation_progress_bar.dart';
+import 'package:flutter_application/components/logout_dialog.dart';
 import 'package:flutter_application/components/return_arrow_argument.dart';
 import 'package:flutter_application/models/team.dart';
 import 'package:flutter_application/session_manager.dart';
@@ -198,7 +199,7 @@ class _OtherTeamPageState extends State<OtherTeamPage> {
         useActionButton: true,
         actionIcon: Iconsax.logout_1,
         onActionPressed: () {
-          SessionManager.instance.signUserOut(context);
+          SignOutDialog.show(context); // Call the sign-out dialog
         },
       ),
       body: SingleChildScrollView(
