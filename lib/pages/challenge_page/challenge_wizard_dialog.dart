@@ -135,7 +135,7 @@ class _WizardDialogState extends State<WizardDialog> {
   @override
   Widget build(BuildContext context) {
     return Dialog(
-      insetPadding: EdgeInsets.all(20.0),
+      insetPadding: const EdgeInsets.all(20.0),
       child: Container(
         width: MediaQuery.of(context).size.width * 0.8 + 60, // bredd på wizard
         height: MediaQuery.of(context).size.height * 0.6,
@@ -164,7 +164,7 @@ class _WizardDialogState extends State<WizardDialog> {
                         foregroundColor: Colors.white, // textfärg
                         backgroundColor: Colors.grey, // knappfärg
                       ),
-                      child: Text('Tillbaka'),
+                      child: const Text('Tillbaka'),
                     ),
                   if (_currentPage > 0)
                     ElevatedButton(
@@ -173,10 +173,10 @@ class _WizardDialogState extends State<WizardDialog> {
                         foregroundColor: Colors.white, // textfärg
                         backgroundColor: Colors.grey, // knappfärg
                       ),
-                      child: Text('Tillbaka'),
+                      child: const Text('Tillbaka'),
                     ),
                   if (_currentPage < 3)
-                    Spacer(), // Spacer så att "nästa"-knappen alltid är på höger sida.
+                    const Spacer(), // Spacer så att "nästa"-knappen alltid är på höger sida.
                   if (_currentPage < 3)
                     ElevatedButton(
                       onPressed: _nextPage,
@@ -184,7 +184,7 @@ class _WizardDialogState extends State<WizardDialog> {
                         foregroundColor: Colors.white, // textfärg
                         backgroundColor: const Color(0XFF3C4785), // knappfärg
                       ),
-                      child: Text('Nästa'),
+                      child: const Text('Nästa'),
                     ),
                   if (_currentPage == 3)
                     ElevatedButton(
@@ -223,7 +223,7 @@ class _WizardDialogState extends State<WizardDialog> {
           padding: const EdgeInsets.symmetric(horizontal: 20.0),
           child: TextField(
             controller: searchController,
-            decoration: InputDecoration(
+            decoration: const InputDecoration(
               hintText: 'Ange lagnamn...',
               prefixIcon: Icon(Icons.search),
               border: OutlineInputBorder(),
@@ -236,14 +236,14 @@ class _WizardDialogState extends State<WizardDialog> {
         Expanded(
           child: filteredTeams
                   .isEmpty // om det inte finns några lag i challengeable teams API endpoint
-              ? Center(child: Text('Inga lag finns att utmana!'))
+              ? const Center(child: Text('Inga lag finns att utmana!'))
               : ListView.builder(
                   itemCount: filteredTeams.length,
                   itemBuilder: (context, index) {
                     return ListTile(
                       title: Text(
                         filteredTeams[index],
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 18.0,
                           fontWeight: FontWeight.bold,
                         ),
@@ -265,7 +265,7 @@ class _WizardDialogState extends State<WizardDialog> {
   // Hämta team för sökfunktionen för API
   Future<void> fetchTeams() async {
     try {
-      final data = await ApiUtils.fetchChallengeableTeamsFromAPI(username!);
+      final data = await ApiUtils.fetchChallengeableTeams(username!);
       // final data = await ApiUtils.fetchTeamsFromAPI();
 
       setState(() {
@@ -309,7 +309,7 @@ class _WizardDialogState extends State<WizardDialog> {
               hintText: userTeam != null
                   ? '${userTeam!} vs ${selectedTeam ?? ''}' // lokala användarens lag vs valt lag i listan
                   : 'Mitt lag vs ${selectedTeam ?? ''}', // tror inte detta behövs, men används för fall då användare inte är med i ett lag
-              border: OutlineInputBorder(),
+              border: const OutlineInputBorder(),
             ),
           )
         ],
@@ -336,7 +336,7 @@ class _WizardDialogState extends State<WizardDialog> {
           ),
           TextField(
             controller: descriptionController,
-            decoration: InputDecoration(
+            decoration: const InputDecoration(
               hintText: 'Ange egna handgjorda utmaningar',
               border: OutlineInputBorder(),
             ),
@@ -365,11 +365,11 @@ class _WizardDialogState extends State<WizardDialog> {
                 'Översikt',
                 style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               _buildOverviewItem('Valt lag:', selectedTeam ?? 'Inget lag valt'),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               _buildOverviewItem('Titel:', titleController.text),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               const Text(
                 'Egna tävlingar:',
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),

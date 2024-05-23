@@ -105,7 +105,7 @@ class ApiUtils {
     return headers;
   }
 
-  static Future<List<String>> fetchCharitiesFromAPI() async {
+  static Future<List<String>> fetchCharities() async {
     final response = await http.get(
       Uri.parse('$baseURL/all/charities'),
       headers: <String, String>{
@@ -175,7 +175,7 @@ class ApiUtils {
     }
   }
 
-  static Future<List<String>> fetchTeamsFromAPI() async {
+  static Future<List<String>> fetchTeams() async {
     final response = await http.get(
       Uri.parse('$baseURL/all/teams'),
       headers: <String, String>{
@@ -192,7 +192,7 @@ class ApiUtils {
     }
   }
 
-  static Future<List<String>> fetchChallengeableTeamsFromAPI(String username) async {
+  static Future<List<String>> fetchChallengeableTeams(String username) async {
     final response = await http.get(
       Uri.parse('$baseURL/all/challengeable-teams/$username'),
       headers: <String, String>{
@@ -209,7 +209,7 @@ class ApiUtils {
     }
   }
 
-  static Future<List<String>> fetchTeamsByCompanyFromAPI(
+  static Future<List<String>> fetchTeamsByCompany(
       String companyName) async {
     final response = await http.get(
       Uri.parse('$baseURL/all/teams/$companyName'),
