@@ -3,10 +3,8 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_application/api_utils/api_utils.dart';
 import 'package:flutter_application/components/donation_progress_bar.dart';
-import 'package:flutter_application/components/logout_dialog.dart';
 import 'package:flutter_application/components/return_arrow_argument.dart';
 import 'package:flutter_application/models/team.dart';
-import 'package:flutter_application/session_manager.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:flutter_application/components/custom_app_bar.dart';
 import 'package:flutter_application/components/other_goal_box.dart';
@@ -198,13 +196,9 @@ class _OtherTeamPageState extends State<OtherTeamPage> {
     return Scaffold(
       appBar: CustomAppBar(
         key: null,
-        title: 'Mitt lag',
+        title: '',
         showReturnArrow: args.showReturnArrow,
         useActionButton: true,
-        actionIcon: Iconsax.logout_1,
-        onActionPressed: () {
-          SignOutDialog.show(context); // Call the sign-out dialog
-        },
       ),
       body: SingleChildScrollView(
         child: Column(
