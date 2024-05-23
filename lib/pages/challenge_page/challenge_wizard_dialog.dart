@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_application/api_utils/api_utils.dart';
+import 'package:flutter_application/components/dialog_utils.dart';
 import 'package:flutter_application/session_manager.dart';
 import 'package:http/http.dart' as http;
 
@@ -50,15 +51,18 @@ class _WizardDialogState extends State<WizardDialog> {
   void _nextPage() {
     setState(() {
       if (_currentPage == 0 && selectedTeam == null) {
-        _showValidationError('Du måste välja ett lag.');
+        DialogUtils.showGenericErrorMessage(
+            context, 'Fel', 'Du måste välja ett lag!');
         return;
       }
       if (_currentPage == 1 && titleController.text.isEmpty) {
-        _showValidationError('Du måste ange en titel.');
+        DialogUtils.showGenericErrorMessage(context, 'Fel',
+          'Du måste ange en titel.');
         return;
       }
       if (_currentPage == 2 && descriptionController.text.isEmpty) {
-        _showValidationError('Du måste ange egna utmaningar.');
+        DialogUtils.showGenericErrorMessage(context, 'Fel',
+          'Du måste ange egna utmaningar.');
         return;
       }
       if (_currentPage < 3) {
@@ -113,81 +117,20 @@ class _WizardDialogState extends State<WizardDialog> {
         // Hantera error
         print('Failed to send challenge: ${response.body}');
         // Visa error till användare.
-        showDialog(
-          context: context,
-          builder: (context) => AlertDialog(
-            title: Text('Fel'),
-            content:
-                const Text('Lyckades inte att skicka. Försök igen senare.'),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.pop(context),
-                child: Text('Ok'),
-              ),
-            ],
-          ),
-        );
+        DialogUtils.showGenericErrorMessage(context, 'Fel',
+          'Lyckades inte att skicka! Vänligen försök igen senare.');
       }
     } catch (e) {
       print('Error sending challenge: $e');
       // (catch) för felhantering
-      showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-          title: Text('Fel'),
-          content: Text('Lyckades inte att skicka. Försök igen senare.'),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: Text('Ok'),
-            ),
-          ],
-        ),
-      );
+      DialogUtils.showGenericErrorMessage(context, 'Fel',
+          'Lyckades inte att skicka! Vänligen försök igen senare.');
     }
   }
 
   void _handleGoBack() {
     Navigator.pop(context);
   }
-
-  void _showValidationError(String message) {
-  showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return AlertDialog(
-        title: Text(
-          'Fel',
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontFamily: 'Sora',
-          ),
-        ),
-        content: Text(
-          message,
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontFamily: 'Sora',
-          ),
-        ),
-        actions: <Widget>[
-          TextButton(
-            child: Text(
-              'OK',
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontFamily: 'Sora',
-              ),
-            ),
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-          ),
-        ],
-      );
-    },
-  );
-}
 
   @override
   Widget build(BuildContext context) {
@@ -322,7 +265,9 @@ class _WizardDialogState extends State<WizardDialog> {
   // Hämta team för sökfunktionen för API
   Future<void> fetchTeams() async {
     try {
-      final data = await ApiUtils.fetchTeamsFromAPI();
+      final data = await ApiUtils.fetchChallengeableTeamsFromAPI(username!);
+      // final data = await ApiUtils.fetchTeamsFromAPI();
+
       setState(() {
         teams = data;
         filteredTeams.addAll(teams);
