@@ -39,6 +39,10 @@ class _OtherTeamPageState extends State<OtherTeamPage> {
     companyName = widget.team.companyName;
     fetchTeamDetails();
     fetchLeaderboardData();
+    timer = Timer.periodic(const Duration(seconds: 10), (timer) {
+      fetchTeamDetails();
+      fetchLeaderboardData();
+    });
   }
 
   Future<void> fetchTeamDetails() async {

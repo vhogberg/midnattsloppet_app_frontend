@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_application/api_utils/api_utils.dart';
 import 'package:flutter_application/components/custom_app_bar.dart';
@@ -23,6 +21,8 @@ class _ChallengePageState extends State<ChallengePage> {
       ''; // någon har skickat en utmaning till MIG, incomingChallengeTeam är namnet på det laget
   String outgoingChallengeTeam =
       ''; // JAG har skickat en utmaning till ANNAT LAG, outgoingChallengeTeam är namnet på det laget
+  String incomingChallengeTitle = '';
+  String incomingChallengeDescription = '';
 
   String? username; // plockas från sessionmanager
   String? userTeam;
@@ -120,6 +120,8 @@ class _ChallengePageState extends State<ChallengePage> {
         if (challenge.challengerName != '$userTeam') {
           challengeReceived = true;
           incomingChallengeTeam = challenge.challengerName;
+          incomingChallengeTitle = challenge.title;
+          incomingChallengeDescription = challenge.description;
         }
       }
     }
@@ -152,8 +154,12 @@ class _ChallengePageState extends State<ChallengePage> {
           // Lägg allt i en ScrollView så att sidan går att skrolla upp och ned, krav för responsive design.
           : SingleChildScrollView(
               child: Padding(
-                padding: const EdgeInsets.all(
-                    20.0), // top-nivå padding, allting på sidan har 20px padding i alla riktningar
+                padding: const EdgeInsets.only(
+                    top: 20.0,
+                    left: 20,
+                    right: 20,
+                    bottom:
+                        50), // top-nivå padding, allting på sidan har 20px padding i alla riktningar
                 child: Column(
                   crossAxisAlignment:
                       CrossAxisAlignment.center, // centrera allt.
@@ -293,6 +299,7 @@ class _ChallengePageState extends State<ChallengePage> {
                       // När en lagkampsinbjudan har ankommit till MITT lag från ett ANNAT lag
                       child: challengeReceived
                           ? Column(
+                              mainAxisSize: MainAxisSize.min, // används för att texten kan ha olik storlek
                               children: [
                                 Text(
                                   '$incomingChallengeTeam vill starta en lagkamp med er, acceptera?',
@@ -302,6 +309,38 @@ class _ChallengePageState extends State<ChallengePage> {
                                     fontFamily: 'Sora',
                                   ),
                                   textAlign: TextAlign.center,
+                                ),
+                                const SizedBox(height: 20),
+                                Text(
+                                  'Titel: $incomingChallengeTitle',
+                                  style: const TextStyle(
+                                    fontSize: 16.0,
+                                    fontWeight: FontWeight.bold,
+                                    fontFamily: 'Sora',
+                                  ),
+                                  textAlign: TextAlign.center,
+                                ),
+                                const SizedBox(height: 10),
+                                LayoutBuilder(
+                                  builder: (context, constraints) {
+                                    // Beräkna höjd baserat på textlängd
+                                    return ConstrainedBox(
+                                      constraints: BoxConstraints(
+                                        maxHeight: constraints.maxHeight *
+                                            0.5, // kan behöva justeras
+                                      ),
+                                      child: SingleChildScrollView(
+                                        child: Text(
+                                          'Beskrivning: $incomingChallengeDescription',
+                                          style: const TextStyle(
+                                            fontSize: 14.0,
+                                            fontFamily: 'Sora',
+                                          ),
+                                          textAlign: TextAlign.left,
+                                        ),
+                                      ),
+                                    );
+                                  },
                                 ),
                                 const SizedBox(height: 20),
                                 Row(
@@ -339,7 +378,6 @@ class _ChallengePageState extends State<ChallengePage> {
                                               'Error accepting challenge: $e');
                                         }
                                       },
-
                                       style: ElevatedButton.styleFrom(
                                         backgroundColor: Colors.green,
                                         padding: const EdgeInsets.symmetric(
@@ -393,7 +431,6 @@ class _ChallengePageState extends State<ChallengePage> {
                                               'Error declining challenge: $e');
                                         }
                                       },
-
                                       style: ElevatedButton.styleFrom(
                                         backgroundColor: Colors.red,
                                         padding: const EdgeInsets.symmetric(
