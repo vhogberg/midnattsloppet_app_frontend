@@ -1,8 +1,10 @@
 import 'dart:async';
 import 'dart:convert';
-
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_application/api_utils/api_utils.dart';
+import 'package:flutter_application/components/custom_colors.dart';
 import 'package:flutter_application/components/donation_progress_bar.dart';
 import 'package:flutter_application/components/goal_box.dart';
 import 'package:flutter_application/components/top_three_teams.dart';
@@ -30,7 +32,7 @@ class _HomePageState extends State<HomePage> {
   double donationGoal = 0;
   double totalDonations = 0;
   late Timer _timer;
-  int numberOfDaysLeft = 0;
+  int daysLeft = 0;
 
   @override
   void initState() {
@@ -42,12 +44,13 @@ class _HomePageState extends State<HomePage> {
     fetchCharityName();
     fetchTeamName();
     fetchLeaderboardData();
-    daysLeft();
+    calculateDaysLeft();
 
+    //Periodically check the donation goal, donation amount and number of days remaining to race
     _timer = Timer.periodic(const Duration(seconds: 10), (timer) {
       fetchGoal();
       fetchDonations();
-      daysLeft();
+      calculateDaysLeft();
     });
   }
 
@@ -152,144 +155,216 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-  void daysLeft() {
-    // Target date for the countdown
+  //Calculates amount of days left until midnattsloppet
+  void calculateDaysLeft() {
     DateTime targetDate = DateTime(2024, 8, 17);
-
-    // Get current date and time
     DateTime now = DateTime.now();
-
-    // Calculate the difference in days
     setState(() {
-      numberOfDaysLeft = targetDate.difference(now).inDays;
+      daysLeft = targetDate.difference(now).inDays;
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(left: 20, right: 20, top: 50),
-              child: Row(
-                children: [
-                  const Text(
-                    "Godmorgon!",
-                    style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black,
-                      fontFamily: 'Sora',
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.only(left: 20, right: 20),
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                Row(
+                  children: [
+                    //Top left welcoming text
+                    const Text(
+                      "Godmorgon!",
+                      style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
+                        fontFamily: 'Sora',
+                      ),
                     ),
-                  ),
-                  const Spacer(),
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => NotificationPage()),
-                      );
-                    },
-                    child: const Stack(
-                      children: [
-                        Icon(
-                          Iconsax.notification,
-                          size: 35,
-                          color: Color.fromARGB(255, 113, 113, 113),
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(width: 20),
-                  GestureDetector(
-                    onTap: () {
-                      widget.navigateToPage(4);
-                    },
-                    child: companyName != null
-                        ? CircleAvatar(
-                            radius: 35,
-                            backgroundColor: Colors.white,
-                            backgroundImage: AssetImage(
-                                'images/company_logos/$companyName.png'),
-                          )
-                        : const CircularProgressIndicator(), // Show a loading indicator
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 10),
-            Padding(
-              padding: const EdgeInsets.only(left: 20.0, right: 20.0),
-              child: Column(
-                children: [
-                  Stack(
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.all(20),
-                        width: MediaQuery.of(context).size.width,
-                        height: 320,
-                        decoration: BoxDecoration(
-                          color: const Color(0XFF3C4785),
-                          borderRadius: BorderRadius.circular(12.0),
-                          gradient: const RadialGradient(
-                            radius: 0.8,
-                            center: Alignment(-0.5, 0.4),
-                            colors: [
-                              Color.fromARGB(255, 140, 90, 100), // Start color
-                              Color(0xFF3C4785), // End color
-                            ],
-                            stops: [
-                              0.15,
-                              1.0,
-                            ],
+                    const Spacer(),
+                    //Top right notification bell button
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => NotificationPage()),
+                        );
+                      },
+                      child: const Stack(
+                        children: [
+                          Icon(
+                            Iconsax.notification,
+                            size: 35,
+                            color: Color.fromARGB(255, 113, 113, 113),
                           ),
-                        ),
-                        child: SingleChildScrollView(
+                        ],
+                      ),
+                    ),
+                    const SizedBox(width: 20),
+                    //Top right profile avatar button
+                    GestureDetector(
+                      onTap: () {
+                        widget.navigateToPage(4);
+                      },
+                      child: companyName != null
+                          ? Container(
+                              padding: const EdgeInsets.all(2),
+                              decoration: BoxDecoration(
+                                  gradient: LinearGradient(
+                                    begin: Alignment.bottomCenter,
+                                    colors: [
+                                      CustomColors.midnattsblue,
+                                      CustomColors.midnattsorange
+                                    ],
+                                  ),
+                                  shape: BoxShape.circle),
+                              child: Container(
+                                padding: const EdgeInsets.all(6),
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: Colors.white,
+                                ),
+                                child: CircleAvatar(
+                                  radius: 30,
+                                  backgroundColor: Colors.white,
+                                  backgroundImage: AssetImage(
+                                      'images/company_logos/$companyName.png'),
+                                ),
+                              ),
+                            )
+                          : const CircularProgressIndicator(), //Show a loading indicator
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 10),
+                Column(
+                  children: [
+                    Stack(
+                      children: [
+                        //Upper blue/orange gradient box
+                        Container(
+                          padding: const EdgeInsets.all(20),
+                          width: MediaQuery.of(context).size.width,
+                          height: 320,
+                          decoration: BoxDecoration(
+                            color: CustomColors.midnattsblue,
+                            borderRadius: BorderRadius.circular(12.0),
+                            gradient: RadialGradient(
+                              radius: 0.8,
+                              center: const Alignment(-0.5, 0.4),
+                              colors: [
+                                //Darkened start color for improved visuals
+                                const Color.fromARGB(
+                                    255, 140, 90, 100), //Start color
+                                CustomColors.midnattsblue, //End color
+                              ],
+                              stops: const [
+                                0.15,
+                                1.0,
+                              ],
+                            ),
+                          ),
+                          //Content of upper blue/orange gradient box placed in column
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(
-                                'Insamlingsbössa: $teamName',
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.w400,
+                              //Constrained box preventing longer team names from overlapping other content
+                              ConstrainedBox(
+                                constraints: BoxConstraints(
+                                    maxWidth:
+                                        MediaQuery.of(context).size.width -
+                                            155),
+                                //Scroll view allows longer team names to be scrolled
+                                child: SingleChildScrollView(
+                                  scrollDirection: Axis.horizontal,
+                                  child: Text(
+                                    'Insamlingsbössa: $teamName',
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.w400,
+                                    ),
+                                  ),
                                 ),
                               ),
-                              Text(
-                                '${totalDonations.toStringAsFixed(0)} kr insamlat',
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 28,
-                                  fontWeight: FontWeight.bold,
+                              //Same logic as with team names
+                              ConstrainedBox(
+                                constraints: BoxConstraints(
+                                    maxWidth:
+                                        MediaQuery.of(context).size.width -
+                                            155),
+                                //Same logic as with team names
+                                child: SingleChildScrollView(
+                                  scrollDirection: Axis.horizontal,
+                                  //Rich text allows donation amount to have a different font size
+                                  child: RichText(
+                                    text: TextSpan(
+                                      children: [
+                                        TextSpan(
+                                          //toStringAsFixed removes decimal point in donation amount displayed
+                                          text:
+                                              '${totalDonations.toStringAsFixed(0)}',
+                                          style: const TextStyle(
+                                            color: Colors.white,
+                                            fontSize:
+                                                40, //Larger font size for the donation amount
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        const TextSpan(
+                                          text: ' kr insamlat',
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize:
+                                                28, //Default font size for the rest of the text
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
                                 ),
                               ),
-                              Text(
-                                'Stödjer: $charityName',
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w400,
+
+                              //Same logic as with team names
+                              ConstrainedBox(
+                                constraints: BoxConstraints(
+                                    maxWidth:
+                                        MediaQuery.of(context).size.width - 85),
+                                //Same logic as with team names
+                                child: SingleChildScrollView(
+                                  scrollDirection: Axis.horizontal,
+                                  child: Text(
+                                    'Stödjer: $charityName',
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w400,
+                                    ),
+                                  ),
                                 ),
                               ),
-                              const SizedBox(
-                                height: 15,
-                              ),
+                              const SizedBox(height: 15),
+                              //Donation progress bar
                               SizedBox(
-                                width: MediaQuery.of(context).size.width - 80,
+                                width: MediaQuery.of(context).size.width - 92,
                                 child: const Padding(
-                                  padding: EdgeInsets.only(left: 30, right: 30),
-                                  child: DonationProgressBar(),
-                                ),
+                                    padding:
+                                        EdgeInsets.only(left: 30, right: 30),
+                                    child: DonationProgressBar()),
                               ),
-                              const SizedBox(height: 10),
+                              const SizedBox(height: 13),
+                              //Goal box displaying donation goal
                               const Align(
                                   alignment: Alignment.topRight,
-                                  child: GoalBox(height: 50, width: 75)),
-                              const SizedBox(height: 10),
+                                  child: GoalBox(height: 50, width: 85)),
+                              const Spacer(),
+                              //Semi-transparent white box
                               Stack(
                                 children: [
                                   Container(
@@ -304,18 +379,23 @@ class _HomePageState extends State<HomePage> {
                                         width: 1.0, // Border width
                                       ),
                                     ),
+                                    //Row containing contents of white box
                                     child: Row(
                                       children: [
-                                        const Expanded(
-                                          child: Text(
+                                        ConstrainedBox(
+                                          constraints: const BoxConstraints(
+                                              maxHeight: 50, maxWidth: 160),
+                                          child: const AutoSizeText(
                                             'Dela bössan med vänner och familj!',
                                             style: TextStyle(
                                                 color: Colors.white,
-                                                fontSize: 18,
                                                 fontWeight: FontWeight.bold,
+                                                fontSize: 20,
                                                 fontFamily: 'Sora'),
+                                            maxLines: 2,
                                           ),
                                         ),
+                                        const Spacer(),
                                         GestureDetector(
                                           onTap: () {
                                             ShareHelper.showShareDialog(
@@ -328,21 +408,23 @@ class _HomePageState extends State<HomePage> {
                                             decoration: BoxDecoration(
                                               color: Colors.white,
                                               borderRadius:
-                                                  BorderRadius.circular(13.0),
+                                                  BorderRadius.circular(4.0),
                                             ),
-                                            child: const Row(
+                                            child: Row(
                                               children: [
                                                 Icon(
                                                   Iconsax.export_1,
+                                                  color:
+                                                      CustomColors.midnattsblue,
                                                 ),
-                                                SizedBox(
-                                                  width: 5,
-                                                ),
+                                                const SizedBox(width: 5),
                                                 Text(
                                                   'Dela',
                                                   style: TextStyle(
                                                     fontSize: 20,
                                                     fontFamily: 'Sora',
+                                                    color: CustomColors
+                                                        .midnattsblue,
                                                   ),
                                                 )
                                               ],
@@ -357,137 +439,136 @@ class _HomePageState extends State<HomePage> {
                             ],
                           ),
                         ),
-                      ),
-                      Positioned(
-                        top: 20,
-                        right: 20,
-                        child: SizedBox(
-                          width: 65,
-                          height: 65,
-                          child: Image.asset(
-                              'images/chrome_DmBUq4pVqL-removebg-preview.png'),
+                        //Top right image
+                        Positioned(
+                          top: 20,
+                          right: 20,
+                          child: SizedBox(
+                              width: 65,
+                              height: 65,
+                              child: Image.asset('images/Present.png')),
                         ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 20),
-                  Stack(
-                    children: [
-                      Container(
-                        width: MediaQuery.of(context).size.width,
-                        height: 320,
-                        decoration: BoxDecoration(
-                          color: const Color(0XFF3C4785),
-                          borderRadius: BorderRadius.circular(12.0),
-                          gradient: const RadialGradient(
-                            radius: 0.8,
-                            center: Alignment(0.2, 0.6),
-                            colors: [
-                              Color.fromARGB(255, 140, 90, 100), // Start color
-                              Color(0xFF3C4785), // End color
-                            ],
-                            stops: [
-                              0.15,
-                              1.0,
-                            ],
-                          ),
-                        ),
-                        padding: const EdgeInsets.all(20),
-                        child: Center(
-                          child: Container(
-                            padding: const EdgeInsets.only(left: 10, right: 10),
-                            width: MediaQuery.of(context).size.width,
-                            height: MediaQuery.of(context).size.height,
-                            decoration: BoxDecoration(
-                              color: Colors.white30,
-                              borderRadius: BorderRadius.circular(12.0),
-                              border: Border.all(
-                                color: Colors.white60, // Border color
-                                width: 1.0, // Border width
-                              ),
+                      ],
+                    ),
+                    const SizedBox(height: 20),
+                    Stack(
+                      children: [
+                        //Lower blue/orange gradient box
+                        Container(
+                          width: MediaQuery.of(context).size.width,
+                          height: 320,
+                          decoration: BoxDecoration(
+                            color: CustomColors.midnattsblue,
+                            borderRadius: BorderRadius.circular(12.0),
+                            gradient: RadialGradient(
+                              radius: 0.8,
+                              center: const Alignment(0.2, 0.6),
+                              colors: [
+                                //Darkened start color for improved visuals
+                                const Color.fromARGB(
+                                    255, 140, 90, 100), // Start color
+                                CustomColors.midnattsblue, // End color
+                              ],
+                              stops: const [
+                                0.15,
+                                1.0,
+                              ],
                             ),
-                            child: Transform.translate(
-                              offset: const Offset(0, -8),
-                              child: Column(
-                                children: [
-                                  const Flexible(
-                                    child: TopThreeTeams(),
-                                  ),
-                                  const Divider(
-                                    height: 0,
-                                    color: Colors
-                                        .white, // Vit färg på avskiljningslinjen
-                                    thickness: 2, // Tjocklek på linjen
-                                    indent: 0, // Indrag från vänster
-                                    endIndent: 0, // Indrag från höger
-                                  ),
-                                  //SizedBox(height: 1),
-                                  Row(
-                                    children: [
-                                      Expanded(
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              teamRank != -1
-                                                  ? 'Plats: #$teamRank av $totalTeams'
-                                                  : 'Rankning saknas',
-                                              style: const TextStyle(
-                                                  color: Colors.white,
-                                                  fontSize: 16.0,
-                                                  fontWeight: FontWeight.bold,
-                                                  fontFamily: 'Sora'),
-                                            ),
-                                            const SizedBox(
-                                                height:
-                                                    8.0), // För att skapa lite avstånd mellan texterna
-                                            Text(
-                                              '$numberOfDaysLeft Dagar till lopp', //YY => $daysToEvent
-                                              style: const TextStyle(
-                                                  color: Colors.white,
-                                                  fontSize: 14.0,
-                                                  fontFamily: 'Sora'),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      const SizedBox(
-                                          width:
-                                              14.0), // För att skapa lite avstånd mellan kolumnen och knappen
-                                      ElevatedButton(
-                                        onPressed: () {
-                                          // Knappens funktionalitet ska in här
-                                        },
-                                        style: ElevatedButton.styleFrom(
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(8.0),
+                          ),
+                          padding: const EdgeInsets.all(20),
+                          child: Center(
+                            //Inner white box
+                            child: Container(
+                              padding:
+                                  const EdgeInsets.only(left: 10, right: 10),
+                              width: MediaQuery.of(context).size.width,
+                              height: MediaQuery.of(context).size.height,
+                              decoration: BoxDecoration(
+                                color: Colors.white30,
+                                borderRadius: BorderRadius.circular(12.0),
+                                border: Border.all(
+                                  color: Colors.white60, // Border color
+                                  width: 1.0, // Border width
+                                ),
+                              ),
+                              //Transform moves the content of the white box up by 8 pixels
+                              child: Transform.translate(
+                                offset: const Offset(0, -8),
+                                //Column contains content of white box
+                                child: Column(
+                                  children: [
+                                    const Flexible(
+                                      child: TopThreeTeams(),
+                                    ),
+                                    const Divider(
+                                      height: 0,
+                                      color: Colors.white,
+                                      thickness: 2,
+                                      indent: 0,
+                                      endIndent: 0,
+                                    ),
+                                    const SizedBox(height: 5),
+                                    Row(
+                                      children: [
+                                        Expanded(
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                teamRank != -1
+                                                    ? 'Plats: #$teamRank av $totalTeams'
+                                                    : 'Rankning saknas',
+                                                style: const TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 16.0,
+                                                    fontWeight: FontWeight.bold,
+                                                    fontFamily: 'Sora'),
+                                              ),
+                                              Text(
+                                                '$daysLeft Dagar till lopp',
+                                                style: const TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 14.0,
+                                                    fontFamily: 'Sora'),
+                                              ),
+                                            ],
                                           ),
                                         ),
-                                        child: const Text(
-                                          'Topplista',
-                                          style: TextStyle(
-                                              color: Colors.black,
-                                              fontSize: 14.0,
-                                              fontWeight: FontWeight.bold,
-                                              fontFamily: 'Sora'),
+                                        ElevatedButton(
+                                          onPressed: () {
+                                            widget.navigateToPage(3);
+                                          },
+                                          style: ElevatedButton.styleFrom(
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(4.0),
+                                            ),
+                                          ),
+                                          child: Text(
+                                            'Topplista',
+                                            style: TextStyle(
+                                                color:
+                                                    CustomColors.midnattsblue,
+                                                fontSize: 18.0,
+                                                fontFamily: 'Sora'),
+                                          ),
                                         ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
+                                      ],
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
                           ),
                         ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
+                      ],
+                    ),
+                  ],
+                ),
+              ],
             ),
-          ],
+          ),
         ),
       ),
     );

@@ -33,6 +33,7 @@ dependencies:
   http: ^0.13.3
   shared_preferences: ^2.0.8
   url_launcher: ^6.0.9
+  auto_size_text: ^3.0.0
   font_awesome_flutter: ^9.2.0  # twitter, facebook, linkedin, mail logo
   
   # notifikationer
@@ -86,7 +87,7 @@ flutter:
     - images/stockholm-university.png
     - images/fire.png
     - images/Gold-Trophy-PNG.png
-    - images/chrome_DmBUq4pVqL-removebg-preview.png
+    - images/Present.png
     - images/swishlogo.jpg.png
     - images/swishlogo2.jpg.png
     - images/GoalCompleted.png

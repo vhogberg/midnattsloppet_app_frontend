@@ -62,7 +62,7 @@ class _DonationProgressBarState extends State<DonationProgressBar> {
 
     return LinearProgressIndicator(
       value: percentage,
-      backgroundColor: Colors.grey[300],
+      backgroundColor: Colors.white,
       valueColor: const AlwaysStoppedAnimation<Color>(Colors.blue),
       borderRadius: BorderRadius.circular(20),
     );
