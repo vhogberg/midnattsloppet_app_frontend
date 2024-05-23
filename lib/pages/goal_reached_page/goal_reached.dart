@@ -31,17 +31,23 @@ class _TeamGoalReachedState extends State<TeamGoalReached> {
   }
 
   void _startGoalCheck(String? username) {
-  Timer.periodic(const Duration(seconds: 10), (timer) {
-    _fetchDonationsAndGoal();
-  });
-}
-
+    Timer.periodic(const Duration(seconds: 10), (timer) {
+      _fetchDonationsAndGoal();
+    });
+  }
 
   Future<void> _fetchDonationsAndGoal() async {
     try {
-      totalDonations = await ApiUtils.fetchDonations(username);
-      donationGoal = await ApiUtils.fetchGoal(username);
-      setState(() {});
+      final fetchedDonations = await ApiUtils.fetchDonations(username);
+      final fetchedGoal = await ApiUtils.fetchGoal(username);
+
+      if (mounted) {
+        setState(() {
+          totalDonations = fetchedDonations;
+          donationGoal = fetchedGoal;
+        });
+      }
+      // Show custom dialog if needed after state has been updated
       _showCustomDialogIfNeeded();
     } catch (e) {
       print("Error fetching data: $e");

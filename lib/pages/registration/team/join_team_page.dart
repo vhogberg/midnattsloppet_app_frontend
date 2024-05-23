@@ -20,25 +20,46 @@ class _JoinTeamPageState extends State<JoinTeamPage> {
   List<String> teams = [];
   List<String> filteredTeams = [];
   String? selectedTeam;
+  String? companyName;
   String? username;
 
   @override
   void initState() {
     super.initState();
     filteredTeams.addAll(teams);
-    fetchTeams();
     username = SessionManager.instance.username;
+    fetchCompanyNameAndTeams();
+  }
+
+  Future<void> fetchCompanyName() async {
+    try {
+      String? coName = await ApiUtils.fetchCompanyNameByUsername(username!);
+      setState(() {
+        companyName = coName;
+      });
+    } catch (e) {
+      print("Error fetching company name: $e");
+    }
   }
 
   Future<void> fetchTeams() async {
     try {
-      final data = await ApiUtils.fetchTeamsFromAPI();
+      final data = await ApiUtils.fetchTeamsByCompanyFromAPI(companyName!);
       setState(() {
         teams = data;
         filteredTeams.addAll(teams);
       });
     } catch (e) {
       print('Failed to fetch teams: $e');
+    }
+  }
+
+  Future<void> fetchCompanyNameAndTeams() async {
+    await fetchCompanyName();
+    if (companyName != null) {
+      await fetchTeams();
+    } else {
+      print('Company name is null, cannot fetch teams');
     }
   }
 

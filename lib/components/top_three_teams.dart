@@ -36,15 +36,19 @@ class _TopThreeTeamsState extends State<TopThreeTeams> {
     try {
       List<Team> fetchedTeams =
           await ApiUtils.fetchTeamsWithBoxAndCompanyName();
-      setState(() {
-        teams = fetchedTeams;
-        isLoading = false;
-      });
+      if (mounted) {
+        setState(() {
+          teams = fetchedTeams;
+          isLoading = false;
+        });
+      }
     } catch (e) {
       // Handle any errors that occur during the fetch
-      setState(() {
-        isLoading = false;
-      });
+      if (mounted) {
+        setState(() {
+          isLoading = false;
+        });
+      }
       print('Error fetching teams: $e');
     }
   }
