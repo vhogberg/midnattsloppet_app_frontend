@@ -150,16 +150,27 @@ class _SearchPageState extends State<SearchPage> {
                                 ],
                               ),
                               child: ListTile(
-                                title: Text(
-                                  filteredTeams[index].name,
-                                  style: const TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
+                                title: Row(children: [
+                                  Text(
+                                    filteredTeams[index].name,
+                                    style: const TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold,
+                                    ),
                                   ),
-                                ),
-                                subtitle: Text(
-                                    '${filteredTeams[index].fundraiserBox}kr'),
+                                  const SizedBox(width: 8),
+                                  if (filteredTeams[index].companyName != null)
+                                    CircleAvatar(
+                                      radius: 20,
+                                      backgroundColor: Colors.white,
+                                      backgroundImage: AssetImage(
+                                          'images/company_logos/${filteredTeams[index].companyName}.png'),
+                                    ),
+                                  const SizedBox(width: 8),
+                                  Text(
+                                      '${filteredTeams[index].fundraiserBox}kr'),
+                                ]),
                               ),
                             ),
                           );
