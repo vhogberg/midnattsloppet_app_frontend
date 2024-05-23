@@ -154,8 +154,12 @@ class _ChallengePageState extends State<ChallengePage> {
           // Lägg allt i en ScrollView så att sidan går att skrolla upp och ned, krav för responsive design.
           : SingleChildScrollView(
               child: Padding(
-                padding: const EdgeInsets.all(
-                    20.0), // top-nivå padding, allting på sidan har 20px padding i alla riktningar
+                padding: const EdgeInsets.only(
+                    top: 20.0,
+                    left: 20,
+                    right: 20,
+                    bottom:
+                        50), // top-nivå padding, allting på sidan har 20px padding i alla riktningar
                 child: Column(
                   crossAxisAlignment:
                       CrossAxisAlignment.center, // centrera allt.

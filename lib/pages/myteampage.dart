@@ -226,80 +226,81 @@ class _MyTeamPageState extends State<MyTeamPage> {
         },
       ),
       body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Display team name above the circular team picture
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Center(
-                child: Text(
-                  '$teamName',
-                  style: const TextStyle(
-                    fontSize: 20, // Adjust font size
-                    color: Colors.black, // Set color to black
-                    fontWeight: FontWeight.bold,
-                    fontFamily: 'Sora',
+        child: Container(
+          padding: const EdgeInsets.only(left: 20, right: 20, bottom: 50),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Display team name above the circular team picture
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Center(
+                  child: Text(
+                    '$teamName',
+                    style: const TextStyle(
+                      fontSize: 20, // Adjust font size
+                      color: Colors.black, // Set color to black
+                      fontWeight: FontWeight.bold,
+                      fontFamily: 'Sora',
+                    ),
                   ),
                 ),
               ),
-            ),
-            const SizedBox(
-                height:
-                    10), // Add some spacing between teamName and the picture
-            // Circular team picture at the middle top
-            Center(
-              child: Container(
-                  width: 150,
-                  height: 150,
-                  decoration: const BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Color(0XFF3C4785), // Use the blue color provided
+              const SizedBox(
+                  height:
+                      10), // Add some spacing between teamName and the picture
+              // Circular team picture at the middle top
+              Center(
+                child: Container(
+                    width: 150,
+                    height: 150,
+                    decoration: const BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Color(0XFF3C4785), // Use the blue color provided
+                    ),
+                    child: Center(
+                      child: companyName != null
+                          ? CircleAvatar(
+                              radius: 74,
+                              backgroundColor: Colors.white,
+                              backgroundImage: AssetImage(
+                                  'images/company_logos/$companyName.png'),
+                            )
+                          : CircularProgressIndicator(), // Show a loading indicator
+                    )),
+              ),
+              const SizedBox(height: 10),
+              // Textbox with the donation pledge name
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Center(
+                  child: Column(
+                    children: [
+                      Text(
+                        'Företag: $companyName', // Display the company name
+                        style: const TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          fontFamily: 'Sora',
+                        ),
+                      ),
+                      Text(
+                        'Stödjer: $charityName', // Display the charity name
+                        style: const TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          fontFamily: 'Sora',
+                        ),
+                      ),
+                    ],
                   ),
-                  child: Center(
-                    child: companyName != null
-                        ? CircleAvatar(
-                            radius: 74,
-                            backgroundColor: Colors.white,
-                            backgroundImage: AssetImage(
-                                'images/company_logos/$companyName.png'),
-                          )
-                        : CircularProgressIndicator(), // Show a loading indicator
-                  )),
-            ),
-            const SizedBox(height: 10),
-            // Textbox with the donation pledge name
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Center(
-                child: Column(
-                  children: [
-                    Text(
-                      'Företag: $companyName', // Display the company name
-                      style: const TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'Sora',
-                      ),
-                    ),
-                    Text(
-                      'Stödjer: $charityName', // Display the charity name
-                      style: const TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'Sora',
-                      ),
-                    ),
-                  ],
                 ),
               ),
-            ),
-            const SizedBox(height: 10),
+              const SizedBox(height: 10),
 
-            // Container with team members name
-            Padding(
-              padding: const EdgeInsets.only(left: 20.0, right: 20.0),
-              child: Container(
+              // Container with team members name
+
+              Container(
                 padding: const EdgeInsets.all(20),
                 width: MediaQuery.of(context).size.width,
                 height: 500,
@@ -470,8 +471,8 @@ class _MyTeamPageState extends State<MyTeamPage> {
                   ],
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
