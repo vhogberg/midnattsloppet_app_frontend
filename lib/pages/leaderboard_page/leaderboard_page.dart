@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application/api_utils/api_utils.dart';
 import 'package:flutter_application/components/custom_app_bar.dart';
+import 'package:flutter_application/components/custom_colors.dart';
 import 'package:flutter_application/components/top_three_teams.dart';
 import 'package:flutter_application/components/return_arrow_argument.dart';
 import 'package:flutter_application/models/team.dart';
 import 'package:flutter_application/pages/searchpage.dart';
 import 'package:flutter_application/pages/otherteampage.dart';
-import 'package:flutter_application/pages/myteampage.dart';
 import 'package:flutter_application/session_manager.dart';
 import 'package:iconsax/iconsax.dart';
 
@@ -98,7 +98,12 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
           : Center(
               child: Column(
                 children: [
-                  const TopThreeTeams(),
+                  TopThreeTeams(
+                    smallCircleColor: CustomColors.midnattsblue,
+                    smallCircleTextColor: Colors.white,
+                    crownColor: CustomColors.midnattsblue,
+                    teamNameColor: Colors.black,
+                  ),
                   Expanded(
                     child: Container(
                       margin: const EdgeInsets.all(16.0),

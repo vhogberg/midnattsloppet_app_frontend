@@ -479,8 +479,8 @@ class _HomePageState extends State<HomePage> {
                           child: Center(
                             //Inner white box
                             child: Container(
-                              padding:
-                                  const EdgeInsets.only(left: 10, right: 10),
+                              padding: const EdgeInsets.only(
+                                  left: 10, right: 10, bottom: 10),
                               width: MediaQuery.of(context).size.width,
                               height: MediaQuery.of(context).size.height,
                               decoration: BoxDecoration(
@@ -492,72 +492,73 @@ class _HomePageState extends State<HomePage> {
                                 ),
                               ),
                               //Transform moves the content of the white box up by 8 pixels
-                              child: Transform.translate(
-                                offset: const Offset(0, -8),
-                                //Column contains content of white box
-                                child: Column(
-                                  children: [
-                                    const Flexible(
-                                      child: TopThreeTeams(),
-                                    ),
-                                    const Divider(
-                                      height: 0,
-                                      color: Colors.white,
-                                      thickness: 2,
-                                      indent: 0,
-                                      endIndent: 0,
-                                    ),
-                                    const SizedBox(height: 5),
-                                    Row(
-                                      children: [
-                                        Expanded(
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Text(
-                                                teamRank != -1
-                                                    ? 'Plats: #$teamRank av $totalTeams'
-                                                    : 'Rankning saknas',
-                                                style: const TextStyle(
-                                                    color: Colors.white,
-                                                    fontSize: 16.0,
-                                                    fontWeight: FontWeight.bold,
-                                                    fontFamily: 'Sora'),
-                                              ),
-                                              Text(
-                                                '$daysLeft Dagar till lopp',
-                                                style: const TextStyle(
-                                                    color: Colors.white,
-                                                    fontSize: 14.0,
-                                                    fontFamily: 'Sora'),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                        ElevatedButton(
-                                          onPressed: () {
-                                            widget.navigateToPage(3);
-                                          },
-                                          style: ElevatedButton.styleFrom(
-                                            shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(4.0),
+                              child: Column(
+                                children: [
+                                  TopThreeTeams(
+                                    smallCircleColor: Colors.white,
+                                    smallCircleTextColor:
+                                        CustomColors.midnattsblue,
+                                    crownColor:
+                                        const Color.fromARGB(255, 247, 214, 72),
+                                    teamNameColor: Colors.white,
+                                  ),
+                                  const Spacer(),
+                                  const Divider(
+                                    height: 0,
+                                    color: Colors.white,
+                                    thickness: 2,
+                                    indent: 0,
+                                    endIndent: 0,
+                                  ),
+                                  const SizedBox(height: 5),
+                                  Row(
+                                    children: [
+                                      Expanded(
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              teamRank != -1
+                                                  ? 'Plats: #$teamRank av $totalTeams'
+                                                  : 'Rankning saknas',
+                                              style: const TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 16.0,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontFamily: 'Sora'),
                                             ),
-                                          ),
-                                          child: Text(
-                                            'Topplista',
-                                            style: TextStyle(
-                                                color:
-                                                    CustomColors.midnattsblue,
-                                                fontSize: 18.0,
-                                                fontFamily: 'Sora'),
+                                            Text(
+                                              '$daysLeft Dagar till lopp',
+                                              style: const TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 14.0,
+                                                  fontFamily: 'Sora'),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      ElevatedButton(
+                                        onPressed: () {
+                                          widget.navigateToPage(3);
+                                        },
+                                        style: ElevatedButton.styleFrom(
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(4.0),
                                           ),
                                         ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
+                                        child: Text(
+                                          'Topplista',
+                                          style: TextStyle(
+                                              color: CustomColors.midnattsblue,
+                                              fontSize: 18.0,
+                                              fontFamily: 'Sora'),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
                               ),
                             ),
                           ),
