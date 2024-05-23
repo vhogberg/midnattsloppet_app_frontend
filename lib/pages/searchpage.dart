@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application/api_utils/api_utils.dart';
 import 'package:flutter_application/models/team.dart';
-import 'package:flutter_application/pages/myteampage.dart';
 import 'package:flutter_application/pages/otherteampage.dart';
 import 'package:flutter_application/session_manager.dart';
 import 'package:flutter_application/components/return_arrow_argument.dart';
@@ -151,15 +150,6 @@ class _SearchPageState extends State<SearchPage> {
                               ),
                               child: ListTile(
                                 title: Row(children: [
-                                  Text(
-                                    filteredTeams[index].name,
-                                    style: const TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  const SizedBox(width: 8),
                                   if (filteredTeams[index].companyName != null)
                                     CircleAvatar(
                                       radius: 20,
@@ -168,8 +158,25 @@ class _SearchPageState extends State<SearchPage> {
                                           'images/company_logos/${filteredTeams[index].companyName}.png'),
                                     ),
                                   const SizedBox(width: 8),
-                                  Text(
-                                      '${filteredTeams[index].fundraiserBox}kr'),
+                                  Expanded(
+                                    child: Text(
+                                      filteredTeams[index].name,
+                                      style: const TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(width: 8),
+                                  Align(
+                                    alignment: Alignment.centerRight,
+                                    child: Text(
+                                      '${filteredTeams[index].fundraiserBox}kr',
+                                      style: const TextStyle(
+                                          fontWeight: FontWeight.normal),
+                                    ),
+                                  ),
                                 ]),
                               ),
                             ),
