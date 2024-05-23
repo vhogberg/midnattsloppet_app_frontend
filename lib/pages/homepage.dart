@@ -311,7 +311,7 @@ class _HomePageState extends State<HomePage> {
                                             'Dela bössan med vänner och familj!',
                                             style: TextStyle(
                                                 color: Colors.white,
-                                                fontSize: 20,
+                                                fontSize: 18,
                                                 fontWeight: FontWeight.bold,
                                                 fontFamily: 'Sora'),
                                           ),
