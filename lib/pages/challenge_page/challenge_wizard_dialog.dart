@@ -37,7 +37,6 @@ class _WizardDialogState extends State<WizardDialog> {
   // hämta användarens lag de är med i
   Future<void> fetchUserTeam() async {
     try {
-
       String? teamName = await ApiUtils.fetchTeamName(username);
       setState(() {
         userTeam = teamName;
@@ -50,6 +49,18 @@ class _WizardDialogState extends State<WizardDialog> {
   // hantera wizard steg
   void _nextPage() {
     setState(() {
+      if (_currentPage == 0 && selectedTeam == null) {
+        _showValidationError('Du måste välja ett lag.');
+        return;
+      }
+      if (_currentPage == 1 && titleController.text.isEmpty) {
+        _showValidationError('Du måste ange en titel.');
+        return;
+      }
+      if (_currentPage == 2 && descriptionController.text.isEmpty) {
+        _showValidationError('Du måste ange egna utmaningar.');
+        return;
+      }
       if (_currentPage < 3) {
         _currentPage++;
       }
@@ -83,10 +94,10 @@ class _WizardDialogState extends State<WizardDialog> {
       final response = await http.post(
         Uri.parse(url),
         headers: {
-        _apiKeyHeader: _apiKey,
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
-      body: utf8.encode(jsonEncode(requestData)),
+          _apiKeyHeader: _apiKey,
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: utf8.encode(jsonEncode(requestData)),
       );
 
       print('Response Status Code: ${response.statusCode}');
@@ -140,6 +151,44 @@ class _WizardDialogState extends State<WizardDialog> {
     Navigator.pop(context);
   }
 
+  void _showValidationError(String message) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: Text(
+          'Fel',
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontFamily: 'Sora',
+          ),
+        ),
+        content: Text(
+          message,
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontFamily: 'Sora',
+          ),
+        ),
+        actions: <Widget>[
+          TextButton(
+            child: Text(
+              'OK',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontFamily: 'Sora',
+              ),
+            ),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+        ],
+      );
+    },
+  );
+}
+
   @override
   Widget build(BuildContext context) {
     return Dialog(
@@ -183,7 +232,6 @@ class _WizardDialogState extends State<WizardDialog> {
                       ),
                       child: Text('Tillbaka'),
                     ),
-
                   if (_currentPage < 3)
                     Spacer(), // Spacer så att "nästa"-knappen alltid är på höger sida.
                   if (_currentPage < 3)
@@ -354,7 +402,7 @@ class _WizardDialogState extends State<WizardDialog> {
     );
   }
 
-  // Wizard steg 4, översikt och skicka iväg utmaning
+// Wizard steg 4, översikt och skicka iväg utmaning
   Widget _buildOverviewPage() {
     return Padding(
       padding: const EdgeInsets.all(20.0),
@@ -373,40 +421,55 @@ class _WizardDialogState extends State<WizardDialog> {
                 style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
               ),
               SizedBox(height: 20),
-              ListTile(
-                title: const Text(
-                  'Valt lag:',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                ),
-                subtitle: Text(
-                  selectedTeam ?? 'Inget lag valt',
-                  style: const TextStyle(fontSize: 18),
-                ),
+              _buildOverviewItem('Valt lag:', selectedTeam ?? 'Inget lag valt'),
+              SizedBox(height: 10),
+              _buildOverviewItem('Titel:', titleController.text),
+              SizedBox(height: 10),
+              const Text(
+                'Egna tävlingar:',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
-              ListTile(
-                title: const Text(
-                  'Titel:',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                ),
-                subtitle: Text(
-                  titleController.text,
-                  style: const TextStyle(fontSize: 18),
-                ),
-              ),
-              ListTile(
-                title: const Text(
-                  'Egna tävlingar:',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                ),
-                subtitle: Text(
-                  descriptionController.text,
-                  style: const TextStyle(fontSize: 18),
+              Flexible(
+                child: Container(
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.grey),
+                    borderRadius: BorderRadius.circular(5),
+                  ),
+                  padding: const EdgeInsets.all(8.0),
+                  child: SingleChildScrollView(
+                    child: Text(
+                      descriptionController.text,
+                      style: const TextStyle(fontSize: 18),
+                    ),
+                  ),
                 ),
               ),
             ],
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildOverviewItem(String title, String subtitle) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Expanded(
+          flex: 1,
+          child: Text(
+            title,
+            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          ),
+        ),
+        Expanded(
+          flex: 2,
+          child: Text(
+            subtitle,
+            style: const TextStyle(fontSize: 18),
+          ),
+        ),
+      ],
     );
   }
 }
