@@ -341,6 +341,7 @@ class _HomePageState extends State<HomePage> {
                                             text:
                                                 '${totalDonations.toStringAsFixed(0)}',
                                             style: const TextStyle(
+                                              fontFamily: 'Sora',
                                               color: Colors.white,
                                               fontSize:
                                                   40, //Larger font size for the donation amount
@@ -350,6 +351,7 @@ class _HomePageState extends State<HomePage> {
                                           const TextSpan(
                                             text: ' kr insamlat',
                                             style: TextStyle(
+                                              fontFamily: 'Sora',
                                               color: Colors.white,
                                               fontSize:
                                                   28, //Default font size for the rest of the text
@@ -384,10 +386,12 @@ class _HomePageState extends State<HomePage> {
                                 const SizedBox(height: 15),
                                 //Donation progress bar
                                 SizedBox(
-                                  width: MediaQuery.of(context).size.width - 92,
+                                  width:
+                                      MediaQuery.of(context).size.width - 122,
                                   child: const Padding(
-                                      padding:
-                                          EdgeInsets.only(left: 30, right: 30),
+                                      padding: EdgeInsets.only(
+                                        left: 30,
+                                      ),
                                       child: DonationProgressBar()),
                                 ),
                                 const SizedBox(height: 13),
@@ -477,9 +481,10 @@ class _HomePageState extends State<HomePage> {
                             top: 20,
                             right: 20,
                             child: SizedBox(
-                                width: 65,
-                                height: 65,
-                                child: Image.asset('images/Present.png')),
+                              width: 65,
+                              height: 65,
+                              child: Image.asset('images/Present.png'),
+                            ),
                           ),
                         ],
                       ),
@@ -524,7 +529,6 @@ class _HomePageState extends State<HomePage> {
                                     width: 1.0, // Border width
                                   ),
                                 ),
-                                //Transform moves the content of the white box up by 8 pixels
                                 child: Column(
                                   children: [
                                     TopThreeTeams(
