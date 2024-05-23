@@ -33,6 +33,7 @@ class _HomePageState extends State<HomePage> {
   double totalDonations = 0;
   late Timer _timer;
   int daysLeft = 0;
+  String _greeting = '';
 
   @override
   void initState() {
@@ -51,6 +52,12 @@ class _HomePageState extends State<HomePage> {
       fetchGoal();
       fetchDonations();
       calculateDaysLeft();
+    });
+
+    updateGreeting();
+    // Update the greeting every minute
+    Timer.periodic(Duration(minutes: 1), (timer) {
+      updateGreeting();
     });
   }
 
@@ -164,6 +171,19 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
+  void updateGreeting() {
+    final now = DateTime.now();
+    setState(() {
+      if (now.hour < 12) {
+        _greeting = 'Godmorgon!';
+      } else if (now.hour < 18 || (now.hour == 18 && now.minute < 30)) {
+        _greeting = 'Goddag!';
+      } else {
+        _greeting = 'Godkväll!';
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -178,9 +198,9 @@ class _HomePageState extends State<HomePage> {
                   Row(
                     children: [
                       //Top left welcoming text
-                      const Text(
-                        "Godmorgon!",
-                        style: TextStyle(
+                       Text(
+                        _greeting,
+                        style: const TextStyle(
                           fontSize: 24,
                           fontWeight: FontWeight.bold,
                           color: Colors.black,
