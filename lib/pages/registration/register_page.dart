@@ -89,6 +89,7 @@ class _RegisterPage extends State<RegisterPage> {
                   onTap: () {
                     final username = emailController.text;
                     final password = passwordController.text;
+                    final confirmPassword = confirmPasswordController.text;
 
                     if (username.isEmpty || password.isEmpty) {
                       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
@@ -105,6 +106,12 @@ class _RegisterPage extends State<RegisterPage> {
                       return;
                     }
 
+                    if (password != confirmPassword) {
+                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                        content: Text('Lösenorden matchar inte.'),
+                      ));
+                      return;
+                    }
                     showDialog(
                       context: context,
                       barrierDismissible: false,
@@ -136,7 +143,8 @@ class _RegisterPage extends State<RegisterPage> {
                           ));
                         });
                       } else if (response.contains("Username already exists")) {
-                        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                        ScaffoldMessenger.of(context)
+                            .showSnackBar(const SnackBar(
                           content: Text('Användarnamnet finns redan.'),
                         ));
                       } else {
@@ -157,7 +165,8 @@ class _RegisterPage extends State<RegisterPage> {
                   onTap: () {
                     Navigator.pushReplacement(
                       context,
-                      MaterialPageRoute(builder: (context) => const LoginPage()),
+                      MaterialPageRoute(
+                          builder: (context) => const LoginPage()),
                     );
                   },
                   child: const Row(
