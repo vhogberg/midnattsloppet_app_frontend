@@ -94,11 +94,11 @@ class SessionManager {
         print('Profile updated successfully');
       } else {
         // Handle error response
-        print('Error: ${response.body}');
+        throw Exception('Error: ${response.body}');
       }
     } catch (e) {
       // Handle exceptions
-      print('Exception: $e');
+      throw Exception('Exception: $e');
     }
   }
 

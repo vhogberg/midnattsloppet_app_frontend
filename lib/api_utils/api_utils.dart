@@ -122,6 +122,33 @@ class ApiUtils {
     }
   }
 
+  static Future<String?> fetchCompanyNameByUsername(String username) async {
+    final response = await http.get(
+      Uri.parse('$baseURL/user/$username'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        _apiKeyHeader: _apiKey,
+      },
+    );
+
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> data =
+          jsonDecode(utf8.decode(response.bodyBytes));
+
+      // Extract company name from JSON response
+      if (data.containsKey('company') &&
+          data['company'] is Map<String, dynamic>) {
+        final companyData = data['company'] as Map<String, dynamic>;
+        if (companyData.containsKey('name')) {
+          return companyData['name'] as String?;
+        }
+      }
+    } else {
+      throw Exception('Failed to load user from API');
+    }
+    return null;
+  }
+
   static Future<void> registerTeam(String username, String teamName,
       String charityName, String donationGoal) async {
     final String url = '$baseURL/register/profile/register/team';
@@ -161,7 +188,25 @@ class ApiUtils {
       final List<dynamic> data = jsonDecode(utf8.decode(response.bodyBytes));
       return List<String>.from(data);
     } else {
-      throw Exception('Failed to load charities from API');
+      throw Exception('Failed to load teams from API');
+    }
+  }
+
+  static Future<List<String>> fetchTeamsByCompanyFromAPI(
+      String companyName) async {
+    final response = await http.get(
+      Uri.parse('$baseURL/all/teams/$companyName'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        _apiKeyHeader: _apiKey,
+      },
+    );
+
+    if (response.statusCode == 200) {
+      final List<dynamic> data = jsonDecode(utf8.decode(response.bodyBytes));
+      return List<String>.from(data);
+    } else {
+      throw Exception('Failed to load teams from API');
     }
   }
 

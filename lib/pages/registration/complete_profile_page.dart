@@ -4,7 +4,6 @@ import 'package:flutter_application/session_manager.dart';
 import 'package:flutter_application/components/my_button.dart';
 import 'package:flutter_application/components/my_textfield.dart';
 
-
 class CompleteProfilePage extends StatefulWidget {
   CompleteProfilePage({Key? key}) : super(key: key);
 
@@ -64,37 +63,36 @@ class _CompleteProfilePage extends State<CompleteProfilePage> {
                 ),
                 const SizedBox(height: 20),
                 MyButton(
-                  text: "Färdigställ profil",
-                  onTap: () async {
-                    final name = nameController.text;
-                    final companyVoucherCode =
-                        companyVoucherCodeController.text;
+                    text: "Färdigställ profil",
+                    onTap: () async {
+                      final name = nameController.text;
+                      final companyVoucherCode =
+                          companyVoucherCodeController.text;
 
-                    if (name.isEmpty || companyVoucherCode.isEmpty) {
-                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                        content:
-                            Text('Vänligen ange ett namn och en företagskod.'),
-                      ));
-                      return;
-                    }
+                      if (name.isEmpty || companyVoucherCode.isEmpty) {
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                          content: Text(
+                              'Vänligen ange ett namn och en företagskod.'),
+                        ));
+                        return;
+                      }
 
-                    try {
-                      await SessionManager.instance
-                          .completeProfile(username!, name, companyVoucherCode);
+                      try {
+                        await SessionManager.instance.completeProfile(
+                            username!, name, companyVoucherCode);
 
-                      // Navigate to RegisterTeamPage after profile completion
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => RegisterTeamPage()),
-                      );
-                    } catch (e) {
-                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                        content: Text('Failed to update user profile: $e'),
-                      ));
-                    }
-                  },
-                ),
+                        // Navigate to RegisterTeamPage after profile completion
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => RegisterTeamPage()),
+                        );
+                      } catch (e) {
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                          content: Text('Failed to update user profile: $e'),
+                        ));
+                      }
+                    }),
                 const SizedBox(height: 50),
               ],
             ),
