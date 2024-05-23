@@ -192,6 +192,23 @@ class ApiUtils {
     }
   }
 
+  static Future<List<String>> fetchChallengeableTeamsFromAPI(String username) async {
+    final response = await http.get(
+      Uri.parse('$baseURL/all/challengeable-teams/$username'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        _apiKeyHeader: _apiKey,
+      },
+    );
+
+    if (response.statusCode == 200) {
+      final List<dynamic> data = jsonDecode(utf8.decode(response.bodyBytes));
+      return List<String>.from(data);
+    } else {
+      throw Exception('Failed to load teams from API');
+    }
+  }
+
   static Future<List<String>> fetchTeamsByCompanyFromAPI(
       String companyName) async {
     final response = await http.get(
