@@ -173,33 +173,39 @@ class _ActiveChallengePageState extends State<ActiveChallengePage> {
                         ),
                       ),
                       const Spacer(),
-                      ElevatedButton(
-                        onPressed: () {
-                          // Knappens funktionalitet ska in här
-                        },
-                        style: ElevatedButton.styleFrom(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8.0),
-                          ),
-                        ),
-                        child: const Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Icon(
-                              Iconsax.export_1,
-                            ),
-                            SizedBox(
-                              width: 5,
-                            ),
-                            Text(
-                              'Redigera utmaningar',
-                              style: TextStyle(
-                                fontSize: 14.0,
-                                fontWeight: FontWeight.bold,
-                                fontFamily: 'Sora',
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 0.0),
+                          child: ElevatedButton(
+                            onPressed: () {
+                              // Knappens funktionalitet ska in här
+                            },
+                            style: ElevatedButton.styleFrom(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8.0),
                               ),
                             ),
-                          ],
+                            child: const Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                SizedBox(
+                                  width: 5,
+                                ),
+                                Text(
+                                  'Redigera utmaning',
+                                  style: TextStyle(
+                                    fontSize: 14.0,
+                                    fontWeight: FontWeight.bold,
+                                    fontFamily: 'Sora',
+                                  ),
+                                ),
+                                Icon(
+                                  Icons.create,
+                                ),
+                              ],
+                            ),
+                          ),
                         ),
                       ),
                       const Divider(
@@ -218,7 +224,10 @@ class _ActiveChallengePageState extends State<ActiveChallengePage> {
                                 Text(
                                   'Tidsresultat publiceras på\nMidnattsloppets hemsida:',
                                   style: TextStyle(
-                                      fontSize: 14.0, color: Colors.white, fontFamily: 'Sora'),
+                                      fontSize: 14.0,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white,
+                                      fontFamily: 'Sora'),
                                 ),
                               ],
                             ),
