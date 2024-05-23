@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application/api_utils/api_utils.dart';
 import 'package:flutter_application/components/custom_app_bar.dart';
 import 'package:flutter_application/models/challenge.dart';
+import 'package:flutter_application/pages/challenge_page/active_challenge_page.dart';
 import 'package:flutter_application/pages/challenge_page/challenge_wizard_dialog.dart';
 import 'package:flutter_application/session_manager.dart';
 import 'package:iconsax/iconsax.dart';
@@ -32,32 +33,31 @@ class _ChallengePageState extends State<ChallengePage> {
   @override
   void initState() {
     super.initState();
-    username = SessionManager.instance.username;
-    fetchUserTeam();
-
-    //_loadChallengeActivity();
-
-    fetchChallenges();
-    
+    _initializePage();
   }
 
-  /* Future<void> _loadChallengeActivity() async {
+  Future<void> _initializePage() async {
     try {
-      final statusMap = await ApiUtils.fetchChallengeActivity(username);
       setState(() {
-        challengeSent = statusMap['challengeSent'] ?? false;
-        challengeReceived = statusMap['challengeReceived'] ?? false;
-        incomingChallengeTeam = statusMap['senderTeam'] ?? '';
-        isLoading = false;
-        print('Status Map: $statusMap'); // Debugging
+        isLoading = true;
       });
+
+      await fetchUsername();
+      await fetchUserTeam();
+      await fetchChallenges();
+      await analyseChallenges();
     } catch (e) {
-      print('Failed to load challenge status: $e');
+      print('Initialization error: $e');
+    } finally {
       setState(() {
         isLoading = false;
       });
     }
-  } */
+  }
+
+  Future<void> fetchUsername() async {
+    username = SessionManager.instance.username;
+  }
 
   // hämta användarens lag de är med i
   Future<void> fetchUserTeam() async {
@@ -72,16 +72,17 @@ class _ChallengePageState extends State<ChallengePage> {
   }
 
   Future<void> fetchChallenges() async {
+    fetchUserTeam();
     print('FETCH123');
     try {
       List<Challenge> fetchedChallenges =
           await ApiUtils.fetchChallengeActivity(username);
-          print ('LISTFETCH: $fetchedChallenges');
-      
+      print('LISTFETCH: $fetchedChallenges');
+
       setState(() {
         challenges = fetchedChallenges;
         isLoading = false;
-        print ('LISTFETCH2: $challenges');
+        print('LISTFETCH2: $challenges');
         analyseChallenges();
       });
     } catch (e) {
@@ -94,21 +95,18 @@ class _ChallengePageState extends State<ChallengePage> {
   }
 
   Future<void> analyseChallenges() async {
-
-    
     print(isLoading);
-    
+
     // for each challenge in challenge, check:
 
     // Check if there is no activity whatsoever in the challenge page
     // Inbox then says "Inga aktiva inbjudningar eller förfrågningar"
-    print (challenges);
+    print(challenges);
 
     if (challenges.isEmpty) {
       challengeSent = false;
       challengeReceived = false;
-    } 
-    else {
+    } else {
       // the list is not empty...
 
       for (Challenge challenge in challenges) {
@@ -312,36 +310,36 @@ class _ChallengePageState extends State<ChallengePage> {
                                     ElevatedButton(
                                       // Acceptera lagkamp logik här
                                       onPressed: () async {
-                                        final String url =
-                                            'https://group-15-7.pvt.dsv.su.se/app/${username}/acceptchallenge';
+                                        try {
+                                          final response =
+                                              await ApiUtils.acceptChallenge(
+                                                  username!,
+                                                  incomingChallengeTeam);
 
-                                        // hämta data från de tre olika stegen i wizard
-                                        final Map<String, String> requestData =
-                                            {
-                                          'challengingTeamName':
-                                              incomingChallengeTeam,
-                                        };
-                                        final response = await ApiUtils.post(
-                                          url,
-                                          utf8.encode(jsonEncode(requestData)),
-                                          // ytterligare data?
-                                        );
+                                          if (response.statusCode == 200) {
+                                            // Challenge accepted
+                                            print(
+                                                'Challenge accepted successfully');
 
-                                        if (response.statusCode == 200) {
-                                          // Challenge accepterad
+                                            // Logik för att switcha till active_challenge_page
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      const ActiveChallengePage()),
+                                            );
+                                          } else {
+                                            // Error hantering
+                                            print(
+                                                'Failed to accept challenge: ${response.body}');
+                                          }
+                                        } catch (e) {
+                                          // Exception handling
                                           print(
-                                              'Challenge accepted successfully');
-                                          
-                                          
-                                          // Logik för att switcha till active_challenge_page
-
-
-                                        } else {
-                                          // Error hantering
-                                          print(
-                                              'Failed to accept challenge: ${response.body}');
+                                              'Error accepting challenge: $e');
                                         }
                                       },
+
                                       style: ElevatedButton.styleFrom(
                                         backgroundColor: Colors.green,
                                         padding: const EdgeInsets.symmetric(
@@ -371,36 +369,29 @@ class _ChallengePageState extends State<ChallengePage> {
                                     ElevatedButton(
                                       // Avböj lagkamp logik här
                                       onPressed: () async {
+                                        try {
+                                          final response =
+                                              await ApiUtils.declineChallenge(
+                                                  username!,
+                                                  incomingChallengeTeam);
 
-                                        // ApiUtils.declineChallenge(username, incomingChallengeTeam);
+                                          if (response.statusCode == 200) {
+                                            // Challenge declined successfully
+                                            print(
+                                                'Challenge declined successfully');
 
-                                        /* 
-                                        final String url =
-                                            'https://group-15-7.pvt.dsv.su.se/app/${username}/declinechallenge'; // OBS!
-
-                                        // hämta data från de tre olika stegen i wizard
-                                        final Map<String, String> requestData =
-                                            {
-                                          'challengingTeamName':
-                                              incomingChallengeTeam,
-                                        };
-                                        final response = await ApiUtils.post(
-                                          url,
-                                          utf8.encode(jsonEncode(requestData)),
-                                          // ytterligare data?
-                                        );
-
-                                        if (response.statusCode == 200) {
-                                          // Challenge avböjd lyckat
+                                            // Run this method again to check if there are any more incoming challenge requests.
+                                            analyseChallenges();
+                                          } else {
+                                            // Handle error response
+                                            print(
+                                                'Failed to decline challenge: ${response.body}');
+                                          }
+                                        } catch (e) {
+                                          // Exception handling
                                           print(
-                                              'Challenge declined successfully');
-                                              // Run this method again to check if there are any more incoming challenge requests.
-                                              analyseChallenges();
-                                        } else {
-                                          // Handle error response
-                                          print(
-                                              'Failed to decline challenge: ${response.body}');
-                                        } */
+                                              'Error declining challenge: $e');
+                                        }
                                       },
 
                                       style: ElevatedButton.styleFrom(
@@ -436,7 +427,7 @@ class _ChallengePageState extends State<ChallengePage> {
                           // När MITT lag har skickat en lagkamp till ett annat lag, inväntar svar
                           : (challengeSent
                               ? Text(
-                                  'Inväntar svar från lag $incomingChallengeTeam',
+                                  'Inväntar svar från lag $outgoingChallengeTeam',
                                   style: const TextStyle(
                                     fontSize: 16.0,
                                     fontWeight: FontWeight.bold,

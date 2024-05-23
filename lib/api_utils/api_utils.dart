@@ -35,6 +35,50 @@ class ApiUtils {
     );
   }
 
+  static Future<http.Response> acceptChallenge(
+      String username, String challengingTeamName) async {
+    final url = '$baseURL/$username/acceptchallenge';
+    final headers = {
+      'Content-Type': 'application/json; charset=UTF-8',
+      _apiKeyHeader: _apiKey,
+    };
+
+    final body = jsonEncode({'challengingTeamName': challengingTeamName});
+
+    try {
+      final response = await http.post(
+        Uri.parse(url),
+        headers: headers,
+        body: body,
+      );
+      return response;
+    } catch (e) {
+      throw Exception('Failed to send request: $e');
+    }
+  }
+
+  static Future<http.Response> declineChallenge(
+      String username, String challengingTeamName) async {
+    final url = '$baseURL/$username/declinechallenge';
+    final headers = {
+      'Content-Type': 'application/json; charset=UTF-8',
+      _apiKeyHeader: _apiKey,
+    };
+
+    final body = jsonEncode({'challengingTeamName': challengingTeamName});
+
+    try {
+      final response = await http.delete(
+        Uri.parse(url),
+        headers: headers,
+        body: body,
+      );
+      return response;
+    } catch (e) {
+      throw Exception('Failed to send request: $e');
+    }
+  }
+
   static Future<http.Response> logout(String url,
       {Map<String, String>? headers, dynamic body}) async {
     try {
@@ -458,8 +502,6 @@ class ApiUtils {
       },
     );
 
-
-
     /* String title;
     String description;
     String challengerName;
@@ -508,28 +550,6 @@ class ApiUtils {
         'challengeReceived': challengeReceived,
         'senderTeam': senderTeam ?? '',
       };*/
-  }
-
-  // DECLINE
-  static Future<String?> declineChallenge(
-      String? username, Map<String?, String?> requestbody) async {
-    try {
-      var response = await http.delete(
-        Uri.parse('$baseURL/$username/declinechallenge'),
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-          _apiKeyHeader: _apiKey,
-        },
-      );
-
-      if (response.statusCode == 200) {
-        print("successfully declined the challenge");
-      }
-    } catch (e) {
-      print('Error fetching team name: $e');
-      rethrow;
-    }
-    return null;
   }
 
   static Future<List<Team>> fetchTeamsWithBoxAndCompanyName() async {
