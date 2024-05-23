@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'dart:convert';
+
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_application/api_utils/api_utils.dart';
 import 'package:flutter_application/components/custom_colors.dart';
 import 'package:flutter_application/components/donation_progress_bar.dart';
@@ -35,6 +35,8 @@ class _HomePageState extends State<HomePage> {
   int daysLeft = 0;
   String _greeting = '';
 
+  late Timer greetingTimer;
+
   @override
   void initState() {
     super.initState();
@@ -56,7 +58,7 @@ class _HomePageState extends State<HomePage> {
 
     updateGreeting();
     // Update the greeting every minute
-    Timer.periodic(Duration(minutes: 1), (timer) {
+    greetingTimer = Timer.periodic(Duration(minutes: 1), (timer) {
       updateGreeting();
     });
   }
@@ -64,6 +66,7 @@ class _HomePageState extends State<HomePage> {
   @override
   void dispose() {
     _timer.cancel();
+    greetingTimer.cancel();
     super.dispose();
   }
 
