@@ -173,7 +173,7 @@ class _NotificationPageState extends State<NotificationPage> {
           NotificationItem(
             title: "Ingen lagkamp påbörjad!",
             message:
-                "Ni har ingen påbörjad aktivitet inom lagkam-sidan. \n\n Gå in och starta en lagkamp!",
+                "Ni har ingen påbörjad aktivitet inom lagkam-sidan.\nGå in i lagkampssidan och starta en lagkamp!",
             timestamp: DateTime.now(),
           ),
         );
@@ -186,7 +186,7 @@ class _NotificationPageState extends State<NotificationPage> {
           NotificationItem(
             title: "Du befinner dig i en lagkamp!",
             message:
-                "Du och ditt lag befinner sig nu i en lagkamp!\n\nGe allt för att vinna och ha kul!",
+                "Du och ditt lag befinner sig nu i en lagkamp!\nGe allt för att vinna och ha kul!\n\nGå in i lagkampssidan och ta reda på mer!",
             timestamp: DateTime.now(),
           ),
         );
@@ -194,12 +194,12 @@ class _NotificationPageState extends State<NotificationPage> {
     }
 
     if (test == "REJECTED") {
-      if (!notificationAlreadyExists(
-          "Lagkampsförfrågan blev avböjd!")) {
+      if (!notificationAlreadyExists("Lagkampsförfrågan blev avböjd!")) {
         allNotifications.add(
           NotificationItem(
             title: "Lagkampsförfrågan blev avböjd!",
-            message: "Ditt lag eller laget ni utmanat har avböjt lagkampsförfrågan! \n\n Gå in och utmana ett annat lag!",
+            message:
+                "Ditt lag eller laget ni utmanat har avböjt lagkampsförfrågan!\nGå in i lagkampssidan och utmana ett annat lag!",
             timestamp: DateTime.now(),
           ),
         );
@@ -375,12 +375,17 @@ class _NotificationPageState extends State<NotificationPage> {
           foundStatus = status;
           break; // Avbryt loopen när vi hittar ACCEPTED eller REJECTED
         }
+
+        if (status == 'PENDING') {
+          foundStatus = status;
+          break;
+        }
       }
-      return foundStatus ?? 'PENDING';
+      return foundStatus;
     } catch (e) {
       // Hantera eventuella fel vid hämtning av statusen
       print('Error: $e');
-      return 'PENDING'; // Default till 'PENDING' om ett fel uppstår
+      return null; // Default till 'PENDING' om ett fel uppstår
     }
   }
 
