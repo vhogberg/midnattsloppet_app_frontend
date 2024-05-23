@@ -140,7 +140,7 @@ class _TopThreeTeamsState extends State<TopThreeTeams> {
                       const EdgeInsets.all(5.0), // Padding around the image
                   child: Image(
                     image: AssetImage(
-                        'images/company_logos/${team.companyName}.png'),
+                        'images/company_logos/${team.companyName == "Null" ? "DefaultTeamImage" : team.companyName}.png'),
                     width: circleSize - 20,
                     height: circleSize - 20,
                     fit: BoxFit.contain,
