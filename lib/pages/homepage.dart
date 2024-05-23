@@ -9,6 +9,7 @@ import 'package:flutter_application/components/donation_progress_bar.dart';
 import 'package:flutter_application/components/goal_box.dart';
 import 'package:flutter_application/components/top_three_teams.dart';
 import 'package:flutter_application/models/team.dart';
+import 'package:flutter_application/pages/goal_reached_page/goal_reached.dart';
 import 'package:flutter_application/pages/notification_page/notification_page.dart';
 import 'package:flutter_application/session_manager.dart';
 import 'package:flutter_application/share_helper.dart';
@@ -195,10 +196,12 @@ class _HomePageState extends State<HomePage> {
               padding: const EdgeInsets.only(bottom: 50),
               child: Column(
                 children: [
+                  if(totalDonations >= donationGoal)
+                  const TeamGoalReached(),
                   Row(
                     children: [
                       //Top left welcoming text
-                       Text(
+                      Text(
                         _greeting,
                         style: const TextStyle(
                           fontSize: 24,

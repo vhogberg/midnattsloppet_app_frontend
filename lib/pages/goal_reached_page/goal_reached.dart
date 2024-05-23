@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:flutter_application/api_utils/api_utils.dart';
 import 'package:flutter_application/components/my_button.dart';
 import 'package:flutter_application/session_manager.dart';
-import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class TeamGoalReached extends StatefulWidget {
@@ -14,44 +14,47 @@ class TeamGoalReached extends StatefulWidget {
 
 class _TeamGoalReachedState extends State<TeamGoalReached> {
   late SharedPreferences _prefs;
-  bool _isGoalReached = false;
+  late String? username;
+  double donationGoal = 0;
+  double totalDonations = 0;
 
   @override
   void initState() {
     super.initState();
+    username = SessionManager.instance.username;
     _initSharedPreferences();
   }
 
   Future<void> _initSharedPreferences() async {
     _prefs = await SharedPreferences.getInstance();
-    _startGoalCheck(SessionManager.instance.username);
+    _startGoalCheck(username);
   }
 
   void _startGoalCheck(String? username) {
-    Timer.periodic(const Duration(seconds: 10), (timer) {
-      _checkGoalReached(username);
-    });
-  }
+  Timer.periodic(const Duration(seconds: 10), (timer) {
+    _fetchDonationsAndGoal();
+  });
+}
 
-  Future<void> _checkGoalReached(String? username) async {
+
+  Future<void> _fetchDonationsAndGoal() async {
     try {
-      var url = Uri.parse('https://group-15-7.pvt.dsv.su.se/app/team/$username/checkGoal');
-      var response = await http.head(url);
-      if (response.statusCode == 200) {
-        setState(() {
-          _isGoalReached = true;
-        });
-        _showCustomDialogIfNeeded();
-      }
+      totalDonations = await ApiUtils.fetchDonations(username);
+      donationGoal = await ApiUtils.fetchGoal(username);
+      setState(() {});
+      _showCustomDialogIfNeeded();
     } catch (e) {
-      print('Error checking goal: $e');
+      print("Error fetching data: $e");
     }
   }
 
   void _showCustomDialogIfNeeded() {
-    if (_isGoalReached && !(_prefs.containsKey('dialogShown') && _prefs.getBool('dialogShown')!)) {
-      _prefs.setBool('dialogShown', true);
-      _showCustomDialog(context);
+    if (totalDonations >= donationGoal) {
+      if (!_prefs.containsKey('dialogShown') ||
+          !(_prefs.getBool('dialogShown') ?? false)) {
+        _prefs.setBool('dialogShown', true);
+        _showCustomDialog(context);
+      }
     }
   }
 
@@ -79,7 +82,8 @@ class _TeamGoalReachedState extends State<TeamGoalReached> {
                       topLeft: Radius.circular(12),
                       topRight: Radius.circular(12),
                     ),
-                    child: Image.asset('images/GoalCompleted.png', fit: BoxFit.cover),
+                    child: Image.asset('images/GoalCompleted.png',
+                        fit: BoxFit.cover),
                   ),
                   const Padding(
                     padding: EdgeInsets.symmetric(vertical: 20, horizontal: 10),
@@ -123,12 +127,7 @@ class _TeamGoalReachedState extends State<TeamGoalReached> {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: Scaffold(
-        body: Center(
-          child: SizedBox(), // Empty widget, could be replaced with something if needed
-        ),
-      ),
-    );
+    _fetchDonationsAndGoal();
+    return const SizedBox(); // Tom widget, då dialogen visas utan att täcka något annat
   }
 }
