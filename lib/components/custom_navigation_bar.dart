@@ -28,7 +28,7 @@ class _CustomNavigationBarState extends State<CustomNavigationBar> {
     super.initState();
     username = SessionManager.instance.username;
     fetchTeamName();
-    fetchChallengeStatus();
+    fetchChallengeStatus(username);
   }
 
   int selectedPage = 0;
@@ -51,16 +51,31 @@ class _CustomNavigationBarState extends State<CustomNavigationBar> {
     }
   }
 
-  Future<void> fetchChallengeStatus() async {
-    try {
-      String? challengeStatus = await ApiUtils.fetchChallengeStatus(username);
-      setState(() {
-        isChallengeAccepted = (challengeStatus == 'ACCEPTED');
-      });
-    } catch (e) {
-      print("Error fetching challenge status: $e");
+  Future<void> fetchChallengeStatus(String? username) async {
+  try {
+    List<String>? statuses = await ApiUtils.fetchChallengeStatus(username);
+
+    String? challengeStatus;
+    for (String status in statuses) {
+      if (status == 'ACCEPTED' || status == 'REJECTED') {
+        challengeStatus = status;
+        break; // Avbryt loopen när vi hittar ACCEPTED eller REJECTED
+      }
     }
+
+    setState(() {
+      isChallengeAccepted = (challengeStatus == 'ACCEPTED');
+    });
+
+  } catch (e) {
+    print("Error fetching challenge status: $e");
+    setState(() {
+      isChallengeAccepted = false; // Standardvärde vid fel
+    });
   }
+}
+
+
 
   @override
   Widget build(BuildContext context) {

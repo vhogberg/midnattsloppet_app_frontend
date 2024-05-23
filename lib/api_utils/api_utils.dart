@@ -345,7 +345,7 @@ class ApiUtils {
     }
   }
 
-  static Future<String?> fetchChallengeStatus(String? username) async {
+  static Future<List<String>> fetchChallengeStatus(String? username) async {
     try {
       var response = await http.get(
         Uri.parse('$baseURL/$username/challenge'),
@@ -356,9 +356,14 @@ class ApiUtils {
       );
 
       if (response.statusCode == 200) {
-        var responseData = jsonDecode(utf8.decode(response.bodyBytes));
-        var challengeStatus = responseData['status'];
-        return challengeStatus;
+        List<dynamic> responseData =
+            jsonDecode(utf8.decode(response.bodyBytes));
+
+        List<String> challengeStatuses = responseData
+            .map((challenge) => challenge['status'].toString())
+            .toList();
+
+        return challengeStatuses;
       } else {
         throw Exception('Failed to fetch challenge status');
       }
@@ -367,7 +372,6 @@ class ApiUtils {
       rethrow;
     }
   }
-
   /*
   // method for challenge_page to fetch activity
   static Future<Map<String, dynamic>> fetchChallengeActivity1(

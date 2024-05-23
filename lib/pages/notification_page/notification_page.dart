@@ -48,7 +48,7 @@ class _NotificationPageState extends State<NotificationPage> {
 
   double donationGoal = 0;
   double totalDonations = 0;
-  String? challengeStatus = "";
+  String? challengeStatus;
 
   late Timer _timer;
 
@@ -349,24 +349,31 @@ class _NotificationPageState extends State<NotificationPage> {
     }
   }
 
-  Future<String?> getChallengeStatus(String? username) async {
-    try {
-      var status = await ApiUtils.fetchChallengeStatus(username);
-      if (status == null) {
-        print(
-            "Error: the challenge status fetched by the API call in JSON format was null");
-      } else {
-        // Hantera om statusen inte är tillgänglig
-        print('Challenge status not available');
-      }
+  Future<void> getChallengeStatus(String? username) async {
+  try {
+    var statuses = await ApiUtils.fetchChallengeStatus(username);
+    String? foundStatus;
 
-      challengeStatus = status;
-      return challengeStatus;
-    } catch (e) {
-      // Hantera eventuella fel vid hämtning av statusen
-      print('Error: $e');
+    for (String status in statuses) {
+      if (status == 'ACCEPTED' || status == 'REJECTED') {
+        foundStatus = status;
+        break; // Avbryt loopen när vi hittar ACCEPTED eller REJECTED
+      }
     }
+
+    setState(() {
+      challengeStatus = foundStatus ?? 'PENDING';
+    });
+
+  } catch (e) {
+    // Hantera eventuella fel vid hämtning av statusen
+    print('Error: $e');
+    setState(() {
+      challengeStatus = 'PENDING'; // Default till 'PENDING' om ett fel uppstår
+    });
   }
+}
+
 
   void sortNotificationsByDate() {
     allNotifications.sort((a, b) => b.timestamp.compareTo(a.timestamp));
