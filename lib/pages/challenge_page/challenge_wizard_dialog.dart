@@ -56,13 +56,13 @@ class _WizardDialogState extends State<WizardDialog> {
         return;
       }
       if (_currentPage == 1 && titleController.text.isEmpty) {
-        DialogUtils.showGenericErrorMessage(context, 'Fel',
-          'Du måste ange en titel.');
+        DialogUtils.showGenericErrorMessage(
+            context, 'Fel', 'Du måste ange en titel.');
         return;
       }
       if (_currentPage == 2 && descriptionController.text.isEmpty) {
-        DialogUtils.showGenericErrorMessage(context, 'Fel',
-          'Du måste ange egna utmaningar.');
+        DialogUtils.showGenericErrorMessage(
+            context, 'Fel', 'Du måste ange egna utmaningar.');
         return;
       }
       if (_currentPage < 3) {
@@ -118,7 +118,7 @@ class _WizardDialogState extends State<WizardDialog> {
         print('Failed to send challenge: ${response.body}');
         // Visa error till användare.
         DialogUtils.showGenericErrorMessage(context, 'Fel',
-          'Lyckades inte att skicka! Vänligen försök igen senare.');
+            'Lyckades inte att skicka! Vänligen försök igen senare.');
       }
     } catch (e) {
       print('Error sending challenge: $e');
@@ -341,6 +341,22 @@ class _WizardDialogState extends State<WizardDialog> {
               border: OutlineInputBorder(),
             ),
             maxLines: 5,
+          ),
+          Expanded(
+            child: Container(
+              margin: const EdgeInsets.all(16.0),
+              padding: const EdgeInsets.all(8.0),
+              decoration: BoxDecoration(
+                color: Colors.grey[200],
+                borderRadius: BorderRadius.circular(16.0),
+              ),
+              child: ListView.builder(
+                itemCount: teams.length,
+                itemBuilder: (context, index) {
+                  return; //ListItem
+                },
+              ),
+            ),
           ),
         ],
       ),
