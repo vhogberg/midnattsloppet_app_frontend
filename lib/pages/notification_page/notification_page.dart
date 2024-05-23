@@ -48,7 +48,7 @@ class _NotificationPageState extends State<NotificationPage> {
 
   double donationGoal = 0;
   double totalDonations = 0;
-  String? challengeStatus;
+  String? foundStatus;
 
   late Timer _timer;
 
@@ -59,8 +59,9 @@ class _NotificationPageState extends State<NotificationPage> {
     dateNotifications(); // Lägg till anropet till metoden som ansvarar för datumsnotiser.
     donationNotifications(); // anrop till metoden som ansvarar för donationsnotiser.
     fetchDonations();
-    fetchGoal();
     getChallengeStatus(username);
+    challengeNotifications();
+    fetchGoal();
     _timer = Timer.periodic(const Duration(seconds: 10), (timer) {
       fetchDonations();
       fetchGoal();
@@ -149,9 +150,13 @@ class _NotificationPageState extends State<NotificationPage> {
     sortNotificationsByDate();
   }
 
-  void challengeNotifications() {
-    if (challengeStatus!.contains("PENDING")) {
-      if (!notificationAlreadyExists("50 dagar kvar till loppet")) {
+  void challengeNotifications() async {
+    String? test = await getChallengeStatus(username);
+    print(test);
+
+    if (test == "PENDING") {
+      if (!notificationAlreadyExists(
+          "Ni har blivit utmanade eller utmanat ett annat lag!")) {
         allNotifications.add(
           NotificationItem(
             title: "Ni har blivit utmanade eller utmanat ett annat lag!",
@@ -162,26 +167,39 @@ class _NotificationPageState extends State<NotificationPage> {
       }
     }
 
-    if (challengeStatus!.contains("ACCEPTED")) {
-      if (!notificationAlreadyExists("Du befinner dig i en lagkamp!")) {
+    if (test == null) {
+      if (!notificationAlreadyExists("Ingen lagkamp påbörjad!")) {
         allNotifications.add(
           NotificationItem(
-            title: "Du befinner dig i en lagkamp!",
+            title: "Ingen lagkamp påbörjad!",
             message:
-                "Du och ditt lag befinner sig nu i en lagkamp!\nGe allt för att vinna och ha kul!",
+                "Ni har ingen påbörjad aktivitet inom lagkam-sidan. \n\n Gå in och starta en lagkamp!",
             timestamp: DateTime.now(),
           ),
         );
       }
     }
 
-    if (challengeStatus!.contains("REJECTED")) {
-      if (!notificationAlreadyExists(
-          "{lagnamn} avböjde din inbjudan på att starta lagkamp")) {
+    if (test == "ACCEPTED") {
+      if (!notificationAlreadyExists("Du befinner dig i en lagkamp!")) {
         allNotifications.add(
           NotificationItem(
-            title: "{lagnamn} avböjde din inbjudan på att starta lagkamp",
-            message: "",
+            title: "Du befinner dig i en lagkamp!",
+            message:
+                "Du och ditt lag befinner sig nu i en lagkamp!\n\nGe allt för att vinna och ha kul!",
+            timestamp: DateTime.now(),
+          ),
+        );
+      }
+    }
+
+    if (test == "REJECTED") {
+      if (!notificationAlreadyExists(
+          "Lagkampsförfrågan blev avböjd!")) {
+        allNotifications.add(
+          NotificationItem(
+            title: "Lagkampsförfrågan blev avböjd!",
+            message: "Ditt lag eller laget ni utmanat har avböjt lagkampsförfrågan! \n\n Gå in och utmana ett annat lag!",
             timestamp: DateTime.now(),
           ),
         );
@@ -349,31 +367,22 @@ class _NotificationPageState extends State<NotificationPage> {
     }
   }
 
-  Future<void> getChallengeStatus(String? username) async {
-  try {
-    var statuses = await ApiUtils.fetchChallengeStatus(username);
-    String? foundStatus;
-
-    for (String status in statuses) {
-      if (status == 'ACCEPTED' || status == 'REJECTED') {
-        foundStatus = status;
-        break; // Avbryt loopen när vi hittar ACCEPTED eller REJECTED
+  Future<String?> getChallengeStatus(String? username) async {
+    try {
+      var statuses = await ApiUtils.fetchChallengeStatus(username);
+      for (String status in statuses) {
+        if (status == 'ACCEPTED' || status == 'REJECTED') {
+          foundStatus = status;
+          break; // Avbryt loopen när vi hittar ACCEPTED eller REJECTED
+        }
       }
+      return foundStatus ?? 'PENDING';
+    } catch (e) {
+      // Hantera eventuella fel vid hämtning av statusen
+      print('Error: $e');
+      return 'PENDING'; // Default till 'PENDING' om ett fel uppstår
     }
-
-    setState(() {
-      challengeStatus = foundStatus ?? 'PENDING';
-    });
-
-  } catch (e) {
-    // Hantera eventuella fel vid hämtning av statusen
-    print('Error: $e');
-    setState(() {
-      challengeStatus = 'PENDING'; // Default till 'PENDING' om ett fel uppstår
-    });
   }
-}
-
 
   void sortNotificationsByDate() {
     allNotifications.sort((a, b) => b.timestamp.compareTo(a.timestamp));
@@ -609,24 +618,3 @@ class NotificationDetail extends StatelessWidget {
     );
   }
 }
-
-/*
-
-final Event event = Event(
-                    title: 'Midnattloppet',
-                    description: 'Distans 10 km',
-                    location: 'Södermalm',
-                    startDate: DateTime(2024, 8, 17, 21, 45),
-                    endDate: DateTime(2024, 8, 17, 24, 00),
-                    iosParams: const IOSParams(
-                      url:
-                          'https://midnattsloppet.com/midnattsloppet-stockholm/',
-                    ),
-                    androidParams: const AndroidParams(
-                      emailInvites: [], // on Android, you can add invite emails to your event.
-                    ),
-                  );
-                  Add2Calendar.addEvent2Cal(event);
-                  
-                  
-*/
