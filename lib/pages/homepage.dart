@@ -233,7 +233,10 @@ class _HomePageState extends State<HomePage> {
                                   radius: 30,
                                   backgroundColor: Colors.white,
                                   backgroundImage: AssetImage(
-                                      'images/company_logos/$companyName.png'),
+                                    companyName == "Null"
+                                        ? 'images/company_logos/DefaultTeamPicture.png'
+                                        : 'images/company_logos/$companyName.png',
+                                  ),
                                 ),
                               ),
                             )

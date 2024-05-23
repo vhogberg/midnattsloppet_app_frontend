@@ -140,7 +140,7 @@ class _TopThreeTeamsState extends State<TopThreeTeams> {
                       const EdgeInsets.all(5.0), // Padding around the image
                   child: Image(
                     image: AssetImage(
-                        'images/company_logos/${team.companyName}.png'),
+                        'images/company_logos/${team.companyName == "Null" ? "DefaultTeamImage" : team.companyName}.png'),
                     width: circleSize - 20,
                     height: circleSize - 20,
                     fit: BoxFit.contain,
@@ -197,15 +197,15 @@ class _TopThreeTeamsState extends State<TopThreeTeams> {
         Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Icon(
+            Icon(
               Iconsax.coin,
-              color: Color.fromARGB(255, 247, 214, 72),
+              color: teamNameColor,
               size: 12.0,
             ),
             const SizedBox(width: 4.0),
             Text(
               '${team.fundraiserBox}kr',
-              style: const TextStyle(fontSize: 14.0),
+              style: TextStyle(fontSize: 14.0, color: teamNameColor),
             ),
           ],
         ),
