@@ -52,30 +52,27 @@ class _CustomNavigationBarState extends State<CustomNavigationBar> {
   }
 
   Future<void> fetchChallengeStatus(String? username) async {
-  try {
-    List<String>? statuses = await ApiUtils.fetchChallengeStatus(username);
+    try {
+      List<String>? statuses = await ApiUtils.fetchChallengeStatus(username);
 
-    String? challengeStatus;
-    for (String status in statuses) {
-      if (status == 'ACCEPTED' || status == 'REJECTED') {
-        challengeStatus = status;
-        break; // Avbryt loopen när vi hittar ACCEPTED eller REJECTED
+      String? challengeStatus;
+      for (String status in statuses) {
+        if (status == 'ACCEPTED' || status == 'REJECTED') {
+          challengeStatus = status;
+          break; // Avbryt loopen när vi hittar ACCEPTED eller REJECTED
+        }
       }
+
+      setState(() {
+        isChallengeAccepted = (challengeStatus == 'ACCEPTED');
+      });
+    } catch (e) {
+      print("Error fetching challenge status: $e");
+      setState(() {
+        isChallengeAccepted = false; // Standardvärde vid fel
+      });
     }
-
-    setState(() {
-      isChallengeAccepted = (challengeStatus == 'ACCEPTED');
-    });
-
-  } catch (e) {
-    print("Error fetching challenge status: $e");
-    setState(() {
-      isChallengeAccepted = false; // Standardvärde vid fel
-    });
   }
-}
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -95,8 +92,20 @@ class _CustomNavigationBarState extends State<CustomNavigationBar> {
           backgroundColor: selectedIconColor,
           onPressed: () async {
             try {
-              if (!await launchUrlString(
-                  'https://group-15-7.pvt.dsv.su.se/app/donate/$teamName')) {
+              if (teamName == null || teamName!.isEmpty) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('Team name is not provided'),
+                    behavior: SnackBarBehavior.floating,
+                  ),
+                );
+                return;
+              }
+              // Encode the teamName to make it URL safe
+              final encodedTeamName = Uri.encodeComponent(teamName!);
+              final url =
+                  'https://group-15-7.pvt.dsv.su.se/app/donate/$encodedTeamName';
+              if (!await launchUrlString(url)) {
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(
                     content: Text('Could not launch URL'),

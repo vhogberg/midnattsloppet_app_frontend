@@ -6,7 +6,6 @@ import 'package:flutter_application/components/custom_colors.dart';
 import 'package:flutter_application/components/donation_progress_bar.dart';
 import 'package:flutter_application/components/return_arrow_argument.dart';
 import 'package:flutter_application/models/team.dart';
-import 'package:iconsax/iconsax.dart';
 import 'package:flutter_application/components/custom_app_bar.dart';
 import 'package:flutter_application/components/other_goal_box.dart';
 import 'package:url_launcher/url_launcher_string.dart';
@@ -55,10 +54,9 @@ class _OtherTeamPageState extends State<OtherTeamPage> {
         charityName = charity;
         donationGoal = goal ?? 0;
         totalDonations = donations ?? 0;
-        members = teamMembers
-                ?.map((member) => member['username'].toString())
-                .toList() ??
-            [];
+        members =
+            teamMembers?.map((member) => member['name'].toString()).toList() ??
+                [];
       });
     } catch (e) {
       print("Error fetching team details: $e");
@@ -387,8 +385,22 @@ class _OtherTeamPageState extends State<OtherTeamPage> {
                           ElevatedButton(
                             onPressed: () async {
                               try {
-                                if (!await launchUrlString(
-                                    'https://group-15-7.pvt.dsv.su.se/app/donate/$teamName')) {
+                                if (teamName == null || teamName!.isEmpty) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content:
+                                          Text('Team name is not provided'),
+                                      behavior: SnackBarBehavior.floating,
+                                    ),
+                                  );
+                                  return;
+                                }
+                                // Encode the teamName to make it URL safe
+                                final encodedTeamName =
+                                    Uri.encodeComponent(teamName!);
+                                final url =
+                                    'https://group-15-7.pvt.dsv.su.se/app/donate/$encodedTeamName';
+                                if (!await launchUrlString(url)) {
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     const SnackBar(
                                       content: Text('Could not launch URL'),

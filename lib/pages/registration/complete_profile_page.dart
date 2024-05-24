@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application/components/dialog_utils.dart';
 import 'package:flutter_application/pages/registration/team/team_page.dart';
 import 'package:flutter_application/session_manager.dart';
 import 'package:flutter_application/components/my_button.dart';
@@ -70,10 +71,8 @@ class _CompleteProfilePage extends State<CompleteProfilePage> {
                           companyVoucherCodeController.text;
 
                       if (name.isEmpty || companyVoucherCode.isEmpty) {
-                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                          content: Text(
-                              'Vänligen ange ett namn och en företagskod.'),
-                        ));
+                        DialogUtils().showGenericErrorMessageNonStatic(context, "Fel",
+                            "Vänligen ange ett användarnamn och företagskod för att fortsätta.");
                         return;
                       }
 
@@ -88,9 +87,8 @@ class _CompleteProfilePage extends State<CompleteProfilePage> {
                               builder: (context) => RegisterTeamPage()),
                         );
                       } catch (e) {
-                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                          content: Text('Failed to update user profile: $e'),
-                        ));
+                        DialogUtils().showGenericErrorMessageNonStatic(context, "Fel",
+                            "Inte en giltig företagskod, vänligen försök igen.");
                       }
                     }),
                 const SizedBox(height: 50),

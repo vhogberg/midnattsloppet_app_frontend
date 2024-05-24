@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application/components/dialog_utils.dart';
 import 'package:flutter_application/components/my_button.dart';
 import 'package:flutter_application/components/my_textfield.dart';
 import 'package:flutter_application/pages/login_page/login_widget.dart';
@@ -92,24 +93,20 @@ class _RegisterPage extends State<RegisterPage> {
                     final confirmPassword = confirmPasswordController.text;
 
                     if (username.isEmpty || password.isEmpty) {
-                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                        content: Text(
-                            'Vänligen ange både e-postadress och lösenord.'),
-                      ));
+                      DialogUtils().showGenericErrorMessageNonStatic(context, "Fel",
+                          'Vänligen ange både e-postadress och lösenord.');
                       return;
                     }
 
                     if (!isValidEmail(username)) {
-                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                        content: Text('Vänligen ange en giltig e-postadress.'),
-                      ));
+                      DialogUtils().showGenericErrorMessageNonStatic(context, "Fel",
+                          'Vänligen ange en giltig e-postadress.');
                       return;
                     }
 
                     if (password != confirmPassword) {
-                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                        content: Text('Lösenorden matchar inte.'),
-                      ));
+                      DialogUtils().showGenericErrorMessageNonStatic(context, "Fel",
+                          'Lösenorden matchar inte.');
                       return;
                     }
                     showDialog(
@@ -143,20 +140,15 @@ class _RegisterPage extends State<RegisterPage> {
                           ));
                         });
                       } else if (response.contains("Username already exists")) {
-                        ScaffoldMessenger.of(context)
-                            .showSnackBar(const SnackBar(
-                          content: Text('Användarnamnet finns redan.'),
-                        ));
+                        DialogUtils().showGenericErrorMessageNonStatic(context, "Fel",
+                            "E-postadressen är redan kopplat till ett konto.");
                       } else {
-                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                          content: Text('Unexpected response: $response'),
-                        ));
+                        DialogUtils().showGenericErrorMessageNonStatic(
+                            context, "Fel", "Okänt fel.");
                       }
                     }).catchError((error) {
-                      Navigator.of(context).pop();
-                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                        content: Text('Failed to register: $error'),
-                      ));
+                      DialogUtils().showGenericErrorMessageNonStatic(
+                          context, "Fel", "Registreringen misslyckades.");
                     });
                   },
                 ),

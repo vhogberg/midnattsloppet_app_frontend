@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application/components/custom_navigation_bar.dart';
+import 'package:flutter_application/components/dialog_utils.dart';
 import 'package:flutter_application/components/my_button.dart';
 import 'package:flutter_application/components/my_textfield.dart';
 import 'package:flutter_application/pages/registration/register_page.dart';
@@ -107,12 +108,8 @@ class _LoginPageState extends State<LoginPage> {
                         );
                       });
                     }).catchError((error) {
-                      // Handle login error
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text('Inloggning misslyckades: $error'),
-                        ),
-                      );
+                      DialogUtils().showGenericErrorMessageNonStatic(context, "Fel", 
+                          "Inloggningen misslyckades, vänligen försök igen.");
                     });
                   },
                 ),
