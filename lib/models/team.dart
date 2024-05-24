@@ -1,6 +1,6 @@
 class Team {
   final String name;
-  final int fundraiserBox;
+  final double fundraiserBox;
   final String? companyName;
 
   Team({

@@ -677,7 +677,7 @@ class ApiUtils {
 
       for (var item in data) {
         String name = item['name'];
-        int fundraiserBox = item['fundraiserBox'];
+        double fundraiserBox = item['fundraiserBox'];
         String? companyName;
 
         if (item['company'] != null) {
