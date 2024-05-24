@@ -2,11 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application/api_utils/api_utils.dart';
 import 'package:flutter_application/components/custom_navigation_bar.dart';
 import 'package:flutter_application/components/dialog_utils.dart';
-import 'package:flutter_application/components/search_popup.dart';
-import 'package:flutter_application/session_manager.dart';
-
 import 'package:flutter_application/components/my_button.dart';
 import 'package:flutter_application/components/my_textfield.dart';
+import 'package:flutter_application/components/search_popup.dart';
+import 'package:flutter_application/session_manager.dart';
 
 class CreateTeamPage extends StatefulWidget {
   CreateTeamPage({super.key});
@@ -156,7 +155,7 @@ class _CreateTeamPageState extends State<CreateTeamPage> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => CustomNavigationBar()),
+                          builder: (context) => const CustomNavigationBar(selectedPage: 0,)),
                     );
                   },
                 ),

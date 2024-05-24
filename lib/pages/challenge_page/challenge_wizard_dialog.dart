@@ -113,8 +113,7 @@ class _WizardDialogState extends State<WizardDialog> {
       if (response.statusCode == 200) {
         print('Challenge sent successfully');
         // Om lyckat: stäng wizard, kanske ha ett steg 5 som säger lyckat?
-        Navigator.pop(context);
-        // Navigator.push(context, ChallengePage() as Route<Object?>);
+        Navigator.pop(context, 'success'); // Return success result
       } else {
         // Hantera error
         print('Failed to send challenge: ${response.body}');

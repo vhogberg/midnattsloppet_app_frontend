@@ -37,7 +37,7 @@ class _AuthPageState extends State<AuthPage> {
 
           // Handle loaded state
           if (snapshot.hasData && snapshot.data != null) {
-            return CustomNavigationBar();
+            return const CustomNavigationBar(selectedPage: 0,);
           } else {
             return LoginPage();
           }
