@@ -396,7 +396,7 @@ class ApiUtils {
         Map<String, dynamic> data = jsonDecode(utf8.decode(response.bodyBytes));
         List<dynamic> membersData = data['members'];
         List<String> members =
-            membersData.map((member) => member['username'].toString()).toList();
+            membersData.map((member) => member['name'].toString()).toList();
         return members;
       } else {
         throw Exception('Failed to fetch members');

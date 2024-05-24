@@ -67,6 +67,7 @@ class _WizardDialogState extends State<WizardDialog> {
       }
       if (_currentPage < 3) {
         _currentPage++;
+        FocusManager.instance.primaryFocus?.unfocus();
       }
     });
   }
@@ -194,7 +195,7 @@ class _WizardDialogState extends State<WizardDialog> {
                         foregroundColor: Colors.white, // textfärg
                         backgroundColor: Colors.green, // knappfärg
                       ),
-                      child: Text('Skicka'),
+                      child: const Text('Skicka'),
                     ),
                 ],
               ),
@@ -221,7 +222,7 @@ class _WizardDialogState extends State<WizardDialog> {
           ),
         ),
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20.0),
+          padding: const EdgeInsets.only(left: 20.0, right: 20, bottom: 10),
           child: TextField(
             controller: searchController,
             decoration: const InputDecoration(
@@ -367,48 +368,39 @@ class _WizardDialogState extends State<WizardDialog> {
 // Wizard steg 4, översikt och skicka iväg utmaning
   Widget _buildOverviewPage() {
     return Padding(
-      padding: const EdgeInsets.all(20.0),
-      child: Card(
-        elevation: 4,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text(
-                'Översikt',
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+      padding: const EdgeInsets.only(top: 20.0, left: 20, right: 20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text(
+            'Översikt',
+            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(height: 20),
+          _buildOverviewItem('Valt lag:', selectedTeam ?? 'Inget lag valt'),
+          const SizedBox(height: 10),
+          _buildOverviewItem('Titel:', titleController.text),
+          const SizedBox(height: 10),
+          const Text(
+            'Egna tävlingar:',
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          ),
+          Flexible(
+            child: Container(
+              decoration: BoxDecoration(
+                border: Border.all(color: Colors.grey),
+                borderRadius: BorderRadius.circular(5),
               ),
-              const SizedBox(height: 20),
-              _buildOverviewItem('Valt lag:', selectedTeam ?? 'Inget lag valt'),
-              const SizedBox(height: 10),
-              _buildOverviewItem('Titel:', titleController.text),
-              const SizedBox(height: 10),
-              const Text(
-                'Egna tävlingar:',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-              Flexible(
-                child: Container(
-                  decoration: BoxDecoration(
-                    border: Border.all(color: Colors.grey),
-                    borderRadius: BorderRadius.circular(5),
-                  ),
-                  padding: const EdgeInsets.all(8.0),
-                  child: SingleChildScrollView(
-                    child: Text(
-                      descriptionController.text,
-                      style: const TextStyle(fontSize: 18),
-                    ),
-                  ),
+              padding: const EdgeInsets.all(8.0),
+              child: SingleChildScrollView(
+                child: Text(
+                  descriptionController.text,
+                  style: const TextStyle(fontSize: 18),
                 ),
               ),
-            ],
+            ),
           ),
-        ),
+        ],
       ),
     );
   }

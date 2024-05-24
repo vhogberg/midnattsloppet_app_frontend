@@ -30,6 +30,7 @@ class _MyTeamPageState extends State<MyTeamPage> {
   late Timer timer;
   int teamRank = -1;
   int totalTeams = 0;
+  int daysLeft = 0;
 
   @override
   void initState() {
@@ -42,9 +43,19 @@ class _MyTeamPageState extends State<MyTeamPage> {
     fetchCompanyName();
     fetchMembers();
     fetchLeaderboardData();
+    calculateDaysLeft();
     timer = Timer.periodic(const Duration(seconds: 10), (timer) {
       fetchDonationGoal();
       fetchDonatedAmount();
+      calculateDaysLeft();
+    });
+  }
+
+  void calculateDaysLeft() {
+    DateTime targetDate = DateTime(2024, 8, 17);
+    DateTime now = DateTime.now();
+    setState(() {
+      daysLeft = targetDate.difference(now).inDays;
     });
   }
 
@@ -167,10 +178,12 @@ class _MyTeamPageState extends State<MyTeamPage> {
                   members[i],
                   style: const TextStyle(
                     color: Colors.white,
-                    fontSize: 20,
+                    fontSize: 16, // smaller font size
                     fontWeight: FontWeight.bold,
-                    fontFamily: 'Sora', // smaller font size
+                    fontFamily: 'Sora',
                   ),
+                  overflow: TextOverflow.ellipsis, // prevents wrapping
+                  maxLines: 1, // ensures single line text
                 ),
               ),
             ),
@@ -180,10 +193,12 @@ class _MyTeamPageState extends State<MyTeamPage> {
                   members[i + 1],
                   style: const TextStyle(
                     color: Colors.white,
-                    fontSize: 20,
+                    fontSize: 16, // smaller font size
                     fontWeight: FontWeight.bold,
-                    fontFamily: 'Sora', // smaller font size
+                    fontFamily: 'Sora',
                   ),
+                  overflow: TextOverflow.ellipsis, // prevents wrapping
+                  maxLines: 1, // ensures single line text
                 ),
               ),
             ),
@@ -195,10 +210,12 @@ class _MyTeamPageState extends State<MyTeamPage> {
             members[i],
             style: const TextStyle(
               color: Colors.white,
-              fontSize: 20,
+              fontSize: 16, // smaller font size
               fontWeight: FontWeight.bold,
-              fontFamily: 'Sora', // smaller font size
+              fontFamily: 'Sora',
             ),
+            overflow: TextOverflow.ellipsis, // prevents wrapping
+            maxLines: 1, // ensures single line text
           ),
         ));
       }
@@ -217,7 +234,7 @@ class _MyTeamPageState extends State<MyTeamPage> {
     return Scaffold(
       appBar: CustomAppBar(
         key: null,
-        title: 'Mitt lag',
+        title: '$teamName',
         // teampage ska ha en logout-knapp till höger, så detta nedan sätts "true"
         useActionButton: true,
         // logout knapp från Iconsax bilbiotek
@@ -233,21 +250,6 @@ class _MyTeamPageState extends State<MyTeamPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Display team name above the circular team picture
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: Center(
-                  child: Text(
-                    '$teamName',
-                    style: const TextStyle(
-                      fontSize: 20, // Adjust font size
-                      color: Colors.black, // Set color to black
-                      fontWeight: FontWeight.bold,
-                      fontFamily: 'Sora',
-                    ),
-                  ),
-                ),
-              ),
               const SizedBox(
                   height:
                       10), // Add some spacing between teamName and the picture
@@ -256,6 +258,7 @@ class _MyTeamPageState extends State<MyTeamPage> {
                 child: Container(
                     width: 150,
                     height: 150,
+                    padding: const EdgeInsets.all(4),
                     decoration: BoxDecoration(
                         gradient: LinearGradient(
                           begin: Alignment.bottomCenter,
@@ -265,7 +268,12 @@ class _MyTeamPageState extends State<MyTeamPage> {
                           ],
                         ),
                         shape: BoxShape.circle),
-                    child: Center(
+                    child: Container(
+                      padding: const EdgeInsets.all(12),
+                      decoration: const BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Colors.white,
+                      ),
                       child: companyName != null
                           ? CircleAvatar(
                               radius: 74,
@@ -295,7 +303,6 @@ class _MyTeamPageState extends State<MyTeamPage> {
                         'Stödjer: $charityName', // Display the charity name
                         style: const TextStyle(
                           fontSize: 20,
-                          fontWeight: FontWeight.bold,
                           fontFamily: 'Sora',
                         ),
                       ),
@@ -306,11 +313,10 @@ class _MyTeamPageState extends State<MyTeamPage> {
               const SizedBox(height: 10),
 
               // Container with team members name
-
               Container(
                 padding: const EdgeInsets.all(20),
                 width: MediaQuery.of(context).size.width,
-                height: 500,
+                height: 520,
                 decoration: BoxDecoration(
                   color: const Color(0XFF3C4785),
                   borderRadius: BorderRadius.circular(12.0),
@@ -330,16 +336,6 @@ class _MyTeamPageState extends State<MyTeamPage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
-                      'Lagmedlemmar',
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 28,
-                          fontFamily: 'Sora'),
-                    ),
-                    SizedBox(height: 10),
-                    // Check if members list is empty
                     members.isEmpty
                         ? const Padding(
                             padding: EdgeInsets.all(10),
@@ -358,10 +354,11 @@ class _MyTeamPageState extends State<MyTeamPage> {
                             ],
                           ),
                     SizedBox(height: 10),
-                    // Display fetched data
+                    // Combined container
                     Container(
+                      padding: const EdgeInsets.all(15),
                       width: MediaQuery.of(context).size.width,
-                      height: 130,
+                      height: 320,
                       decoration: BoxDecoration(
                         color: Colors.white30,
                         borderRadius: BorderRadius.circular(13.0),
@@ -370,111 +367,165 @@ class _MyTeamPageState extends State<MyTeamPage> {
                           width: 1.0, // Border width
                         ),
                       ),
-                      padding: EdgeInsets.all(10),
-                      child: Stack(
+                      child: Column(
                         children: [
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                          // Donation information
+                          Stack(
                             children: [
-                              Text(
-                                '${totalDonations.toStringAsFixed(0)} kr insamlat',
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 28,
-                                  fontWeight: FontWeight.bold,
-                                ),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Transform.translate(
+                                    offset: const Offset(0, -10),
+                                    child: RichText(
+                                      text: TextSpan(
+                                        children: [
+                                          TextSpan(
+                                            //toStringAsFixed removes decimal point in donation amount displayed
+                                            text:
+                                                '${totalDonations.toStringAsFixed(0)}',
+                                            style: const TextStyle(
+                                              fontFamily: 'Sora',
+                                              color: Colors.white,
+                                              fontSize:
+                                                  40, //Larger font size for the donation amount
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                          const TextSpan(
+                                            text: ' kr insamlat',
+                                            style: TextStyle(
+                                              fontFamily: 'Sora',
+                                              color: Colors.white,
+                                              fontSize:
+                                                  28, //Default font size for the rest of the text
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                  Text(
+                                    'Stödjer: $charityName',
+                                    maxLines: 1, // ensures single line text
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w400,
+                                    ),
+                                  ),
+                                  SizedBox(height: 10),
+                                  SizedBox(
+                                    width:
+                                        MediaQuery.of(context).size.width - 80,
+                                    child: const Padding(
+                                      padding:
+                                          EdgeInsets.only(left: 43, right: 43),
+                                      child: DonationProgressBar(),
+                                    ),
+                                  ),
+                                ],
                               ),
-                              SizedBox(height: 10),
-                              SizedBox(
-                                width: MediaQuery.of(context).size.width - 80,
-                                child: const Padding(
-                                  padding: EdgeInsets.only(left: 35, right: 35),
-                                  child: DonationProgressBar(),
+                              Align(
+                                alignment: Alignment.bottomRight,
+                                child: Padding(
+                                  padding: const EdgeInsets.only(
+                                      right: 1,
+                                      top: 98), // Adjust padding as needed
+                                  child: GoalBox(height: 50, width: 90),
                                 ),
                               ),
                             ],
                           ),
-                          const Positioned(
-                            top: 60,
-                            right: 1,
-                            child: GoalBox(height: 50, width: 90),
+                          SizedBox(height: 15),
+                          const Divider(
+                            height: 0,
+                            color: Colors.white,
+                            thickness: 2,
+                            indent: 0,
+                            endIndent: 0,
                           ),
-                        ],
-                      ),
-                    ),
-                    SizedBox(height: 10),
-                    // Sharing button
-                    Container(
-                      padding: const EdgeInsets.all(15),
-                      width: MediaQuery.of(context).size.width,
-                      height: 90,
-                      decoration: BoxDecoration(
-                        color: Colors.white30,
-                        borderRadius: BorderRadius.circular(13.0),
-                        border: Border.all(
-                          color: Colors.white60, // Border color
-                          width: 1.0, // Border width
-                        ),
-                      ),
-                      child: Row(
-                        children: [
-                          const Expanded(
-                            child: Text(
-                              'Dela bössan med vänner och familj!',
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 17,
-                                  fontWeight: FontWeight.bold,
-                                  fontFamily: 'Sora'),
+                          SizedBox(height: 15),
+                          // Sharing button
+                          Row(
+                            children: [
+                              const Expanded(
+                                child: Text(
+                                  'Dela bössan med\nvänner och familj!',
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold,
+                                      fontFamily: 'Sora'),
+                                ),
+                              ),
+                              GestureDetector(
+                                onTap: () {
+                                  ShareHelper.showShareDialog(
+                                      context, teamName!);
+                                },
+                                child: Container(
+                                  padding: const EdgeInsets.all(10),
+                                  width: 100,
+                                  height: 50,
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(4.0),
+                                  ),
+                                  child: Row(
+                                    children: [
+                                      Icon(
+                                        Iconsax.export_1,
+                                        color: CustomColors.midnattsblue,
+                                      ),
+                                      SizedBox(
+                                        width: 5,
+                                      ),
+                                      Text(
+                                        'Dela',
+                                        style: TextStyle(
+                                          fontSize: 20,
+                                          fontFamily: 'Sora',
+                                          color: CustomColors.midnattsblue,
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: 10),
+                          // Add the leaderboard rank display
+                          Align(
+                            alignment: Alignment.centerLeft,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  teamRank != -1
+                                      ? 'Plats: #$teamRank av $totalTeams'
+                                      : 'Rankning saknas',
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                    fontFamily: 'Sora',
+                                  ),
+                                ),
+                                Text(
+                                  '$daysLeft dagar kvar till Midnattsloppet!',
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 14.0,
+                                    fontFamily: 'Sora',
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
-                          GestureDetector(
-                            onTap: () {
-                              ShareHelper.showShareDialog(context, teamName!);
-                            },
-                            child: Container(
-                              padding: const EdgeInsets.all(10),
-                              width: 100,
-                              height: 50,
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(4.0),
-                              ),
-                              child: Row(
-                                children: [
-                                  Icon(
-                                    Iconsax.export_1,
-                                    color: CustomColors.midnattsblue,
-                                  ),
-                                  SizedBox(
-                                    width: 5,
-                                  ),
-                                  Text(
-                                    'Dela',
-                                    style: TextStyle(
-                                      fontSize: 20,
-                                      fontFamily: 'Sora',
-                                      color: CustomColors.midnattsblue,
-                                    ),
-                                  )
-                                ],
-                              ),
-                            ),
-                          ),
                         ],
-                      ),
-                    ),
-                    SizedBox(height: 10),
-                    // Add the leaderboard rank display
-                    Text(
-                      teamRank != -1
-                          ? 'Plats: #$teamRank av $totalTeams'
-                          : 'Rankning saknas',
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'Sora',
                       ),
                     ),
                   ],
