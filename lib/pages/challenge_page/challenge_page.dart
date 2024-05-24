@@ -382,7 +382,6 @@ class _ChallengePageState extends State<ChallengePage> {
                                                   incomingChallengeTeam);
 
                                           if (response.statusCode == 200) {
-
                                             Navigator.push(
                                               context,
                                               MaterialPageRoute(
@@ -443,9 +442,7 @@ class _ChallengePageState extends State<ChallengePage> {
                                     ElevatedButton(
                                       // Avböj lagkamp logik här
                                       onPressed: () async {
-
-
-                                       /*  Navigator.push(
+                                        /*  Navigator.push(
                                               context,
                                               MaterialPageRoute(
                                                   builder: (context) =>
@@ -517,16 +514,80 @@ class _ChallengePageState extends State<ChallengePage> {
 
                           // När MITT lag har skickat en lagkamp till ett annat lag, inväntar svar
                           : (challengeSent
-                              ? Text(
-                                  'Inväntar svar från lag $outgoingChallengeTeam',
-                                  style: const TextStyle(
-                                    fontSize: 16.0,
-                                    fontWeight: FontWeight.bold,
-                                    fontFamily: 'Sora',
-                                  ),
-                                  textAlign: TextAlign.center,
-                                )
+                              ? Column(
+                                  children: [
+                                    Text(
+                                      'Inväntar svar från lag $outgoingChallengeTeam',
+                                      style: const TextStyle(
+                                        fontSize: 16.0,
+                                        fontWeight: FontWeight.bold,
+                                        fontFamily: 'Sora',
+                                      ),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                    const SizedBox(
+                                        height:
+                                            16), // spacing mellan text och knapp
+                                    ElevatedButton(
+                                      onPressed: () async {
+                                        try {
+                                          final response =
+                                              await ApiUtils.declineChallenge( // Ska bytas ut till förslagsvis "cancelSentChallenge"
+                                                  username!,
+                                                  incomingChallengeTeam);
+                                          if (response.statusCode == 200) {
+                                            // Challenge cancelled successfully
+                                            print(
+                                                'Challenge cancelled successfully');
 
+                                            // Run this again to update page
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (context) =>
+                                                    const CustomNavigationBar(
+                                                  selectedPage: 1,
+                                                ),
+                                              ),
+                                            );
+                                          } else {
+                                            // Handle error response
+                                            print(
+                                                'Failed to cancel pending challenge: ${response.body}');
+                                          }
+                                        } catch (e) {
+                                          // Exception handling
+                                          print(
+                                              'Error cancelling pending challenge: $e');
+                                        }
+                                      },
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor: Colors.red,
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 20, vertical: 10),
+                                      ),
+                                      child: const Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Text(
+                                            'Avbryt inbjudan',
+                                            style: TextStyle(
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.black,
+                                            ),
+                                          ),
+                                          SizedBox(width: 8),
+                                          Icon(
+                                            Iconsax.dislike,
+                                            size: 24,
+                                            color: Colors.black,
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                )
                               // När ingen aktivitet har skett på lagkampssidan
                               // både challengeSent och challengeReceived är falskt
                               : const Text(
