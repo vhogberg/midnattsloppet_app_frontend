@@ -44,7 +44,7 @@ class _JoinTeamPageState extends State<JoinTeamPage> {
 
   Future<void> fetchTeams() async {
     try {
-      final data = await ApiUtils.fetchTeamsByCompanyFromAPI(companyName!);
+      final data = await ApiUtils.fetchTeamsByCompany(companyName!);
       setState(() {
         teams = data;
         filteredTeams.addAll(teams);

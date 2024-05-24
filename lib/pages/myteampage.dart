@@ -10,6 +10,7 @@ import 'package:iconsax/iconsax.dart';
 import 'package:flutter_application/components/custom_app_bar.dart';
 import 'package:flutter_application/components/goal_box.dart';
 import '../share_helper.dart';
+import 'package:flutter_application/components/custom_colors.dart';
 
 class MyTeamPage extends StatefulWidget {
   const MyTeamPage({Key? key}) : super(key: key);
@@ -255,10 +256,15 @@ class _MyTeamPageState extends State<MyTeamPage> {
                 child: Container(
                     width: 150,
                     height: 150,
-                    decoration: const BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: Color(0XFF3C4785), // Use the blue color provided
-                    ),
+                    decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          begin: Alignment.bottomCenter,
+                          colors: [
+                            CustomColors.midnattsblue,
+                            CustomColors.midnattsorange
+                          ],
+                        ),
+                        shape: BoxShape.circle),
                     child: Center(
                       child: companyName != null
                           ? CircleAvatar(
@@ -432,12 +438,13 @@ class _MyTeamPageState extends State<MyTeamPage> {
                               height: 50,
                               decoration: BoxDecoration(
                                 color: Colors.white,
-                                borderRadius: BorderRadius.circular(13.0),
+                                borderRadius: BorderRadius.circular(4.0),
                               ),
-                              child: const Row(
+                              child: Row(
                                 children: [
                                   Icon(
                                     Iconsax.export_1,
+                                    color: CustomColors.midnattsblue,
                                   ),
                                   SizedBox(
                                     width: 5,
@@ -447,6 +454,7 @@ class _MyTeamPageState extends State<MyTeamPage> {
                                     style: TextStyle(
                                       fontSize: 20,
                                       fontFamily: 'Sora',
+                                      color: CustomColors.midnattsblue,
                                     ),
                                   )
                                 ],

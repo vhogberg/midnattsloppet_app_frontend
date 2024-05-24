@@ -33,7 +33,7 @@ class _CreateTeamPageState extends State<CreateTeamPage> {
 
   Future<void> fetchEntities() async {
     try {
-      final data = await ApiUtils.fetchCharitiesFromAPI();
+      final data = await ApiUtils.fetchCharities();
       setState(() {
         entities = data;
         filteredEntities.addAll(entities);
