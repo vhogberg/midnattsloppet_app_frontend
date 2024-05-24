@@ -654,7 +654,7 @@ class _RegistrationWizardDialogState extends State<RegistrationWizardDialog> {
           // Navigate to the homepage
           Navigator.pushReplacement(
             context,
-            MaterialPageRoute(builder: (context) => CustomNavigationBar()),
+            MaterialPageRoute(builder: (context) => CustomNavigationBar(selectedPage: 0)),
           );
         }).catchError((e) {
           // Handle login error
