@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ShareHelper {
   String teamName;
@@ -39,33 +39,24 @@ class ShareHelper {
     }
   }
 
-  // ruta som dyker upp
-  // Kalla på den via "onPressed: () => ShareHelper.showShareDialog(context)""
   static void showShareDialog(BuildContext context, String teamName) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return SlideTransition(
-          position: Tween<Offset>(
-            begin: const Offset(0, -1),
-            end: Offset.zero,
-          ).animate(
-            CurvedAnimation(
-              parent: ModalRoute.of(context)!.animation!,
-              curve: Curves.easeInOut,
-            ),
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12.0),
           ),
-          child: Dialog(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12.0),
-            ),
+          insetPadding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 24.0),
+          child: Container(
+            width: MediaQuery.of(context).size.width * 0.9, // Dynamic width
             child: Padding(
               padding: EdgeInsets.all(20.0),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
+                  const Text(
                     'Dela via:',
                     style: TextStyle(
                       fontFamily: 'Sora',
