@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application/api_utils/api_utils.dart';
 import 'package:flutter_application/components/custom_navigation_bar.dart';
+import 'package:flutter_application/components/dialog_utils.dart';
 import 'package:flutter_application/components/search_popup.dart';
 import 'package:flutter_application/session_manager.dart';
 
@@ -146,10 +147,8 @@ class _CreateTeamPageState extends State<CreateTeamPage> {
                     if (teamName.isEmpty ||
                         charity.isEmpty ||
                         donationGoal.isEmpty) {
-                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                        content: Text(
-                            'Vänligen fyll i alla uppgifter för att fortsätta.'),
-                      ));
+                      DialogUtils().showGenericErrorMessageNonStatic(context, "Fel",
+                          "Vänligen fyll i alla uppgifter för att fortsätta.");
                       return;
                     }
                     await ApiUtils.registerTeam(

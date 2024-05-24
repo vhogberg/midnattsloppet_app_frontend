@@ -51,18 +51,18 @@ class _WizardDialogState extends State<WizardDialog> {
   void _nextPage() {
     setState(() {
       if (_currentPage == 0 && selectedTeam == null) {
-        DialogUtils.showGenericErrorMessage(
-            context, 'Fel', 'Du måste välja ett lag!');
+     //   DialogUtils.showGenericErrorMessage(
+           // context, 'Fel', 'Du måste välja ett lag!');
         return;
       }
       if (_currentPage == 1 && titleController.text.isEmpty) {
-        DialogUtils.showGenericErrorMessage(context, 'Fel',
-          'Du måste ange en titel.');
+       // DialogUtils.showGenericErrorMessage(context, 'Fel',
+         // 'Du måste ange en titel.');
         return;
       }
       if (_currentPage == 2 && descriptionController.text.isEmpty) {
-        DialogUtils.showGenericErrorMessage(context, 'Fel',
-          'Du måste ange egna utmaningar.');
+       // DialogUtils.showGenericErrorMessage(context, 'Fel',
+       //   'Du måste ange egna utmaningar.');
         return;
       }
       if (_currentPage < 3) {
@@ -117,14 +117,14 @@ class _WizardDialogState extends State<WizardDialog> {
         // Hantera error
         print('Failed to send challenge: ${response.body}');
         // Visa error till användare.
-        DialogUtils.showGenericErrorMessage(context, 'Fel',
-          'Lyckades inte att skicka! Vänligen försök igen senare.');
+     //   DialogUtils.showGenericErrorMessage(context, 'Fel',
+     //     'Lyckades inte att skicka! Vänligen försök igen senare.');
       }
     } catch (e) {
       print('Error sending challenge: $e');
       // (catch) för felhantering
-      DialogUtils.showGenericErrorMessage(context, 'Fel',
-          'Lyckades inte att skicka! Vänligen försök igen senare.');
+  //    DialogUtils.showGenericErrorMessage(context, 'Fel',
+   //       'Lyckades inte att skicka! Vänligen försök igen senare.');
     }
   }
 
