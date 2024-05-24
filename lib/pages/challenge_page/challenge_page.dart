@@ -46,6 +46,7 @@ class _ChallengePageState extends State<ChallengePage> {
       await fetchUserTeam();
       await fetchChallenges();
       await analyseChallenges();
+
     } catch (e) {
       print('Initialization error: $e');
     } finally {
@@ -73,16 +74,13 @@ class _ChallengePageState extends State<ChallengePage> {
 
   Future<void> fetchChallenges() async {
     fetchUserTeam();
-    print('FETCH123');
     try {
       List<Challenge> fetchedChallenges =
           await ApiUtils.fetchChallengeActivity(username);
-      print('LISTFETCH: $fetchedChallenges');
 
       setState(() {
         challenges = fetchedChallenges;
         isLoading = false;
-        print('LISTFETCH2: $challenges');
         analyseChallenges();
       });
     } catch (e) {
@@ -95,13 +93,11 @@ class _ChallengePageState extends State<ChallengePage> {
   }
 
   Future<void> analyseChallenges() async {
-    print(isLoading);
 
     // for each challenge in challenge, check:
 
     // Check if there is no activity whatsoever in the challenge page
     // Inbox then says "Inga aktiva inbjudningar eller förfrågningar"
-    print(challenges);
 
     if (challenges.isEmpty) {
       challengeSent = false;
@@ -126,9 +122,6 @@ class _ChallengePageState extends State<ChallengePage> {
       }
     }
 
-    print('CHALLENGERECEIVEDBOOL: $challengeReceived');
-    print('CHALLENGESENTBOOL: $challengeSent');
-    print(challenges);
 
     // JAG SKICKAR EN UTMANING
     // challengerName == my team name, set challengeSent to true, set outgoingChallengeTeam to challengedName

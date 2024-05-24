@@ -360,7 +360,7 @@ class ApiUtils {
     }
   }
 
-  static Future<int?> fetchFundraiserBox(String? username) async {
+  static Future<double?> fetchFundraiserBox(String? username) async {
     try {
       var response = await http.get(
         Uri.parse('$baseURL/team/$username'),
@@ -618,6 +618,48 @@ class ApiUtils {
       };*/
   }
 
+  // Method for challenge_page to fetch activity
+  static Future<List<Challenge>> fetchActiveChallenge(
+      String? username) async {
+    if (username == null) {
+      throw Exception('Username cannot be null');
+    }
+
+    final response = await http.get(
+      Uri.parse('$baseURL/$username/challenge'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        _apiKeyHeader: _apiKey,
+      },
+    );
+
+    if (response.statusCode == 200) {
+      final List<dynamic> data = jsonDecode(utf8.decode(response.bodyBytes));
+
+      List<Challenge> fetchedChallenges = [];
+
+      for (var item in data) {
+        String title = item['name'];
+        String description = item['description'];
+        String challengerName = item['challengerName'];
+        String challengedName = item['challengedName'];
+        String status = item['status'];
+
+        fetchedChallenges.add(Challenge(
+          title: title,
+          description: description,
+          challengerName: challengerName,
+          challengedName: challengedName,
+          status: status,
+        ));
+      }
+      return fetchedChallenges;
+    } else {
+      throw Exception('Failed to load teams from API');
+    }
+  }
+
+
   static Future<List<Team>> fetchTeamsWithBoxAndCompanyName() async {
     final response = await http.get(
       Uri.parse('$baseURL/all/teamswithbox'),
@@ -691,7 +733,7 @@ class ApiUtils {
     }
   }
 
-  static Future<int?> fetchOtherDonationGoal(String teamName) async {
+  static Future<double?> fetchOtherDonationGoal(String teamName) async {
     final String url = '$baseUrl$teamName';
     try {
       final response = await http.get(
@@ -716,7 +758,7 @@ class ApiUtils {
     }
   }
 
-  static Future<int?> fetchOtherFundraiserBox(String teamName) async {
+  static Future<double?> fetchOtherFundraiserBox(String teamName) async {
     final String url = '$baseUrl$teamName';
     try {
       final response = await http.get(
