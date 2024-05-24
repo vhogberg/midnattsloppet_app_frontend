@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application/api_utils/api_utils.dart';
 import 'package:flutter_application/components/custom_app_bar.dart';
 import 'package:flutter_application/components/custom_navigation_bar.dart';
+import 'package:flutter_application/components/dialog_utils.dart';
 import 'package:flutter_application/models/challenge.dart';
 import 'package:flutter_application/pages/challenge_page/active_challenge_page.dart';
 import 'package:flutter_application/pages/challenge_page/challenge_wizard_dialog.dart';
@@ -375,43 +376,53 @@ class _ChallengePageState extends State<ChallengePage> {
                                     ElevatedButton(
                                       // Acceptera lagkamp logik här
                                       onPressed: () async {
-                                        try {
-                                          final response =
-                                              await ApiUtils.acceptChallenge(
-                                                  username!,
-                                                  incomingChallengeTeam);
+                                        String? result = await DialogUtils
+                                            .showConfirmationDialog(
+                                          context: context,
+                                          title:
+                                              'Är du säker på att du vill acceptera?',
+                                          description: 'Du kan ej ångra detta',
+                                        );
 
-                                          if (response.statusCode == 200) {
-                                            Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      const CustomNavigationBar(
-                                                        selectedPage: 1,
-                                                      )),
-                                            );
+                                        if (result == 'yes') {
+                                          try {
+                                            final response =
+                                                await ApiUtils.acceptChallenge(
+                                                    username!,
+                                                    incomingChallengeTeam);
 
-                                            // Challenge accepted
+                                            if (response.statusCode == 200) {
+                                              Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        const CustomNavigationBar(
+                                                            selectedPage: 1)),
+                                              );
+
+                                              // Challenge accepted
+                                              print(
+                                                  'Challenge accepted successfully');
+
+                                              // Logik för att switcha till active_challenge_page
+                                              Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        const ActiveChallengePage()),
+                                              );
+                                            } else {
+                                              // Error hantering
+                                              print(
+                                                  'Failed to accept challenge: ${response.body}');
+                                            }
+                                          } catch (e) {
+                                            // Exception handling
                                             print(
-                                                'Challenge accepted successfully');
-
-                                            // Logik för att switcha till active_challenge_page
-                                            Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      const ActiveChallengePage()),
-                                            );
-                                          } else {
-                                            // Error hantering
-                                            print(
-                                                'Failed to accept challenge: ${response.body}');
+                                                'Error accepting challenge: $e');
                                           }
-                                        } catch (e) {
-                                          // Exception handling
-                                          print(
-                                              'Error accepting challenge: $e');
                                         }
+                                        // If the user presses "No", simply return without doing anything
                                       },
                                       style: ElevatedButton.styleFrom(
                                         backgroundColor: Colors.green,
@@ -442,46 +453,48 @@ class _ChallengePageState extends State<ChallengePage> {
                                     ElevatedButton(
                                       // Avböj lagkamp logik här
                                       onPressed: () async {
-                                        /*  Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      const CustomNavigationBar(
-                                                        selectedPage: 1,
-                                                      )),
-                                            ); */
+                                        String? result = await DialogUtils
+                                            .showConfirmationDialog(
+                                          context: context,
+                                          title:
+                                              'Är du säker på att du vill avböja?',
+                                          description: 'Du kan ej ångra detta',
+                                        );
 
-                                        try {
-                                          final response =
-                                              await ApiUtils.declineChallenge(
-                                                  username!,
-                                                  incomingChallengeTeam);
+                                        if (result == 'yes') {
+                                          try {
+                                            final response =
+                                                await ApiUtils.declineChallenge(
+                                                    username!,
+                                                    incomingChallengeTeam);
 
-                                          if (response.statusCode == 200) {
-                                            // Challenge declined successfully
+                                            if (response.statusCode == 200) {
+                                              // Challenge declined successfully
+                                              print(
+                                                  'Challenge declined successfully');
+
+                                              // Run this  again to check if there are any more incoming challenge requests.
+                                              Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        const CustomNavigationBar(
+                                                          selectedPage: 1,
+                                                        )),
+                                              );
+                                            } else {
+                                              // Handle error response
+                                              print(
+                                                  'Failed to decline challenge: ${response.body}');
+                                            }
+                                          } catch (e) {
+                                            // Exception handling
                                             print(
-                                                'Challenge declined successfully');
-
-                                            // Run this  again to check if there are any more incoming challenge requests.
-                                            Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      const CustomNavigationBar(
-                                                        selectedPage: 1,
-                                                      )),
-                                            );
-                                          } else {
-                                            // Handle error response
-                                            print(
-                                                'Failed to decline challenge: ${response.body}');
+                                                'Error declining challenge: $e');
                                           }
-                                        } catch (e) {
-                                          // Exception handling
-                                          print(
-                                              'Error declining challenge: $e');
                                         }
                                       },
+
                                       style: ElevatedButton.styleFrom(
                                         backgroundColor: Colors.red,
                                         padding: const EdgeInsets.symmetric(
@@ -532,7 +545,8 @@ class _ChallengePageState extends State<ChallengePage> {
                                       onPressed: () async {
                                         try {
                                           final response =
-                                              await ApiUtils.declineChallenge( // Ska bytas ut till förslagsvis "cancelSentChallenge"
+                                              await ApiUtils.declineChallenge(
+                                                  // Ska bytas ut till förslagsvis "cancelSentChallenge"
                                                   username!,
                                                   incomingChallengeTeam);
                                           if (response.statusCode == 200) {
