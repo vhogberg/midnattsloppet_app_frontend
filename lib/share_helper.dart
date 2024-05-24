@@ -43,56 +43,69 @@ class ShareHelper {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return Dialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12.0),
+        return SlideTransition(
+          position: Tween<Offset>(
+            begin: const Offset(0, -1),
+            end: Offset.zero,
+          ).animate(
+            CurvedAnimation(
+              parent: ModalRoute.of(context)!.animation!,
+              curve: Curves.easeInOut,
+            ),
           ),
-          insetPadding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 24.0),
-          child: Container(
-            width: MediaQuery.of(context).size.width * 0.9, // Dynamic width
-            child: Padding(
-              padding: EdgeInsets.all(20.0),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    'Dela via:',
-                    style: TextStyle(
-                      fontFamily: 'Sora',
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
+          child: Dialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12.0),
+            ),
+            insetPadding:
+                const EdgeInsets.symmetric(horizontal: 20.0, vertical: 24.0),
+            child: Container(
+              width: MediaQuery.of(context).size.width * 0.9, // Dynamic width
+              child: Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      'Dela via:',
+                      style: TextStyle(
+                        fontFamily: 'Sora',
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
-                  ),
-                  SizedBox(height: 15),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      IconButton(
-                        onPressed: () => ShareHelper(teamName).shareToTwitter(),
-                        icon: FaIcon(FontAwesomeIcons.twitter),
-                        iconSize: 50,
-                      ),
-                      IconButton(
-                        onPressed: () =>
-                            ShareHelper(teamName).shareToFacebook(),
-                        icon: FaIcon(FontAwesomeIcons.facebook),
-                        iconSize: 50,
-                      ),
-                      IconButton(
-                        onPressed: () =>
-                            ShareHelper(teamName).shareToLinkedIn(),
-                        icon: FaIcon(FontAwesomeIcons.linkedin),
-                        iconSize: 50,
-                      ),
-                      IconButton(
-                        onPressed: openMail,
-                        icon: Icon(Icons.email),
-                        iconSize: 50,
-                      ),
-                    ],
-                  ),
-                ],
+                    const SizedBox(height: 15),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        IconButton(
+                          onPressed: () =>
+                              ShareHelper(teamName).shareToTwitter(),
+                          icon: const FaIcon(FontAwesomeIcons.twitter),
+                          iconSize: 50,
+                        ),
+                        IconButton(
+                          onPressed: () =>
+                              ShareHelper(teamName).shareToFacebook(),
+                          icon: const FaIcon(FontAwesomeIcons.facebook),
+                          iconSize: 50,
+                        ),
+                        IconButton(
+                          onPressed: () =>
+                              ShareHelper(teamName).shareToLinkedIn(),
+                          icon: const FaIcon(FontAwesomeIcons.linkedin),
+                          iconSize: 50,
+                        ),
+                        const IconButton(
+                          onPressed: openMail,
+                          icon: Icon(Icons.email),
+                          iconSize: 50,
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
           ),

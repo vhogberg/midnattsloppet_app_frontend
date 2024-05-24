@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_application/api_utils/api_utils.dart';
+import 'package:flutter_application/components/custom_app_bar.dart';
 import 'package:flutter_application/models/challenge.dart';
 import 'package:flutter_application/session_manager.dart';
 
@@ -130,8 +131,10 @@ class _ActiveChallengePageState extends State<ActiveChallengePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Lagkamp'),
+      appBar: const CustomAppBar(
+        title: 'Lagkamp',
+        useActionButton: false,
+        showReturnArrow: false,
       ),
       body: Padding(
         padding: const EdgeInsets.all(20.0),

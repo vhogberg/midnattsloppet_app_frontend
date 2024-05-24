@@ -303,7 +303,7 @@ class _OtherTeamPageState extends State<OtherTeamPage> {
                     const Spacer(),
                     Container(
                       width: MediaQuery.of(context).size.width,
-                      height: 350,
+                      height: 320,
                       decoration: BoxDecoration(
                         color: Colors.white30,
                         borderRadius: BorderRadius.circular(13.0),
@@ -358,9 +358,9 @@ class _OtherTeamPageState extends State<OtherTeamPage> {
                           const SizedBox(height: 15),
                           SizedBox(
                             width: MediaQuery.of(context).size.width - 165,
-                            child: const Padding(
-                              padding: EdgeInsets.only(left: 43),
-                              child: DonationProgressBar(),
+                            child: Padding(
+                              padding: const EdgeInsets.only(left: 43),
+                              child: DonationProgressBar(username: teamName),
                             ),
                           ),
                           const SizedBox(height: 10),

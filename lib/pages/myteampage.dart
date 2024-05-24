@@ -281,7 +281,7 @@ class _MyTeamPageState extends State<MyTeamPage> {
                               backgroundImage: AssetImage(
                                   'images/company_logos/$companyName.png'),
                             )
-                          : CircularProgressIndicator(), // Show a loading indicator
+                          : const CircularProgressIndicator(), // Show a loading indicator
                     )),
               ),
               const SizedBox(height: 10),
@@ -353,7 +353,7 @@ class _MyTeamPageState extends State<MyTeamPage> {
                               ...generateTeamList(),
                             ],
                           ),
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
                     // Combined container
                     Container(
                       padding: const EdgeInsets.all(15),
@@ -415,22 +415,23 @@ class _MyTeamPageState extends State<MyTeamPage> {
                                       fontWeight: FontWeight.w400,
                                     ),
                                   ),
-                                  SizedBox(height: 10),
+                                  const SizedBox(height: 10),
                                   SizedBox(
                                     width:
                                         MediaQuery.of(context).size.width - 80,
-                                    child: const Padding(
-                                      padding:
-                                          EdgeInsets.only(left: 43, right: 43),
-                                      child: DonationProgressBar(),
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(
+                                          left: 43, right: 43),
+                                      child: DonationProgressBar(
+                                          username: username),
                                     ),
                                   ),
                                 ],
                               ),
-                              Align(
+                              const Align(
                                 alignment: Alignment.bottomRight,
                                 child: Padding(
-                                  padding: const EdgeInsets.only(
+                                  padding: EdgeInsets.only(
                                       right: 1,
                                       top: 98), // Adjust padding as needed
                                   child: GoalBox(height: 50, width: 90),
@@ -438,7 +439,7 @@ class _MyTeamPageState extends State<MyTeamPage> {
                               ),
                             ],
                           ),
-                          SizedBox(height: 15),
+                          const SizedBox(height: 15),
                           const Divider(
                             height: 0,
                             color: Colors.white,
@@ -446,7 +447,7 @@ class _MyTeamPageState extends State<MyTeamPage> {
                             indent: 0,
                             endIndent: 0,
                           ),
-                          SizedBox(height: 15),
+                          const SizedBox(height: 15),
                           // Sharing button
                           Row(
                             children: [
@@ -479,9 +480,7 @@ class _MyTeamPageState extends State<MyTeamPage> {
                                         Iconsax.export_1,
                                         color: CustomColors.midnattsblue,
                                       ),
-                                      SizedBox(
-                                        width: 5,
-                                      ),
+                                      const SizedBox(width: 5),
                                       Text(
                                         'Dela',
                                         style: TextStyle(
@@ -496,7 +495,7 @@ class _MyTeamPageState extends State<MyTeamPage> {
                               ),
                             ],
                           ),
-                          SizedBox(height: 10),
+                          const SizedBox(height: 10),
                           // Add the leaderboard rank display
                           Align(
                             alignment: Alignment.centerLeft,

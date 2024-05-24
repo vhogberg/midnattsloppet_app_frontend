@@ -1,25 +1,28 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application/session_manager.dart';
 import 'package:flutter_application/api_utils/api_utils.dart';
 import 'dart:async';
 
 class DonationProgressBar extends StatefulWidget {
-  const DonationProgressBar({Key? key}) : super(key: key);
+  final String? username;
+  final String? teamName;
+
+  const DonationProgressBar({Key? key, this.username, this.teamName})
+      : assert(username != null || teamName != null,
+            'Either username or teamName must be provided'),
+        super(key: key);
 
   @override
   _DonationProgressBarState createState() => _DonationProgressBarState();
 }
 
 class _DonationProgressBarState extends State<DonationProgressBar> {
-  double totalDonations = 0;
-  double donationGoal = 0;
-  String? username;
+  double? totalDonations = 0;
+  double? donationGoal = 0;
   late Timer _timer;
 
   @override
   void initState() {
     super.initState();
-    username = SessionManager.instance.username;
     fetchDonations();
     fetchGoal();
     _timer = Timer.periodic(const Duration(seconds: 10), (timer) {
@@ -36,29 +39,40 @@ class _DonationProgressBarState extends State<DonationProgressBar> {
 
   Future<void> fetchDonations() async {
     try {
-      double total = await ApiUtils.fetchDonations(username);
+      double? total;
+      if (widget.username != null) {
+        total = await ApiUtils.fetchDonations(widget.username!);
+      } else {
+        total = await ApiUtils.fetchOtherFundraiserBox(widget.teamName!);
+      }
       setState(() {
         totalDonations = total;
       });
     } catch (e) {
-      print("Error");
+      print("Error: $e");
     }
   }
 
   Future<void> fetchGoal() async {
     try {
-      double goal = await ApiUtils.fetchGoal(username);
+      double? goal;
+      if (widget.username != null) {
+        goal = await ApiUtils.fetchGoal(widget.username!);
+      } else {
+        goal = await ApiUtils.fetchOtherDonationGoal(widget.teamName!);
+      }
       setState(() {
         donationGoal = goal;
       });
     } catch (e) {
-      print("Error");
+      print("Error: $e");
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    double percentage = donationGoal != 0 ? totalDonations / donationGoal : 0.0;
+    double percentage =
+        donationGoal != 0 ? totalDonations! / donationGoal! : 0.0;
 
     return LinearProgressIndicator(
       value: percentage,

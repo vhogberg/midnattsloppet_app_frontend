@@ -381,11 +381,12 @@ class _HomePageState extends State<HomePage> {
                                 SizedBox(
                                   width:
                                       MediaQuery.of(context).size.width - 122,
-                                  child: const Padding(
-                                      padding: EdgeInsets.only(
+                                  child: Padding(
+                                      padding: const EdgeInsets.only(
                                         left: 30,
                                       ),
-                                      child: DonationProgressBar()),
+                                      child: DonationProgressBar(
+                                          username: username)),
                                 ),
                                 const SizedBox(height: 13),
                                 //Goal box displaying donation goal
