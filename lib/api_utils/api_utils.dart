@@ -35,6 +35,71 @@ class ApiUtils {
     );
   }
 
+  static Future<bool> doesUserExist(String username) async {
+    final url = Uri.parse('$baseURL/userExists/$username');
+
+    try {
+      final response = await http.get(
+        url,
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          _apiKeyHeader: _apiKey,
+        },
+      );
+
+      if (response.statusCode == 200) {
+        return jsonDecode(response.body) as bool;
+      } else {
+        throw Exception('Failed to check user existence');
+      }
+    } catch (e) {
+      throw Exception('Failed to check user existence: $e');
+    }
+  }
+
+  static Future<bool> doesTeamNameExist(String teamName) async {
+    final url = Uri.parse('$baseURL/teamExists/$teamName');
+
+    try {
+      final response = await http.get(
+        url,
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          _apiKeyHeader: _apiKey,
+        },
+      );
+
+      if (response.statusCode == 200) {
+        return jsonDecode(response.body) as bool;
+      } else {
+        throw Exception('Failed to check team existence');
+      }
+    } catch (e) {
+      throw Exception('Failed to check team existence: $e');
+    }
+  }
+
+  static Future<String?> getCompanyNameByVoucherCode(String voucherCode) async {
+    final url = Uri.parse('$baseURL/company/$voucherCode');
+    try {
+      final response = await http.get(
+        url,
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          _apiKeyHeader: _apiKey,
+        },
+      );
+
+      if (response.statusCode == 200) {
+        return response.body.isNotEmpty ? response.body : null;
+      } else {
+        throw Exception('Failed to fetch company name');
+      }
+    } catch (e) {
+      throw Exception('Failed to fetch company name: $e');
+    }
+  }
+
   static Future<http.Response> acceptChallenge(
       String username, String challengingTeamName) async {
     final url = '$baseURL/$username/acceptchallenge';
@@ -209,8 +274,7 @@ class ApiUtils {
     }
   }
 
-  static Future<List<String>> fetchTeamsByCompany(
-      String companyName) async {
+  static Future<List<String>> fetchTeamsByCompany(String companyName) async {
     final response = await http.get(
       Uri.parse('$baseURL/all/teams/$companyName'),
       headers: <String, String>{

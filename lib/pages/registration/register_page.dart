@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application/components/custom_app_bar.dart';
 import 'package:flutter_application/components/dialog_utils.dart';
 import 'package:flutter_application/components/my_button.dart';
 import 'package:flutter_application/components/my_textfield.dart';
+import 'package:flutter_application/components/return_arrow_argument.dart';
 import 'package:flutter_application/pages/login_page/login_widget.dart';
 import 'package:flutter_application/pages/registration/complete_profile_page.dart';
 import 'package:flutter_application/session_manager.dart';
@@ -93,20 +95,22 @@ class _RegisterPage extends State<RegisterPage> {
                     final confirmPassword = confirmPasswordController.text;
 
                     if (username.isEmpty || password.isEmpty) {
-                      DialogUtils().showGenericErrorMessageNonStatic(context, "Fel",
+                      DialogUtils().showGenericErrorMessageNonStatic(
+                          context,
+                          "Fel",
                           'Vänligen ange både e-postadress och lösenord.');
                       return;
                     }
 
                     if (!isValidEmail(username)) {
-                      DialogUtils().showGenericErrorMessageNonStatic(context, "Fel",
-                          'Vänligen ange en giltig e-postadress.');
+                      DialogUtils().showGenericErrorMessageNonStatic(context,
+                          "Fel", 'Vänligen ange en giltig e-postadress.');
                       return;
                     }
 
                     if (password != confirmPassword) {
-                      DialogUtils().showGenericErrorMessageNonStatic(context, "Fel",
-                          'Lösenorden matchar inte.');
+                      DialogUtils().showGenericErrorMessageNonStatic(
+                          context, "Fel", 'Lösenorden matchar inte.');
                       return;
                     }
                     showDialog(
@@ -140,7 +144,9 @@ class _RegisterPage extends State<RegisterPage> {
                           ));
                         });
                       } else if (response.contains("Username already exists")) {
-                        DialogUtils().showGenericErrorMessageNonStatic(context, "Fel",
+                        DialogUtils().showGenericErrorMessageNonStatic(
+                            context,
+                            "Fel",
                             "E-postadressen är redan kopplat till ett konto.");
                       } else {
                         DialogUtils().showGenericErrorMessageNonStatic(
