@@ -559,7 +559,7 @@ class _HomePageState extends State<HomePage> {
                                                     fontFamily: 'Sora'),
                                               ),
                                               Text(
-                                                '$daysLeft Dagar till lopp',
+                                                '$daysLeft dagar kvar till Midnattsloppet!',
                                                 style: const TextStyle(
                                                     color: Colors.white,
                                                     fontSize: 14.0,
