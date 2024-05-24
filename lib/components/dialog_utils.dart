@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application/session_manager.dart';
 
 // importeras i filer på detta sätt: import 'package:flutter_application/components/dialog_utils.dart';
 
@@ -85,6 +86,88 @@ class DialogUtils {
                   fontFamily: 'Sora',
                 ),
               ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  // New method to show sign out dialog
+  static void showSignOutDialog(BuildContext context) {
+    NavigatorState navigator = Navigator.of(context, rootNavigator: true);
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text(
+            'Bekräfta logga ut',
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontFamily: 'Sora',
+            ),
+          ),
+          content: SizedBox(
+            width: MediaQuery.of(context).size.width * 0.9, // Dynamic width
+            child: const Text(
+              'Är du säker att du vill logga ut?',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontFamily: 'Sora',
+              ),
+            ),
+          ),
+          actions: <Widget>[
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    foregroundColor: Colors.white, // textfärg
+                    backgroundColor: const Color(0XFF3C4785), // knappfärg
+                  ),
+                  onPressed: () {
+                    navigator.pop();
+                  },
+                  child: const Text(
+                    'Avbryt',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontFamily: 'Sora',
+                    ),
+                  ),
+                ),
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    foregroundColor: Colors.white, // textfärg
+                    backgroundColor: const Color(0XFF3C4785), // knappfärg
+                  ),
+                  onPressed: () async {
+                    navigator.pop();
+                    Future.delayed(const Duration(milliseconds: 100), () async {
+                      bool signOutSuccess =
+                          await SessionManager.instance.signUserOut();
+                      if (signOutSuccess) {
+                        navigator.pushNamedAndRemoveUntil(
+                            '/', (route) => false);
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('Failed to sign out'),
+                          ),
+                        );
+                      }
+                    });
+                  },
+                  child: const Text(
+                    'Logga ut',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontFamily: 'Sora',
+                    ),
+                  ),
+                ),
+              ],
             ),
           ],
         );
