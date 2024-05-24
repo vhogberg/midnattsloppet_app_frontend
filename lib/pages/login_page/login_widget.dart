@@ -4,6 +4,7 @@ import 'package:flutter_application/components/dialog_utils.dart';
 import 'package:flutter_application/components/my_button.dart';
 import 'package:flutter_application/components/my_textfield.dart';
 import 'package:flutter_application/pages/registration/register_page.dart';
+import 'package:flutter_application/pages/registration/registration_wizard.dart';
 import 'package:flutter_application/session_manager.dart';
 
 class LoginPage extends StatefulWidget {
@@ -83,13 +84,10 @@ class _LoginPageState extends State<LoginPage> {
 
                     // Check if username or password is empty
                     if (username.isEmpty || password.isEmpty) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text(
-                            'Vänligen ange både e-postadress och lösenord.',
-                          ),
-                        ),
-                      );
+                      DialogUtils().showGenericErrorMessageNonStatic(
+                          context,
+                          "Fel",
+                          "Vänligen ange både e-postadress och lösenord.");
                       return; // Exit the function early if either field is empty
                     }
 
@@ -104,11 +102,15 @@ class _LoginPageState extends State<LoginPage> {
                         Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => const CustomNavigationBar(selectedPage: 0,)),
+                              builder: (context) => const CustomNavigationBar(
+                                    selectedPage: 0,
+                                  )),
                         );
                       });
                     }).catchError((error) {
-                      DialogUtils().showGenericErrorMessageNonStatic(context, "Fel", 
+                      DialogUtils().showGenericErrorMessageNonStatic(
+                          context,
+                          "Fel",
                           "Inloggningen misslyckades, vänligen försök igen.");
                     });
                   },
@@ -124,11 +126,11 @@ class _LoginPageState extends State<LoginPage> {
                     const SizedBox(width: 4),
                     GestureDetector(
                       onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => RegisterPage(),
-                          ),
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return RegistrationWizardDialog();
+                          },
                         );
                       },
                       child: const Text(

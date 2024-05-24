@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_application/api_utils/api_utils.dart';
 import 'package:flutter_application/components/custom_navigation_bar.dart';
@@ -191,6 +189,7 @@ class _RegistrationWizardDialogState extends State<RegistrationWizardDialog> {
             context, "Fel", "Lagnamnet är upptaget.");
         return;
       }
+      newTeam = true;
     }
 
     setState(() {
@@ -362,7 +361,7 @@ class _RegistrationWizardDialogState extends State<RegistrationWizardDialog> {
           const Padding(
             padding: EdgeInsets.all(20.0),
             child: Text(
-              '2. Låt oss färdigställa din profil!',
+              '2. Färdigställ din profil',
               style: TextStyle(
                 fontSize: 24.0,
                 fontWeight: FontWeight.bold,
@@ -398,6 +397,7 @@ class _RegistrationWizardDialogState extends State<RegistrationWizardDialog> {
   // Wizard steg 3, välj eller skapa nytt lag
   Widget _buildRegisterTeamPage() {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const Padding(
           padding: EdgeInsets.all(20.0),
@@ -447,17 +447,25 @@ class _RegistrationWizardDialogState extends State<RegistrationWizardDialog> {
             ),
           ),
         ),
-        ElevatedButton(
-          onPressed: () {
-            setState(() {
-              _currentPage = 3; // Navigate to _buildCreateTeamPage
-            });
-          },
-          style: ElevatedButton.styleFrom(
-            foregroundColor: Colors.white,
-            backgroundColor: const Color(0XFF3C4785),
+        Padding(
+          padding: const EdgeInsets.fromLTRB(
+              20.0, 30.0, 20.0, 0), // Adjusted top padding for more space
+          child: Row(
+            children: [
+              ElevatedButton(
+                onPressed: () {
+                  setState(() {
+                    _currentPage = 3; // Navigate to _buildCreateTeamPage
+                  });
+                },
+                style: ElevatedButton.styleFrom(
+                  foregroundColor: Colors.white,
+                  backgroundColor: const Color(0XFF3C4785),
+                ),
+                child: const Text('Skapa ett nytt lag'),
+              ),
+            ],
           ),
-          child: const Text('Skapa ett nytt lag'),
         ),
       ],
     );
@@ -558,27 +566,13 @@ class _RegistrationWizardDialogState extends State<RegistrationWizardDialog> {
                 style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 20),
-              _buildOverviewItem('Användarnamn:', emailController.text),
+              _buildOverviewItem('E-mail:', emailController.text),
               const SizedBox(height: 10),
               _buildOverviewItem('Företag:', companyName ?? 'Inget företag'),
               const SizedBox(height: 10),
-              _buildOverviewItem('Lag:', teamNameController.text),
+              _buildOverviewItem(
+                  'Lag:', teamNameController.text + searchController.text),
               const SizedBox(height: 10),
-              Flexible(
-                child: Container(
-                  decoration: BoxDecoration(
-                    border: Border.all(color: Colors.grey),
-                    borderRadius: BorderRadius.circular(5),
-                  ),
-                  padding: const EdgeInsets.all(8.0),
-                  child: SingleChildScrollView(
-                    child: Text(
-                      emailController.text,
-                      style: const TextStyle(fontSize: 18),
-                    ),
-                  ),
-                ),
-              ),
             ],
           ),
         ),
@@ -618,11 +612,14 @@ class _RegistrationWizardDialogState extends State<RegistrationWizardDialog> {
     String password = passwordController.text;
     String name = nameController.text;
     String voucherCode = companyVoucherCodeController.text;
-    String newTeamName = teamNameController.text;
-    String teamName = searchController.text;
+    String teamName;
+    if (newTeam == true) {
+      teamName = teamNameController.text;
+    } else {
+      teamName = searchController.text;
+    }
     String charityName = charityController.text;
     String donationGoal = donationGoalController.text;
-    bool createNewTeam = true;
 
     // Create the registration request object
     RegistrationRequest request = RegistrationRequest(
@@ -630,16 +627,18 @@ class _RegistrationWizardDialogState extends State<RegistrationWizardDialog> {
       password: password,
       name: name,
       voucherCode: voucherCode,
-      teamName: newTeamName,
+      teamName: teamName,
       charityName: charityName,
       donationGoal: donationGoal,
-      createNewTeam: createNewTeam,
+      createNewTeam: newTeam,
     );
+
+    print(request.toJson());
 
     try {
       // Send the request
       final response = await ApiUtils.post(
-        'https://localhost:8443/app/register',
+        'https://group-15-7.pvt.dsv.su.se/app/registerUser',
         request.toJson(),
       );
 
@@ -647,14 +646,15 @@ class _RegistrationWizardDialogState extends State<RegistrationWizardDialog> {
       if (response.statusCode == 200 || response.statusCode == 201) {
         // User registered successfully
         DialogUtils().showGenericErrorMessageNonStatic(
-            context, "Success", "User registered successfully");
+            context, "", "Registreringen lyckades.");
 
         // Log in the user
         await SessionManager.instance.loginUser(username, password).then((_) {
           // Navigate to the homepage
           Navigator.pushReplacement(
             context,
-            MaterialPageRoute(builder: (context) => CustomNavigationBar(selectedPage: 0)),
+            MaterialPageRoute(
+                builder: (context) => CustomNavigationBar(selectedPage: 0)),
           );
         }).catchError((e) {
           // Handle login error
