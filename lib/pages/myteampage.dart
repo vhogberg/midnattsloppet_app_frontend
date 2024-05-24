@@ -217,7 +217,7 @@ class _MyTeamPageState extends State<MyTeamPage> {
     return Scaffold(
       appBar: CustomAppBar(
         key: null,
-        title: 'Mitt lag',
+        title: '$teamName',
         // teampage ska ha en logout-knapp till höger, så detta nedan sätts "true"
         useActionButton: true,
         // logout knapp från Iconsax bilbiotek
@@ -233,21 +233,6 @@ class _MyTeamPageState extends State<MyTeamPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Display team name above the circular team picture
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: Center(
-                  child: Text(
-                    '$teamName',
-                    style: const TextStyle(
-                      fontSize: 20, // Adjust font size
-                      color: Colors.black, // Set color to black
-                      fontWeight: FontWeight.bold,
-                      fontFamily: 'Sora',
-                    ),
-                  ),
-                ),
-              ),
               const SizedBox(
                   height:
                       10), // Add some spacing between teamName and the picture
@@ -266,7 +251,12 @@ class _MyTeamPageState extends State<MyTeamPage> {
                           ],
                         ),
                         shape: BoxShape.circle),
-                    child: Center(
+                    child: Container(
+                      padding: const EdgeInsets.all(12),
+                    decoration: const BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Colors.white,
+                    ),
                       child: companyName != null
                           ? CircleAvatar(
                               radius: 74,
