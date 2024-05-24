@@ -1,7 +1,10 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_application/api_utils/api_utils.dart';
+import 'package:flutter_application/components/custom_app_bar.dart';
+import 'package:flutter_application/models/challenge.dart';
 import 'package:flutter_application/session_manager.dart';
-import 'package:iconsax/iconsax.dart';
 
 class ActiveChallengePage extends StatefulWidget {
   const ActiveChallengePage({Key? key}) : super(key: key);
@@ -12,37 +15,126 @@ class ActiveChallengePage extends StatefulWidget {
 
 class _ActiveChallengePageState extends State<ActiveChallengePage> {
   String? username;
-  String? charityName;
-  String? teamName;
-  String? companyName;
-  int teamRank = -1;
-  int totalTeams = 0;
-  double donationGoal = 0;
-  double totalDonations = 0;
+
+  String? userTeamName; // MITT LAG NAMN
+  String? otherTeamName; // ANDRA LAGETS NAMN
+
+  double? myTeamDonations; // MITT LAG
+  double? otherTeamDonations; // ANDRA LAGET
+
+  List<Challenge> challenges = []; // Initiera en lista av challenges
+
+  String? challengeTitle;
+  String? challengeDescription;
+
+  late Timer timer;
 
   @override
   void initState() {
     super.initState();
-    username = SessionManager.instance.username;
-    fetchDonations();
+    _initializePage();
   }
 
-  Future<void> fetchDonations() async {
+  Future<void> _initializePage() async {
+    try {
+      await fetchUsername();
+      await fetchUserTeam();
+      await fetchMyTeamDonations();
+      await fetchChallenge();
+      await analyseChallenges();
+      await fetchOtherTeamDonations();
+
+      timer = Timer.periodic(const Duration(seconds: 10), (timer) {
+        fetchOtherTeamDonations();
+      });
+    } catch (e) {
+      print('Initialization error: $e');
+    }
+  }
+
+  Future<void> fetchUsername() async {
+    username = SessionManager.instance.username;
+  }
+
+  // hämta användarens lag de är med i
+  Future<void> fetchUserTeam() async {
+    try {
+      String? teamName = await ApiUtils.fetchTeamName(username);
+      setState(() {
+        userTeamName = teamName;
+      });
+    } catch (e) {
+      print('Error fetching user team: $e');
+    }
+  }
+
+  Future<void> fetchMyTeamDonations() async {
     try {
       double total = await ApiUtils.fetchDonations(username);
       setState(() {
-        totalDonations = total;
+        myTeamDonations = total;
       });
     } catch (e) {
       print("Error fetching donations: $e");
     }
   }
 
+  Future<void> fetchOtherTeamDonations() async {
+    try {
+      double? donations =
+          await ApiUtils.fetchOtherFundraiserBox(otherTeamName!);
+
+      setState(() {
+        otherTeamDonations = donations;
+      });
+    } catch (e) {
+      print("Error fetching team donationamount: $e");
+    }
+  }
+
+  // Metod för att hämta andra lagets donationer, tbi
+  // fetchOtherTeamDonations();
+
+  Future<void> fetchChallenge() async {
+    fetchUserTeam();
+    try {
+      List<Challenge> fetchedChallenges =
+          await ApiUtils.fetchActiveChallenge(username);
+
+      setState(() {
+        challenges = fetchedChallenges;
+        analyseChallenges();
+      });
+    } catch (e) {
+      // Handle any errors that occur during the fetch
+      print('Error fetching teams: $e');
+    }
+  }
+
+  Future<void> analyseChallenges() async {
+    for (Challenge challenge in challenges) {
+      challengeTitle = challenge.title;
+      challengeDescription = challenge.description;
+
+      if (challenge.challengerName != '$userTeamName') {
+        otherTeamName = challenge.challengerName;
+      }
+
+      if (challenge.challengedName != '$userTeamName') {
+        otherTeamName = challenge.challengedName;
+      }
+
+      print(challenges);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Lagkamp'),
+      appBar: const CustomAppBar(
+        title: 'Lagkamp',
+        useActionButton: false,
+        showReturnArrow: false,
       ),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
@@ -87,10 +179,11 @@ class _ActiveChallengePageState extends State<ActiveChallengePage> {
                   ),
                   child: Column(
                     children: [
-                      const Center(
+                      Center(
                         child: Text(
-                          'Nordea lag 5 vs. Nordea lag 7',
-                          style: TextStyle(
+                          // Titel för challengen
+                          '$challengeTitle',
+                          style: const TextStyle(
                             fontSize: 18.0,
                             fontWeight: FontWeight.bold,
                             color: Colors.white,
@@ -114,7 +207,7 @@ class _ActiveChallengePageState extends State<ActiveChallengePage> {
                                   ),
                                   const SizedBox(height: 10),
                                   Text(
-                                    '${totalDonations.toStringAsFixed(0)} kr',
+                                    '$myTeamDonations kr',
                                     style: const TextStyle(
                                       color: Colors.white,
                                       fontSize: 28,
@@ -143,7 +236,7 @@ class _ActiveChallengePageState extends State<ActiveChallengePage> {
                                   ),
                                   const SizedBox(height: 10),
                                   Text(
-                                    '${totalDonations.toStringAsFixed(0)} kr',
+                                    '$otherTeamDonations kr',
                                     style: const TextStyle(
                                       color: Colors.white,
                                       fontSize: 28,
@@ -162,10 +255,10 @@ class _ActiveChallengePageState extends State<ActiveChallengePage> {
                       const SizedBox(height: 10),
                       ConstrainedBox(
                         constraints: const BoxConstraints(maxHeight: 170),
-                        child: const SingleChildScrollView(
+                        child: SingleChildScrollView(
                           child: Text(
-                            'Egen tävling: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor inciLorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmodLorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmodLorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmodLorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmodLorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmoddidunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
-                            style: TextStyle(
+                            '$challengeDescription',
+                            style: const TextStyle(
                               fontSize: 16.0,
                               color: Colors.white,
                             ),

@@ -1,13 +1,14 @@
 import 'dart:async';
 import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_application/api_utils/api_utils.dart';
+import 'package:flutter_application/components/custom_app_bar.dart';
 import 'package:flutter_application/components/custom_colors.dart';
 import 'package:flutter_application/components/donation_progress_bar.dart';
+import 'package:flutter_application/components/other_goal_box.dart';
 import 'package:flutter_application/components/return_arrow_argument.dart';
 import 'package:flutter_application/models/team.dart';
-import 'package:flutter_application/components/custom_app_bar.dart';
-import 'package:flutter_application/components/other_goal_box.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 class OtherTeamPage extends StatefulWidget {
@@ -24,8 +25,8 @@ class _OtherTeamPageState extends State<OtherTeamPage> {
   String? teamName;
   String? companyName;
   String? charityName;
-  int donationGoal = 0;
-  int totalDonations = 0;
+  double donationGoal = 0;
+  double totalDonations = 0;
   late Timer timer;
   int teamRank = -1;
   int totalTeams = 0;
@@ -46,8 +47,8 @@ class _OtherTeamPageState extends State<OtherTeamPage> {
   Future<void> fetchTeamDetails() async {
     try {
       String? charity = await ApiUtils.fetchOtherCharityOrganization(teamName!);
-      int? goal = await ApiUtils.fetchOtherDonationGoal(teamName!);
-      int? donations = await ApiUtils.fetchOtherFundraiserBox(teamName!);
+      double? goal = await ApiUtils.fetchOtherDonationGoal(teamName!);
+      double? donations = await ApiUtils.fetchOtherFundraiserBox(teamName!);
       List<dynamic>? teamMembers = await ApiUtils.fetchOtherMembers(teamName!);
 
       setState(() {
@@ -75,7 +76,7 @@ class _OtherTeamPageState extends State<OtherTeamPage> {
 
         for (var item in data) {
           String name = item['name'];
-          int fundraiserBox = item['fundraiserBox'];
+          double fundraiserBox = item['fundraiserBox'];
           String? companyName;
 
           if (item['company'] != null) {
@@ -103,10 +104,11 @@ class _OtherTeamPageState extends State<OtherTeamPage> {
     }
   }
 
+  // Används ej??
   Future<void> fetchDonationGoal() async {
     if (teamName != null) {
       try {
-        int? goal = await ApiUtils.fetchOtherDonationGoal(teamName!);
+        double? goal = await ApiUtils.fetchOtherDonationGoal(teamName!);
         setState(() {
           donationGoal = goal ?? 0;
         });
@@ -116,10 +118,11 @@ class _OtherTeamPageState extends State<OtherTeamPage> {
     }
   }
 
+  // Används ej??
   Future<void> fetchDonatedAmount() async {
     if (teamName != null) {
       try {
-        int? donations = await ApiUtils.fetchOtherFundraiserBox(teamName!);
+        double? donations = await ApiUtils.fetchOtherFundraiserBox(teamName!);
         setState(() {
           totalDonations = donations ?? 0;
         });
@@ -300,7 +303,7 @@ class _OtherTeamPageState extends State<OtherTeamPage> {
                     const Spacer(),
                     Container(
                       width: MediaQuery.of(context).size.width,
-                      height: 350,
+                      height: 320,
                       decoration: BoxDecoration(
                         color: Colors.white30,
                         borderRadius: BorderRadius.circular(13.0),
@@ -355,9 +358,9 @@ class _OtherTeamPageState extends State<OtherTeamPage> {
                           const SizedBox(height: 15),
                           SizedBox(
                             width: MediaQuery.of(context).size.width - 165,
-                            child: const Padding(
-                              padding: EdgeInsets.only(left: 43),
-                              child: DonationProgressBar(),
+                            child: Padding(
+                              padding: const EdgeInsets.only(left: 43),
+                              child: DonationProgressBar(username: teamName),
                             ),
                           ),
                           const SizedBox(height: 10),

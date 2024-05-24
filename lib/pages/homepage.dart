@@ -83,7 +83,7 @@ class _HomePageState extends State<HomePage> {
 
         for (var item in data) {
           String name = item['name'];
-          int fundraiserBox = item['fundraiserBox'];
+          double fundraiserBox = item['fundraiserBox'];
           String? companyName;
 
           if (item['company'] != null) {
@@ -381,11 +381,12 @@ class _HomePageState extends State<HomePage> {
                                 SizedBox(
                                   width:
                                       MediaQuery.of(context).size.width - 122,
-                                  child: const Padding(
-                                      padding: EdgeInsets.only(
+                                  child: Padding(
+                                      padding: const EdgeInsets.only(
                                         left: 30,
                                       ),
-                                      child: DonationProgressBar()),
+                                      child: DonationProgressBar(
+                                          username: username)),
                                 ),
                                 const SizedBox(height: 13),
                                 //Goal box displaying donation goal
@@ -559,7 +560,7 @@ class _HomePageState extends State<HomePage> {
                                                     fontFamily: 'Sora'),
                                               ),
                                               Text(
-                                                '$daysLeft Dagar till lopp',
+                                                '$daysLeft dagar kvar till Midnattsloppet!',
                                                 style: const TextStyle(
                                                     color: Colors.white,
                                                     fontSize: 14.0,

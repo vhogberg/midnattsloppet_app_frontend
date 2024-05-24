@@ -28,7 +28,7 @@ class _OtherGoalBoxState extends State<OtherGoalBox> {
 
   Future<void> fetchOtherDonationGoal() async {
     try {
-      int? goal = await ApiUtils.fetchOtherDonationGoal(widget.teamName);
+      double? goal = await ApiUtils.fetchOtherDonationGoal(widget.teamName);
       setState(() {
         donationGoal = goal?.toDouble() ?? 0;
       });

@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application/api_utils/api_utils.dart';
 import 'package:flutter_application/pages/challenge_page/active_challenge_page.dart';
-import 'package:flutter_application/pages/leaderboard_page/leaderboard_page.dart';
-import 'package:flutter_application/session_manager.dart';
-import 'package:iconsax/iconsax.dart';
 import 'package:flutter_application/pages/challenge_page/challenge_page.dart';
 import 'package:flutter_application/pages/homepage.dart';
+import 'package:flutter_application/pages/leaderboard_page/leaderboard_page.dart';
 import 'package:flutter_application/pages/myteampage.dart';
+import 'package:flutter_application/session_manager.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 class CustomNavigationBar extends StatefulWidget {
-  const CustomNavigationBar({super.key});
+  final int selectedPage;
+
+  const CustomNavigationBar({super.key, required this.selectedPage});
 
   @override
   _CustomNavigationBarState createState() => _CustomNavigationBarState();
@@ -22,21 +24,21 @@ class _CustomNavigationBarState extends State<CustomNavigationBar> {
   Color iconColor = const Color.fromARGB(255, 148, 148, 148);
   Color selectedIconColor = const Color(0XFF3C4785);
   bool isChallengeAccepted = false;
+  int _selectedPage = 0; // Add state variable for selected page
 
   @override
   void initState() {
     super.initState();
+    _selectedPage = widget.selectedPage; // Initialize with widget's selectedPage
     username = SessionManager.instance.username;
     fetchTeamName();
     fetchChallengeStatus(username);
   }
 
-  int selectedPage = 0;
-
   //navigateToPage allows the navigation index to be passed to the pages themselves
   void navigateToPage(int index) {
     setState(() {
-      selectedPage = index;
+      _selectedPage = index; // Use state variable
     });
   }
 
@@ -132,10 +134,10 @@ class _CustomNavigationBarState extends State<CustomNavigationBar> {
         bottomNavigationBar: NavigationBar(
           onDestinationSelected: (index) {
             setState(() {
-              selectedPage = index;
+              _selectedPage = index; // Use state variable
             });
           },
-          selectedIndex: selectedPage,
+          selectedIndex: _selectedPage, // Use state variable
           destinations: [
             NavigationDestination(
               icon: Icon(
@@ -200,6 +202,6 @@ class _CustomNavigationBarState extends State<CustomNavigationBar> {
           indicatorShape: const CircleBorder(),
         ),
         body: pageOptions[
-            selectedPage]); //Change the body of the app so it displays the desired page
+            _selectedPage]); //Change the body of the app so it displays the desired page
   }
 }

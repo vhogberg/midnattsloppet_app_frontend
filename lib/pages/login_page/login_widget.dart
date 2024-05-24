@@ -104,7 +104,7 @@ class _LoginPageState extends State<LoginPage> {
                         Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => CustomNavigationBar()),
+                              builder: (context) => const CustomNavigationBar(selectedPage: 0,)),
                         );
                       });
                     }).catchError((error) {

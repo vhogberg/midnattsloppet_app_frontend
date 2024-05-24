@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application/api_utils/api_utils.dart';
 import 'package:flutter_application/components/custom_app_bar.dart';
+import 'package:flutter_application/components/custom_navigation_bar.dart';
 import 'package:flutter_application/models/challenge.dart';
 import 'package:flutter_application/pages/challenge_page/active_challenge_page.dart';
 import 'package:flutter_application/pages/challenge_page/challenge_wizard_dialog.dart';
@@ -73,16 +74,13 @@ class _ChallengePageState extends State<ChallengePage> {
 
   Future<void> fetchChallenges() async {
     fetchUserTeam();
-    print('FETCH123');
     try {
       List<Challenge> fetchedChallenges =
           await ApiUtils.fetchChallengeActivity(username);
-      print('LISTFETCH: $fetchedChallenges');
 
       setState(() {
         challenges = fetchedChallenges;
         isLoading = false;
-        print('LISTFETCH2: $challenges');
         analyseChallenges();
       });
     } catch (e) {
@@ -95,13 +93,10 @@ class _ChallengePageState extends State<ChallengePage> {
   }
 
   Future<void> analyseChallenges() async {
-    print(isLoading);
-
     // for each challenge in challenge, check:
 
     // Check if there is no activity whatsoever in the challenge page
     // Inbox then says "Inga aktiva inbjudningar eller förfrågningar"
-    print(challenges);
 
     if (challenges.isEmpty) {
       challengeSent = false;
@@ -110,6 +105,7 @@ class _ChallengePageState extends State<ChallengePage> {
       // the list is not empty...
 
       for (Challenge challenge in challenges) {
+        print(challenge); // ta bort
         // OM JAG HAR SKICKAT CHALLENGEN
         if (challenge.challengerName == '$userTeam') {
           challengeSent = true;
@@ -126,10 +122,6 @@ class _ChallengePageState extends State<ChallengePage> {
       }
     }
 
-    print('CHALLENGERECEIVEDBOOL: $challengeReceived');
-    print('CHALLENGESENTBOOL: $challengeSent');
-    print(challenges);
-
     // JAG SKICKAR EN UTMANING
     // challengerName == my team name, set challengeSent to true, set outgoingChallengeTeam to challengedName
 
@@ -142,9 +134,9 @@ class _ChallengePageState extends State<ChallengePage> {
     return Scaffold(
       // egen custom appbar fr klassen "CustomAppBar"
       appBar: const CustomAppBar(
-        key: null,
         title: 'Lagkamp',
         useActionButton: false,
+        showReturnArrow: false,
       ),
 
       // Loading skärm pga mycket api calls
@@ -215,63 +207,96 @@ class _ChallengePageState extends State<ChallengePage> {
                         ],
                       ),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 6), // lite vertikalt space
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Expanded(
-                            child: GestureDetector(
-                              onTap: () {
-                                showDialog(
-                                  context: context,
-                                  builder: (BuildContext context) {
-                                    return WizardDialog();
-                                  },
-                                );
-                              },
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  color: const Color(0XFF3C4785),
-                                  borderRadius: BorderRadius.circular(
-                                      4.0), // Avrunda hörnen
-                                ),
-                                padding: const EdgeInsets.symmetric(
-                                    vertical:
-                                        15), // höjd på skicka-iväg utmaning knapp.
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment
-                                      .center, // centrera allt, viktigt för padding i kanter
-                                  children: [
-                                    Image.asset(
-                                      'images/fire.png',
-                                      width: 35,
-                                      height: 35,
-                                    ),
-                                    const SizedBox(width: 10),
-                                    const Text(
-                                      'Starta en lagkamp',
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.bold,
+
+                    // Visa ej "Starta lagkamp"-knapp om användaren redan har skickat en lagkamp.
+                    if (!challengeSent)
+                      Padding(
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 6), // lite vertikalt space
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Expanded(
+                              child: GestureDetector(
+                                onTap: () async {
+                                  final result = await showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return WizardDialog();
+                                    },
+                                  );
+
+                                  // Check if the dialog returned a success result and reload the page
+                                  if (result == 'success') {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              const CustomNavigationBar(
+                                                selectedPage: 1,
+                                              )),
+                                    );
+                                  }
+                                },
+                                /* onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => WizardDialog(
+                                        onDialogClose: () {
+                                          // Replace the current page with a new instance to reload it
+                                          Navigator.pushReplacement(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    ChallengePage()),
+                                          );
+                                        },
                                       ),
                                     ),
-                                    const SizedBox(width: 10),
-                                    Image.asset(
-                                      'images/fire.png',
-                                      width: 35,
-                                      height: 35,
-                                    ),
-                                  ],
+                                  );
+                                }, */
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    color: const Color(0XFF3C4785),
+                                    borderRadius: BorderRadius.circular(
+                                        4.0), // Avrunda hörnen
+                                  ),
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical:
+                                          15), // höjd på skicka-iväg utmaning knapp.
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment
+                                        .center, // centrera allt, viktigt för padding i kanter
+                                    children: [
+                                      Image.asset(
+                                        'images/fire.png',
+                                        width: 35,
+                                        height: 35,
+                                      ),
+                                      const SizedBox(width: 10),
+                                      const Text(
+                                        'Starta en lagkamp',
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      const SizedBox(width: 10),
+                                      Image.asset(
+                                        'images/fire.png',
+                                        width: 35,
+                                        height: 35,
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
-                    ),
 
                     const Padding(
                       padding: EdgeInsets.only(
@@ -299,7 +324,8 @@ class _ChallengePageState extends State<ChallengePage> {
                       // När en lagkampsinbjudan har ankommit till MITT lag från ett ANNAT lag
                       child: challengeReceived
                           ? Column(
-                              mainAxisSize: MainAxisSize.min, // används för att texten kan ha olik storlek
+                              mainAxisSize: MainAxisSize
+                                  .min, // används för att texten kan ha olik storlek
                               children: [
                                 Text(
                                   '$incomingChallengeTeam vill starta en lagkamp med er, acceptera?',
@@ -356,6 +382,16 @@ class _ChallengePageState extends State<ChallengePage> {
                                                   incomingChallengeTeam);
 
                                           if (response.statusCode == 200) {
+
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      const CustomNavigationBar(
+                                                        selectedPage: 1,
+                                                      )),
+                                            );
+
                                             // Challenge accepted
                                             print(
                                                 'Challenge accepted successfully');
@@ -407,6 +443,17 @@ class _ChallengePageState extends State<ChallengePage> {
                                     ElevatedButton(
                                       // Avböj lagkamp logik här
                                       onPressed: () async {
+
+
+                                       /*  Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      const CustomNavigationBar(
+                                                        selectedPage: 1,
+                                                      )),
+                                            ); */
+
                                         try {
                                           final response =
                                               await ApiUtils.declineChallenge(
@@ -418,8 +465,15 @@ class _ChallengePageState extends State<ChallengePage> {
                                             print(
                                                 'Challenge declined successfully');
 
-                                            // Run this method again to check if there are any more incoming challenge requests.
-                                            analyseChallenges();
+                                            // Run this  again to check if there are any more incoming challenge requests.
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      const CustomNavigationBar(
+                                                        selectedPage: 1,
+                                                      )),
+                                            );
                                           } else {
                                             // Handle error response
                                             print(
