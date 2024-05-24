@@ -538,11 +538,14 @@ class NotificationDetail extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          notification.title,
-          style: const TextStyle(
-            fontWeight: FontWeight.w700,
-            fontFamily: 'Sora',
+        title: FittedBox(
+          fit: BoxFit.scaleDown,
+          child: Text(
+            notification.title,
+            style: const TextStyle(
+              fontWeight: FontWeight.w700,
+              fontFamily: 'Sora',
+            ),
           ),
         ),
       ),
