@@ -128,6 +128,45 @@ class _ActiveChallengePageState extends State<ActiveChallengePage> {
     }
   }
 
+  void _editDescription() {
+    TextEditingController _controller =
+        TextEditingController(text: challengeDescription);
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Edit Description'),
+          content: TextField(
+            controller: _controller,
+            onSubmitted: (value) {
+              setState(() {
+                challengeDescription = value;
+              });
+              Navigator.of(context).pop();
+            },
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text('Cancel'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: Text('Save'),
+              onPressed: () {
+                setState(() {
+                  challengeDescription = _controller.text;
+                });
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -138,221 +177,221 @@ class _ActiveChallengePageState extends State<ActiveChallengePage> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Image.asset(
-              'images/CompetitionImage.png',
-              fit: BoxFit.fitWidth,
-            ),
-            const SizedBox(height: 10),
-            const Text(
-              'Aktiv utmaning',
-              style: TextStyle(
-                fontSize: 23.0,
-                fontWeight: FontWeight.bold,
-                fontFamily: 'Sora',
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Image.asset(
+                'images/CompetitionImage.png',
+                fit: BoxFit.fitWidth,
               ),
-            ),
-            const SizedBox(height: 10),
-            Stack(
-              children: [
-                Container(
-                  padding: const EdgeInsets.all(20),
-                  width: MediaQuery.of(context).size.width,
-                  height: 470,
-                  decoration: BoxDecoration(
-                    color: const Color(0XFF3C4785),
-                    borderRadius: BorderRadius.circular(12.0),
-                    gradient: const RadialGradient(
-                      radius: 0.8,
-                      center: Alignment(-0.5, 0.4),
-                      colors: [
-                        Color.fromARGB(255, 140, 90, 100), // Start color
-                        Color(0xFF3C4785), // End color
-                      ],
-                      stops: [
-                        0.15,
-                        1.0,
-                      ],
+              const SizedBox(height: 10),
+              const Text(
+                'Aktiv utmaning',
+                style: TextStyle(
+                  fontSize: 23.0,
+                  fontWeight: FontWeight.bold,
+                  fontFamily: 'Sora',
+                ),
+              ),
+              const SizedBox(height: 10),
+              Stack(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(20),
+                    width: MediaQuery.of(context).size.width,
+                    height: 470,
+                    decoration: BoxDecoration(
+                      color: const Color(0XFF3C4785),
+                      borderRadius: BorderRadius.circular(12.0),
+                      gradient: const RadialGradient(
+                        radius: 0.8,
+                        center: Alignment(-0.5, 0.4),
+                        colors: [
+                          Color.fromARGB(255, 140, 90, 100), // Start color
+                          Color(0xFF3C4785), // End color
+                        ],
+                        stops: [
+                          0.15,
+                          1.0,
+                        ],
+                      ),
                     ),
-                  ),
-                  child: Column(
-                    children: [
-                      Center(
-                        child: Text(
-                          // Titel för challengen
-                          '$challengeTitle',
-                          style: const TextStyle(
-                            fontSize: 18.0,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 10),
-                      IntrinsicHeight(
-                        child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  const Text(
-                                    'Insamlat',
-                                    style: TextStyle(
-                                      fontSize: 18.0,
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                  const SizedBox(height: 10),
-                                  Text(
-                                    '$myTeamDonations kr',
-                                    style: const TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 28,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  const SizedBox(height: 10),
-                                ],
-                              ),
-                              const VerticalDivider(
-                                width: 60,
-                                thickness: 2,
-                                indent: 0,
-                                endIndent: 0,
-                                color: Colors.white,
-                              ),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  const Text(
-                                    'Insamlat',
-                                    style: TextStyle(
-                                      fontSize: 18.0,
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                  const SizedBox(height: 10),
-                                  Text(
-                                    '$otherTeamDonations kr',
-                                    style: const TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 28,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ]),
-                      ),
-                      const Divider(
-                        height: 0,
-                        color: Colors.white,
-                        thickness: 2,
-                      ),
-                      const SizedBox(height: 10),
-                      ConstrainedBox(
-                        constraints: const BoxConstraints(maxHeight: 170),
-                        child: SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        Center(
                           child: Text(
-                            '$challengeDescription',
+                            // Titel för challengen
+                            '$challengeTitle',
                             style: const TextStyle(
-                              fontSize: 16.0,
+                              fontSize: 18.0,
+                              fontWeight: FontWeight.bold,
                               color: Colors.white,
                             ),
                           ),
                         ),
-                      ),
-                      const Spacer(),
-                      Align(
-                        alignment: Alignment.centerLeft,
-                        child: Padding(
-                          padding: const EdgeInsets.only(left: 0.0),
-                          child: ElevatedButton(
-                            onPressed: () {
-                              // Knappens funktionalitet ska in här
-                            },
-                            style: ElevatedButton.styleFrom(
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8.0),
-                              ),
-                            ),
-                            child: const Row(
-                              mainAxisSize: MainAxisSize.min,
+                        const SizedBox(height: 10),
+                        IntrinsicHeight(
+                          child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                SizedBox(
-                                  width: 5,
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    const Text(
+                                      'Insamlat',
+                                      style: TextStyle(
+                                        fontSize: 18.0,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 10),
+                                    Text(
+                                      '$myTeamDonations kr',
+                                      style: const TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 28,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 10),
+                                  ],
                                 ),
-                                Text(
-                                  'Redigera utmaning',
-                                  style: TextStyle(
-                                    fontSize: 14.0,
-                                    fontWeight: FontWeight.bold,
-                                    fontFamily: 'Sora',
-                                  ),
+                                const VerticalDivider(
+                                  width: 60,
+                                  thickness: 2,
+                                  indent: 0,
+                                  endIndent: 0,
+                                  color: Colors.white,
                                 ),
-                                Icon(
-                                  Icons.create,
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    const Text(
+                                      'Insamlat',
+                                      style: TextStyle(
+                                        fontSize: 18.0,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 10),
+                                    Text(
+                                      '$otherTeamDonations kr',
+                                      style: const TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 28,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                              ],
+                              ]),
+                        ),
+                        const Divider(
+                          height: 0,
+                          color: Colors.white,
+                          thickness: 2,
+                        ),
+                        const SizedBox(height: 10),
+                        ConstrainedBox(
+                          constraints: const BoxConstraints(maxHeight: 170),
+                          child: SingleChildScrollView(
+                            child: Text(
+                              '$challengeDescription',
+                              style: const TextStyle(
+                                fontSize: 16.0,
+                                color: Colors.white,
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                      const Divider(
-                        color: Colors.white,
-                        thickness: 2,
-                      ),
-                      Row(
-                        children: [
-                          const Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                SizedBox(
-                                    height:
-                                        8.0), // För att skapa lite avstånd mellan texterna
-                                Text(
-                                  'Tidsresultat publiceras på\nMidnattsloppets hemsida:',
-                                  style: TextStyle(
+                        const Spacer(),
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 0.0),
+                            child: ElevatedButton(
+                              onPressed: _editDescription,
+                              style: ElevatedButton.styleFrom(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8.0),
+                                ),
+                              ),
+                              child: const Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  SizedBox(
+                                    width: 5,
+                                  ),
+                                  Text(
+                                    'Redigera utmaning',
+                                    style: TextStyle(
                                       fontSize: 14.0,
                                       fontWeight: FontWeight.bold,
-                                      color: Colors.white,
-                                      fontFamily: 'Sora'),
-                                ),
-                              ],
-                            ),
-                          ),
-                          const SizedBox(
-                              width:
-                                  14.0), // För att skapa lite avstånd mellan kolumnen och knappen
-                          ElevatedButton(
-                            onPressed: () {
-                              // Knappens funktionalitet ska in här
-                            },
-                            style: ElevatedButton.styleFrom(
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8.0),
+                                      fontFamily: 'Sora',
+                                    ),
+                                  ),
+                                  Icon(
+                                    Icons.create,
+                                  ),
+                                ],
                               ),
                             ),
-                            child: const Text(
-                              'Hemsida',
-                              style: TextStyle(
-                                  fontSize: 14.0,
-                                  fontWeight: FontWeight.bold,
-                                  fontFamily: 'Sora'),
-                            ),
                           ),
-                        ],
-                      ),
-                    ],
+                        ),
+                        const Divider(
+                          color: Colors.white,
+                          thickness: 2,
+                        ),
+                        Row(
+                          children: [
+                            const Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  SizedBox(
+                                      height:
+                                          8.0), // För att skapa lite avstånd mellan texterna
+                                  Text(
+                                    'Tidsresultat publiceras på\nMidnattsloppets hemsida:',
+                                    style: TextStyle(
+                                        fontSize: 14.0,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.white,
+                                        fontFamily: 'Sora'),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            const SizedBox(
+                                width:
+                                    14.0), // För att skapa lite avstånd mellan kolumnen och knappen
+                            ElevatedButton(
+                              onPressed: () {
+                                // Knappens funktionalitet ska in här
+                              },
+                              style: ElevatedButton.styleFrom(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8.0),
+                                ),
+                              ),
+                              child: const Text(
+                                'Hemsida',
+                                style: TextStyle(
+                                    fontSize: 14.0,
+                                    fontWeight: FontWeight.bold,
+                                    fontFamily: 'Sora'),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-              ],
-            ),
-          ],
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );
