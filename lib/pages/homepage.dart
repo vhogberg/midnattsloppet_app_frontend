@@ -199,8 +199,7 @@ class _HomePageState extends State<HomePage> {
               padding: const EdgeInsets.only(bottom: 50),
               child: Column(
                 children: [
-                  if(totalDonations >= donationGoal)
-                  const TeamGoalReached(),
+                  if (totalDonations >= donationGoal) const TeamGoalReached(),
                   Row(
                     children: [
                       //Top left welcoming text
@@ -243,13 +242,7 @@ class _HomePageState extends State<HomePage> {
                             ? Container(
                                 padding: const EdgeInsets.all(2),
                                 decoration: BoxDecoration(
-                                    gradient: LinearGradient(
-                                      begin: Alignment.bottomCenter,
-                                      colors: [
-                                        CustomColors.midnattsblue,
-                                        CustomColors.midnattsorange
-                                      ],
-                                    ),
+                                    color: CustomColors.midnattsblue,
                                     shape: BoxShape.circle),
                                 child: Container(
                                   padding: const EdgeInsets.all(6),
