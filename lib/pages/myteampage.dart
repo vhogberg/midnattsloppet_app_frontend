@@ -256,6 +256,7 @@ class _MyTeamPageState extends State<MyTeamPage> {
                 child: Container(
                     width: 150,
                     height: 150,
+                    padding: const EdgeInsets.all(4),
                     decoration: BoxDecoration(
                         gradient: LinearGradient(
                           begin: Alignment.bottomCenter,
