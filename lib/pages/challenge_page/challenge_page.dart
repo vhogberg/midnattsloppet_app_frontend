@@ -593,7 +593,6 @@ class _ChallengePageState extends State<ChallengePage> {
                                           try {
                                             final response = await ApiUtils
                                                 .takeBackChallenge(
-                                              // Ska bytas ut till förslagsvis "cancelSentChallenge"
                                               username!,
                                             );
                                             if (response.statusCode == 200) {

@@ -148,7 +148,7 @@ class _WizardDialogState extends State<WizardDialog> {
                 children: [
                   _buildSearchPage(),
                   _buildTitlePage(),
-                  _buildDescriptionPage(),
+                  _buildDescriptionPage(context),
                   _buildOverviewPage(),
                 ],
               ),
@@ -318,51 +318,69 @@ class _WizardDialogState extends State<WizardDialog> {
     );
   }
 
-  // Wizard steg 3, ange egna utmaningar
-  Widget _buildDescriptionPage() {
-    return Padding(
-      padding: const EdgeInsets.only(left: 20, right: 20),
-      child: Column(
-        children: [
-          const Padding(
-            padding: EdgeInsets.all(20.0),
-            child: Text(
-              '3. Ange utmaningar',
-              style: TextStyle(
-                fontSize: 24.0,
-                fontWeight: FontWeight.bold,
-                fontFamily: 'Sora',
-              ),
+Widget _buildDescriptionPage(BuildContext context) {
+  return Padding(
+    padding: const EdgeInsets.only(left: 20, right: 20),
+    child: Column(
+      children: [
+        const Padding(
+          padding: EdgeInsets.all(20.0),
+          child: Text(
+            '3. Ange utmaningar',
+            style: TextStyle(
+              fontSize: 24.0,
+              fontWeight: FontWeight.bold,
+              fontFamily: 'Sora',
             ),
           ),
-          TextField(
-            controller: descriptionController,
-            decoration: const InputDecoration(
-              hintText: 'Ange egna handgjorda utmaningar',
-              border: OutlineInputBorder(),
+        ),
+        Expanded(
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                Container(
+                  height: MediaQuery.of(context).size.height * 0.12,
+                  child: TextField(
+                    controller: descriptionController,
+                    decoration: const InputDecoration(
+                      hintText: 'Ange dina egna utmaningar här...',
+                      border: OutlineInputBorder(),
+                    ),
+                    maxLines: null, // Gör att textfield kan växa i storlek
+                    expands: true, // Expanderar textfield till så stort som går
+                    keyboardType: TextInputType.multiline,
+                    textAlignVertical: TextAlignVertical.top, // text ska starta i topp, per default börjar den i mitten..
+                  ),
+                ),
+                const SizedBox(height: 20),
+                Container(
+                  padding: const EdgeInsets.all(10.0),
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.grey),
+                    borderRadius: BorderRadius.circular(5.0),
+                  ),
+                  child: const Text(
+                    'Exempel på utmaningar:'
+                        '\n* Pulsutmaning: Lagen bär pulsmätare under loppet, och laget med den lägsta medelpulsen vid mållinjen vinner.'
+                        '\n'
+                        '\n* Hoppa på ett ben: Under olika sektioner av loppet måste man hoppa på ett ben'
+                        '\n'
+                        '\n* Förutsäga resultat: Lag måste förutsäga sin sluttid före loppet. Det lag vars faktiska sluttid är närmast sin beräknade tid vinner'
+                        '\n'
+                        '\n* Maskerad: Lagen måste springa i maskeradkostymer under loppet'
+                        '\n'
+                        '\n* Bära ägg: Lagen bär med sig ett ägg under loppet, de som har flest hela ägg i slutet vinner',
+                    style: TextStyle(fontSize: 16.0),
+                  ),
+                ),
+              ],
             ),
-            maxLines: 5,
           ),
-          Expanded(
-            child: Container(
-              margin: const EdgeInsets.all(16.0),
-              padding: const EdgeInsets.all(8.0),
-              decoration: BoxDecoration(
-                color: Colors.grey[200],
-                borderRadius: BorderRadius.circular(16.0),
-              ),
-              child: ListView.builder(
-                itemCount: teams.length,
-                itemBuilder: (context, index) {
-                  return; //ListItem
-                },
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
+        ),
+      ],
+    ),
+  );
+}
 
 // Wizard steg 4, översikt och skicka iväg utmaning
   Widget _buildOverviewPage() {
