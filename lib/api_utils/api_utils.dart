@@ -144,6 +144,24 @@ class ApiUtils {
     }
   }
 
+  static Future<http.Response> takeBackChallenge(String username) async {
+    final url = '$baseURL/$username/take-back-challenge';
+    final headers = {
+      'Content-Type': 'application/json; charset=UTF-8',
+      _apiKeyHeader: _apiKey,
+    };
+
+    try {
+      final response = await http.delete(
+        Uri.parse(url),
+        headers: headers,
+      );
+      return response;
+    } catch (e) {
+      throw Exception('Failed to send request: $e');
+    }
+  }
+
   static Future<http.Response> logout(String url,
       {Map<String, String>? headers, dynamic body}) async {
     try {
@@ -683,8 +701,7 @@ class ApiUtils {
   }
 
   // Method for challenge_page to fetch activity
-  static Future<List<Challenge>> fetchActiveChallenge(
-      String? username) async {
+  static Future<List<Challenge>> fetchActiveChallenge(String? username) async {
     if (username == null) {
       throw Exception('Username cannot be null');
     }
@@ -722,7 +739,6 @@ class ApiUtils {
       throw Exception('Failed to load teams from API');
     }
   }
-
 
   static Future<List<Team>> fetchTeamsWithBoxAndCompanyName() async {
     final response = await http.get(
