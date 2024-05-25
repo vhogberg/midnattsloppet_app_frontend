@@ -185,12 +185,12 @@ class _CustomNavigationBarState extends State<CustomNavigationBar> {
             ),
             NavigationDestination(
               icon: Icon(
-                Iconsax.smileys,
+                Iconsax.profile_2user,
                 size: 30,
                 color: iconColor,
               ),
               selectedIcon: Icon(
-                Iconsax.smileys5,
+                Iconsax.profile_2user5,
                 size: 30,
                 color: selectedIconColor,
               ),

@@ -4,8 +4,6 @@ import 'package:add_2_calendar/add_2_calendar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application/api_utils/api_utils.dart';
 import 'package:flutter_application/components/custom_navigation_bar.dart';
-import 'package:flutter_application/pages/challenge_page/active_challenge_page.dart';
-import 'package:flutter_application/pages/challenge_page/challenge_page.dart';
 import 'package:flutter_application/session_manager.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -481,7 +479,7 @@ class _NotificationPageState extends State<NotificationPage> {
           Padding(
             padding: const EdgeInsets.only(right: 16.0),
             child: IconButton(
-              icon: const Icon(Icons.search),
+              icon: const Icon(Iconsax.search_normal_1),
               onPressed: () {
                 _showSearchModal(context);
               },
