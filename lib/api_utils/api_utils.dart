@@ -162,6 +162,26 @@ class ApiUtils {
     }
   }
 
+  static Future<http.Response> editChallengeDescription(String username, String description) async {
+    final url = '$baseURL/$username/challenge/update-description';
+    final headers = {
+      'Content-Type': 'application/json; charset=UTF-8',
+      _apiKeyHeader: _apiKey,
+    };
+    final body = jsonEncode({'description': description});
+
+    try {
+      final response = await http.patch(
+        Uri.parse(url),
+        headers: headers,
+        body: body,
+      );
+      return response;
+    } catch (e) {
+      throw Exception('Failed to send request: $e');
+    }
+  }
+
   static Future<http.Response> logout(String url,
       {Map<String, String>? headers, dynamic body}) async {
     try {
