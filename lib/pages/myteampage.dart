@@ -476,21 +476,35 @@ class _MyTeamPageState extends State<MyTeamPage> {
                                   ],
                                 ),
                               ),
-                              ElevatedButton(
-                                onPressed: () {
+                              GestureDetector(
+                                onTap: () {
+                                  // Knappens funktionalitet ska in här
                                   widget.navigateToPage(3);
                                 },
-                                style: ElevatedButton.styleFrom(
-                                  shape: RoundedRectangleBorder(
+                                child: Container(
+                                  padding: const EdgeInsets.all(10),
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
                                     borderRadius: BorderRadius.circular(4.0),
                                   ),
-                                ),
-                                child: Text(
-                                  'Topplista',
-                                  style: TextStyle(
-                                      color: CustomColors.midnattsblue,
-                                      fontSize: 18.0,
-                                      fontFamily: 'Sora'),
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Text(
+                                        'Topplista',
+                                        style: TextStyle(
+                                          fontSize: 18,
+                                          fontFamily: 'Sora',
+                                          color: CustomColors.midnattsblue,
+                                        ),
+                                      ),
+                                      const SizedBox(width: 5),
+                                      Icon(
+                                        Iconsax.receipt_item,
+                                        color: CustomColors.midnattsblue,
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ),
                             ],

@@ -399,7 +399,7 @@ class _HomePageState extends State<HomePage> {
                                               style: TextStyle(
                                                   color: Colors.white,
                                                   fontWeight: FontWeight.bold,
-                                                  fontSize: 20,
+                                                  fontSize: 18,
                                                   fontFamily: 'Sora'),
                                               maxLines: 2,
                                             ),
@@ -421,12 +421,6 @@ class _HomePageState extends State<HomePage> {
                                               ),
                                               child: Row(
                                                 children: [
-                                                  Icon(
-                                                    Iconsax.export_1,
-                                                    color: CustomColors
-                                                        .midnattsblue,
-                                                  ),
-                                                  const SizedBox(width: 5),
                                                   Text(
                                                     'Dela',
                                                     style: TextStyle(
@@ -435,7 +429,13 @@ class _HomePageState extends State<HomePage> {
                                                       color: CustomColors
                                                           .midnattsblue,
                                                     ),
-                                                  )
+                                                  ),
+                                                  const SizedBox(width: 5),
+                                                  Icon(
+                                                    Iconsax.export_1,
+                                                    color: CustomColors
+                                                        .midnattsblue,
+                                                  ),
                                                 ],
                                               ),
                                             ),
@@ -547,23 +547,38 @@ class _HomePageState extends State<HomePage> {
                                             ],
                                           ),
                                         ),
-                                        ElevatedButton(
-                                          onPressed: () {
+                                        GestureDetector(
+                                          onTap: () {
+                                            // Knappens funktionalitet ska in här
                                             widget.navigateToPage(3);
                                           },
-                                          style: ElevatedButton.styleFrom(
-                                            shape: RoundedRectangleBorder(
+                                          child: Container(
+                                            padding: const EdgeInsets.all(10),
+                                            decoration: BoxDecoration(
+                                              color: Colors.white,
                                               borderRadius:
                                                   BorderRadius.circular(4.0),
                                             ),
-                                          ),
-                                          child: Text(
-                                            'Topplista',
-                                            style: TextStyle(
-                                                color:
-                                                    CustomColors.midnattsblue,
-                                                fontSize: 18.0,
-                                                fontFamily: 'Sora'),
+                                            child: Row(
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: [
+                                                Text(
+                                                  'Topplista',
+                                                  style: TextStyle(
+                                                    fontSize: 18,
+                                                    fontFamily: 'Sora',
+                                                    color: CustomColors
+                                                        .midnattsblue,
+                                                  ),
+                                                ),
+                                                const SizedBox(width: 5),
+                                                Icon(
+                                                  Iconsax.receipt_item,
+                                                  color:
+                                                      CustomColors.midnattsblue,
+                                                ),
+                                              ],
+                                            ),
                                           ),
                                         ),
                                       ],

@@ -6,6 +6,7 @@ import 'package:flutter_application/components/custom_app_bar.dart';
 import 'package:flutter_application/components/custom_colors.dart';
 import 'package:flutter_application/models/challenge.dart';
 import 'package:flutter_application/session_manager.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ActiveChallengePage extends StatefulWidget {
@@ -329,35 +330,39 @@ class _ActiveChallengePageState extends State<ActiveChallengePage> {
                           alignment: Alignment.centerLeft,
                           child: Padding(
                             padding: const EdgeInsets.only(left: 0.0),
-                            child: ElevatedButton(
-                              onPressed: _editDescription,
-                              style: ElevatedButton.styleFrom(
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(8.0),
+                            child: GestureDetector(
+                              onTap: () {
+                                _editDescription();
+                              },
+                              child: Container(
+                                padding: const EdgeInsets.all(10),
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(4.0),
                                 ),
-                              ),
-                              child: const Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  SizedBox(
-                                    width: 5,
-                                  ),
-                                  Text(
-                                    'Redigera utmaning',
-                                    style: TextStyle(
-                                      fontSize: 14.0,
-                                      fontWeight: FontWeight.bold,
-                                      fontFamily: 'Sora',
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Icon(
+                                      Iconsax.edit,
+                                      color: CustomColors.midnattsblue,
                                     ),
-                                  ),
-                                  Icon(
-                                    Icons.create,
-                                  ),
-                                ],
+                                    const SizedBox(width: 5),
+                                    Text(
+                                      'Redigera utmaning',
+                                      style: TextStyle(
+                                        fontSize: 18,
+                                        fontFamily: 'Sora',
+                                        color: CustomColors.midnattsblue,
+                                      ),
+                                    )
+                                  ],
+                                ),
                               ),
                             ),
                           ),
                         ),
+                        const SizedBox(height: 7.0),
                         const Divider(
                           color: Colors.white,
                           thickness: 2,
@@ -370,7 +375,7 @@ class _ActiveChallengePageState extends State<ActiveChallengePage> {
                                 children: [
                                   SizedBox(
                                       height:
-                                          8.0), // För att skapa lite avstånd mellan texterna
+                                          5.0), // För att skapa lite avstånd mellan texterna
                                   Text(
                                     'Tidsresultat publiceras på\nMidnattsloppets hemsida:',
                                     style: TextStyle(
@@ -384,24 +389,37 @@ class _ActiveChallengePageState extends State<ActiveChallengePage> {
                             ),
                             const SizedBox(
                                 width:
-                                    14.0), // För att skapa lite avstånd mellan kolumnen och knappen
-                            ElevatedButton(
-                              onPressed: () {
+                                    10.0), // För att skapa lite avstånd mellan kolumnen och knappen
+                            GestureDetector(
+                              onTap: () {
                                 // Knappens funktionalitet ska in här
                                 launchUrl(Uri.parse(
                                     'https://midnattsloppet.com/resultat/'));
                               },
-                              style: ElevatedButton.styleFrom(
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(8.0),
+                              child: Container(
+                                padding: const EdgeInsets.all(10),
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(4.0),
                                 ),
-                              ),
-                              child: const Text(
-                                'Hemsida',
-                                style: TextStyle(
-                                    fontSize: 14.0,
-                                    fontWeight: FontWeight.bold,
-                                    fontFamily: 'Sora'),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Text(
+                                      'Hemsida',
+                                      style: TextStyle(
+                                        fontSize: 18,
+                                        fontFamily: 'Sora',
+                                        color: CustomColors.midnattsblue,
+                                      ),
+                                    ),
+                                    const SizedBox(width: 5),
+                                    Icon(
+                                      Iconsax.export_3,
+                                      color: CustomColors.midnattsblue,
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
                           ],
