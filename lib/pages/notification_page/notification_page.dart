@@ -3,6 +3,9 @@ import 'dart:async';
 import 'package:add_2_calendar/add_2_calendar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application/api_utils/api_utils.dart';
+import 'package:flutter_application/components/custom_navigation_bar.dart';
+import 'package:flutter_application/pages/challenge_page/active_challenge_page.dart';
+import 'package:flutter_application/pages/challenge_page/challenge_page.dart';
 import 'package:flutter_application/session_manager.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -11,14 +14,16 @@ import 'package:shared_preferences/shared_preferences.dart';
 class NotificationItem {
   final String title;
   final String message;
-  bool isRead; // Spåra om notisen är läst eller inte
-  final DateTime timestamp; // Lägg till ett timestamp för notisen
+  bool isRead;
+  final DateTime timestamp;
+  final String? challengeStatus; // Nytt fält
 
   NotificationItem({
     required this.title,
     required this.message,
     this.isRead = false,
-    required this.timestamp, // Lägg till timestamp här
+    required this.timestamp,
+    this.challengeStatus, // Nytt fält
   });
 }
 
@@ -152,7 +157,6 @@ class _NotificationPageState extends State<NotificationPage> {
 
   void challengeNotifications() async {
     String? test = await getChallengeStatus(username);
-    print(test);
 
     if (test == "PENDING") {
       if (!notificationAlreadyExists(
@@ -162,6 +166,7 @@ class _NotificationPageState extends State<NotificationPage> {
             title: "Ni har blivit utmanade eller utmanat ett annat lag!",
             message: "Gör er redo för lagkamp!",
             timestamp: DateTime.now(),
+            challengeStatus: "PENDING", // Nytt fält
           ),
         );
       }
@@ -173,7 +178,7 @@ class _NotificationPageState extends State<NotificationPage> {
           NotificationItem(
             title: "Ingen lagkamp påbörjad!",
             message:
-                "Ni har ingen påbörjad aktivitet inom lagkam-sidan.\nGå in i lagkampssidan och starta en lagkamp!",
+                "Ni har ingen påbörjad aktivitet inom lagkamp-sidan.\n\nGå in i lagkampssidan och starta en lagkamp!",
             timestamp: DateTime.now(),
           ),
         );
@@ -188,6 +193,7 @@ class _NotificationPageState extends State<NotificationPage> {
             message:
                 "Du och ditt lag befinner sig nu i en lagkamp!\nGe allt för att vinna och ha kul!\n\nGå in i lagkampssidan och ta reda på mer!",
             timestamp: DateTime.now(),
+            challengeStatus: "ACCEPTED", // Nytt fält
           ),
         );
       }
@@ -201,6 +207,7 @@ class _NotificationPageState extends State<NotificationPage> {
             message:
                 "Ditt lag eller laget ni utmanat har avböjt lagkampsförfrågan!\nGå in i lagkampssidan och utmana ett annat lag!",
             timestamp: DateTime.now(),
+            challengeStatus: "REJECTED", // Nytt fält
           ),
         );
       }
@@ -322,7 +329,7 @@ class _NotificationPageState extends State<NotificationPage> {
                   child: TextField(
                     controller: _searchController,
                     decoration: const InputDecoration(
-                      labelText: '...',
+                      labelText: 'Ange notifikation',
                       labelStyle: TextStyle(
                         fontFamily: 'Sora',
                       ),
@@ -600,6 +607,10 @@ class NotificationDetail extends StatelessWidget {
   Widget build(BuildContext context) {
     bool showSaveDateButton =
         notification.message.contains("Spara datumet: 17 Augusti 2024");
+    bool showChallengePageButton = notification.title ==
+            "Ni har blivit utmanade eller utmanat ett annat lag!" ||
+        notification.title == "Ingen lagkamp påbörjad!" ||
+        notification.title == "Du befinner dig i en lagkamp!";
 
     return Scaffold(
       appBar: AppBar(
@@ -685,6 +696,58 @@ class NotificationDetail extends StatelessWidget {
                   ),
                 ),
               ),
+            if (showChallengePageButton) ...[
+              const SizedBox(height: 16.0),
+              GestureDetector(
+                onTap: () {
+                  // Navigera till Lagkampssidan
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const CustomNavigationBar(
+                              selectedPage: 1,
+                            )),
+                  );
+                },
+                child: Container(
+                  padding: const EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(13.0),
+                    border: Border.all(
+                      color: Colors.black,
+                      width: 1.0,
+                    ),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.2),
+                        spreadRadius: 2,
+                        blurRadius: 5,
+                        offset: const Offset(0, 3),
+                      ),
+                    ],
+                  ),
+                  child: const Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(
+                         Iconsax.medal_star,
+                      ),
+                      SizedBox(
+                        width: 5,
+                      ),
+                      Text(
+                        'Gå till lagkampssidan',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontFamily: 'Sora',
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
           ],
         ),
       ),
