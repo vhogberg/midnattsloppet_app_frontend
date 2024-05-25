@@ -295,7 +295,7 @@ class _ActiveChallengePageState extends State<ActiveChallengePage> {
                         ),
                         const SizedBox(height: 10),
                         ConstrainedBox(
-                          constraints: const BoxConstraints(maxHeight: 170),
+                          constraints: const BoxConstraints(maxHeight: 150),
                           child: SingleChildScrollView(
                             child: Text(
                               '$challengeDescription',
