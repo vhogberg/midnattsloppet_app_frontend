@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_application/api_utils/api_utils.dart';
 import 'package:flutter_application/components/custom_app_bar.dart';
+import 'package:flutter_application/components/custom_colors.dart';
 import 'package:flutter_application/models/challenge.dart';
 import 'package:flutter_application/session_manager.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -177,7 +178,7 @@ class _ActiveChallengePageState extends State<ActiveChallengePage> {
         showReturnArrow: false,
       ),
       body: Padding(
-        padding: const EdgeInsets.all(20.0),
+        padding: const EdgeInsets.only(left: 20.0, right: 20, bottom: 50),
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -199,20 +200,22 @@ class _ActiveChallengePageState extends State<ActiveChallengePage> {
               Stack(
                 children: [
                   Container(
-                    padding: const EdgeInsets.all(20),
+                    padding: const EdgeInsets.only(
+                        top: 15, left: 20, right: 20, bottom: 20),
                     width: MediaQuery.of(context).size.width,
                     height: 470,
                     decoration: BoxDecoration(
-                      color: const Color(0XFF3C4785),
+                      color: CustomColors.midnattsblue,
                       borderRadius: BorderRadius.circular(12.0),
-                      gradient: const RadialGradient(
+                      gradient: RadialGradient(
                         radius: 0.8,
-                        center: Alignment(-0.5, 0.4),
+                        center: const Alignment(-0.5, 0.4),
                         colors: [
-                          Color.fromARGB(255, 140, 90, 100), // Start color
-                          Color(0xFF3C4785), // End color
+                          const Color.fromARGB(
+                              255, 140, 90, 100), // Start color
+                          CustomColors.midnattsblue, // End color
                         ],
-                        stops: [
+                        stops: const [
                           0.15,
                           1.0,
                         ],
@@ -234,9 +237,10 @@ class _ActiveChallengePageState extends State<ActiveChallengePage> {
                         const SizedBox(height: 10),
                         IntrinsicHeight(
                           child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Expanded(
+                                child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
                                     const Text(
@@ -248,24 +252,26 @@ class _ActiveChallengePageState extends State<ActiveChallengePage> {
                                     ),
                                     const SizedBox(height: 10),
                                     Text(
-                                      '$myTeamDonations kr',
+                                      '${myTeamDonations?.toStringAsFixed(0)} kr',
                                       style: const TextStyle(
                                         color: Colors.white,
-                                        fontSize: 28,
+                                        fontSize: 26,
                                         fontWeight: FontWeight.bold,
                                       ),
                                     ),
                                     const SizedBox(height: 10),
                                   ],
                                 ),
-                                const VerticalDivider(
-                                  width: 60,
-                                  thickness: 2,
-                                  indent: 0,
-                                  endIndent: 0,
-                                  color: Colors.white,
-                                ),
-                                Column(
+                              ),
+                              const VerticalDivider(
+                                width: 10,
+                                thickness: 2,
+                                indent: 0,
+                                endIndent: 0,
+                                color: Colors.white,
+                              ),
+                              Expanded(
+                                child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
                                     const Text(
@@ -277,16 +283,18 @@ class _ActiveChallengePageState extends State<ActiveChallengePage> {
                                     ),
                                     const SizedBox(height: 10),
                                     Text(
-                                      '$otherTeamDonations kr',
+                                      '${otherTeamDonations?.toStringAsFixed(0)} kr',
                                       style: const TextStyle(
                                         color: Colors.white,
-                                        fontSize: 28,
+                                        fontSize: 26,
                                         fontWeight: FontWeight.bold,
                                       ),
                                     ),
                                   ],
                                 ),
-                              ]),
+                              ),
+                            ],
+                          ),
                         ),
                         const Divider(
                           height: 0,

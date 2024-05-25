@@ -4,7 +4,6 @@ import 'package:flutter_application/components/custom_app_bar.dart';
 import 'package:flutter_application/components/custom_navigation_bar.dart';
 import 'package:flutter_application/components/dialog_utils.dart';
 import 'package:flutter_application/models/challenge.dart';
-import 'package:flutter_application/pages/challenge_page/active_challenge_page.dart';
 import 'package:flutter_application/pages/challenge_page/challenge_wizard_dialog.dart';
 import 'package:flutter_application/session_manager.dart';
 import 'package:iconsax/iconsax.dart';
@@ -40,20 +39,12 @@ class _ChallengePageState extends State<ChallengePage> {
 
   Future<void> _initializePage() async {
     try {
-      setState(() {
-        isLoading = true;
-      });
-
       await fetchUsername();
       await fetchUserTeam();
       await fetchChallenges();
       await analyseChallenges();
     } catch (e) {
       print('Initialization error: $e');
-    } finally {
-      setState(() {
-        isLoading = false;
-      });
     }
   }
 
@@ -409,7 +400,8 @@ class _ChallengePageState extends State<ChallengePage> {
                                                 context,
                                                 MaterialPageRoute(
                                                     builder: (context) =>
-                                                        const ActiveChallengePage()),
+                                                        const CustomNavigationBar(
+                                                            selectedPage: 1)),
                                               );
                                             } else {
                                               // Error hantering
