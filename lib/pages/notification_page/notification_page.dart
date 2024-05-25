@@ -262,55 +262,120 @@ class _NotificationPageState extends State<NotificationPage> {
   void _showSearchModal(BuildContext context) {
     showModalBottomSheet(
       context: context,
+      backgroundColor: Colors
+          .transparent, // gör bakgrunden transparent för att tillämpa anpassad bakgrund
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(0),
+          topRight: Radius.circular(0),
+        ),
+      ),
       builder: (BuildContext context) {
-        return Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const Spacer(),
-                  IconButton(
-                    icon: const Icon(Icons.close),
-                    onPressed: () {
-                      Navigator.pop(context);
-                      _searchController.clear();
+        return Container(
+          decoration: BoxDecoration(
+            color: Colors.white, // bakgrundsfärgen för hela fönstret
+            borderRadius: BorderRadius.circular(0),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Spacer(),
+                    IconButton(
+                      icon: const Icon(Icons.close),
+                      onPressed: () {
+                        Navigator.pop(context);
+                        _searchController.clear();
+                        setState(() {
+                          _searchTerm = '';
+                        });
+                      },
+                    ),
+                  ],
+                ),
+                const Text(
+                  'Sök notifikation',
+                  style: TextStyle(
+                    fontFamily: 'Sora',
+                    fontSize: 18.0,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 16.0),
+                Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white, // bakgrundsfärgen för sökrutan
+                    borderRadius: BorderRadius.circular(0),
+                    boxShadow: const [
+                      BoxShadow(
+                        color: Colors.black26,
+                        blurRadius: 6.0,
+                        offset: Offset(0, 2),
+                      ),
+                    ],
+                  ),
+                  child: TextField(
+                    controller: _searchController,
+                    decoration: const InputDecoration(
+                      labelText: '...',
+                      labelStyle: TextStyle(
+                        fontFamily: 'Sora',
+                      ),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(0)),
+                      ),
+                      filled: true,
+                      fillColor: Colors.white, // bakgrundsfärgen för sökrutan
+                      contentPadding: EdgeInsets.symmetric(
+                          vertical: 15.0, horizontal: 10.0),
+                    ),
+                    onChanged: (value) {
                       setState(() {
-                        _searchTerm = '';
+                        _searchTerm = value;
                       });
                     },
                   ),
-                ],
-              ),
-              TextField(
-                controller: _searchController,
-                decoration: const InputDecoration(
-                  labelText: 'Sök',
-                  labelStyle: TextStyle(
-                    fontFamily: 'Sora',
+                ),
+                const SizedBox(height: 16.0),
+                Container(
+                  decoration: const BoxDecoration(
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black26,
+                        blurRadius: 6.0,
+                        offset: Offset(0, 2),
+                      ),
+                    ],
+                  ),
+                  child: ElevatedButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFF3C4785),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(0),
+                      ),
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 15.0, horizontal: 30.0),
+                    ),
+                    child: const Text(
+                      'Sök',
+                      style: TextStyle(
+                        fontFamily: 'Sora',
+                        fontSize: 16.0,
+                        color: Color.fromARGB(255, 255, 255, 255),
+                      ),
+                    ),
                   ),
                 ),
-                onChanged: (value) {
-                  setState(() {
-                    _searchTerm = value;
-                  });
-                },
-              ),
-              const SizedBox(height: 16.0),
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                child: const Text(
-                  'Sök',
-                  style: TextStyle(
-                    fontFamily: 'Sora',
-                  ),
-                ),
-              ),
-            ],
+              ],
+            ),
           ),
         );
       },
@@ -420,7 +485,7 @@ class _NotificationPageState extends State<NotificationPage> {
       body: Column(
         children: [
           Container(
-            color: Color(0xFF3C4785), // Färgen på strecket
+            color: const Color(0xFF3C4785), // Färgen på strecket
             height: 4.0, // Tjockleken på strecket
           ),
           Expanded(
@@ -596,7 +661,7 @@ class NotificationDetail extends StatelessWidget {
                         color: Colors.black.withOpacity(0.2),
                         spreadRadius: 2,
                         blurRadius: 5,
-                        offset: Offset(0, 3),
+                        offset: const Offset(0, 3),
                       ),
                     ],
                   ),
