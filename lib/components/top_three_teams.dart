@@ -208,7 +208,8 @@ class _TopThreeTeamsState extends State<TopThreeTeams> {
             ),
             const SizedBox(width: 4.0),
             Text(
-              '${team.fundraiserBox}kr',
+              //${totalDonations.toStringAsFixed(0)}
+              '${team.fundraiserBox.toStringAsFixed(0)} kr',
               style: TextStyle(fontSize: 14.0, color: teamNameColor),
             ),
           ],

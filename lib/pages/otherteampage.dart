@@ -148,6 +148,7 @@ class _OtherTeamPageState extends State<OtherTeamPage> {
                     fontWeight: FontWeight.bold,
                     fontFamily: 'Sora',
                   ),
+                  textAlign: TextAlign.center,
                 ),
               ),
             ),
@@ -161,6 +162,7 @@ class _OtherTeamPageState extends State<OtherTeamPage> {
                     fontWeight: FontWeight.bold,
                     fontFamily: 'Sora',
                   ),
+                  textAlign: TextAlign.center,
                 ),
               ),
             ),
@@ -176,6 +178,7 @@ class _OtherTeamPageState extends State<OtherTeamPage> {
               fontWeight: FontWeight.bold,
               fontFamily: 'Sora',
             ),
+            textAlign: TextAlign.center,
           ),
         ));
       }
@@ -240,32 +243,32 @@ class _OtherTeamPageState extends State<OtherTeamPage> {
                 ),
               ),
               const SizedBox(height: 10),
-              Center(
-                child: Column(
-                  children: [
-                    Text(
-                      '$teamName',
-                      style: const TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'Sora',
-                      ),
+              Column(
+                children: [
+                  Text(
+                    '$teamName',
+                    style: const TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: 'Sora',
                     ),
-                    Text(
-                      'Stödjer: $charityName',
-                      style: const TextStyle(
-                        fontSize: 20,
-                        fontFamily: 'Sora',
-                      ),
+                    textAlign: TextAlign.center,
+                  ),
+                  Text(
+                    'Stödjer: $charityName',
+                    style: const TextStyle(
+                      fontSize: 20,
+                      fontFamily: 'Sora',
                     ),
-                  ],
-                ),
+                    textAlign: TextAlign.center,
+                  ),
+                ],
               ),
               const SizedBox(height: 10),
               Container(
-                padding: const EdgeInsets.all(20),
+                padding: const EdgeInsets.only(
+                    left: 20, right: 20, top: 15, bottom: 20),
                 width: MediaQuery.of(context).size.width,
-                height: 500,
                 decoration: BoxDecoration(
                   color: CustomColors.midnattsblue,
                   borderRadius: BorderRadius.circular(12.0),
@@ -297,10 +300,17 @@ class _OtherTeamPageState extends State<OtherTeamPage> {
                           )
                         : Column(
                             children: [
+                              const Text(
+                                'Lagmedlemmar',
+                                style: TextStyle(
+                                    fontFamily: 'Sora',
+                                    fontSize: 22,
+                                    color: Colors.white),
+                                textAlign: TextAlign.center,
+                              ),
                               ...generateTeamList(),
                             ],
                           ),
-                    const Spacer(),
                     Container(
                       width: MediaQuery.of(context).size.width,
                       height: 320,
@@ -312,39 +322,36 @@ class _OtherTeamPageState extends State<OtherTeamPage> {
                           width: 1.0,
                         ),
                       ),
-                      padding: const EdgeInsets.all(20),
+                      padding: const EdgeInsets.only(
+                          top: 10, left: 15, right: 15, bottom: 20),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Transform.translate(
-                            offset: const Offset(0, -10),
-                            child: RichText(
-                              text: TextSpan(
-                                children: [
-                                  TextSpan(
-                                    //toStringAsFixed removes decimal point in donation amount displayed
-                                    text:
-                                        '${totalDonations.toStringAsFixed(0)}',
-                                    style: const TextStyle(
-                                      fontFamily: 'Sora',
-                                      color: Colors.white,
-                                      fontSize:
-                                          40, //Larger font size for the donation amount
-                                      fontWeight: FontWeight.bold,
-                                    ),
+                          RichText(
+                            text: TextSpan(
+                              children: [
+                                TextSpan(
+                                  //toStringAsFixed removes decimal point in donation amount displayed
+                                  text: '${totalDonations.toStringAsFixed(0)}',
+                                  style: const TextStyle(
+                                    fontFamily: 'Sora',
+                                    color: Colors.white,
+                                    fontSize:
+                                        30, //Larger font size for the donation amount
+                                    fontWeight: FontWeight.bold,
                                   ),
-                                  const TextSpan(
-                                    text: ' kr insamlat',
-                                    style: TextStyle(
-                                      fontFamily: 'Sora',
-                                      color: Colors.white,
-                                      fontSize:
-                                          28, //Default font size for the rest of the text
-                                      fontWeight: FontWeight.bold,
-                                    ),
+                                ),
+                                const TextSpan(
+                                  text: ' kr insamlat',
+                                  style: TextStyle(
+                                    fontFamily: 'Sora',
+                                    color: Colors.white,
+                                    fontSize:
+                                        24, //Default font size for the rest of the text
+                                    fontWeight: FontWeight.bold,
                                   ),
-                                ],
-                              ),
+                                ),
+                              ],
                             ),
                           ),
                           Text(
@@ -357,10 +364,10 @@ class _OtherTeamPageState extends State<OtherTeamPage> {
                           ),
                           const SizedBox(height: 15),
                           SizedBox(
-                            width: MediaQuery.of(context).size.width - 165,
+                            width: MediaQuery.of(context).size.width - 155,
                             child: Padding(
-                              padding: const EdgeInsets.only(left: 43),
-                              child: DonationProgressBar(username: teamName),
+                              padding: const EdgeInsets.only(left: 33),
+                              child: DonationProgressBar(teamName: teamName),
                             ),
                           ),
                           const SizedBox(height: 10),

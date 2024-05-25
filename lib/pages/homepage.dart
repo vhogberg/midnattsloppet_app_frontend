@@ -297,22 +297,38 @@ class _HomePageState extends State<HomePage> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                //Constrained box preventing longer team names from overlapping other content
+                                //Constrained box preventing larger donation amounts from causing overlap
                                 ConstrainedBox(
                                   constraints: BoxConstraints(
                                       maxWidth:
                                           MediaQuery.of(context).size.width -
                                               155),
-                                  //Scroll view allows longer team names to be scrolled
-                                  child: SingleChildScrollView(
-                                    scrollDirection: Axis.horizontal,
-                                    child: Text(
-                                      'Insamlingsbössa: $teamName',
-                                      style: const TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.w400,
-                                      ),
+                                  child: RichText(
+                                    text: TextSpan(
+                                      children: [
+                                        TextSpan(
+                                          //toStringAsFixed removes decimal point in donation amount displayed
+                                          text:
+                                              '${totalDonations.toStringAsFixed(0)}',
+                                          style: const TextStyle(
+                                            fontFamily: 'Sora',
+                                            color: Colors.white,
+                                            fontSize:
+                                                36, //Larger font size for the donation amount
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        const TextSpan(
+                                          text: ' kr insamlat',
+                                          style: TextStyle(
+                                            fontFamily: 'Sora',
+                                            color: Colors.white,
+                                            fontSize:
+                                                24, //Default font size for the rest of the text
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      ],
                                     ),
                                   ),
                                 ),
@@ -322,47 +338,6 @@ class _HomePageState extends State<HomePage> {
                                       maxWidth:
                                           MediaQuery.of(context).size.width -
                                               155),
-                                  //Same logic as with team names
-                                  child: SingleChildScrollView(
-                                    scrollDirection: Axis.horizontal,
-                                    //Rich text allows donation amount to have a different font size
-                                    child: RichText(
-                                      text: TextSpan(
-                                        children: [
-                                          TextSpan(
-                                            //toStringAsFixed removes decimal point in donation amount displayed
-                                            text:
-                                                '${totalDonations.toStringAsFixed(0)}',
-                                            style: const TextStyle(
-                                              fontFamily: 'Sora',
-                                              color: Colors.white,
-                                              fontSize:
-                                                  40, //Larger font size for the donation amount
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          ),
-                                          const TextSpan(
-                                            text: ' kr insamlat',
-                                            style: TextStyle(
-                                              fontFamily: 'Sora',
-                                              color: Colors.white,
-                                              fontSize:
-                                                  28, //Default font size for the rest of the text
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                ),
-
-                                //Same logic as with team names
-                                ConstrainedBox(
-                                  constraints: BoxConstraints(
-                                      maxWidth:
-                                          MediaQuery.of(context).size.width -
-                                              85),
                                   //Same logic as with team names
                                   child: SingleChildScrollView(
                                     scrollDirection: Axis.horizontal,
@@ -376,7 +351,8 @@ class _HomePageState extends State<HomePage> {
                                     ),
                                   ),
                                 ),
-                                const SizedBox(height: 15),
+                                const SizedBox(height: 10),
+                                const Spacer(),
                                 //Donation progress bar
                                 SizedBox(
                                   width:
@@ -393,7 +369,9 @@ class _HomePageState extends State<HomePage> {
                                 const Align(
                                     alignment: Alignment.topRight,
                                     child: GoalBox(height: 50, width: 85)),
+                                const SizedBox(height: 10),
                                 const Spacer(),
+
                                 //Semi-transparent white box
                                 Stack(
                                   children: [
