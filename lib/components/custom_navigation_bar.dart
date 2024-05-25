@@ -29,7 +29,8 @@ class _CustomNavigationBarState extends State<CustomNavigationBar> {
   @override
   void initState() {
     super.initState();
-    _selectedPage = widget.selectedPage; // Initialize with widget's selectedPage
+    _selectedPage =
+        widget.selectedPage; // Initialize with widget's selectedPage
     username = SessionManager.instance.username;
     fetchTeamName();
     fetchChallengeStatus(username);
@@ -83,7 +84,7 @@ class _CustomNavigationBarState extends State<CustomNavigationBar> {
       isChallengeAccepted ? const ActiveChallengePage() : ChallengePage(),
       const SizedBox(), //Placeholder to allow index of selection to match with navigation bar destination page
       LeaderboardPage(navigateToPage: navigateToPage),
-      const MyTeamPage(),
+      MyTeamPage(navigateToPage: navigateToPage),
     ];
 
     return Scaffold(

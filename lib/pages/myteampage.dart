@@ -12,10 +12,9 @@ import 'package:flutter_application/models/team.dart';
 import 'package:flutter_application/session_manager.dart';
 import 'package:iconsax/iconsax.dart';
 
-import '../share_helper.dart';
-
 class MyTeamPage extends StatefulWidget {
-  const MyTeamPage({Key? key}) : super(key: key);
+  final Function(int) navigateToPage;
+  const MyTeamPage({Key? key, required this.navigateToPage}) : super(key: key);
 
   @override
   _MyTeamPageState createState() => _MyTeamPageState();
@@ -167,7 +166,6 @@ class _MyTeamPageState extends State<MyTeamPage> {
     }
   }
 
-  // Method to generate ListTiles dynamically based on team members list
   List<Widget> generateTeamList() {
     List<Widget> listTiles = [];
     for (int i = 0; i < members.length; i += 2) {
@@ -180,12 +178,11 @@ class _MyTeamPageState extends State<MyTeamPage> {
                   members[i],
                   style: const TextStyle(
                     color: Colors.white,
-                    fontSize: 16, // smaller font size
+                    fontSize: 20,
                     fontWeight: FontWeight.bold,
                     fontFamily: 'Sora',
                   ),
-                  overflow: TextOverflow.ellipsis, // prevents wrapping
-                  maxLines: 1, // ensures single line text
+                  textAlign: TextAlign.center,
                 ),
               ),
             ),
@@ -195,12 +192,11 @@ class _MyTeamPageState extends State<MyTeamPage> {
                   members[i + 1],
                   style: const TextStyle(
                     color: Colors.white,
-                    fontSize: 16, // smaller font size
+                    fontSize: 20,
                     fontWeight: FontWeight.bold,
                     fontFamily: 'Sora',
                   ),
-                  overflow: TextOverflow.ellipsis, // prevents wrapping
-                  maxLines: 1, // ensures single line text
+                  textAlign: TextAlign.center,
                 ),
               ),
             ),
@@ -212,12 +208,11 @@ class _MyTeamPageState extends State<MyTeamPage> {
             members[i],
             style: const TextStyle(
               color: Colors.white,
-              fontSize: 16, // smaller font size
+              fontSize: 20,
               fontWeight: FontWeight.bold,
               fontFamily: 'Sora',
             ),
-            overflow: TextOverflow.ellipsis, // prevents wrapping
-            maxLines: 1, // ensures single line text
+            textAlign: TextAlign.center,
           ),
         ));
       }
@@ -300,6 +295,7 @@ class _MyTeamPageState extends State<MyTeamPage> {
                           fontWeight: FontWeight.bold,
                           fontFamily: 'Sora',
                         ),
+                        textAlign: TextAlign.center,
                       ),
                       Text(
                         'Stödjer: $charityName', // Display the charity name
@@ -307,6 +303,7 @@ class _MyTeamPageState extends State<MyTeamPage> {
                           fontSize: 20,
                           fontFamily: 'Sora',
                         ),
+                        textAlign: TextAlign.center,
                       ),
                     ],
                   ),
@@ -316,20 +313,20 @@ class _MyTeamPageState extends State<MyTeamPage> {
 
               // Container with team members name
               Container(
-                padding: const EdgeInsets.all(20),
+                padding: const EdgeInsets.only(
+                    left: 20, right: 20, top: 15, bottom: 20),
                 width: MediaQuery.of(context).size.width,
-                height: 520,
                 decoration: BoxDecoration(
-                  color: const Color(0XFF3C4785),
+                  color: CustomColors.midnattsblue,
                   borderRadius: BorderRadius.circular(12.0),
-                  gradient: const RadialGradient(
+                  gradient: RadialGradient(
                     radius: 0.8,
-                    center: Alignment(-0.5, 0.4),
+                    center: const Alignment(-0.5, 0.4),
                     colors: [
-                      Color.fromARGB(255, 140, 90, 100), // Start color
-                      Color(0xFF3C4785), // End color
+                      const Color.fromARGB(255, 140, 90, 100), // Start color
+                      CustomColors.midnattsblue, // End color
                     ],
-                    stops: [
+                    stops: const [
                       0.15,
                       1.0,
                     ],
@@ -352,15 +349,24 @@ class _MyTeamPageState extends State<MyTeamPage> {
                         : Column(
                             // Generate ListTiles dynamically
                             children: [
+                              const Text(
+                                'Lagmedlemmar',
+                                style: TextStyle(
+                                    fontFamily: 'Sora',
+                                    fontSize: 22,
+                                    color: Colors.white),
+                                textAlign: TextAlign.center,
+                              ),
                               ...generateTeamList(),
                             ],
                           ),
                     const SizedBox(height: 10),
                     // Combined container
                     Container(
-                      padding: const EdgeInsets.all(15),
+                      padding: const EdgeInsets.only(
+                          top: 10, left: 15, right: 15, bottom: 20),
                       width: MediaQuery.of(context).size.width,
-                      height: 320,
+                      height: 310,
                       decoration: BoxDecoration(
                         color: Colors.white30,
                         borderRadius: BorderRadius.circular(13.0),
@@ -377,40 +383,36 @@ class _MyTeamPageState extends State<MyTeamPage> {
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Transform.translate(
-                                    offset: const Offset(0, -10),
-                                    child: RichText(
-                                      text: TextSpan(
-                                        children: [
-                                          TextSpan(
-                                            //toStringAsFixed removes decimal point in donation amount displayed
-                                            text:
-                                                '${totalDonations.toStringAsFixed(0)}',
-                                            style: const TextStyle(
-                                              fontFamily: 'Sora',
-                                              color: Colors.white,
-                                              fontSize:
-                                                  40, //Larger font size for the donation amount
-                                              fontWeight: FontWeight.bold,
-                                            ),
+                                  RichText(
+                                    text: TextSpan(
+                                      children: [
+                                        TextSpan(
+                                          //toStringAsFixed removes decimal point in donation amount displayed
+                                          text:
+                                              '${totalDonations.toStringAsFixed(0)}',
+                                          style: const TextStyle(
+                                            fontFamily: 'Sora',
+                                            color: Colors.white,
+                                            fontSize:
+                                                30, //Larger font size for the donation amount
+                                            fontWeight: FontWeight.bold,
                                           ),
-                                          const TextSpan(
-                                            text: ' kr insamlat',
-                                            style: TextStyle(
-                                              fontFamily: 'Sora',
-                                              color: Colors.white,
-                                              fontSize:
-                                                  28, //Default font size for the rest of the text
-                                              fontWeight: FontWeight.bold,
-                                            ),
+                                        ),
+                                        const TextSpan(
+                                          text: ' kr insamlat',
+                                          style: TextStyle(
+                                            fontFamily: 'Sora',
+                                            color: Colors.white,
+                                            fontSize:
+                                                24, //Default font size for the rest of the text
+                                            fontWeight: FontWeight.bold,
                                           ),
-                                        ],
-                                      ),
+                                        ),
+                                      ],
                                     ),
                                   ),
                                   Text(
                                     'Stödjer: $charityName',
-                                    maxLines: 1, // ensures single line text
                                     style: const TextStyle(
                                       color: Colors.white,
                                       fontSize: 16,
@@ -420,26 +422,24 @@ class _MyTeamPageState extends State<MyTeamPage> {
                                   const SizedBox(height: 10),
                                   SizedBox(
                                     width:
-                                        MediaQuery.of(context).size.width - 80,
+                                        MediaQuery.of(context).size.width - 155,
                                     child: Padding(
-                                      padding: const EdgeInsets.only(
-                                          left: 43, right: 43),
+                                      padding: const EdgeInsets.only(left: 33),
                                       child: DonationProgressBar(
                                           username: username),
                                     ),
                                   ),
                                 ],
                               ),
-                              const Align(
-                                alignment: Alignment.bottomRight,
-                                child: Padding(
-                                  padding: EdgeInsets.only(
-                                      right: 1,
-                                      top: 98), // Adjust padding as needed
-                                  child: GoalBox(height: 50, width: 90),
-                                ),
-                              ),
                             ],
+                          ),
+                          const SizedBox(height: 10),
+                          const Align(
+                            alignment: Alignment.topRight,
+                            child: GoalBox(
+                              height: 50,
+                              width: 85,
+                            ),
                           ),
                           const SizedBox(height: 15),
                           const Divider(
@@ -450,81 +450,50 @@ class _MyTeamPageState extends State<MyTeamPage> {
                             endIndent: 0,
                           ),
                           const SizedBox(height: 15),
-                          // Sharing button
                           Row(
                             children: [
-                              const Expanded(
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      teamRank != -1
+                                          ? 'Plats: #$teamRank av $totalTeams'
+                                          : 'Rankning saknas',
+                                      style: const TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 16.0,
+                                          fontWeight: FontWeight.bold,
+                                          fontFamily: 'Sora'),
+                                    ),
+                                    Text(
+                                      '$daysLeft dagar kvar till Midnattsloppet!',
+                                      style: const TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 14.0,
+                                          fontFamily: 'Sora'),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              ElevatedButton(
+                                onPressed: () {
+                                  widget.navigateToPage(3);
+                                },
+                                style: ElevatedButton.styleFrom(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(4.0),
+                                  ),
+                                ),
                                 child: Text(
-                                  'Dela bössan med\nvänner och familj!',
+                                  'Topplista',
                                   style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold,
+                                      color: CustomColors.midnattsblue,
+                                      fontSize: 18.0,
                                       fontFamily: 'Sora'),
                                 ),
                               ),
-                              GestureDetector(
-                                onTap: () {
-                                  ShareHelper.showShareDialog(
-                                      context, teamName!);
-                                },
-                                child: Container(
-                                  padding: const EdgeInsets.all(10),
-                                  width: 100,
-                                  height: 50,
-                                  decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius: BorderRadius.circular(4.0),
-                                  ),
-                                  child: Row(
-                                    children: [
-                                      Icon(
-                                        Iconsax.export_1,
-                                        color: CustomColors.midnattsblue,
-                                      ),
-                                      const SizedBox(width: 5),
-                                      Text(
-                                        'Dela',
-                                        style: TextStyle(
-                                          fontSize: 20,
-                                          fontFamily: 'Sora',
-                                          color: CustomColors.midnattsblue,
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                ),
-                              ),
                             ],
-                          ),
-                          const SizedBox(height: 10),
-                          // Add the leaderboard rank display
-                          Align(
-                            alignment: Alignment.centerLeft,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  teamRank != -1
-                                      ? 'Plats: #$teamRank av $totalTeams'
-                                      : 'Rankning saknas',
-                                  style: const TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
-                                    fontFamily: 'Sora',
-                                  ),
-                                ),
-                                Text(
-                                  '$daysLeft dagar kvar till Midnattsloppet!',
-                                  style: const TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 14.0,
-                                    fontFamily: 'Sora',
-                                  ),
-                                ),
-                              ],
-                            ),
                           ),
                         ],
                       ),

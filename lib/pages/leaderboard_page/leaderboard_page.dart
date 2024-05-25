@@ -190,7 +190,7 @@ class TeamListItem extends StatelessWidget {
               Align(
                 alignment: Alignment.centerRight,
                 child: Text(
-                  '${team.fundraiserBox}kr',
+                  '${team.fundraiserBox.toStringAsFixed(0)} kr',
                   style: const TextStyle(fontWeight: FontWeight.normal),
                 ),
               ),
