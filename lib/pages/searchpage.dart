@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application/api_utils/api_utils.dart';
+import 'package:flutter_application/components/custom_app_bar.dart';
 import 'package:flutter_application/models/team.dart';
 import 'package:flutter_application/pages/otherteampage.dart';
 import 'package:flutter_application/session_manager.dart';
 import 'package:flutter_application/components/return_arrow_argument.dart';
+import 'package:iconsax/iconsax.dart';
 
 class SearchPage extends StatefulWidget {
   const SearchPage({Key? key}) : super(key: key);
@@ -91,7 +93,7 @@ class _SearchPageState extends State<SearchPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
+      /*appBar: AppBar(
         title: const Text(
           'Sök lag',
           style: TextStyle(
@@ -103,6 +105,19 @@ class _SearchPageState extends State<SearchPage> {
         ),
         backgroundColor: Colors.white,
         iconTheme: const IconThemeData(color: Colors.black),
+      ),*/
+      appBar: CustomAppBar(
+        key: null,
+        title: 'Sök lag',
+        useActionButton: true,
+        actionIcon: Iconsax.search_normal,
+        onActionPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const SearchPage()),
+          );
+        },
+        showReturnArrow: true,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
