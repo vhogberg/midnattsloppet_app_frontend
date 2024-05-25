@@ -371,9 +371,9 @@ class _NotificationPageState extends State<NotificationPage> {
     try {
       var statuses = await ApiUtils.fetchChallengeStatus(username);
       for (String status in statuses) {
-        if (status == 'ACCEPTED' || status == 'REJECTED') {
+        if (status == 'ACCEPTED') {
           foundStatus = status;
-          break; // Avbryt loopen när vi hittar ACCEPTED eller REJECTED
+          break; // Avbryt loopen när vi hittar ACCEPTED
         }
 
         if (status == 'PENDING') {

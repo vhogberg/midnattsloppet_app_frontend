@@ -60,9 +60,9 @@ class _CustomNavigationBarState extends State<CustomNavigationBar> {
 
       String? challengeStatus;
       for (String status in statuses) {
-        if (status == 'ACCEPTED' || status == 'REJECTED') {
+        if (status == 'ACCEPTED') {
           challengeStatus = status;
-          break; // Avbryt loopen när vi hittar ACCEPTED eller REJECTED
+          break; // Avbryt loopen när vi hittar ACCEPTED
         }
       }
 
@@ -77,6 +77,7 @@ class _CustomNavigationBarState extends State<CustomNavigationBar> {
     }
   }
 
+  
   @override
   Widget build(BuildContext context) {
     final pageOptions = [
