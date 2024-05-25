@@ -543,36 +543,46 @@ class _ChallengePageState extends State<ChallengePage> {
                                             16), // spacing mellan text och knapp
                                     ElevatedButton(
                                       onPressed: () async {
-                                        try {
-                                          final response =
-                                              await ApiUtils.declineChallenge(
-                                                  // Ska bytas ut till förslagsvis "cancelSentChallenge"
-                                                  username!,
-                                                  incomingChallengeTeam);
-                                          if (response.statusCode == 200) {
-                                            // Challenge cancelled successfully
-                                            print(
-                                                'Challenge cancelled successfully');
+                                        String? result = await DialogUtils
+                                            .showConfirmationDialog(
+                                          context: context,
+                                          title:
+                                              'Är du säker på att du vill avbryta inbjudan?',
+                                          description: 'Du kan ej ångra detta',
+                                        );
 
-                                            // Run this again to update page
-                                            Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                builder: (context) =>
-                                                    const CustomNavigationBar(
-                                                  selectedPage: 1,
+                                        if (result == 'yes') {
+                                          try {
+                                            final response =
+                                                await ApiUtils.declineChallenge(
+                                                    // Ska bytas ut till förslagsvis "cancelSentChallenge"
+                                                    username!,
+                                                    incomingChallengeTeam);
+                                            if (response.statusCode == 200) {
+                                              // Challenge cancelled successfully
+                                              print(
+                                                  'Challenge cancelled successfully');
+
+                                              // Run this again to update page
+                                              Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      const CustomNavigationBar(
+                                                    selectedPage: 1,
+                                                  ),
                                                 ),
-                                              ),
-                                            );
-                                          } else {
-                                            // Handle error response
+                                              );
+                                            } else {
+                                              // Handle error response
+                                              print(
+                                                  'Failed to cancel pending challenge: ${response.body}');
+                                            }
+                                          } catch (e) {
+                                            // Exception handling
                                             print(
-                                                'Failed to cancel pending challenge: ${response.body}');
+                                                'Error cancelling pending challenge: $e');
                                           }
-                                        } catch (e) {
-                                          // Exception handling
-                                          print(
-                                              'Error cancelling pending challenge: $e');
                                         }
                                       },
                                       style: ElevatedButton.styleFrom(
