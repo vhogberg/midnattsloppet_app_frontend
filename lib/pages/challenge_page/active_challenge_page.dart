@@ -94,6 +94,18 @@ class _ActiveChallengePageState extends State<ActiveChallengePage> {
     }
   }
 
+  Future<void> editChallengeDescription(String newDescription) async {
+    try {
+      await ApiUtils.editChallengeDescription(username!, newDescription);
+
+      setState(() {
+        challengeDescription = newDescription;
+      });
+    } catch (e) {
+      print("Error fetching team donationamount: $e");
+    }
+  }
+
   // Metod för att hämta andra lagets donationer, tbi
   // fetchOtherTeamDonations();
 
@@ -137,26 +149,23 @@ class _ActiveChallengePageState extends State<ActiveChallengePage> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Edit Description'),
+          title: const Text('Edit Description'),
           content: TextField(
             controller: _controller,
             onSubmitted: (value) {
-              setState(() {
-                challengeDescription = value;
-              });
-              //TODO API-patch call
+              editChallengeDescription(value);
               Navigator.of(context).pop();
             },
           ),
           actions: <Widget>[
             TextButton(
-              child: Text('Cancel'),
+              child: const Text('Cancel'),
               onPressed: () {
                 Navigator.of(context).pop();
               },
             ),
             TextButton(
-              child: Text('Save'),
+              child: const Text('Save'),
               onPressed: () {
                 setState(() {
                   challengeDescription = _controller.text;
