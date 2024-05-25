@@ -144,6 +144,7 @@ class _ActiveChallengePageState extends State<ActiveChallengePage> {
               setState(() {
                 challengeDescription = value;
               });
+              //TODO API-patch call
               Navigator.of(context).pop();
             },
           ),
