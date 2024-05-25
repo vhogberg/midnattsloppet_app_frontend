@@ -5,6 +5,7 @@ import 'package:flutter_application/api_utils/api_utils.dart';
 import 'package:flutter_application/components/custom_app_bar.dart';
 import 'package:flutter_application/models/challenge.dart';
 import 'package:flutter_application/session_manager.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ActiveChallengePage extends StatefulWidget {
   const ActiveChallengePage({Key? key}) : super(key: key);
@@ -369,6 +370,8 @@ class _ActiveChallengePageState extends State<ActiveChallengePage> {
                             ElevatedButton(
                               onPressed: () {
                                 // Knappens funktionalitet ska in här
+                                launchUrl(Uri.parse(
+                                    'https://midnattsloppet.com/resultat/'));
                               },
                               style: ElevatedButton.styleFrom(
                                 shape: RoundedRectangleBorder(

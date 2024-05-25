@@ -8,21 +8,18 @@ class ShareHelper {
   ShareHelper(this.teamName);
 
   void shareToTwitter() {
-    final url =
-        'http://twitter.com/intent/tweet?text=Hjälp%20mitt%20lag%20att%20uppnå%20vårat%20donationsmål%20inför%20midnattsloppets%20race!%20Öppna%20länken%20här%20för%20att%20donera:%20group-15-7.pvt.dsv.su.se/app/donate/$teamName';
-    launch(url);
+    launchUrl(Uri.parse(
+        'http://twitter.com/intent/tweet?text=Hjälp%20mitt%20lag%20att%20uppnå%20vårat%20donationsmål%20inför%20midnattsloppets%20race!%20Öppna%20länken%20här%20för%20att%20donera:%20group-15-7.pvt.dsv.su.se/app/donate/$teamName'));
   }
 
   void shareToFacebook() {
-    final url =
-        'https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Fexample.com&quote=Hjälp%20mitt%20lag%20att%20uppnå%20vårat%20donationsmål%20inför%20midnattsloppets%20race!%20Öppna%20länken%20här%20för%20att%20group-15-7.pvt.dsv.su.se/app/donate/$teamName';
-    launch(url);
+    launchUrl(Uri.parse(
+        'https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Fexample.com&quote=Hjälp%20mitt%20lag%20att%20uppnå%20vårat%20donationsmål%20inför%20midnattsloppets%20race!%20Öppna%20länken%20här%20för%20att%20group-15-7.pvt.dsv.su.se/app/donate/$teamName'));
   }
 
   void shareToLinkedIn() {
-    final url =
-        'https://www.linkedin.com/sharing/share-offsite/?url=http%3A%2F%2Fexample.com&summary=Hjälp%20mitt%20lag%20att%20uppnå%20vårat%20donationsmål%20inför%20midnattsloppets%20race!%20Öppna%20länken%20här%20för%20att%20donera:%20group-15-7.pvt.dsv.su.se/app/donate/$teamName';
-    launch(url);
+    launchUrl(Uri.parse(
+        'https://www.linkedin.com/sharing/share-offsite/?url=http%3A%2F%2Fexample.com&summary=Hjälp%20mitt%20lag%20att%20uppnå%20vårat%20donationsmål%20inför%20midnattsloppets%20race!%20Öppna%20länken%20här%20för%20att%20donera:%20group-15-7.pvt.dsv.su.se/app/donate/$teamName'));
   }
 
   static void openMail() async {
@@ -32,8 +29,8 @@ class ShareHelper {
       query: 'subject=Your%20Subject&body=Your%20Body',
     );
     String url = params.toString();
-    if (await canLaunch(url)) {
-      await launch(url);
+    if (await canLaunchUrl(Uri.parse(url))) {
+      await launchUrl(Uri.parse(url));
     } else {
       throw 'Could not launch $url';
     }
