@@ -193,7 +193,7 @@ class DialogUtils {
             ),
           ),
           content: Container(
-            width: 300, // Adjust the width as needed
+            width: 300, 
             child: Text(
               description,
               style: const TextStyle(
@@ -245,4 +245,61 @@ class DialogUtils {
       },
     );
   }
+
+  // New method to show a customizable confirmation dialog
+  static Future<String?> showInformationDialog({
+    required BuildContext context,
+    required String title,
+    required String description,
+  }) {
+    return showDialog<String>(
+      context: context,
+      barrierDismissible: false, // man ska inte kunna trycka på utsidan.
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(
+            title,
+            style: const TextStyle(
+              fontWeight: FontWeight.bold,
+              fontFamily: 'Sora',
+            ),
+          ),
+          content: Container(
+            width: 300, 
+            child: Text(
+              description,
+              style: const TextStyle(
+                fontWeight: FontWeight.bold,
+                fontFamily: 'Sora',
+              ),
+            ),
+          ),
+          actions: <Widget>[
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    foregroundColor: Colors.white, // textfärg
+                    backgroundColor: const Color(0XFF3C4785), // knappfärg
+                  ),
+                  onPressed: () {
+                    Navigator.of(context).pop('yes');
+                  },
+                  child: const Text(
+                    'Ok',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontFamily: 'Sora',
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        );
+      },
+    );
+  }
+
 }

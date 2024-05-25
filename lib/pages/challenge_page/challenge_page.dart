@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_application/api_utils/api_utils.dart';
 import 'package:flutter_application/components/custom_app_bar.dart';
@@ -31,10 +33,32 @@ class _ChallengePageState extends State<ChallengePage> {
   bool isLoading =
       true; // använder isLoading för en loadingcirkel på utmaningssidan pga många API-calls
 
+  late Timer statustimer;
   @override
   void initState() {
     super.initState();
     _initializePage();
+
+    statustimer = Timer.periodic(const Duration(seconds: 5), (timer) async {
+
+      // Situation när det andra laget har accepterat utmaningen
+      if (getChallengeStatus(username) == 'ACCEPTED') {
+        String? result = await DialogUtils.showInformationDialog(
+            context: context,
+            title: '$outgoingChallengeTeam har accepterat er inbjudan',
+            description: 'En aktiv lagkamp startar. Lycka till!');
+
+        if (result == 'yes') {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => const CustomNavigationBar(
+                      selectedPage: 1,
+                    )),
+          );
+        }
+      }
+    });
   }
 
   Future<void> _initializePage() async {
@@ -43,9 +67,16 @@ class _ChallengePageState extends State<ChallengePage> {
       await fetchUserTeam();
       await fetchChallenges();
       await analyseChallenges();
+      await getChallengeStatus(username);
     } catch (e) {
       print('Initialization error: $e');
     }
+  }
+
+  @override
+  void dispose() {
+    statustimer.cancel();
+    super.dispose();
   }
 
   Future<void> fetchUsername() async {
@@ -119,6 +150,24 @@ class _ChallengePageState extends State<ChallengePage> {
 
     // JAG TAR EMOT EN UTMANING
     // challengerName != my team name, set incomingChallengeTeam to challengerName, set challengeReceived to true
+  }
+
+  Future<String> getChallengeStatus(String? username) async {
+    try {
+      var statuses = await ApiUtils.fetchChallengeStatus(username);
+      for (String status in statuses) {
+        if (status == 'ACCEPTED') {
+          return 'ACCEPTED';
+        } else {
+          return '';
+        }
+      }
+      return '';
+    } catch (e) {
+      // Hantera eventuella fel vid hämtning av statusen
+      print('Error: $e');
+      return ''; // Default till 'PENDING' om ett fel uppstår
+    }
   }
 
   @override
@@ -374,14 +423,12 @@ class _ChallengePageState extends State<ChallengePage> {
                                               'Är du säker på att du vill acceptera?',
                                           description: 'Du kan ej ångra detta',
                                         );
-
                                         if (result == 'yes') {
                                           try {
                                             final response =
                                                 await ApiUtils.acceptChallenge(
                                                     username!,
                                                     incomingChallengeTeam);
-
                                             if (response.statusCode == 200) {
                                               Navigator.push(
                                                 context,
@@ -390,18 +437,17 @@ class _ChallengePageState extends State<ChallengePage> {
                                                         const CustomNavigationBar(
                                                             selectedPage: 1)),
                                               );
-
                                               // Challenge accepted
                                               print(
                                                   'Challenge accepted successfully');
-
                                               // Logik för att switcha till active_challenge_page
                                               Navigator.push(
                                                 context,
                                                 MaterialPageRoute(
                                                     builder: (context) =>
                                                         const CustomNavigationBar(
-                                                            selectedPage: 1)),
+                                                          selectedPage: 1,
+                                                        )),
                                               );
                                             } else {
                                               // Error hantering
