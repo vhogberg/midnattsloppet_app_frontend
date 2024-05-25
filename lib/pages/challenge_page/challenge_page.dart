@@ -591,11 +591,11 @@ class _ChallengePageState extends State<ChallengePage> {
 
                                         if (result == 'yes') {
                                           try {
-                                            final response =
-                                                await ApiUtils.declineChallenge(
-                                                    // Ska bytas ut till förslagsvis "cancelSentChallenge"
-                                                    username!,
-                                                    incomingChallengeTeam);
+                                            final response = await ApiUtils
+                                                .takeBackChallenge(
+                                              // Ska bytas ut till förslagsvis "cancelSentChallenge"
+                                              username!,
+                                            );
                                             if (response.statusCode == 200) {
                                               // Challenge cancelled successfully
                                               print(

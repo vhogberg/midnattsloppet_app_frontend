@@ -3,7 +3,6 @@ import 'package:flutter_application/api_utils/local_notifications.dart';
 import 'package:flutter_application/auth_page.dart';
 import 'package:flutter_application/pages/notification_page/notification_page.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:provider/provider.dart';
 
 // NOTIFIKATIONER
 final navigatorKey = GlobalKey<NavigatorState>();
@@ -33,8 +32,10 @@ void main() async {
   }
 // NOTIFIKATIONER
 
-  runApp(MyApp(),);
-  }
+  runApp(
+    MyApp(),
+  );
+}
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -65,11 +66,17 @@ class DailyAbsenceCheck {
 class ScheduledNotification {
   void notification50DaysLeft() {
     LocalNotifications.showNotificationWhen50DaysLeft(
-        id: 10, title: "50 Dagar kvar till loppet!", body: "Nu är det bara 50 dagar kvar!", payload: "50 dagar");
+        id: 10,
+        title: "50 Dagar kvar till loppet!",
+        body: "Nu är det bara 50 dagar kvar!",
+        payload: "50 dagar");
   }
 
   void notification100DaysLet() {
     LocalNotifications.showNotificationWhen100DaysLeft(
-        id: 20, title: "100 Dagar kvar till loppet!", body: "Nu är det bara 100 dagar kvar!", payload: "100 dagar");
+        id: 20,
+        title: "100 Dagar kvar till loppet!",
+        body: "Nu är det bara 100 dagar kvar!",
+        payload: "100 dagar");
   }
 }
