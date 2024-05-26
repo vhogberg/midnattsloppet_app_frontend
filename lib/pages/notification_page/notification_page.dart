@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:add_2_calendar/add_2_calendar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application/api_utils/api_utils.dart';
+import 'package:flutter_application/components/custom_app_bar.dart';
 import 'package:flutter_application/components/custom_navigation_bar.dart';
 import 'package:flutter_application/session_manager.dart';
 import 'package:iconsax/iconsax.dart';
@@ -463,29 +464,20 @@ class _NotificationPageState extends State<NotificationPage> {
     allNotifications.sort((a, b) => b.timestamp.compareTo(a.timestamp));
   }
 
+
   @override
   Widget build(BuildContext context) {
     sortNotificationsByDate(); // Sortera notiser vid rendering
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          'Notifikationer',
-          style: TextStyle(
-            fontWeight: FontWeight.w700,
-            fontFamily: 'Sora',
-          ),
-        ),
-        actions: [
-          Padding(
-            padding: const EdgeInsets.only(right: 16.0),
-            child: IconButton(
-              icon: const Icon(Iconsax.search_normal_1),
-              onPressed: () {
-                _showSearchModal(context);
-              },
-            ),
-          ),
-        ],
+      appBar: CustomAppBar(
+        key: null,
+        title: 'Notifikationer',
+        showReturnArrow: true,
+        useActionButton: true,
+        actionIcon: Iconsax.search_normal_1,
+        onActionPressed: () {
+          _showSearchModal(context);
+        },
       ),
       body: Column(
         children: [
