@@ -47,21 +47,23 @@ class _ChallengePageState extends State<ChallengePage> {
       String status = await getChallengeStatus(username);
       if (status == 'ACCEPTED') {
         statustimer.cancel();
-        String? result = await DialogUtils.showInformationDialog(
-            context: context,
-            title: '$outgoingChallengeTeam har accepterat er inbjudan',
-            description: 'En aktiv lagkamp startar. Lycka till!');
+        if (outgoingChallengeTeam != '') {
+          String? result = await DialogUtils.showInformationDialog(
+              context: context,
+              title: '$outgoingChallengeTeam har accepterat er inbjudan',
+              description: 'En aktiv lagkamp startar. Lycka till!');
 
-        if (result == 'yes') {
-          dispose(); //Fungerar halvt för att stoppa pop-ups?? Orsakar även memoryleak
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const CustomNavigationBar(
-                selectedPage: 1,
+          if (result == 'yes') {
+            dispose(); //Fungerar halvt för att stoppa pop-ups?? Orsakar även memoryleak
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const CustomNavigationBar(
+                  selectedPage: 1,
+                ),
               ),
-            ),
-          );
+            );
+          }
         }
       }
     });

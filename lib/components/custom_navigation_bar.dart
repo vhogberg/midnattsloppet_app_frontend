@@ -29,11 +29,19 @@ class _CustomNavigationBarState extends State<CustomNavigationBar> {
   @override
   void initState() {
     super.initState();
-    _selectedPage =
-        widget.selectedPage; // Initialize with widget's selectedPage
-    username = SessionManager.instance.username;
-    fetchTeamName();
-    fetchChallengeStatus(username);
+    _initializePage();
+  }
+
+  Future<void> _initializePage() async {
+    try {
+      await fetchUsername();
+      await fetchTeamName();
+      await fetchChallengeStatus(username);
+      _selectedPage =
+          widget.selectedPage; // Initialize with widget's selectedPage
+    } catch (e) {
+      print('Initialization error: $e');
+    }
   }
 
   //navigateToPage allows the navigation index to be passed to the pages themselves
@@ -41,6 +49,10 @@ class _CustomNavigationBarState extends State<CustomNavigationBar> {
     setState(() {
       _selectedPage = index; // Use state variable
     });
+  }
+
+  Future<void> fetchUsername() async {
+    username = SessionManager.instance.username;
   }
 
   Future<void> fetchTeamName() async {
@@ -77,7 +89,6 @@ class _CustomNavigationBarState extends State<CustomNavigationBar> {
     }
   }
 
-  
   @override
   Widget build(BuildContext context) {
     final pageOptions = [
