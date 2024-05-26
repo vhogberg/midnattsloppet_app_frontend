@@ -155,32 +155,107 @@ class _ActiveChallengePageState extends State<ActiveChallengePage> {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Edit Description'),
-          content: TextField(
-            controller: _controller,
-            onSubmitted: (value) {
-              editChallengeDescription(value);
-              Navigator.of(context).pop();
-            },
+        return Dialog(
+          insetPadding: const EdgeInsets.all(20),
+          child: SizedBox(
+            width: MediaQuery.of(context).size.width * 0.8 + 60,
+            height: MediaQuery.of(context).size.height * 0.6,
+            child: Padding(
+              padding: const EdgeInsets.all(20),
+              child: Column(
+                children: [
+                  Expanded(
+                    child: SingleChildScrollView(
+                      child: Column(
+                        children: [
+                          const Text(
+                            'Redigera utmaning',
+                            style: TextStyle(
+                              fontSize: 24.0,
+                              fontWeight: FontWeight.bold,
+                              fontFamily: 'Sora',
+                            ),
+                          ),
+                          const SizedBox(height: 5),
+                          SizedBox(
+                            height: MediaQuery.of(context).size.height * 0.12,
+                            child: TextField(
+                              controller: _controller,
+                              decoration: const InputDecoration(
+                                hintText: 'Ange dina egna utmaningar här...',
+                                border: OutlineInputBorder(),
+                              ),
+                              maxLines:
+                                  null, // Gör att textfield kan växa i storlek
+                              expands:
+                                  true, // Expanderar textfield till så stort som går
+                              keyboardType: TextInputType.multiline,
+                              textAlignVertical: TextAlignVertical.top,
+                              onSubmitted: (value) {
+                                editChallengeDescription(value);
+                                FocusManager.instance.primaryFocus?.unfocus();
+                              },
+                            ),
+                          ),
+                          const SizedBox(height: 20),
+                          Container(
+                            padding: const EdgeInsets.all(10.0),
+                            decoration: BoxDecoration(
+                              border: Border.all(color: Colors.grey),
+                              borderRadius: BorderRadius.circular(5.0),
+                            ),
+                            child: const Text(
+                              'Exempel på utmaningar:'
+                              '\n* Pulsutmaning: Lagen bär pulsmätare under loppet, och laget med den lägsta medelpulsen vid mållinjen vinner.'
+                              '\n'
+                              '\n* Hoppa på ett ben: Under olika sektioner av loppet måste man hoppa på ett ben'
+                              '\n'
+                              '\n* Förutsäga resultat: Lag måste förutsäga sin sluttid före loppet. Det lag vars faktiska sluttid är närmast sin beräknade tid vinner'
+                              '\n'
+                              '\n* Maskerad: Lagen måste springa i maskeradkostymer under loppet'
+                              '\n'
+                              '\n* Bära ägg: Lagen bär med sig ett ägg under loppet, de som har flest hela ägg i slutet vinner',
+                              style: TextStyle(fontSize: 16.0),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      ElevatedButton(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                        style: ElevatedButton.styleFrom(
+                          foregroundColor: Colors.white, // textfärg
+                          backgroundColor: Colors.grey, // knappfärg
+                        ),
+                        child: const Text('Avbryt'),
+                      ),
+                      ElevatedButton(
+                        onPressed: () {
+                          setState(() {
+                            challengeDescription = _controller.text;
+                          });
+                          Navigator.of(context).pop();
+                        },
+                        style: ElevatedButton.styleFrom(
+                          foregroundColor: Colors.white, // textfärg
+                          backgroundColor:
+                              CustomColors.midnattsblue, // knappfärg
+                        ),
+                        child: const Text('Spara'),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
           ),
-          actions: <Widget>[
-            TextButton(
-              child: const Text('Cancel'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-            TextButton(
-              child: const Text('Save'),
-              onPressed: () {
-                setState(() {
-                  challengeDescription = _controller.text;
-                });
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
         );
       },
     );
@@ -260,11 +335,14 @@ class _ActiveChallengePageState extends State<ActiveChallengePage> {
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
-                                    const Text(
-                                      'Insamlat',
-                                      style: TextStyle(
-                                        fontSize: 18.0,
-                                        color: Colors.white,
+                                    SingleChildScrollView(
+                                      scrollDirection: Axis.horizontal,
+                                      child: Text(
+                                        '$userTeamName',
+                                        style: const TextStyle(
+                                          fontSize: 18.0,
+                                          color: Colors.white,
+                                        ),
                                       ),
                                     ),
                                     const SizedBox(height: 10),
@@ -291,11 +369,14 @@ class _ActiveChallengePageState extends State<ActiveChallengePage> {
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
-                                    const Text(
-                                      'Insamlat',
-                                      style: TextStyle(
-                                        fontSize: 18.0,
-                                        color: Colors.white,
+                                    SingleChildScrollView(
+                                      scrollDirection: Axis.horizontal,
+                                      child: Text(
+                                        '$otherTeamName',
+                                        style: const TextStyle(
+                                          fontSize: 18.0,
+                                          color: Colors.white,
+                                        ),
                                       ),
                                     ),
                                     const SizedBox(height: 10),
