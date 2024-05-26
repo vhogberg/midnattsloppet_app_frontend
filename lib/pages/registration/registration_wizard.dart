@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application/api_utils/api_utils.dart';
+import 'package:flutter_application/components/custom_colors.dart';
 import 'package:flutter_application/components/custom_navigation_bar.dart';
 import 'package:flutter_application/components/dialog_utils.dart';
 import 'package:flutter_application/components/search_popup.dart';
@@ -269,7 +270,7 @@ class _RegistrationWizardDialogState extends State<RegistrationWizardDialog> {
                       onPressed: _nextPage,
                       style: ElevatedButton.styleFrom(
                         foregroundColor: Colors.white, // textfärg
-                        backgroundColor: const Color(0XFF3C4785), // knappfärg
+                        backgroundColor: CustomColors.midnattsblue, // knappfärg
                       ),
                       child: const Text('Nästa'),
                     ),
@@ -279,7 +280,7 @@ class _RegistrationWizardDialogState extends State<RegistrationWizardDialog> {
                       onPressed: _nextPage,
                       style: ElevatedButton.styleFrom(
                         foregroundColor: Colors.white, // textfärg
-                        backgroundColor: const Color(0XFF3C4785), // knappfärg
+                        backgroundColor: CustomColors.midnattsblue, // knappfärg
                       ),
                       child: const Text('Nästa'),
                     ),
@@ -460,7 +461,7 @@ class _RegistrationWizardDialogState extends State<RegistrationWizardDialog> {
                 },
                 style: ElevatedButton.styleFrom(
                   foregroundColor: Colors.white,
-                  backgroundColor: const Color(0XFF3C4785),
+                  backgroundColor: CustomColors.midnattsblue,
                 ),
                 child: const Text('Skapa ett nytt lag'),
               ),

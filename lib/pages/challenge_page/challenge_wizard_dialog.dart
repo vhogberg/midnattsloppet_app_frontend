@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_application/api_utils/api_utils.dart';
+import 'package:flutter_application/components/custom_colors.dart';
 import 'package:flutter_application/components/dialog_utils.dart';
 import 'package:flutter_application/session_manager.dart';
 import 'package:http/http.dart' as http;
@@ -183,7 +184,7 @@ class _WizardDialogState extends State<WizardDialog> {
                       onPressed: _nextPage,
                       style: ElevatedButton.styleFrom(
                         foregroundColor: Colors.white, // textfärg
-                        backgroundColor: const Color(0XFF3C4785), // knappfärg
+                        backgroundColor: CustomColors.midnattsblue, // knappfärg
                       ),
                       child: const Text('Nästa'),
                     ),

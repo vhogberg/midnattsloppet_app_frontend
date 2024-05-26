@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application/components/custom_colors.dart';
 import 'package:flutter_application/session_manager.dart';
+
 
 // importeras i filer på detta sätt: import 'package:flutter_application/components/dialog_utils.dart';
 
@@ -29,7 +31,7 @@ class DialogUtils {
             ElevatedButton(
               style: ElevatedButton.styleFrom(
                 foregroundColor: Colors.white, // textfärg
-                backgroundColor: const Color(0XFF3C4785), // knappfärg
+                backgroundColor: CustomColors.midnattsblue, // knappfärg
               ),
               onPressed: () {
                 Navigator.of(context).pop();
@@ -74,7 +76,7 @@ class DialogUtils {
             ElevatedButton(
               style: ElevatedButton.styleFrom(
                 foregroundColor: Colors.white, // textfärg
-                backgroundColor: const Color(0XFF3C4785), // knappfärg
+                backgroundColor: CustomColors.midnattsblue, // knappfärg
               ),
               onPressed: () {
                 Navigator.of(context).pop();
@@ -124,7 +126,7 @@ class DialogUtils {
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     foregroundColor: Colors.white, // textfärg
-                    backgroundColor: const Color(0XFF3C4785), // knappfärg
+                    backgroundColor: CustomColors.midnattsblue, // knappfärg
                   ),
                   onPressed: () {
                     navigator.pop();
@@ -140,7 +142,7 @@ class DialogUtils {
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     foregroundColor: Colors.white, // textfärg
-                    backgroundColor: const Color(0XFF3C4785), // knappfärg
+                    backgroundColor: CustomColors.midnattsblue, // knappfärg
                   ),
                   onPressed: () async {
                     navigator.pop();
@@ -209,7 +211,7 @@ class DialogUtils {
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     foregroundColor: Colors.white, // textfärg
-                    backgroundColor: const Color(0XFF3C4785), // knappfärg
+                    backgroundColor: CustomColors.midnattsblue, // knappfärg
                   ),
                   onPressed: () {
                     Navigator.of(context).pop('no');
@@ -225,7 +227,7 @@ class DialogUtils {
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     foregroundColor: Colors.white, // textfärg
-                    backgroundColor: const Color(0XFF3C4785), // knappfärg
+                    backgroundColor: CustomColors.midnattsblue, // knappfärg
                   ),
                   onPressed: () {
                     Navigator.of(context).pop('yes');
@@ -281,7 +283,7 @@ class DialogUtils {
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     foregroundColor: Colors.white, // textfärg
-                    backgroundColor: const Color(0XFF3C4785), // knappfärg
+                    backgroundColor: CustomColors.midnattsblue, // knappfärg
                   ),
                   onPressed: () {
                     Navigator.of(context).pop('yes');

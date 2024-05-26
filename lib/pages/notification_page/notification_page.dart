@@ -4,6 +4,7 @@ import 'package:add_2_calendar/add_2_calendar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application/api_utils/api_utils.dart';
 import 'package:flutter_application/components/custom_app_bar.dart';
+import 'package:flutter_application/components/custom_colors.dart';
 import 'package:flutter_application/components/custom_navigation_bar.dart';
 import 'package:flutter_application/session_manager.dart';
 import 'package:iconsax/iconsax.dart';
@@ -333,7 +334,7 @@ class _NotificationPageState extends State<NotificationPage> {
                         fontFamily: 'Sora',
                       ),
                       border: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(0)),
+                        borderRadius: BorderRadius.all(Radius.circular(4)),
                       ),
                       filled: true,
                       fillColor: Colors.white, // bakgrundsfärgen för sökrutan
@@ -363,9 +364,9 @@ class _NotificationPageState extends State<NotificationPage> {
                       Navigator.pop(context);
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF3C4785),
+                      backgroundColor: CustomColors.midnattsblue,
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(0),
+                        borderRadius: BorderRadius.circular(4),
                       ),
                       padding: const EdgeInsets.symmetric(
                           vertical: 15.0, horizontal: 30.0),
@@ -464,7 +465,6 @@ class _NotificationPageState extends State<NotificationPage> {
     allNotifications.sort((a, b) => b.timestamp.compareTo(a.timestamp));
   }
 
-
   @override
   Widget build(BuildContext context) {
     sortNotificationsByDate(); // Sortera notiser vid rendering
@@ -482,7 +482,7 @@ class _NotificationPageState extends State<NotificationPage> {
       body: Column(
         children: [
           Container(
-            color: const Color(0xFF3C4785), // Färgen på strecket
+            color: CustomColors.midnattsblue, // Färgen på strecket
             height: 4.0, // Tjockleken på strecket
           ),
           Expanded(
@@ -721,7 +721,7 @@ class NotificationDetail extends StatelessWidget {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Icon(
-                         Iconsax.medal_star,
+                        Iconsax.medal_star,
                       ),
                       SizedBox(
                         width: 5,
