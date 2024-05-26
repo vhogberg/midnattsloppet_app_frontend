@@ -191,8 +191,8 @@ class _ActiveChallengePageState extends State<ActiveChallengePage> {
                                   true, // Expanderar textfield till så stort som går
                               keyboardType: TextInputType.multiline,
                               textAlignVertical: TextAlignVertical.top,
-                              onSubmitted: (value) {
-                                editChallengeDescription(value);
+                              onSubmitted: (value) async {
+                                await editChallengeDescription(value);
                                 FocusManager.instance.primaryFocus?.unfocus();
                               },
                             ),
@@ -237,11 +237,17 @@ class _ActiveChallengePageState extends State<ActiveChallengePage> {
                         child: const Text('Avbryt'),
                       ),
                       ElevatedButton(
-                        onPressed: () {
-                          setState(() {
-                            challengeDescription = _controller.text;
-                          });
-                          Navigator.of(context).pop();
+                        onPressed: () async {
+                          try {
+                            await editChallengeDescription(_controller.text);
+                            setState(() {
+                              challengeDescription = _controller.text;
+                            });
+                            Navigator.of(context).pop();
+                          } catch (e) {
+                            // Show an error message if needed
+                            print('Failed to update challenge description: $e');
+                          }
                         },
                         style: ElevatedButton.styleFrom(
                           foregroundColor: Colors.white, // textfärg

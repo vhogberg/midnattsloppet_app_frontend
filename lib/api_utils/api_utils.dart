@@ -162,7 +162,8 @@ class ApiUtils {
     }
   }
 
-  static Future<http.Response> editChallengeDescription(String username, String description) async {
+  static Future<http.Response> editChallengeDescription(
+      String username, String description) async {
     final url = '$baseURL/$username/challenge/update-description';
     final headers = {
       'Content-Type': 'application/json; charset=UTF-8',
@@ -176,7 +177,11 @@ class ApiUtils {
         headers: headers,
         body: body,
       );
-      return response;
+      if (response.statusCode == 200) {
+        return response;
+      } else {
+        throw Exception('Failed to update description: ${response.statusCode}');
+      }
     } catch (e) {
       throw Exception('Failed to send request: $e');
     }
