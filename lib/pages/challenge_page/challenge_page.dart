@@ -40,21 +40,27 @@ class _ChallengePageState extends State<ChallengePage> {
     _initializePage();
 
     statustimer = Timer.periodic(const Duration(seconds: 5), (timer) async {
-
       // Situation när det andra laget har accepterat utmaningen
-      if (getChallengeStatus(username) == 'ACCEPTED') {
+      //Att lagra statusen i en variabel och sen använda den fungerar
+      //men leder till att dialogen poppar up var 3e sekund
+      //även på active challenge page
+      String status = await getChallengeStatus(username);
+      if (status == 'ACCEPTED') {
+        statustimer.cancel();
         String? result = await DialogUtils.showInformationDialog(
             context: context,
             title: '$outgoingChallengeTeam har accepterat er inbjudan',
             description: 'En aktiv lagkamp startar. Lycka till!');
 
         if (result == 'yes') {
+          dispose(); //Fungerar halvt för att stoppa pop-ups?? Orsakar även memoryleak
           Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => const CustomNavigationBar(
-                      selectedPage: 1,
-                    )),
+              builder: (context) => const CustomNavigationBar(
+                selectedPage: 1,
+              ),
+            ),
           );
         }
       }
@@ -430,6 +436,7 @@ class _ChallengePageState extends State<ChallengePage> {
                                                     username!,
                                                     incomingChallengeTeam);
                                             if (response.statusCode == 200) {
+                                              statustimer.cancel();
                                               Navigator.push(
                                                 context,
                                                 MaterialPageRoute(

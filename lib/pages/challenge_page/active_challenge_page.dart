@@ -143,6 +143,12 @@ class _ActiveChallengePageState extends State<ActiveChallengePage> {
     }
   }
 
+  @override
+  void dispose() {
+    timer.cancel();
+    super.dispose();
+  }
+
   void _editDescription() {
     TextEditingController _controller =
         TextEditingController(text: challengeDescription);
@@ -313,14 +319,17 @@ class _ActiveChallengePageState extends State<ActiveChallengePage> {
                           thickness: 2,
                         ),
                         const SizedBox(height: 10),
-                        ConstrainedBox(
-                          constraints: const BoxConstraints(maxHeight: 150),
-                          child: SingleChildScrollView(
-                            child: Text(
-                              '$challengeDescription',
-                              style: const TextStyle(
-                                fontSize: 16.0,
-                                color: Colors.white,
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child: ConstrainedBox(
+                            constraints: const BoxConstraints(maxHeight: 150),
+                            child: SingleChildScrollView(
+                              child: Text(
+                                '$challengeDescription',
+                                style: const TextStyle(
+                                  fontSize: 16.0,
+                                  color: Colors.white,
+                                ),
                               ),
                             ),
                           ),
