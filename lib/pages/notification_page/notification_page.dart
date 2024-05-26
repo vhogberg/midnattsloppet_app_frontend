@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:add_2_calendar/add_2_calendar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application/api_utils/api_utils.dart';
@@ -14,14 +13,12 @@ import 'package:shared_preferences/shared_preferences.dart';
 class NotificationItem {
   final String title;
   final String message;
-  bool isRead;
   final DateTime timestamp;
   final String? challengeStatus; // Nytt fält
 
   NotificationItem({
     required this.title,
     required this.message,
-    this.isRead = false,
     required this.timestamp,
     this.challengeStatus, // Nytt fält
   });
@@ -79,11 +76,6 @@ class _NotificationPageState extends State<NotificationPage> {
     _searchController.dispose(); // Ta bort TextEditingController
     _timer.cancel();
     super.dispose();
-  }
-
-  // Uppdatera notisens lässtatus i SharedPreferences
-  void updateNotificationStatus(NotificationItem notification) {
-    _prefs.setBool(notification.title, notification.isRead);
   }
 
   // Funktion för filtrering av notifikationer baserat på söktermen
