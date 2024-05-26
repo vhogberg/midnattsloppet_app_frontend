@@ -103,7 +103,7 @@ class _ActiveChallengePageState extends State<ActiveChallengePage> {
         challengeDescription = newDescription;
       });
     } catch (e) {
-      print("Error fetching team donationamount: $e");
+      print("Error editing challenge description: $e");
     }
   }
 
