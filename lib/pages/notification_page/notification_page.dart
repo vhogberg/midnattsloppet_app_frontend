@@ -138,7 +138,7 @@ class _NotificationPageState extends State<NotificationPage> {
           NotificationItem(
             title: "100% av donationsmålet uppnått",
             message:
-                "Ni har uppnått 100% av erat donationsmål!\n\nSUPER BRA JOBBAT!\n\nFantastiskt arbete! Ni har nått ert donationsmål och gör en verklig skillnad. Era generösa donationer gör en enorm skillnad i världen. Varje krona ni har samlat in går till att stödja viktiga välgörenhetsprohekt som förändrar liv till det bättre. Ert engagemang och er insats hjälper till att skapa en bättre framtid för många.\n\nFortsätt springa och inspirera!",
+                "Ni har uppnått 100% av erat donationsmål!\n\nSUPERBRA JOBBAT!\n\nFantastiskt arbete! Ni har nått ert donationsmål och gör en verklig skillnad. Era generösa donationer gör en enorm skillnad i världen. Varje krona ni har samlat in går till att stödja viktiga välgörenhetsprohekt som förändrar liv till det bättre. Ert engagemang och er insats hjälper till att skapa en bättre framtid för många.\n\nFortsätt springa och inspirera!",
             timestamp: DateTime.now(),
           ),
         );

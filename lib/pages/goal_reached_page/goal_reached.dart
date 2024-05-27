@@ -94,7 +94,7 @@ class _TeamGoalReachedState extends State<TeamGoalReached> {
                   const Padding(
                     padding: EdgeInsets.symmetric(vertical: 20, horizontal: 10),
                     child: Text(
-                      'Tack så hemskt mycket!',
+                      'Tack!',
                       style: TextStyle(
                         fontSize: 26,
                         fontWeight: FontWeight.bold,
