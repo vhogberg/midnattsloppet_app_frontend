@@ -3,7 +3,6 @@ import 'package:flutter_application/components/custom_navigation_bar.dart';
 import 'package:flutter_application/components/dialog_utils.dart';
 import 'package:flutter_application/components/my_button.dart';
 import 'package:flutter_application/components/my_textfield.dart';
-import 'package:flutter_application/pages/registration/register_page.dart';
 import 'package:flutter_application/pages/registration/registration_wizard.dart';
 import 'package:flutter_application/session_manager.dart';
 
@@ -65,15 +64,6 @@ class _LoginPageState extends State<LoginPage> {
                 const SizedBox(height: 10),
                 const Padding(
                   padding: EdgeInsets.symmetric(horizontal: 25.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      Text(
-                        'Glömt lösenord?',
-                        style: TextStyle(color: Colors.white),
-                      ),
-                    ],
-                  ),
                 ),
                 const SizedBox(height: 25),
                 MyButton(
@@ -116,34 +106,50 @@ class _LoginPageState extends State<LoginPage> {
                   },
                 ),
                 const SizedBox(height: 25),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 25.0),
+                ),
+                //Semi-transparent white box
+                Stack(
                   children: [
-                    const Text(
-                      'Inget användarkonto?',
-                      style: TextStyle(color: Colors.white, fontSize: 15),
-                    ),
-                    const SizedBox(width: 4),
-                    GestureDetector(
-                      onTap: () {
-                        showDialog(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return RegistrationWizardDialog();
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        GestureDetector(
+                          onTap: () {
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return RegistrationWizardDialog();
+                              },
+                            );
                           },
-                        );
-                      },
-                      child: const Text(
-                        'Registrera dig nu',
-                        style: TextStyle(
-                          color: Colors.blue,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 15,
+                          child: Container(
+                            padding: const EdgeInsets.all(10),
+                            width: 275,
+                            height: 50,
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(4.0),
+                            ),
+                            child: const Row(
+                              children: [
+                                Text(
+                                  'Inget konto? Registrera dig nu',
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontFamily: 'Sora',
+                                    color: Colors.black,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
                         ),
-                      ),
+                      ],
                     ),
                   ],
-                )
+                ),
               ],
             ),
           ),
