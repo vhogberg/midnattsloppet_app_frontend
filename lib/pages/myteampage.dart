@@ -36,23 +36,36 @@ class _MyTeamPageState extends State<MyTeamPage> {
   @override
   void initState() {
     super.initState();
-    username = SessionManager.instance.username;
-    fetchDonationGoal();
-    fetchDonatedAmount();
-    fetchCharityName();
-    fetchTeamName();
-    fetchCompanyName();
-    fetchMembers();
-    fetchLeaderboardData();
+    _initializePage();
+
     calculateDaysLeft();
     timer = Timer.periodic(const Duration(seconds: 10), (timer) {
       fetchDonationGoal();
       fetchDonatedAmount();
-      calculateDaysLeft();
     });
   }
 
-  void calculateDaysLeft() {
+  Future<void> _initializePage() async {
+    try {
+      await fetchUsername();
+      await fetchTeamName();
+      await fetchDonationGoal();
+      await fetchMembers();
+      await fetchDonatedAmount();
+      await fetchCompanyName();
+      await fetchCharityName();
+      await fetchLeaderboardData();
+      await calculateDaysLeft();
+    } catch (e) {
+      print('Initialization error: $e');
+    }
+  }
+
+  Future<void> fetchUsername() async {
+    username = SessionManager.instance.username;
+  }
+
+  Future<void> calculateDaysLeft() async {
     DateTime targetDate = DateTime(2024, 8, 17);
     DateTime now = DateTime.now();
     setState(() {

@@ -166,7 +166,7 @@ class _SearchPageState extends State<SearchPage> {
                                   Align(
                                     alignment: Alignment.centerRight,
                                     child: Text(
-                                      '${filteredTeams[index].fundraiserBox}kr',
+                                      '${filteredTeams[index].fundraiserBox.toStringAsFixed(0)}kr',
                                       style: const TextStyle(
                                           fontWeight: FontWeight.normal),
                                     ),

@@ -36,12 +36,20 @@ class _OtherTeamPageState extends State<OtherTeamPage> {
     super.initState();
     teamName = widget.team.name;
     companyName = widget.team.companyName;
-    fetchTeamDetails();
-    fetchLeaderboardData();
+    _initializePage();
     timer = Timer.periodic(const Duration(seconds: 10), (timer) {
       fetchTeamDetails();
       fetchLeaderboardData();
     });
+  }
+
+  Future<void> _initializePage() async {
+    try {
+      await fetchTeamDetails();
+      await fetchLeaderboardData();
+    } catch (e) {
+      print('Initialization error: $e');
+    }
   }
 
   Future<void> fetchTeamDetails() async {

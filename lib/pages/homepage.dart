@@ -42,13 +42,8 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     username = SessionManager.instance.username;
-    fetchCompanyName();
-    fetchGoal();
-    fetchDonations();
-    fetchCharityName();
-    fetchTeamName();
-    fetchLeaderboardData();
-    calculateDaysLeft();
+
+    _initializePage();
 
     //Periodically check the donation goal, donation amount and number of days remaining to race
     _timer = Timer.periodic(const Duration(seconds: 10), (timer) {
@@ -62,6 +57,20 @@ class _HomePageState extends State<HomePage> {
     greetingTimer = Timer.periodic(Duration(minutes: 1), (timer) {
       updateGreeting();
     });
+  }
+
+  Future<void> _initializePage() async {
+    try {
+      await fetchCompanyName();
+      await fetchGoal();
+      await fetchDonations();
+      await fetchCharityName();
+      await fetchTeamName();
+      await fetchLeaderboardData();
+      await calculateDaysLeft();
+    } catch (e) {
+      print('Initialization error: $e');
+    }
   }
 
   @override
@@ -167,7 +176,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   //Calculates amount of days left until midnattsloppet
-  void calculateDaysLeft() {
+  Future<void> calculateDaysLeft() async {
     DateTime targetDate = DateTime(2024, 8, 17);
     DateTime now = DateTime.now();
     setState(() {
