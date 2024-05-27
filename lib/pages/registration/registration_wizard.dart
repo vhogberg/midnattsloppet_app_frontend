@@ -170,6 +170,7 @@ class _RegistrationWizardDialogState extends State<RegistrationWizardDialog> {
       }
 
       setState(() {
+        FocusManager.instance.primaryFocus?.unfocus();
         _currentPage = 4; // Navigate directly to the overview page
       });
       return;
@@ -190,6 +191,7 @@ class _RegistrationWizardDialogState extends State<RegistrationWizardDialog> {
             context, "Fel", "Lagnamnet är upptaget.");
         return;
       }
+      FocusManager.instance.primaryFocus?.unfocus();
       newTeam = true;
     }
 

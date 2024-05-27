@@ -190,6 +190,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    ShareHelper shareHelper = ShareHelper(teamName);
     return Scaffold(
       body: SafeArea(
         child: Padding(
@@ -407,8 +408,8 @@ class _HomePageState extends State<HomePage> {
                                           const Spacer(),
                                           GestureDetector(
                                             onTap: () {
-                                              ShareHelper.showShareDialog(
-                                                  context, teamName!);
+                                              shareHelper
+                                                  .showShareDialog(context);
                                             },
                                             child: Container(
                                               padding: const EdgeInsets.all(10),
