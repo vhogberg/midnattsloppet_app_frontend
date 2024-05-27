@@ -116,6 +116,7 @@ class SessionManager {
         );
         if (response.statusCode == 200) {
           prefs.remove(_sessionKey);
+          await prefs.clear();
           print("Logout successful");
           return true; // Sign-out successful
         } else {
