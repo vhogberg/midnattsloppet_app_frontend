@@ -78,7 +78,7 @@ class _OtherTeamPageState extends State<OtherTeamPage> {
           ('https://group-15-7.pvt.dsv.su.se/app/all/teamswithbox'));
 
       if (response.statusCode == 200) {
-        final List<dynamic> data = jsonDecode(response.body);
+        final List<dynamic> data = jsonDecode(utf8.decode(response.bodyBytes));
 
         List<Team> fetchedTeams = [];
 
