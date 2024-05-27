@@ -199,7 +199,7 @@ class _HomePageState extends State<HomePage> {
               padding: const EdgeInsets.only(bottom: 50),
               child: Column(
                 children: [
-                  if (totalDonations >= donationGoal) const TeamGoalReached(),
+                  const TeamGoalReached(),
                   Row(
                     children: [
                       //Top left welcoming text

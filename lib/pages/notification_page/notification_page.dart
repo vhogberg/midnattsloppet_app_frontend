@@ -132,7 +132,7 @@ class _NotificationPageState extends State<NotificationPage> {
     }
     sortNotificationsByDate();
 
-    if (percentage == 100) {
+    if (percentage >= 100) {
       if (!notificationAlreadyExists("100% av donationsmålet uppnått")) {
         allNotifications.add(
           NotificationItem(
