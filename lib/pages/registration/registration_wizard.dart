@@ -225,7 +225,7 @@ class _RegistrationWizardDialogState extends State<RegistrationWizardDialog> {
       insetPadding: const EdgeInsets.all(20.0),
       child: Container(
         width: MediaQuery.of(context).size.width * 0.8 + 60, // bredd på wizard
-        height: MediaQuery.of(context).size.height * 0.6,
+        height: MediaQuery.of(context).size.height * 0.53, // höjd på wizard
         child: Column(
           children: [
             Expanded(
@@ -241,7 +241,8 @@ class _RegistrationWizardDialogState extends State<RegistrationWizardDialog> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.all(20.0),
+              padding: const EdgeInsets.only(
+                  top: 15, left: 20.0, right: 20, bottom: 15),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -307,7 +308,7 @@ class _RegistrationWizardDialogState extends State<RegistrationWizardDialog> {
     return Column(
       children: [
         const Padding(
-          padding: EdgeInsets.all(20.0),
+          padding: EdgeInsets.only(top: 10.0, left: 20, right: 20, bottom: 10),
           child: Text(
             '1. Skapa konto:',
             style: TextStyle(
@@ -356,11 +357,12 @@ class _RegistrationWizardDialogState extends State<RegistrationWizardDialog> {
   // Wizard steg 2, färdigställa din profil
   Widget _buildCompleteProfilePage() {
     return Padding(
-      padding: const EdgeInsets.all(20.0),
+      padding:
+          const EdgeInsets.only(top: 10, bottom: 20.0, left: 20, right: 20),
       child: Column(
         children: [
           const Padding(
-            padding: EdgeInsets.all(20.0),
+            padding: EdgeInsets.only(left: 20, right: 20, bottom: 10),
             child: Text(
               '2. Färdigställ din profil',
               style: TextStyle(
@@ -370,18 +372,15 @@ class _RegistrationWizardDialogState extends State<RegistrationWizardDialog> {
               ),
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20.0),
-            child: TextField(
-              controller: nameController,
-              decoration: const InputDecoration(
-                hintText: 'Användarnamn',
-                border: OutlineInputBorder(),
-              ),
+          TextField(
+            controller: nameController,
+            decoration: const InputDecoration(
+              hintText: 'Användarnamn',
+              border: OutlineInputBorder(),
             ),
           ),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10),
+            padding: const EdgeInsets.only(top: 10),
             child: TextField(
               controller: companyVoucherCodeController,
               decoration: const InputDecoration(
@@ -401,7 +400,7 @@ class _RegistrationWizardDialogState extends State<RegistrationWizardDialog> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const Padding(
-          padding: EdgeInsets.all(20.0),
+          padding: EdgeInsets.only(top: 10, right: 20, left: 20, bottom: 15),
           child: Text(
             '3. Välj ett befintligt lag eller skapa ett nytt',
             style: TextStyle(
@@ -450,7 +449,7 @@ class _RegistrationWizardDialogState extends State<RegistrationWizardDialog> {
         ),
         Padding(
           padding: const EdgeInsets.fromLTRB(
-              20.0, 30.0, 20.0, 0), // Adjusted top padding for more space
+              20.0, 20.0, 20.0, 0), // Adjusted top padding for more space
           child: Row(
             children: [
               ElevatedButton(
@@ -477,7 +476,7 @@ class _RegistrationWizardDialogState extends State<RegistrationWizardDialog> {
     return Column(
       children: [
         const Padding(
-          padding: EdgeInsets.all(20.0),
+          padding: EdgeInsets.only(top: 10, right: 20, left: 20, bottom: 10),
           child: Text(
             '4. Skapa ett nytt lag',
             style: TextStyle(
@@ -534,7 +533,6 @@ class _RegistrationWizardDialogState extends State<RegistrationWizardDialog> {
             ),
           ),
         ),
-        const SizedBox(height: 8),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20.0),
           child: TextField(
