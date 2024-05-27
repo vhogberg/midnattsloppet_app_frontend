@@ -625,7 +625,7 @@ class NotificationDetail extends StatelessWidget {
               GestureDetector(
                 onTap: () {
                   final Event event = Event(
-                    title: 'Midnattloppet',
+                    title: 'Midnattsloppet',
                     description: 'Distans 10 km',
                     location: 'Södermalm',
                     startDate: DateTime(2024, 8, 17, 21, 45),
