@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application/api_utils/api_utils.dart';
-import 'package:flutter_application/pages/challenge_page/active_challenge_page.dart';
-import 'package:flutter_application/pages/challenge_page/challenge_page.dart';
+import 'package:flutter_application/authentication/session_manager.dart';
+import 'package:flutter_application/pages/challenge_pages/active_challenge_page.dart';
+import 'package:flutter_application/pages/challenge_pages/challenge_page.dart';
 import 'package:flutter_application/pages/homepage.dart';
-import 'package:flutter_application/pages/leaderboard_page/leaderboard_page.dart';
-import 'package:flutter_application/pages/myteampage.dart';
-import 'package:flutter_application/session_manager.dart';
+import 'package:flutter_application/pages/leaderboard_page.dart';
+import 'package:flutter_application/pages/team_pages/myteampage.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
@@ -140,7 +140,7 @@ class _CustomNavigationBarState extends State<CustomNavigationBar> {
           child: const CircleAvatar(
             radius: 40,
             backgroundColor: Colors.white,
-            backgroundImage: AssetImage('images/swishlogo2.jpg.png'),
+            backgroundImage: AssetImage('images/swishlogo2.png'),
           ),
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,

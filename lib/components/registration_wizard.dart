@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application/api_utils/api_utils.dart';
+import 'package:flutter_application/authentication/session_manager.dart';
 import 'package:flutter_application/components/custom_colors.dart';
 import 'package:flutter_application/components/custom_navigation_bar.dart';
 import 'package:flutter_application/components/dialog_utils.dart';
 import 'package:flutter_application/components/search_popup.dart';
 import 'package:flutter_application/models/registration.dart';
-import 'package:flutter_application/session_manager.dart';
 
 class RegistrationWizardDialog extends StatefulWidget {
   @override

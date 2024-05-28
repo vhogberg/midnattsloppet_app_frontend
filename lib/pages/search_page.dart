@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application/api_utils/api_utils.dart';
+import 'package:flutter_application/authentication/session_manager.dart';
 import 'package:flutter_application/components/custom_app_bar.dart';
 import 'package:flutter_application/components/return_arrow_argument.dart';
 import 'package:flutter_application/models/team.dart';
-import 'package:flutter_application/pages/otherteampage.dart';
-import 'package:flutter_application/session_manager.dart';
+import 'package:flutter_application/pages/team_pages/otherteampage.dart';
 
 class SearchPage extends StatefulWidget {
   const SearchPage({Key? key}) : super(key: key);

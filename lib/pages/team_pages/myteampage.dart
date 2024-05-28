@@ -3,13 +3,13 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_application/api_utils/api_utils.dart';
+import 'package:flutter_application/authentication/session_manager.dart';
 import 'package:flutter_application/components/custom_app_bar.dart';
 import 'package:flutter_application/components/custom_colors.dart';
 import 'package:flutter_application/components/dialog_utils.dart';
 import 'package:flutter_application/components/donation_progress_bar.dart';
-import 'package:flutter_application/components/goal_box.dart';
+import 'package:flutter_application/components/team_goal_box.dart';
 import 'package:flutter_application/models/team.dart';
-import 'package:flutter_application/session_manager.dart';
 import 'package:iconsax/iconsax.dart';
 
 class MyTeamPage extends StatefulWidget {

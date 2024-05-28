@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application/authentication/session_manager.dart';
 import 'package:flutter_application/components/custom_navigation_bar.dart';
 import 'package:flutter_application/components/dialog_utils.dart';
 import 'package:flutter_application/components/my_button.dart';
 import 'package:flutter_application/components/my_textfield.dart';
-import 'package:flutter_application/pages/registration/registration_wizard.dart';
-import 'package:flutter_application/session_manager.dart';
+import 'package:flutter_application/components/registration_wizard.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);

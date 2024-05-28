@@ -6,7 +6,7 @@ import 'package:flutter_application/api_utils/api_utils.dart';
 import 'package:flutter_application/components/custom_app_bar.dart';
 import 'package:flutter_application/components/custom_colors.dart';
 import 'package:flutter_application/components/donation_progress_bar.dart';
-import 'package:flutter_application/components/other_goal_box.dart';
+import 'package:flutter_application/components/other_team_goal_box.dart';
 import 'package:flutter_application/components/return_arrow_argument.dart';
 import 'package:flutter_application/models/team.dart';
 import 'package:url_launcher/url_launcher_string.dart';
@@ -453,7 +453,7 @@ class _OtherTeamPageState extends State<OtherTeamPage> {
                                     height: 30,
                                     width: 30,
                                     child:
-                                        Image.asset('images/swishlogo.jpg.png'),
+                                        Image.asset('images/swishlogo.png'),
                                   ),
                                   const SizedBox(width: 10),
                                   const Text(

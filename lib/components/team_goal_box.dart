@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application/api_utils/api_utils.dart';
-import 'package:flutter_application/session_manager.dart';
+import 'package:flutter_application/authentication/session_manager.dart';
 
 class GoalBox extends StatefulWidget {
   final double height;

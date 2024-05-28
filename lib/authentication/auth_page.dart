@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application/authentication/session_manager.dart';
 import 'package:flutter_application/components/custom_navigation_bar.dart';
-import 'package:flutter_application/pages/login_page/login_widget.dart';
-import 'package:flutter_application/session_manager.dart';
+import 'package:flutter_application/pages/login_page.dart';
 
 class AuthPage extends StatefulWidget {
   const AuthPage({Key? key}) : super(key: key);

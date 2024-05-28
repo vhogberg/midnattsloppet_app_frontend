@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application/authentication/session_manager.dart';
 import 'package:flutter_application/components/custom_colors.dart';
-import 'package:flutter_application/session_manager.dart';
 
 
 // importeras i filer på detta sätt: import 'package:flutter_application/components/dialog_utils.dart';

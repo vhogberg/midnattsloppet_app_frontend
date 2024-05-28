@@ -4,15 +4,15 @@ import 'dart:convert';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application/api_utils/api_utils.dart';
+import 'package:flutter_application/authentication/session_manager.dart';
 import 'package:flutter_application/components/custom_colors.dart';
 import 'package:flutter_application/components/donation_progress_bar.dart';
-import 'package:flutter_application/components/goal_box.dart';
+import 'package:flutter_application/components/goal_reached.dart';
+import 'package:flutter_application/components/share_helper.dart';
+import 'package:flutter_application/components/team_goal_box.dart';
 import 'package:flutter_application/components/top_three_teams.dart';
 import 'package:flutter_application/models/team.dart';
-import 'package:flutter_application/pages/goal_reached_page/goal_reached.dart';
-import 'package:flutter_application/pages/notification_page/notification_page.dart';
-import 'package:flutter_application/session_manager.dart';
-import 'package:flutter_application/share_helper.dart';
+import 'package:flutter_application/pages/notification_page.dart';
 import 'package:iconsax/iconsax.dart';
 
 class HomePage extends StatefulWidget {

@@ -1,11 +1,12 @@
 import 'dart:async';
+
 import 'package:add_2_calendar/add_2_calendar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application/api_utils/api_utils.dart';
+import 'package:flutter_application/authentication/session_manager.dart';
 import 'package:flutter_application/components/custom_app_bar.dart';
 import 'package:flutter_application/components/custom_colors.dart';
 import 'package:flutter_application/components/custom_navigation_bar.dart';
-import 'package:flutter_application/session_manager.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
