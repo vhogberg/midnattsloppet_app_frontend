@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'dart:async';
 import 'dart:convert';
 
@@ -259,7 +261,7 @@ class ApiUtils {
 
   static Future<void> registerTeam(String username, String teamName,
       String charityName, String donationGoal) async {
-    final String url = '$baseURL/register/profile/register/team';
+    const String url = '$baseURL/register/profile/register/team';
 
     Map<String, String> requestBody = {
       'username': username,
@@ -335,7 +337,7 @@ class ApiUtils {
   }
 
   static Future<void> joinTeam(String username, String teamName) async {
-    final String url = '$baseURL/register/profile/join/team';
+    const String url = '$baseURL/register/profile/join/team';
 
     Map<String, String> requestBody = {
       'username': username,
@@ -541,121 +543,6 @@ class ApiUtils {
       rethrow;
     }
   }
-  /*
-  // method for challenge_page to fetch activity
-  static Future<Map<String, dynamic>> fetchChallengeActivity1(
-      String? username) async {
-    try {
-      final response = await http.get(
-        Uri.parse('$baseURL/$username/challenge'),
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-          _apiKeyHeader: _apiKey,
-        },
-      );
-
-      if (response.statusCode == 200) {
-        final data =
-            jsonDecode(utf8.decode(response.bodyBytes)) as List<dynamic>;
-        bool challengeSent = data.any((challenge) =>
-            challenge['challengerName'] == username &&
-            challenge['status'] == 'PENDING');
-        bool challengeReceived = data.any((challenge) =>
-            challenge['challengedName'] == username &&
-            challenge['status'] == 'PENDING');
-
-        String senderTeam = '';
-        if (challengeReceived) {
-          senderTeam = data.firstWhere((challenge) =>
-              challenge['challengedName'] == username &&
-              challenge['status'] == 'PENDING')['challengerName'];
-        }
-
-        return {
-          'challengeSent': challengeSent,
-          'challengeReceived': challengeReceived,
-          'senderTeam': senderTeam,
-        };
-      } else {
-        throw Exception('Failed to fetch challenge status');
-      }
-    } catch (e) {
-      print('Error fetching challenge status: $e');
-      rethrow;
-    }
-  }
-
-  // Method for challenge_page to fetch activity
-  static Future<Map<String, dynamic>> fetchChallengeActivity2(
-      String? username) async {
-    if (username == null) {
-      throw Exception('Username cannot be null');
-    }
-
-    String? senderTeam;
-    bool challengeSent = false;
-    bool challengeReceived = false;
-
-    try {
-      print(
-          'Fetching challenge activity for $username'); // Debugging information
-      final response = await http.get(
-        Uri.parse('$baseURL/$username/challenge'),
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-          _apiKeyHeader: _apiKey,
-        },
-      );
-
-      print(
-          'Response status code: ${response.statusCode}'); // Debugging information
-
-      if (response.statusCode == 200) {
-        final responseBody = utf8.decode(response.bodyBytes);
-        print('Response body: $responseBody'); // Debugging information
-
-        final data = jsonDecode(responseBody);
-        print('Decoded data: $data'); // Debugging information
-
-        if (responseBody.isNotEmpty) {
-          challengeReceived = true;
-        }
-
-        if (data is List<dynamic>) {
-          for (var challenge in data) {
-            if (challenge is Map<String, dynamic>) {
-              if (challenge['challengerName'] == username &&
-                  (challenge['status'] as String).toChallengeStatus() ==
-                      ChallengeStatus.pending) {
-                challengeSent = true;
-              }
-              if (challenge['challengedName'] == username &&
-                  (challenge['status'] as String).toChallengeStatus() ==
-                      ChallengeStatus.pending) {
-                challengeReceived = true;
-                senderTeam = challenge['challengerName'] ?? '';
-              }
-            }
-          }
-
-          return {
-            'challengeSent': challengeSent,
-            'challengeReceived': challengeReceived,
-            'senderTeam': senderTeam,
-          };
-        } else {
-          throw Exception('Unexpected response format');
-        }
-      } else {
-        print(
-            'Failed to fetch challenge status. Status code: ${response.statusCode}, body: ${response.body}');
-        throw Exception('Failed to fetch challenge status');
-      }
-    } catch (e) {
-      print('Error fetching challenge status: $e');
-      rethrow;
-    }
-  } */
 
   // Method for challenge_page to fetch activity
   static Future<List<Challenge>> fetchChallengeActivity(
@@ -663,9 +550,6 @@ class ApiUtils {
     if (username == null) {
       throw Exception('Username cannot be null');
     }
-
-    bool challengeSent = false;
-    bool challengeReceived = false;
 
     final response = await http.get(
       Uri.parse('$baseURL/$username/challenge'),
@@ -705,24 +589,6 @@ class ApiUtils {
     } else {
       throw Exception('Failed to load teams from API');
     }
-
-    /*
-      final List<dynamic> data = jsonDecode(utf8.decode(response.bodyBytes));
-      return List<String>.from(data);
-
-      final responseBody = utf8.decode(response.bodyBytes);
-      print('Response body: $responseBody'); // Debugging information
-
-      final data = jsonDecode(responseBody);
-      print('Decoded data: $data'); // Debugging information
-
-      // 
-
-      return {
-        'challengeSent': challengeSent,
-        'challengeReceived': challengeReceived,
-        'senderTeam': senderTeam ?? '',
-      };*/
   }
 
   // Method for challenge_page to fetch activity
@@ -776,7 +642,6 @@ class ApiUtils {
 
     if (response.statusCode == 200) {
       final List<dynamic> data = jsonDecode(utf8.decode(response.bodyBytes));
-      print(data); // Add this line to print the JSON response
 
       List<Team> fetchedTeams = [];
 
@@ -968,7 +833,7 @@ enum ChallengeStatus { pending, accepted, completed }
 
 extension ChallengeStatusExtension on String {
   ChallengeStatus toChallengeStatus() {
-    switch (this.toUpperCase()) {
+    switch (toUpperCase()) {
       case 'PENDING':
         return ChallengeStatus.pending;
       case 'ACCEPTED':

@@ -1,7 +1,9 @@
+// ignore_for_file: use_super_parameters, library_private_types_in_public_api, avoid_print
+
 import 'package:flutter/material.dart';
+import 'package:flutter_application/api_utils/api_utils.dart';
 import 'package:flutter_application/components/custom_colors.dart';
 import 'package:flutter_application/models/team.dart';
-import 'package:flutter_application/api_utils/api_utils.dart';
 import 'package:iconsax/iconsax.dart';
 
 class TopThreeTeams extends StatefulWidget {

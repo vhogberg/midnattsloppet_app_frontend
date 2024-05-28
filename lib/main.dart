@@ -24,7 +24,7 @@ void main() async {
       await flutterLocalNotificationsPlugin.getNotificationAppLaunchDetails();
   if (initialNotification?.didNotificationLaunchApp == true) {
     // LocalNotifications.onClickNotification.stream.listen((event) {
-    Future.delayed(Duration(seconds: 1), () {
+    Future.delayed(const Duration(seconds: 1), () {
       // print(event);
       navigatorKey.currentState!.pushNamed('/notificationPage',
           arguments: initialNotification?.notificationResponse?.payload);
@@ -33,7 +33,7 @@ void main() async {
 // NOTIFIKATIONER
 
   runApp(
-    MyApp(),
+    const MyApp(),
   );
 }
 
@@ -48,7 +48,7 @@ class MyApp extends StatelessWidget {
       },
       navigatorKey: navigatorKey,
       debugShowCheckedModeBanner: false,
-      home: AuthPage(),
+      home: const AuthPage(),
     );
   }
 }

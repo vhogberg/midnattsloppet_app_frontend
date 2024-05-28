@@ -1,3 +1,5 @@
+// ignore_for_file: use_key_in_widget_constructors, library_private_types_in_public_api, avoid_print, use_build_context_synchronously
+
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
@@ -91,10 +93,6 @@ class _WizardDialogState extends State<WizardDialog> {
       'description': descriptionController.text,
       'teamtochallenge': selectedTeam!,
     };
-
-    print('Request Data: $requestData');
-    print('URL: $url');
-
     try {
       // Skicka POST request (try)
       final response = await http.post(
@@ -106,13 +104,8 @@ class _WizardDialogState extends State<WizardDialog> {
         body: utf8.encode(jsonEncode(requestData)),
       );
 
-      print('Response Status Code: ${response.statusCode}');
-      print('Response Headers: ${response.headers}');
-      print('Response Body: ${response.body}');
-
       // Hantera respons, printar i konsol atm
       if (response.statusCode == 200) {
-        print('Challenge sent successfully');
         // Om lyckat: stäng wizard, kanske ha ett steg 5 som säger lyckat?
         Navigator.pop(context, 'success'); // Return success result
       } else {
@@ -138,7 +131,7 @@ class _WizardDialogState extends State<WizardDialog> {
   Widget build(BuildContext context) {
     return Dialog(
       insetPadding: const EdgeInsets.all(20.0),
-      child: Container(
+      child: SizedBox(
         width: MediaQuery.of(context).size.width * 0.8 + 60, // bredd på wizard
         height: MediaQuery.of(context).size.height * 0.6,
         child: Column(
@@ -339,7 +332,7 @@ Widget _buildDescriptionPage(BuildContext context) {
           child: SingleChildScrollView(
             child: Column(
               children: [
-                Container(
+                SizedBox(
                   height: MediaQuery.of(context).size.height * 0.12,
                   child: TextField(
                     controller: descriptionController,

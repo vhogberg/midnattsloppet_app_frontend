@@ -1,3 +1,5 @@
+// ignore_for_file: depend_on_referenced_packages
+
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:timezone/data/latest.dart' as tz;
@@ -117,10 +119,9 @@ class LocalNotifications {
     final targetDate = DateTime(2024, 8, 17);
     final currentDate = DateTime.now();
     final durationUntilTarget = targetDate.difference(currentDate);
-    final durationUntilNotification = durationUntilTarget - Duration(days: 100);
+    final durationUntilNotification = durationUntilTarget - const Duration(days: 100);
 
     if (durationUntilNotification.isNegative) {
-      print('The date has already passed for showing a notification 100 days before the target date.');
       return;
     }
 
@@ -142,10 +143,9 @@ class LocalNotifications {
     final targetDate = DateTime(2024, 8, 17);
     final currentDate = DateTime.now();
     final durationUntilTarget = targetDate.difference(currentDate);
-    final durationUntilNotification = durationUntilTarget - Duration(days: 50);
+    final durationUntilNotification = durationUntilTarget - const Duration(days: 50);
 
     if (durationUntilNotification.isNegative) {
-      print('The date has already passed for showing a notification 50 days before the target date.');
       return;
     }
 

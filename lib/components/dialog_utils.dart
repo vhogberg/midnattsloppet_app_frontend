@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:flutter_application/authentication/session_manager.dart';
 import 'package:flutter_application/components/custom_colors.dart';
@@ -194,8 +196,8 @@ class DialogUtils {
               fontFamily: 'Sora',
             ),
           ),
-          content: Container(
-            width: 300, 
+          content: SizedBox(
+            width: 300,
             child: Text(
               description,
               style: const TextStyle(
@@ -266,8 +268,8 @@ class DialogUtils {
               fontFamily: 'Sora',
             ),
           ),
-          content: Container(
-            width: 300, 
+          content: SizedBox(
+            width: 300,
             child: Text(
               description,
               style: const TextStyle(

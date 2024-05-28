@@ -1,3 +1,5 @@
+// ignore_for_file: use_super_parameters, library_private_types_in_public_api, avoid_print
+
 import 'dart:async';
 import 'dart:convert';
 
@@ -402,6 +404,7 @@ class _MyTeamPageState extends State<MyTeamPage> {
                                         TextSpan(
                                           //toStringAsFixed removes decimal point in donation amount displayed
                                           text:
+                                              // ignore: unnecessary_string_interpolations
                                               '${totalDonations.toStringAsFixed(0)}',
                                           style: const TextStyle(
                                             fontFamily: 'Sora',

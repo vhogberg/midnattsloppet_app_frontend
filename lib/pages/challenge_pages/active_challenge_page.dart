@@ -1,3 +1,5 @@
+// ignore_for_file: use_super_parameters, library_private_types_in_public_api, avoid_print, use_build_context_synchronously
+
 import 'dart:async';
 
 import 'package:flutter/material.dart';
@@ -138,8 +140,6 @@ class _ActiveChallengePageState extends State<ActiveChallengePage> {
       if (challenge.challengedName != '$userTeamName') {
         otherTeamName = challenge.challengedName;
       }
-
-      print(challenges);
     }
   }
 
@@ -150,7 +150,7 @@ class _ActiveChallengePageState extends State<ActiveChallengePage> {
   }
 
   void _editDescription() {
-    TextEditingController _controller =
+    TextEditingController controller =
         TextEditingController(text: challengeDescription);
     showDialog(
       context: context,
@@ -180,7 +180,7 @@ class _ActiveChallengePageState extends State<ActiveChallengePage> {
                           SizedBox(
                             height: MediaQuery.of(context).size.height * 0.12,
                             child: TextField(
-                              controller: _controller,
+                              controller: controller,
                               decoration: const InputDecoration(
                                 hintText: 'Ange dina egna utmaningar här...',
                                 border: OutlineInputBorder(),
@@ -239,9 +239,9 @@ class _ActiveChallengePageState extends State<ActiveChallengePage> {
                       ElevatedButton(
                         onPressed: () async {
                           try {
-                            await editChallengeDescription(_controller.text);
+                            await editChallengeDescription(controller.text);
                             setState(() {
-                              challengeDescription = _controller.text;
+                              challengeDescription = controller.text;
                             });
                             Navigator.of(context).pop();
                           } catch (e) {

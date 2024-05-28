@@ -1,3 +1,5 @@
+// ignore_for_file: use_super_parameters, library_private_types_in_public_api, avoid_print
+
 import 'dart:async';
 import 'dart:convert';
 
@@ -54,7 +56,7 @@ class _HomePageState extends State<HomePage> {
 
     updateGreeting();
     // Update the greeting every minute
-    greetingTimer = Timer.periodic(Duration(minutes: 1), (timer) {
+    greetingTimer = Timer.periodic(const Duration(minutes: 1), (timer) {
       updateGreeting();
     });
   }
@@ -319,6 +321,7 @@ class _HomePageState extends State<HomePage> {
                                         TextSpan(
                                           //toStringAsFixed removes decimal point in donation amount displayed
                                           text:
+                                              // ignore: unnecessary_string_interpolations
                                               '${totalDonations.toStringAsFixed(0)}',
                                           style: const TextStyle(
                                             fontFamily: 'Sora',

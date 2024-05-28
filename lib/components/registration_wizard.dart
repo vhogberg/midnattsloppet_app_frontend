@@ -1,3 +1,5 @@
+// ignore_for_file: use_key_in_widget_constructors, library_private_types_in_public_api, avoid_print, use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:flutter_application/api_utils/api_utils.dart';
 import 'package:flutter_application/authentication/session_manager.dart';
@@ -225,7 +227,7 @@ class _RegistrationWizardDialogState extends State<RegistrationWizardDialog> {
   Widget build(BuildContext context) {
     return Dialog(
       insetPadding: const EdgeInsets.all(20.0),
-      child: Container(
+      child: SizedBox(
         width: MediaQuery.of(context).size.width * 0.8 + 60, // bredd på wizard
         height: MediaQuery.of(context).size.height * 0.53, // höjd på wizard
         child: Column(
@@ -294,7 +296,7 @@ class _RegistrationWizardDialogState extends State<RegistrationWizardDialog> {
                         foregroundColor: Colors.white, // textfärg
                         backgroundColor: Colors.green, // knappfärg
                       ),
-                      child: Text('Slutför'),
+                      child: const Text('Slutför'),
                     ),
                 ],
               ),
@@ -620,7 +622,7 @@ class _RegistrationWizardDialogState extends State<RegistrationWizardDialog> {
       teamName = searchController.text;
     }
     String charityName = charityController.text;
-    String donationGoal = donationGoalController.text;
+    String donationGoal = donationGoalController.text.trim().replaceAll(' ', '');
 
     // Create the registration request object
     RegistrationRequest request = RegistrationRequest(
@@ -633,8 +635,6 @@ class _RegistrationWizardDialogState extends State<RegistrationWizardDialog> {
       donationGoal: donationGoal,
       createNewTeam: newTeam,
     );
-
-    print(request.toJson());
 
     try {
       // Send the request
@@ -655,7 +655,7 @@ class _RegistrationWizardDialogState extends State<RegistrationWizardDialog> {
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(
-                builder: (context) => CustomNavigationBar(selectedPage: 0)),
+                builder: (context) => const CustomNavigationBar(selectedPage: 0)),
           );
         }).catchError((e) {
           // Handle login error

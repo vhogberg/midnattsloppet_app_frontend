@@ -1,3 +1,5 @@
+// ignore_for_file: use_super_parameters
+
 import 'package:flutter/material.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
@@ -19,75 +21,72 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: Container(
-        padding: EdgeInsets.only(top: 0), // padding i topp
-        child: AppBar(
-          automaticallyImplyLeading:
-              false, // tar bort standard-tillbaka knappen som medföljer AppBar
-          elevation: 0,
-          centerTitle: true, // centrera titeln
-          title: Row(
-            children: [
-              // Visa endast tillbakapil om showReturnArrow är sann
-              if (showReturnArrow)
-                IconButton(
-                  icon: const Icon(
-                    Icons.arrow_back,
-                    color: Color(0xFF4F4F4F), // färg för pilen
-                    size: 30,
-                  ),
-                  onPressed: () => Navigator.of(context).pop(),
-                )
-              else
-                const SizedBox(
-                    width:
-                        48), // Kompensera för saknat avstånd om pilen inte visas
-
-              const SizedBox(width: 8), // Padding
-              Expanded(
-                // titelns egenskaper
-                child: Text(
-                  title,
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(
-                    fontFamily: 'Sora',
-                    fontWeight: FontWeight.bold,
-                    fontSize: 24,
-                    color: Color(0xFF4F4F4F),
-                  ),
+      child: AppBar(
+        automaticallyImplyLeading:
+            false, // tar bort standard-tillbaka knappen som medföljer AppBar
+        elevation: 0,
+        centerTitle: true, // centrera titeln
+        title: Row(
+          children: [
+            // Visa endast tillbakapil om showReturnArrow är sann
+            if (showReturnArrow)
+              IconButton(
+                icon: const Icon(
+                  Icons.arrow_back,
+                  color: Color(0xFF4F4F4F), // färg för pilen
+                  size: 30,
+                ),
+                onPressed: () => Navigator.of(context).pop(),
+              )
+            else
+              const SizedBox(
+                  width:
+                      48), // Kompensera för saknat avstånd om pilen inte visas
+      
+            const SizedBox(width: 8), // Padding
+            Expanded(
+              // titelns egenskaper
+              child: Text(
+                title,
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                  fontFamily: 'Sora',
+                  fontWeight: FontWeight.bold,
+                  fontSize: 24,
+                  color: Color(0xFF4F4F4F),
                 ),
               ),
-
-              // Den andra knappen till högers implementation nedan
-              // Om ActionButton ska användas:
-              if (useActionButton)
-                if (actionIcon != null && onActionPressed != null)
-                  IconButton(
-                    icon: Icon(
-                      actionIcon,
-                      size: 30,
-                      color: actionIcon != null
-                          ? Color(0xFF4F4F4F)
-                          : Colors.transparent,
-                    ),
-                    onPressed: onActionPressed,
-                  ),
-
-              // Om ActionButton inte ska användas görs den osynlig
-              if (!useActionButton)
+            ),
+      
+            // Den andra knappen till högers implementation nedan
+            // Om ActionButton ska användas:
+            if (useActionButton)
+              if (actionIcon != null && onActionPressed != null)
                 IconButton(
                   icon: Icon(
                     actionIcon,
+                    size: 30,
                     color: actionIcon != null
-                        ? Color.fromARGB(255, 255, 255, 255)
-                        : Color.fromARGB(255, 255, 255, 255),
+                        ? const Color(0xFF4F4F4F)
+                        : Colors.transparent,
                   ),
                   onPressed: onActionPressed,
                 ),
-            ],
-          ),
-          backgroundColor: Colors.transparent,
+      
+            // Om ActionButton inte ska användas görs den osynlig
+            if (!useActionButton)
+              IconButton(
+                icon: Icon(
+                  actionIcon,
+                  color: actionIcon != null
+                      ? const Color.fromARGB(255, 255, 255, 255)
+                      : const Color.fromARGB(255, 255, 255, 255),
+                ),
+                onPressed: onActionPressed,
+              ),
+          ],
         ),
+        backgroundColor: Colors.transparent,
       ),
     );
   }

@@ -1,3 +1,5 @@
+// ignore_for_file: library_private_types_in_public_api, use_key_in_widget_constructors, avoid_print
+
 import 'dart:async';
 
 import 'package:add_2_calendar/add_2_calendar.dart';
@@ -8,7 +10,6 @@ import 'package:flutter_application/components/custom_app_bar.dart';
 import 'package:flutter_application/components/custom_colors.dart';
 import 'package:flutter_application/components/custom_navigation_bar.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 // Skapa en klass för notifikationen.
 class NotificationItem {
@@ -32,7 +33,6 @@ class NotificationPage extends StatefulWidget {
 }
 
 class _NotificationPageState extends State<NotificationPage> {
-  late SharedPreferences _prefs; // SharedPreferences-instans
   final TextEditingController _searchController =
       TextEditingController(); // Controller för sökfältet
   String _searchTerm = ''; // Söktermen

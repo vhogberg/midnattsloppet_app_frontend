@@ -1,3 +1,5 @@
+// ignore_for_file: use_super_parameters, library_private_types_in_public_api
+
 import 'package:flutter/material.dart';
 import 'package:flutter_application/authentication/session_manager.dart';
 import 'package:flutter_application/components/custom_navigation_bar.dart';
@@ -27,7 +29,7 @@ class _AuthPageState extends State<AuthPage> {
         builder: (context, snapshot) {
           // Handle waiting state
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           }
 
           // Handle error state
@@ -39,7 +41,7 @@ class _AuthPageState extends State<AuthPage> {
           if (snapshot.hasData && snapshot.data != null) {
             return const CustomNavigationBar(selectedPage: 0,);
           } else {
-            return LoginPage();
+            return const LoginPage();
           }
         },
       ),

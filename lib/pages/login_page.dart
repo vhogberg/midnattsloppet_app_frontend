@@ -1,3 +1,5 @@
+// ignore_for_file: use_super_parameters, library_private_types_in_public_api
+
 import 'package:flutter/material.dart';
 import 'package:flutter_application/authentication/session_manager.dart';
 import 'package:flutter_application/components/custom_navigation_bar.dart';
@@ -14,8 +16,8 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  TextEditingController _usernameController = TextEditingController();
-  TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _usernameController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
 
   @override
   void initState() {

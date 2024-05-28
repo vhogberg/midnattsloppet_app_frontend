@@ -10,7 +10,6 @@ class ShareHelper {
   void shareToTwitter() {
     final encodedTeamName = Uri.encodeComponent(teamName!);
     final doubleEncodedTeamName = Uri.encodeComponent(encodedTeamName);
-    print('$encodedTeamName');
     launchUrl(Uri.parse(
         'http://twitter.com/intent/tweet?text=Hjälp%20mitt%20lag%20att%20uppnå%20vårat%20donationsmål%20inför%20midnattsloppets%20race!%20Öppna%20länken%20här%20för%20att%20donera:%20group-15-7.pvt.dsv.su.se/app/donate/$doubleEncodedTeamName'));
   }
@@ -66,7 +65,7 @@ class ShareHelper {
             ),
             insetPadding:
                 const EdgeInsets.symmetric(horizontal: 20.0, vertical: 24.0),
-            child: Container(
+            child: SizedBox(
               width: MediaQuery.of(context).size.width * 0.9, // Dynamic width
               child: Padding(
                 padding: const EdgeInsets.all(20.0),

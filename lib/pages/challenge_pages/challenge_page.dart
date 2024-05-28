@@ -1,3 +1,5 @@
+// ignore_for_file: use_key_in_widget_constructors, library_private_types_in_public_api, use_build_context_synchronously, avoid_print
+
 import 'dart:async';
 
 import 'package:flutter/material.dart';
@@ -137,7 +139,6 @@ class _ChallengePageState extends State<ChallengePage> {
       // the list is not empty...
 
       for (Challenge challenge in challenges) {
-        print(challenge); // ta bort
         // OM JAG HAR SKICKAT CHALLENGEN
         if (challenge.challengerName == '$userTeam') {
           challengeSent = true;
@@ -191,7 +192,7 @@ class _ChallengePageState extends State<ChallengePage> {
 
       // Loading skärm pga mycket api calls
       body: isLoading
-          ? Center(child: CircularProgressIndicator())
+          ? const Center(child: CircularProgressIndicator())
 
           // Lägg allt i en ScrollView så att sidan går att skrolla upp och ned, krav för responsive design.
           : SingleChildScrollView(
@@ -448,8 +449,6 @@ class _ChallengePageState extends State<ChallengePage> {
                                                             selectedPage: 1)),
                                               );
                                               // Challenge accepted
-                                              print(
-                                                  'Challenge accepted successfully');
                                               // Logik för att switcha till active_challenge_page
                                               Navigator.push(
                                                 context,
@@ -518,9 +517,6 @@ class _ChallengePageState extends State<ChallengePage> {
 
                                             if (response.statusCode == 200) {
                                               // Challenge declined successfully
-                                              print(
-                                                  'Challenge declined successfully');
-
                                               // Run this  again to check if there are any more incoming challenge requests.
                                               Navigator.push(
                                                 context,
@@ -607,9 +603,6 @@ class _ChallengePageState extends State<ChallengePage> {
                                             );
                                             if (response.statusCode == 200) {
                                               // Challenge cancelled successfully
-                                              print(
-                                                  'Challenge cancelled successfully');
-
                                               // Run this again to update page
                                               Navigator.push(
                                                 context,

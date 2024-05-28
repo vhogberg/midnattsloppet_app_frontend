@@ -1,3 +1,5 @@
+// ignore_for_file: use_super_parameters, library_private_types_in_public_api, avoid_print, use_build_context_synchronously
+
 import 'dart:async';
 import 'dart:convert';
 
@@ -340,6 +342,7 @@ class _OtherTeamPageState extends State<OtherTeamPage> {
                               children: [
                                 TextSpan(
                                   //toStringAsFixed removes decimal point in donation amount displayed
+                                  // ignore: unnecessary_string_interpolations
                                   text: '${totalDonations.toStringAsFixed(0)}',
                                   style: const TextStyle(
                                     fontFamily: 'Sora',
@@ -452,8 +455,7 @@ class _OtherTeamPageState extends State<OtherTeamPage> {
                                   SizedBox(
                                     height: 30,
                                     width: 30,
-                                    child:
-                                        Image.asset('images/swishlogo.png'),
+                                    child: Image.asset('images/swishlogo.png'),
                                   ),
                                   const SizedBox(width: 10),
                                   const Text(

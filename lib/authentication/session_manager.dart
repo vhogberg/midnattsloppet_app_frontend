@@ -1,4 +1,5 @@
-import 'package:flutter/material.dart';
+// ignore_for_file: avoid_print
+
 import 'package:flutter_application/api_utils/api_utils.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -43,7 +44,7 @@ class SessionManager {
   }
 
   Future<String> loginUser(String username, String password) async {
-    final url = 'https://group-15-7.pvt.dsv.su.se/app/login';
+    const url = 'https://group-15-7.pvt.dsv.su.se/app/login';
     final credentials = {'username': username, 'password': password};
     final response = await ApiUtils.post(url, credentials);
 
@@ -56,58 +57,12 @@ class SessionManager {
     }
   }
 
-  Future<String> registerUser(String username, String password) async {
-    final url = 'https://group-15-7.pvt.dsv.su.se/app/register';
-    final credentials = {'username': username, 'password': password};
-
-    try {
-      final response = await ApiUtils.post(
-        url,
-        credentials,
-      );
-
-      if (response.statusCode >= 200 && response.statusCode < 300) {
-        return response.body;
-      } else {
-        throw Exception(
-            'Failed to register: ${response.statusCode} - ${response.body}');
-      }
-    } catch (e) {
-      throw Exception('Failed to register: $e');
-    }
-  }
-
-  Future<void> completeProfile(
-      String username, String name, String voucherCode) async {
-    final url = 'https://group-15-7.pvt.dsv.su.se/app/register/profile';
-    final payload = {
-      'username': username,
-      'name': name,
-      'voucherCode': voucherCode,
-    };
-
-    try {
-      final response = await ApiUtils.post(url, payload);
-
-      if (response.statusCode == 200) {
-        // Handle success response
-        print('Profile updated successfully');
-      } else {
-        // Handle error response
-        throw Exception('Error: ${response.body}');
-      }
-    } catch (e) {
-      // Handle exceptions
-      throw Exception('Exception: $e');
-    }
-  }
-
   Future<bool> signUserOut() async {
     try {
       final SharedPreferences prefs = await SharedPreferences.getInstance();
       final String? sessionToken = prefs.getString(_sessionKey);
       if (sessionToken != null) {
-        final url = 'https://group-15-7.pvt.dsv.su.se/app/logout';
+        const url = 'https://group-15-7.pvt.dsv.su.se/app/logout';
         final response = await ApiUtils.logout(
           url,
           headers: {
@@ -117,7 +72,6 @@ class SessionManager {
         if (response.statusCode == 200) {
           prefs.remove(_sessionKey);
           await prefs.clear();
-          print("Logout successful");
           return true; // Sign-out successful
         } else {
           throw Exception('Failed to logout: ${response.statusCode}');

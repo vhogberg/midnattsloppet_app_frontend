@@ -1,3 +1,5 @@
+// ignore_for_file: use_super_parameters, library_private_types_in_public_api, deprecated_member_use
+
 import 'package:flutter/material.dart';
 
 class SearchPopup extends StatefulWidget {
@@ -41,13 +43,13 @@ class _SearchPopupState extends State<SearchPopup> {
   @override
   Widget build(BuildContext context) {
     return Dialog(
-      insetPadding: EdgeInsets.all(20.0),
+      insetPadding: const EdgeInsets.all(20.0),
       child: WillPopScope(
         onWillPop: () async {
           Navigator.pop(context);
           return true;
         },
-        child: Container(
+        child: SizedBox(
           width: MediaQuery.of(context).size.width * 0.8 + 45,
           height: MediaQuery.of(context).size.height * 0.5,
           child: Column(
@@ -58,8 +60,8 @@ class _SearchPopupState extends State<SearchPopup> {
                   controller: searchController,
                   decoration: InputDecoration(
                     hintText: widget.hintText,
-                    prefixIcon: Icon(Icons.search),
-                    border: OutlineInputBorder(),
+                    prefixIcon: const Icon(Icons.search),
+                    border: const OutlineInputBorder(),
                   ),
                   onChanged: (value) {
                     filterSearchResults(value);
@@ -73,7 +75,7 @@ class _SearchPopupState extends State<SearchPopup> {
                     return ListTile(
                       title: Text(
                         searchResults[index],
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 18.0,
                           fontWeight: FontWeight.bold,
                         ),

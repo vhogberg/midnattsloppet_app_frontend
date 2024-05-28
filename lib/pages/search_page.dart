@@ -1,3 +1,5 @@
+// ignore_for_file: use_super_parameters, library_private_types_in_public_api, avoid_print, use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:flutter_application/api_utils/api_utils.dart';
 import 'package:flutter_application/authentication/session_manager.dart';
