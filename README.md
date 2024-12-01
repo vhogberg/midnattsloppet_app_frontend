@@ -1,5 +1,6 @@
 # Midnattsloppet Fortal 🏃 
 A Charity-Focused App for Businesses and Organizations made with Flutter in a group of ten people as part of the course Projektarbete med programvaruteknik at Stockholm University.
+Note that this is the flutter frontend repo, a backend repo also exists but is private.
 
 ## Overview
 
