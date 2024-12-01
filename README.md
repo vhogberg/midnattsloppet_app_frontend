@@ -13,16 +13,16 @@ Take a look at some screenshots from the app below:
 
 **Homepage, Leaderboard, and Team Page:**
 <p align="start">
-  <img src="demo_images/homepage.png" width="200" />
-  <img src="demo_images/leaderboardpage.png" width="200" />
-  <img src="demo_images/teampage.png" width="200" />
+  <img src="demo_images/homepage.png" width="220" />
+  <img src="demo_images/leaderboardpage.png" width="220" />
+  <img src="demo_images/teampage.png" width="220" />
 </p>
 
 **Challenge Page, Notification Overview, and Completed Goal Page:**
 <p align="start">
-  <img src="demo_images/challengepage.png" width="200" />
-  <img src="demo_images/notificationpage.png" width="200" />
-  <img src="demo_images/completedgoalpage.png" width="200" />
+  <img src="demo_images/challengepage.png" width="220" />
+  <img src="demo_images/notificationpage.png" width="220" />
+  <img src="demo_images/completedgoalpage.png" width="220" />
 </p>
 
 ## Key Features
