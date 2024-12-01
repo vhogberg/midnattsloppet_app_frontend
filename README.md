@@ -6,9 +6,23 @@ A Charity-Focused App for Businesses and Organizations made with Flutter in a gr
 Midnattsloppet Fortal is a mobile app designed to engage employees and companies participating in the Midnattsloppet event while supporting charitable causes. It combines team competitions, fundraising, and donations to selected charities, motivating participants to stay active and contribute to a good cause.
 
 ## Demos
-See how the app swish integration works in this video: [YouTube demo video](https://youtube.com/shorts/nnDU-ftcbvU?feature=share).
+See how the swish integration works in this demo video: [YouTube demo video](https://youtube.com/shorts/nnDU-ftcbvU?feature=share).
 
-Take a look at some screenshots and images from the app in this album: [Imgur album](#).
+Take a look at some screenshots from the app below:
+
+**Homepage, Leaderboard, and Team Page:**
+<p align="start">
+  <img src="demo_images/homepage.png" width="300" />
+  <img src="demo_images/leaderboardpage.png" width="300" />
+  <img src="demo_images/teampage.png" width="300" />
+</p>
+
+**Challenge Page, Notification Overview, and Completed Goal Page:**
+<p align="start">
+  <img src="demo_images/challengepage.png" width="300" />
+  <img src="demo_images/notificationpage.png" width="300" />
+  <img src="demo_images/completedgoalpage.png" width="300" />
+</p>
 
 ## Key Features
 
